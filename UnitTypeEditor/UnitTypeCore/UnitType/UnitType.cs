@@ -17,7 +17,7 @@ namespace UnitTypeCore
 		private List<string> m_ImmediateChildren = new List<string>();
 		private List<string> m_AllChildren = new List<string>();
 		private int m_iHashCodeOfUnitType = 0;
-		private List<byte> m_BitLookUp = new List<byte>();
+		private List<int> m_BitLookUp = new List<int>();
 
 		public UnitType() { }
 		public UnitType(UnitTypeCategory pParent) { m_UnitTypeCategory = pParent; }
@@ -112,8 +112,8 @@ namespace UnitTypeCore
 			
 		}
 
-		[DisplayName("Bit Lookup Array"), Category("DATA"), Description("the bit look up to see if this is a type of unittype."), Browsable(false)]
-		public List<byte> bitLookupArray
+		[DisplayName("Bit Lookup Array"), Category("DATA"), Description("the bit look up array of ints to see if this is a type of unittype."), Browsable(false)]
+		public List<int> bitLookupArray
 		{
 			get 
 			{ 
@@ -123,7 +123,7 @@ namespace UnitTypeCore
 			{
 				if (value != null)
 				{
-					m_BitLookUp = new List<byte>(value);
+					m_BitLookUp = new List<int>(value);
 				}
 				else
 				{
@@ -248,8 +248,8 @@ namespace UnitTypeCore
 		private int _calculateTheNumberOfBytesNeeded()
 		{
 			int iCountOf = m_UnitTypeCategory.getUnitTypes().Count;
-			int iRemainder = iCountOf % 8;
-			int iFractionOf = iCountOf / 8;
+			int iRemainder = iCountOf % 32;
+			int iFractionOf = iCountOf / 32;
 			int iTotalVariablesNeeded = Math.Max(1, iFractionOf + ((iRemainder > 0) ? 1 : 0));
 			return iTotalVariablesNeeded;
 		}
@@ -270,12 +270,12 @@ namespace UnitTypeCore
 				UnitType mUnitType = m_UnitTypeCategory.unitTypes[iUnitTypeIndex];
 				if ( isa(mUnitType.unitTypeName))
 				{
-					int iBitOffsetIntoShort = iUnitTypeIndex % 8;
-					int iIndexOfShort = iUnitTypeIndex / 8;
+					int iBitOffsetIntoShort = iUnitTypeIndex % 32;
+					int iIndexOfShort = iUnitTypeIndex / 32;
 					//weird C# won't let me bit shift a byte - even after converting it to byte
-					int mValueOf = (int)bitLookupArray[iIndexOfShort];
+					int mValueOf = bitLookupArray[iIndexOfShort];
 					int mValueToMod = 1 << iBitOffsetIntoShort;
-					bitLookupArray[iIndexOfShort] = Convert.ToByte( mValueOf | mValueToMod );
+					bitLookupArray[iIndexOfShort] =  mValueOf | mValueToMod;
 				}
 			}
 		}

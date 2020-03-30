@@ -19,45 +19,49 @@ namespace UnitTypeCore.LoadAndSave
 			{
 				return false;
 			}
-			ByteWriter mWriter = new ByteWriter(Encoding.ASCII);
-			//MemoryStream mMemoryStream = new MemoryStream();			
-			//BinaryWriter mWriter = new BinaryWriter(mMemoryStream, Encoding.ASCII);
-			
-			byte iByte = 13;
-			int iInt = 13;
-			Int64 iInt64 = 13;
-			float fFloat = 13.0f;
-			double fDouble = 13.0;
-			string strString = "13131313131313131313";
-			
-			mWriter.write(true);
-			mWriter.write(iByte);
-			mWriter.write(iInt);
-			mWriter.write(iInt64);
-			mWriter.write(fFloat);
-			mWriter.write(fDouble);
-			mWriter.write(strString);
+			ByteWriter mWriter = new ByteWriter(Encoding.ASCII);						
+			_writeHeader(mWriter);						
+			_writeCategoryData(mManager, mWriter);
+
 			File.WriteAllBytes(strLocationToSaveFile, mWriter.getMemoryStream().ToArray());
-			/*
-			_writeHeader(mWriter);
-			_createStringLookup(mWriter);
-			_writeStringLookup(mWriter);
-			*/
+			
 			return true;
 		}
 
 
-		private bool _writeHeader(BinaryWriter mWriter)
+
+
+
+		private bool _writeHeader(ByteWriter mWriter)
 		{
+			byte iVersion = 1;
+			mWriter.write(iVersion);
 			return true;
 		}
 
-		private bool _createStringLookup(BinaryWriter mWriter)
+		private bool _writeCategoryData(UnitTypeManager mManager, ByteWriter mWriter)
 		{
-			return true;
-		}
-		private bool _writeStringLookup(BinaryWriter mWriter)
-		{
+			List<UnitTypeCategory> mCategories = mManager.getCategories();
+			ushort iCountOfCategories = (ushort)mCategories.Count;			
+			mWriter.write(iCountOfCategories);
+			foreach(UnitTypeCategory mCategory in mCategories)
+			{
+				
+				ushort iCountOfUnitTypes = (ushort)mCategory.unitTypes.Count;				
+				byte iCountOfBinaryLookupInts = (byte)((mCategory.unitTypes.Count > 0) ? mCategory.unitTypes[0].bitLookupArray.Count : 0);
+				
+				mWriter.write(mCategory.categoryName);
+				mWriter.write(iCountOfUnitTypes);
+				mWriter.write(iCountOfBinaryLookupInts);
+				foreach (UnitType mUnitType in mCategory.unitTypes)
+				{
+					mWriter.write(mUnitType.unitTypeName);
+					foreach(int iBitLookUp in mUnitType.bitLookupArray)
+					{
+						mWriter.write(iBitLookUp);
+					}
+				}
+			}
 			return true;
 		}
 	}

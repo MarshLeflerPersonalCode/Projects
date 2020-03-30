@@ -54,7 +54,11 @@ namespace UnitTypeCore.LoadAndSave
 			string strFileName = Path.GetFileName(strFileAndPath);
 			string strPath = strFileAndPath.Substring(0, strFileAndPath.Length - strFileName.Length);
 			if( strPath.Contains(":\\") == false )
-			{				
+			{
+				if (strPath == "")
+				{
+					strPath = ".\\";
+				}
 				strPath = Path.GetFullPath(strPath);
 			}
 			if (Directory.Exists(strPath) == false)

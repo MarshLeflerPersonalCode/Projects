@@ -86,8 +86,8 @@
     <Content Include="unittypeicon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CustomControls\CustomControls.csproj">
-      <Project>{0632B60D-0438-46F9-BA76-1EBC9F0263C0}</Project>
+    <ProjectReference Include="..\..\CustomControls\CustomControls.csproj">
+      <Project>{0632b60d-0438-46f9-ba76-1ebc9f0263c0}</Project>
       <Name>CustomControls</Name>
     </ProjectReference>
     <ProjectReference Include="..\UnitTypeCore\UnitTypeCore.csproj">

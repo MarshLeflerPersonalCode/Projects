@@ -72,7 +72,7 @@ namespace UnitTypeCore.LoadAndSave
 			strReturnString = strReturnString + "{" + System.Environment.NewLine;
 			strReturnString = strReturnString  + "     " + makeStringLength(m_strString, iLengthOfName) + "m_strName;" + System.Environment.NewLine;
 			strReturnString = strReturnString + "     " + makeStringLength(mCategory.categoryConfig.enumName, iLengthOfName) + "m_eType;" + System.Environment.NewLine;
-			strReturnString = strReturnString + "     " + makeStringLength(m_strInt8, iLengthOfName) + "m_Data[" + _getVariableForNumberOfBytes(mCategory) + "]; " + System.Environment.NewLine;
+			strReturnString = strReturnString + "     " + makeStringLength(m_strInt32, iLengthOfName) + "m_Data[" + _getVariableForNumberOfBytes(mCategory) + "]; " + System.Environment.NewLine;
 			strReturnString = strReturnString + "};" + System.Environment.NewLine;
 			return strReturnString;
 		}
@@ -100,7 +100,7 @@ namespace UnitTypeCore.LoadAndSave
 				string strNumbers = "";
 				for(int iNumIndex = 0; iNumIndex < mUnitType.bitLookupArray.Count; iNumIndex++)
 				{
-					strNumbers = strNumbers + "(" + m_strInt8 + ")" + mUnitType.bitLookupArray[iNumIndex].ToString();
+					strNumbers = strNumbers + mUnitType.bitLookupArray[iNumIndex].ToString();
 					if( iNumIndex != mUnitType.bitLookupArray.Count - 1)
 					{
 						strNumbers = strNumbers + ", ";
@@ -119,9 +119,9 @@ namespace UnitTypeCore.LoadAndSave
 //ISA checks to see if A is a B. So if A was a sword, and sword was a weapon and an item, and B could be sword, weapon or item and this would return true. Else it would return false
 static bool ISA([UnitType] A_is_a, [UnitType] B )
 {	
-	UnitTypeInt32 iBitOffsetIntoShort = (UnitTypeInt32)B % 8;
-	UnitTypeInt32 iIndexOfShort = (UnitTypeInt32)B / 8;
-	return ([GlobalArray][(UnitTypeInt32)A_is_a].m_Data[iIndexOfShort] & ( 1 << iBitOffsetIntoShort ))?true:false;	
+	UnitTypeInt32 iBitOffsetIntoInt = (UnitTypeInt32)B % 32;
+	UnitTypeInt32 iIndexOfArray = (UnitTypeInt32)B / 32;
+	return ([GlobalArray][(UnitTypeInt32)A_is_a].m_Data[iIndexOfArray] & ( 1 << iBitOffsetIntoInt ))?true:false;	
 }
 
 //Returns the unit type name as a string

@@ -1,0 +1,55 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="KCCore">
+      <UniqueIdentifier>{cde37509-470a-4c57-9657-ed2c7041e49b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KCCore\Containers">
+      <UniqueIdentifier>{04fa7f8c-7cdf-424c-bd2b-c7c2aba0891c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KCCore\IO">
+      <UniqueIdentifier>{a9eed3ee-4b95-4764-b32a-1ee42baa132a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KCCore\UnitTypes">
+      <UniqueIdentifier>{b4a43385-861c-4552-bc25-ce295068b248}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KCCore\UnitTypes\UnitTypes">
+      <UniqueIdentifier>{7ba9c286-17ed-45c4-8ab8-5da071f1e8ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KCCore\UnitTypes\Private">
+      <UniqueIdentifier>{e2a15782-af75-4573-a22d-7cde9933d3b6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="CoreClasses.cpp" />
+    <ClCompile Include="KCCore\UnitTypes\KCUnitTypeManager.cpp">
+      <Filter>KCCore\UnitTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="KCCore\UnitTypes\Private\KCUnitTypeCategory.cpp">
+      <Filter>KCCore\UnitTypes\Private</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="KCCore\UnitTypes\KCUnitTypeManager.h">
+      <Filter>KCCore\UnitTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\IO\KCByteReader.h">
+      <Filter>KCCore\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Containers\KCTArray.h">
+      <Filter>KCCore\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\KCDefines.h">
+      <Filter>KCCore</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\UnitTypes\UnitTypes\KCUnitTypesItems.h">
+      <Filter>KCCore\UnitTypes\UnitTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\UnitTypes\Private\KCUnitType.h">
+      <Filter>KCCore\UnitTypes\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\UnitTypes\Private\KCUnitTypeCategory.h">
+      <Filter>KCCore\UnitTypes\Private</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

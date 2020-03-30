@@ -1,0 +1,175 @@
+{
+  "version": 1,
+  "categoryConfigs": [
+    {
+      "categoryName": "ITEMS",
+      "enumHeaderDirectory": "..\\..\\CoreClasses\\KCCore\\UnitTypes\\UnitTypes",
+      "enumHeaderFile": "KCUnitTypesItems.h",
+      "enumName": "EUNITTYPES_ITEMS",
+      "unitTypes": [
+        {
+          "unitTypeName": "ANY",
+          "description": null,
+          "immediateChildren": [],
+          "fullHierarchyOfChildren": [],
+          "bitLookupArray": [
+            1
+          ]
+        },
+        {
+          "unitTypeName": "NEW",
+          "description": null,
+          "immediateChildren": [
+            "ANY"
+          ],
+          "fullHierarchyOfChildren": [
+            "ANY"
+          ],
+          "bitLookupArray": [
+            3
+          ]
+        },
+        {
+          "unitTypeName": "NEW1",
+          "description": null,
+          "immediateChildren": [
+            "NEW"
+          ],
+          "fullHierarchyOfChildren": [
+            "NEW",
+            "ANY"
+          ],
+          "bitLookupArray": [
+            7
+          ]
+        },
+        {
+          "unitTypeName": "NEW2",
+          "description": null,
+          "immediateChildren": [
+            "NEW1"
+          ],
+          "fullHierarchyOfChildren": [
+            "NEW1",
+            "NEW",
+            "ANY"
+          ],
+          "bitLookupArray": [
+            15
+          ]
+        },
+        {
+          "unitTypeName": "NEW3",
+          "description": null,
+          "immediateChildren": [
+            "NEW2"
+          ],
+          "fullHierarchyOfChildren": [
+            "NEW2",
+            "NEW1",
+            "NEW",
+            "ANY"
+          ],
+          "bitLookupArray": [
+            31
+          ]
+        },
+        {
+          "unitTypeName": "NEW4",
+          "description": null,
+          "immediateChildren": [
+            "NEW3"
+          ],
+          "fullHierarchyOfChildren": [
+            "NEW3",
+            "NEW2",
+            "NEW1",
+            "NEW",
+            "ANY"
+          ],
+          "bitLookupArray": [
+            63
+          ]
+        },
+        {
+          "unitTypeName": "NEW5",
+          "description": null,
+          "immediateChildren": [
+            "NEW4"
+          ],
+          "fullHierarchyOfChildren": [
+            "NEW4",
+            "NEW3",
+            "NEW2",
+            "NEW1",
+            "NEW",
+            "ANY"
+          ],
+          "bitLookupArray": [
+            127
+          ]
+        },
+        {
+          "unitTypeName": "NEW6",
+          "description": null,
+          "immediateChildren": [
+            "NEW5"
+          ],
+          "fullHierarchyOfChildren": [
+            "NEW5",
+            "NEW4",
+            "NEW3",
+            "NEW2",
+            "NEW1",
+            "NEW",
+            "ANY"
+          ],
+          "bitLookupArray": [
+            255
+          ]
+        },
+        {
+          "unitTypeName": "NEW7",
+          "description": null,
+          "immediateChildren": [
+            "NEW6"
+          ],
+          "fullHierarchyOfChildren": [
+            "NEW6",
+            "NEW5",
+            "NEW4",
+            "NEW3",
+            "NEW2",
+            "NEW1",
+            "NEW",
+            "ANY"
+          ],
+          "bitLookupArray": [
+            511
+          ]
+        },
+        {
+          "unitTypeName": "NEW8",
+          "description": null,
+          "immediateChildren": [
+            "NEW7"
+          ],
+          "fullHierarchyOfChildren": [
+            "NEW7",
+            "NEW6",
+            "NEW5",
+            "NEW4",
+            "NEW3",
+            "NEW2",
+            "NEW1",
+            "NEW",
+            "ANY"
+          ],
+          "bitLookupArray": [
+            1023
+          ]
+        }
+      ]
+    }
+  ]
+}
