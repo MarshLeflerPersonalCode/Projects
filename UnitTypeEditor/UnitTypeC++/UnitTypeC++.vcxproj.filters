@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\UnitTypes">
+      <UniqueIdentifier>{2e920561-073c-4f7f-976f-143e549cfb47}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Interfaces">
+      <UniqueIdentifier>{ea4ee358-5d63-41a3-86b3-20219a4dba50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UnitTypes\IO">
+      <UniqueIdentifier>{6fd08f75-ea92-4cdd-b5f9-83e5c3eb2876}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\UnitTypes\UnitTypes">
+      <UniqueIdentifier>{d44cd8b8-d99b-46ce-843a-a415a7cfebe1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Containers">
+      <UniqueIdentifier>{dbad8fac-f877-421a-9a3b-b66875a20de7}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="UnitTypeC++.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTypes\KCUnitTypeManager.cpp">
+      <Filter>Source Files\UnitTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTypes\IO\KCUnitTypeBinaryFileParser.cpp">
+      <Filter>Source Files\UnitTypes\IO</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="KCDefines.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Interfaces\KCByteReader.h">
+      <Filter>Source Files\Interfaces</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitTypes\KCUnitTypeManager.h">
+      <Filter>Source Files\UnitTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitTypes\UnitTypes\KCUnitTypesItems.h">
+      <Filter>Source Files\UnitTypes\UnitTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="UnitTypes\IO\KCUnitTypeBinaryFileParser.h">
+      <Filter>Source Files\UnitTypes\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="Containers\KCTArray.h">
+      <Filter>Source Files\Containers</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
