@@ -1,5 +1,6 @@
+//copyright Marsh Lefler 2000-...
 #pragma once
-#include "KCDefines.h"
+#include "KCIncludes.h"
 #include "UnitTypes/UnitTypes/KCUnitTypesItems.h"
 #include "Private/KCUnitTypeCategory.h"
 ///////////////////////////////////////////////////////////
@@ -25,10 +26,10 @@ namespace UNITTYPE
 		~KCUnitTypeManager();
 
 		//returns the singleton of this class
-		static KCUnitTypeManager *			getSingleton();
+		static KCUnitTypeManager *		getSingleton();
 
 		//returns the category Index by name
-		uint32								getCategoryIndexByName(const KCString &strCategoryName) const
+		uint32							getCategoryIndexByName(const KCString &strCategoryName) const
 		{
 			for (uint32 iCategoryIndex = 0; iCategoryIndex < m_Categories.getCount(); iCategoryIndex++)
 			{
@@ -41,7 +42,7 @@ namespace UNITTYPE
 		}
 
 		//returns the category Index by name
-		const KCUnitTypeCategory *			getCategoryByName(const KCString &strCategoryName) const
+		const KCUnitTypeCategory *		getCategoryByName(const KCString &strCategoryName) const
 		{
 			for (uint32 iCategoryIndex = 0; iCategoryIndex < m_Categories.getCount(); iCategoryIndex++)
 			{
@@ -54,7 +55,7 @@ namespace UNITTYPE
 		}
 
 		//returns the category Index by name
-		const KCUnitTypeCategory *			getCategoryByIndex(uint32 iIndex) const
+		const KCUnitTypeCategory *		getCategoryByIndex(uint32 iIndex) const
 		{
 			if (iIndex >= m_Categories.getCount())
 			{
@@ -64,9 +65,18 @@ namespace UNITTYPE
 		}
 		
 		//parses the bytes of the unit type file
-		bool								parseUnitTypeFile(const int8 *pArray, const int32 iCount);
+		bool							parseUnitTypeFile(const TCHAR *strPath);
 
-
+		//returns the id of the unit type. Returns INVALID if not defined.
+		uint32							getUnitTypeID(const KCString &strCategoryName, const KCString &strUnitTypeName)
+		{
+			const KCUnitTypeCategory *pCategory = getCategoryByName(strCategoryName);
+			if (pCategory)
+			{
+				return pCategory->getUnitTypeIDByName(strUnitTypeName);
+			}
+			return INVALID;
+		}
 		//does a check between two different unit types in the category passed in
 		FORCEINLINE bool				IsA(const KCUnitTypeCategory &mCategory, uint32 iObjectsIsA, uint32 iSubChild) const
 		{

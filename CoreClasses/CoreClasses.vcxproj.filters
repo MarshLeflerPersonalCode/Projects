@@ -19,6 +19,12 @@
     <Filter Include="KCCore\UnitTypes\Private">
       <UniqueIdentifier>{e2a15782-af75-4573-a22d-7cde9933d3b6}</UniqueIdentifier>
     </Filter>
+    <Filter Include="KCCore\DataGroup">
+      <UniqueIdentifier>{82e24a4f-fe7b-4aad-9d16-e06c37132b19}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KCCore\DataGroup\Private">
+      <UniqueIdentifier>{0bc5955e-7dbf-4697-a052-2ed245b0e978}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CoreClasses.cpp" />
@@ -27,6 +33,24 @@
     </ClCompile>
     <ClCompile Include="KCCore\UnitTypes\Private\KCUnitTypeCategory.cpp">
       <Filter>KCCore\UnitTypes\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="KCCore\IO\KCFileUtilities.cpp">
+      <Filter>KCCore\IO</Filter>
+    </ClCompile>
+    <ClCompile Include="KCCore\UnitTypes\KCDefinedUnitTypes.cpp">
+      <Filter>KCCore\UnitTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="KCCore\KCDefines.cpp">
+      <Filter>KCCore</Filter>
+    </ClCompile>
+    <ClCompile Include="KCCore\Containers\KCName.cpp">
+      <Filter>KCCore\Containers</Filter>
+    </ClCompile>
+    <ClCompile Include="KCCore\DataGroup\KCDataGroup.cpp">
+      <Filter>KCCore\DataGroup</Filter>
+    </ClCompile>
+    <ClCompile Include="KCCore\DataGroup\Private\KCDataProperty.cpp">
+      <Filter>KCCore\DataGroup\Private</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -50,6 +74,33 @@
     </ClInclude>
     <ClInclude Include="KCCore\UnitTypes\Private\KCUnitTypeCategory.h">
       <Filter>KCCore\UnitTypes\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\IO\KCFileUtilities.h">
+      <Filter>KCCore\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\UnitTypes\KCDefinedUnitTypes.h">
+      <Filter>KCCore\UnitTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="SaveObjectTest.h">
+      <Filter>KCCore</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Containers\KCStringTable.h">
+      <Filter>KCCore\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Containers\KCName.h">
+      <Filter>KCCore\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\DataGroup\KCDataGroup.h">
+      <Filter>KCCore\DataGroup</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\DataGroup\Private\KCDataGroupEnumsAndStructs.h">
+      <Filter>KCCore\DataGroup\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\DataGroup\Private\KCDataProperty.h">
+      <Filter>KCCore\DataGroup\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\KCIncludes.h">
+      <Filter>KCCore</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

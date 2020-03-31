@@ -3,20 +3,25 @@
 #pragma once
 
 #include "KCDefines.h"
-
+#include "Containers/KCTArray.h"
 
 
 
 class KCByteReader
 {
 public:
-	KCByteReader(const int8 *pArray, const int32 iCount = 0)
+	KCByteReader(const KCTArray<uint8> &mArray)
+	{
+		m_pByteArray = mArray.getMemory();
+		m_iArraySize = mArray.getCount();
+		m_iCurrentByteIndex = 0;
+	}
+	KCByteReader(const uint8 *pArray, const int32 iCount = 0)
 	{
 		m_pByteArray = pArray;
 		m_iArraySize = iCount;
 		m_iCurrentByteIndex = 0;
 	}
-
 	FORCEINLINE int32 tell() { return m_iCurrentByteIndex; }
 	FORCEINLINE bool seek(int32 iLocation)
 	{
@@ -41,151 +46,134 @@ public:
 		return false;
 	}
 
-	FORCEINLINE bool readBool(bool bDefaultValue = false)
+	FORCEINLINE bool operator<<(bool &bValue)
 	{
-		bool bValue(false);
 		if (readValue(&bValue, sizeof(bool)))
 		{
-			return bValue;
+			return true;
 		}
-		return bDefaultValue;
+		return false;
 	}
-	FORCEINLINE char readChar(char iDefaultValue = 0)
+	FORCEINLINE bool operator<<(char &cValue)
 	{
-		char iValue(0);
-		if (readValue(&iValue, sizeof(char)))
+		if (readValue(&cValue, sizeof(char)))
 		{
-			return iValue;
+			return true;
 		}
-		return iDefaultValue;
+		return false;
 	}
-	FORCEINLINE int8 readInt8(int8 iDefaultValue = INVALID)
+	FORCEINLINE bool operator<<(int8 &iValue)
 	{
-		int8 iValue(0);
 		if (readValue(&iValue, sizeof(int8)))
 		{
-			return iValue;
+			return true;
 		}
-		return iDefaultValue;
+		return false;
 	}
-	FORCEINLINE uint8 readUInt8(uint8 iDefaultValue = INVALID)
+
+	FORCEINLINE bool operator<<(uint8 &iValue)
 	{
-		uint8 iValue(0);
 		if (readValue(&iValue, sizeof(uint8)))
 		{
-			return iValue;
+			return true;
 		}
-		return iDefaultValue;
+		return false;
 	}
-	FORCEINLINE int16 readInt16(int16 iDefaultValue = INVALID)
+
+	FORCEINLINE bool operator<<(int16 &iValue)
 	{
-		int16 iValue(0);
 		if (readValue(&iValue, sizeof(int16)))
 		{
-			return iValue;
+			return true;
 		}
-		return iDefaultValue;
+		return false;
 	}
-	FORCEINLINE uint16 readUInt16(uint16 iDefaultValue = INVALID)
+
+	FORCEINLINE bool operator<<(uint16 &iValue)
 	{
-		uint16 iValue(0);
 		if (readValue(&iValue, sizeof(uint16)))
 		{
-			return iValue;
+			return true;
 		}
-		return iDefaultValue;
+		return false;
 	}
-	FORCEINLINE int32 readInt32(int32 iDefaultValue = INVALID)
+
+	FORCEINLINE bool operator<<(int32 &iValue)
 	{
-		int32 iValue(0);
 		if (readValue(&iValue, sizeof(int32)))
 		{
-			return iValue;
+			return true;
 		}
-		return iDefaultValue;
+		return false;
 	}
 
-	FORCEINLINE int64 readInt64(int64 iDefaultValue = INVALID)
+	FORCEINLINE bool operator<<(uint32 &iValue)
 	{
-		int64 iValue(0);
+		if (readValue(&iValue, sizeof(uint32)))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	FORCEINLINE bool operator<<(int64 &iValue)
+	{
 		if (readValue(&iValue, sizeof(int64)))
 		{
-			return iValue;
+			return true;
 		}
-		return iDefaultValue;
+		return false;
 	}
 
-	FORCEINLINE float readFloat(float fDefaultValue = INVALID)
+	FORCEINLINE bool operator<<(uint64 &iValue)
 	{
-		float fValue(0);
+		if (readValue(&iValue, sizeof(uint64)))
+		{
+			return true;
+		}
+		return false;
+	}
+
+	FORCEINLINE bool operator<<(float &fValue)
+	{
 		if (readValue(&fValue, sizeof(float)))
 		{
-			return fValue;
+			return true;
 		}
-		return fDefaultValue;
+		return false;
 	}
-
-	FORCEINLINE double readDouble(double dDefaultValue = INVALID)
+	FORCEINLINE bool operator<<(double &dValue)
 	{
-		double dValue(0);
 		if (readValue(&dValue, sizeof(double)))
 		{
-			return dValue;
+			return true;
 		}
-		return dDefaultValue;
+		return false;
 	}
-	FORCEINLINE bool readInt32Array(int32 iCount, KCTArray<int> &mArray)
+	FORCEINLINE bool operator<<(KCString &strValue)
 	{
-		for (int iIndex = 0; iIndex < iCount; iIndex++)
+		uint16 iNumberOfCharacters(0);
+		if (readValue(&iNumberOfCharacters, sizeof(uint16)))
 		{
-			int32 iValue(0);
-			if (readValue(&iValue, sizeof(int32)) == false)
+			if (iNumberOfCharacters == 0)
+			{
+				return true;
+			}
+			if ((m_iCurrentByteIndex + iNumberOfCharacters) - 1 >= m_iArraySize)
 			{
 				return false;
 			}
-			mArray.add(iValue);
-		}
-		return true;
-	}
-
-	FORCEINLINE bool readInt32Array(int32 *pArray, int32 iCount)
-	{
-		for (int iIndex = 0; iIndex < iCount; iIndex++)
-		{
-			int32 iValue(0);
-			if (readValue(&iValue, sizeof(int32)) == false)
-			{
-				return false;
-			}
-			pArray[iIndex] = iValue;
-		}
-		return true;
+			strValue = std::string((char*)&m_pByteArray[m_iCurrentByteIndex], sizeof(char) * (size_t)iNumberOfCharacters);
+			m_iCurrentByteIndex += iNumberOfCharacters;
+			return true;
+		}		
+		return false;
 	}
 	
-	FORCEINLINE KCString readString(KCString strDefaultValue = EMPTY_KCSTRING)
-	{
-		uint16 iNumberOfCharacters = (uint16)readInt16(0);
-		if (iNumberOfCharacters == 0)
-		{
-			return strDefaultValue;
-		}
-		if ((m_iCurrentByteIndex + iNumberOfCharacters) - 1 >= m_iArraySize)
-		{
-			return strDefaultValue;
-		}
-		std::string strReturnValue = std::string((char*)&m_pByteArray[m_iCurrentByteIndex], sizeof(char) * (size_t)iNumberOfCharacters);
-		m_iCurrentByteIndex += iNumberOfCharacters;
-		if (strReturnValue != EMPTY_KCSTRING)
-		{
-			return strReturnValue;
-		}
-		return strDefaultValue;
-	}
-
 	//TODO - how to read a string in
 
 private:
-	const int8			*m_pByteArray = nullptr;
+	const uint8			*m_pByteArray = nullptr;
 	int32				m_iArraySize = 0;
 	int32				m_iCurrentByteIndex = 0;
 

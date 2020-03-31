@@ -1,7 +1,8 @@
 #pragma once
 #include "KCDefines.h"
 #include "KCUnitType.h"
-#include "IO/KCByteReader.h"
+
+
 namespace UNITTYPE
 {
 
@@ -12,10 +13,10 @@ namespace UNITTYPE
 		~KCUnitTypeCategory();
 
 		//returns the category name
-		const KCString &				getCategoryName() const { return m_strName; }
+		const KCString &					getCategoryName() const { return m_strName; }
 
 		//returns the unit type ID
-		FORCEINLINE uint32				getUnitTypeID(const KCString &strString) const
+		DEBUG_FORCEINLINE uint32			getUnitTypeIDByName(const KCString &strString) const
 		{
 			 auto mPair = m_MapLookUp.find(strString);
 			 if (mPair != m_MapLookUp.end())
@@ -25,7 +26,7 @@ namespace UNITTYPE
 			 return INVALID;
 		}
 		//returns the unit type ID
-		FORCEINLINE const KCString &	getUnitTypeNameByID(uint32 iID) const
+		DEBUG_FORCEINLINE const KCString &	getUnitTypeNameByID(uint32 iID) const
 		{
 			if (iID < m_iNumberOfUnitTypes)
 			{
@@ -35,7 +36,7 @@ namespace UNITTYPE
 		}
 
 		//does a check between two different unit types in this category
-		FORCEINLINE bool				IsA(uint32 iObjectsIsA, uint32 iSubChild) const
+		DEBUG_FORCEINLINE bool				IsA(uint32 iObjectsIsA, uint32 iSubChild) const
 		{
 			if (iObjectsIsA < m_iNumberOfUnitTypes &&
 				iSubChild < m_iNumberOfUnitTypes)
@@ -45,28 +46,28 @@ namespace UNITTYPE
 			return false;
 		}
 		//does a check between two different unit types in this category
-		FORCEINLINE bool				IsA(uint32 iObjectsIsA, const std::string &strSubChild) const
+		DEBUG_FORCEINLINE bool				IsA(uint32 iObjectsIsA, const std::string &strSubChild) const
 		{
-			return IsA(iObjectsIsA, getUnitTypeID(strSubChild));
+			return IsA(iObjectsIsA, getUnitTypeIDByName(strSubChild));
 		}
 		//does a check between two different unit types in this category
-		FORCEINLINE bool				IsA(const std::string &strObjectsIsA, uint32 iSubChild) const
+		DEBUG_FORCEINLINE bool				IsA(const std::string &strObjectsIsA, uint32 iSubChild) const
 		{
-			return IsA(getUnitTypeID(strObjectsIsA), iSubChild);
+			return IsA(getUnitTypeIDByName(strObjectsIsA), iSubChild);
 		}
 		//does a check between two different unit types in this category
-		FORCEINLINE bool				IsA(const std::string &strObjectsIsA, const std::string &strSubChild) const
+		DEBUG_FORCEINLINE bool				IsA(const std::string &strObjectsIsA, const std::string &strSubChild) const
 		{
-			return IsA(getUnitTypeID(strObjectsIsA), getUnitTypeID(strSubChild));
+			return IsA(getUnitTypeIDByName(strObjectsIsA), getUnitTypeIDByName(strSubChild));
 		}
 
 		//parses the category
-		bool							_parse(KCByteReader &mByteReader);
+		bool								_parse(KCByteReader &mByteReader);
 
 	private:
 		uint32						m_iNumberOfUnitTypes = 0;
 		uint32						m_iNumberOfBitLookIndexs = 0;
-		KCUnitType					*m_UnitTypes = null;
+		KCUnitType					*m_UnitTypes = nullptr;
 		std::map<KCString, uint32 >	m_MapLookUp;
 		KCString					m_strName;
 

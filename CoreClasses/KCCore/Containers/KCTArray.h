@@ -32,6 +32,36 @@ public:
 		
 	}
 
+#if USING_UE4
+	//copies a UE4 array into our TArray. If bResetMemory is true, it'll do a clean first. If it's false, it'll append the memory copy
+	bool						copyMemoryUE4(TArray<T> &mArray, bool bResetMemory = true)
+	{
+		if (bResetMemory)
+		{
+			clean();
+		}
+		uint32 iCurrentMemoryLocation = m_iCountOfItems;	//this will always be zero if bResetMemory is true. Else we'll use it to pass that memory location out so it can be append
+		reserve(m_iCountOfItems + mArray.Num());
+		//UE4 function to copy the memory
+		ConstructItems<T>(m_Memory, mArray.GetData(), mArray.Num());
+		m_iCountOfItems += mArray.Num();
+		return true;
+	}
+#endif
+
+	//assuming a memory copy - reserves the space needed and returns the memory. If bResetMemory is true, it'll do a clean first. If it's false, it'll append the memory copy
+	T *							_AttemptMemoryCopy(uint32 iIntendedMemorySize, bool bResetMemory = true) 
+	{ 
+		if (bResetMemory)
+		{
+			clean();
+		}
+		uint32 iCurrentMemoryLocation = m_iCountOfItems;	//this will always be zero if bResetMemory is true. Else we'll use it to pass that memory location out so it can be append
+		reserve(m_iCountOfItems + iIntendedMemorySize);
+		m_iCountOfItems += iIntendedMemorySize; 
+		return &m_Memory[iCurrentMemoryLocation];
+	}
+
 	//sets the grow by number
 	void						setGrowBy(uint32 iGrowBy) { m_iGrowBy = iGrowBy; m_eGrowType = ETARRAY_GROW_BY_TYPES::PREDEFINED; }
 	//returns the grow by value

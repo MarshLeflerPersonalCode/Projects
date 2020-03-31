@@ -44,7 +44,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <CLRSupport>true</CLRSupport>
+    <CLRSupport>false</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -112,6 +112,7 @@
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <AdditionalOptions>/Zc:twoPhase- %(AdditionalOptions)</AdditionalOptions>
+      <CompileAsManaged>false</CompileAsManaged>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -159,17 +160,32 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CoreClasses.cpp" />
+    <ClCompile Include="KCCore\Containers\KCName.cpp" />
+    <ClCompile Include="KCCore\DataGroup\KCDataGroup.cpp" />
+    <ClCompile Include="KCCore\DataGroup\Private\KCDataProperty.cpp" />
+    <ClCompile Include="KCCore\IO\KCFileUtilities.cpp" />
+    <ClCompile Include="KCCore\KCDefines.cpp" />
+    <ClCompile Include="KCCore\UnitTypes\KCDefinedUnitTypes.cpp" />
     <ClCompile Include="KCCore\UnitTypes\KCUnitTypeManager.cpp" />
     <ClCompile Include="KCCore\UnitTypes\Private\KCUnitTypeCategory.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="KCCore\Containers\KCName.h" />
+    <ClInclude Include="KCCore\Containers\KCStringTable.h" />
     <ClInclude Include="KCCore\Containers\KCTArray.h" />
+    <ClInclude Include="KCCore\DataGroup\KCDataGroup.h" />
+    <ClInclude Include="KCCore\DataGroup\Private\KCDataGroupEnumsAndStructs.h" />
+    <ClInclude Include="KCCore\DataGroup\Private\KCDataProperty.h" />
     <ClInclude Include="KCCore\IO\KCByteReader.h" />
+    <ClInclude Include="KCCore\IO\KCFileUtilities.h" />
     <ClInclude Include="KCCore\KCDefines.h" />
+    <ClInclude Include="KCCore\KCIncludes.h" />
+    <ClInclude Include="KCCore\UnitTypes\KCDefinedUnitTypes.h" />
     <ClInclude Include="KCCore\UnitTypes\KCUnitTypeManager.h" />
     <ClInclude Include="KCCore\UnitTypes\Private\KCUnitType.h" />
     <ClInclude Include="KCCore\UnitTypes\Private\KCUnitTypeCategory.h" />
     <ClInclude Include="KCCore\UnitTypes\UnitTypes\KCUnitTypesItems.h" />
+    <ClInclude Include="SaveObjectTest.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

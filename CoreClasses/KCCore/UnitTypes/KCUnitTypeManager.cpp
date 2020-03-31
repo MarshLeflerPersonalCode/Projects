@@ -1,6 +1,6 @@
 #include "KCUnitTypeManager.h"
+#include "KCDefinedUnitTypes.h"
 
-#include "IO/KCByteReader.h"
 
 
 
@@ -34,15 +34,24 @@ UNITTYPE::KCUnitTypeManager * UNITTYPE::KCUnitTypeManager::getSingleton()
 	return g_pUnitTypeManager;
 }
 
-bool UNITTYPE::KCUnitTypeManager::parseUnitTypeFile(const int8 *pArray, const int32 iCount)
+bool UNITTYPE::KCUnitTypeManager::parseUnitTypeFile(const TCHAR *strPath)
 {
+	KCTArray<uint8> mFileBytes;
+	if (KCFileUtilities::loadFile(strPath, mFileBytes) == false ||
+		mFileBytes.getCount() == 0 )
+	{
+		return false;
+	}
 
 	static int8 UNITTYPE_FILE_VERSION_ONE(1);			//first Version!
 	static int8 UNITTYPE_FILE_VERSION(UNITTYPE_FILE_VERSION_ONE);
-	
-	KCByteReader mByteReader(pArray, iCount);
-	int8 iVersion = mByteReader.readInt8(UNITTYPE_FILE_VERSION);
-	int32 iNumberOfCategories = (int32)mByteReader.readUInt16(0);
+
+	KCByteReader mByteReader(mFileBytes);
+	int8 iVersion(UNITTYPE_FILE_VERSION);
+	uint16 iNumberOfCategories(0);
+	mByteReader << iVersion;
+	mByteReader << iNumberOfCategories;
+
 	m_Categories.reserve(iNumberOfCategories);
 	KCTArray<int> mArrayOfBitLookUps;
 	for (int32 iCategoryIndex = 0; iCategoryIndex < iNumberOfCategories; iCategoryIndex++)
@@ -50,9 +59,12 @@ bool UNITTYPE::KCUnitTypeManager::parseUnitTypeFile(const int8 *pArray, const in
 		m_Categories.add(KCUnitTypeCategory());
 		m_Categories.last()._parse(mByteReader);
 	}
+	//define the unit types predefined.
 
+	CORE_UNITTYPE::defineUnitTypes(this);
 
 	//note this 
 	return true;
 }
+
 

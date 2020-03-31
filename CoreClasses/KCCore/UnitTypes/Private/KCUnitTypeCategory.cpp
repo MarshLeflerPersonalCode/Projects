@@ -21,15 +21,25 @@ UNITTYPE::KCUnitTypeCategory::~KCUnitTypeCategory()
 
 bool UNITTYPE::KCUnitTypeCategory::_parse(KCByteReader &mByteReader)
 {
-	m_strName = mByteReader.readString();
-	m_iNumberOfUnitTypes = (uint32)mByteReader.readUInt16(0);
-	m_iNumberOfBitLookIndexs = (uint32)mByteReader.readInt8(0);
+
+	
+	uint16 iNumberOfUnitTypes(0);
+	uint8 iNumberOfBitLookIndexes(0);
+	mByteReader << m_strName;
+	mByteReader << iNumberOfUnitTypes;
+	mByteReader << iNumberOfBitLookIndexes;
+	m_iNumberOfUnitTypes = (uint32)iNumberOfUnitTypes;
+	m_iNumberOfBitLookIndexs = (uint32)iNumberOfBitLookIndexes;
 	m_UnitTypes = new KCUnitType[m_iNumberOfUnitTypes];
+
 	for (uint32 iUnitTypeIndex = 0; iUnitTypeIndex < m_iNumberOfUnitTypes; iUnitTypeIndex++)
 	{
-		m_UnitTypes[iUnitTypeIndex].m_strString = mByteReader.readString("");
+		mByteReader << m_UnitTypes[iUnitTypeIndex].m_strString;
 		m_UnitTypes[iUnitTypeIndex].m_BitLookUpArray = new int32[m_iNumberOfBitLookIndexs];
-		mByteReader.readInt32Array(m_UnitTypes[iUnitTypeIndex].m_BitLookUpArray, m_iNumberOfBitLookIndexs);
+		for (uint32 iNumberOfBitsIndex = 0; iNumberOfBitsIndex < m_iNumberOfBitLookIndexs; iNumberOfBitsIndex++)
+		{
+			mByteReader << m_UnitTypes[iUnitTypeIndex].m_BitLookUpArray[iNumberOfBitsIndex];			
+		}
 		m_UnitTypes[iUnitTypeIndex].m_iIndex = (uint16)iUnitTypeIndex;
 		m_MapLookUp[m_UnitTypes[iUnitTypeIndex].m_strString] = iUnitTypeIndex;
 	}

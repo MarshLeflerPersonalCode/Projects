@@ -1,6 +1,5 @@
 #pragma once
-#include "KCDefines.h"
-
+#include "KCIncludes.h"
 
 struct KCUnitType
 {
