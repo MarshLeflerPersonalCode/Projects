@@ -1,6 +1,17 @@
 #pragma once
 //defines to help ease the transition to and from UE4 and standard library
-
+#ifdef UE_BUILD_DEBUG
+#define DEBUG_FORCEINLINE
+#else
+#ifdef _DEBUG
+#define DEBUG_FORCEINLINE
+#else
+#define DEBUG_FORCEINLINE FORCEINLINE
+#ifndef NDEBUG
+#define NDEBUG
+#endif
+#endif
+#endif
 
 /////////////////////Took this straight from UE4
 #ifdef USING_UE4
@@ -164,15 +175,7 @@ typedef union UNIONDATA64BIT
 
 
 
-#ifdef UE_BUILD_DEBUG
-#define DEBUG_FORCEINLINE
-#else
-#ifdef _DEBUG
-#define DEBUG_FORCEINLINE
-#else
-#define DEBUG_FORCEINLINE FORCEINLINE
-#endif
-#endif
+
 
 #include <unordered_map>
 #include <mutex>

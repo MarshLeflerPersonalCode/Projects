@@ -9,6 +9,7 @@
 
 #endif	//note using_ue4
 
+#include "Utils/KCAsserts.h"
 #include "KCDefines.h"
 #include "Containers/KCName.h"
 #include "Containers/KCTArray.h"

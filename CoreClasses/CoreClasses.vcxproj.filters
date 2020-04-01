@@ -25,6 +25,9 @@
     <Filter Include="KCCore\DataGroup\Private">
       <UniqueIdentifier>{0bc5955e-7dbf-4697-a052-2ed245b0e978}</UniqueIdentifier>
     </Filter>
+    <Filter Include="KCCore\Utils">
+      <UniqueIdentifier>{24bde16d-a036-4d02-ae3d-be773ab6ed18}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CoreClasses.cpp" />
@@ -101,6 +104,9 @@
     </ClInclude>
     <ClInclude Include="KCCore\KCIncludes.h">
       <Filter>KCCore</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Utils\KCAsserts.h">
+      <Filter>KCCore\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

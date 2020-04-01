@@ -7,8 +7,16 @@
 #include "KCCore/UnitTypes/KCDefinedUnitTypes.h"
 #include "KCCore/Containers/KCName.h"
 #include <direct.h>
+#include <assert.h>
 #define GetCurrentDir _getcwd
 
+static void funTest()
+{
+	static int32 iCount(1);
+	//KCEnsureOnce(false);
+	std::cout << "True" << iCount << std::endl;
+	iCount++;
+}
 
 int main()
 {
@@ -35,9 +43,12 @@ int main()
 	{
 		std::cout << "False\n";
 	}
+	funTest();
+	funTest();
+	funTest();
+	//KCEnsureOnce(false);
 	
-	
-	
+	exit(0);
 
 }
 

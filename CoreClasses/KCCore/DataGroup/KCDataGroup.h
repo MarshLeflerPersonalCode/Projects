@@ -1,4 +1,5 @@
 //copyright Marsh Lefler 2000-...
+//this is a data group that stores properties in a child parent relationship.
 #pragma once
 #include "Private/KCDataProperty.h"
 #include <unordered_map>
@@ -27,7 +28,36 @@ public:
 		}
 		return mData->second;
 	}
-
+	/////////////////////////////////PROPERTIES/////////////////////////////////////////////////////
+	//returns the number of properties
+	size_t								getCountOfProperties() { return m_Properties.size(); }
+	//returns the child group map
+	//for (auto element : getChildGroups()){element.first; element.second; }
+	std::unordered_map<KCName, KCDataProperty, KCNameHasher> & getProperties() { return m_Properties; }
+	//returns the being iterator for the properties
+	//auto iter = getPropertiesBegin();
+	//while( iter != getPropertiesEnd()){ iter->first; iter->second; iter++; ... }
+	auto								getPropertiesBegin() { return m_Properties.begin(); }
+	//returns the end iterator for the properties
+	//auto iter = getPropertiesBegin();
+	//while( iter != getPropertiesEnd()){ iter->first; iter->second; iter++; ... }
+	auto								getPropertiesEnd() { return m_Properties.end(); }
+	/////////////////////////////////PROPERTIES/////////////////////////////////////////////////////
+	///////////////////////////////////GROUPS//////////////////////////////////////////////////////
+	//returns the number of groups
+	size_t								getCountOfChildGroups() { return m_ChildGroups.size(); }
+	//returns the child group map
+	//for (auto element : getChildGroups()){element.first; element.second; }
+	std::unordered_map<KCName, KCDataGroup, KCNameHasher> & getChildGroups() { return m_ChildGroups; }
+	//returns the being iterator for the properties
+	//auto iter = getChildGroupBegin();
+	//while( iter != getChildGroupEnd()){ iter->first; iter->second; iter++; ... }
+	auto								getChildGroupBegin() { return m_ChildGroups.begin(); }
+	//returns the end iterator for the properties
+	//auto iter = getChildGroupBegin();
+	//while( iter != getChildGroupEnd()){ iter->first; iter->second; iter++; ... }
+	auto								getChildGroupEnd() { return m_ChildGroups.end(); }
+	///////////////////////////////////GROUPS//////////////////////////////////////////////////////
 	//setters
 	DEBUG_FORCEINLINE void				setProperty(const KCName &strName, bool bValue) { getOrCreateProperty(strName) << bValue; }
 	DEBUG_FORCEINLINE void				setProperty(const KCName &strName, char cValue) { getOrCreateProperty(strName) << cValue; }
