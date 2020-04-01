@@ -14,8 +14,7 @@ enum class EDATAGROUP_VARIABLE_TYPES : uint8
 	UINT32,
 	INT64,
 	UINT64,
-	FLOAT,
-	DOUBLE,
+	FLOAT,	
 	STRING,
 	COUNT
 };
@@ -31,8 +30,15 @@ static KCString g_strDataGroupVariableTypeNames[(int32)EDATAGROUP_VARIABLE_TYPES
 	"UINT32",
 	"INT64",
 	"UINT64",
-	"FLOAT",
-	"DOUBLE",
+	"FLOAT",	
 	"STRING"
 };
 
+
+enum class EDATAGROUP_BINARY_VERSION : uint8
+{
+	one,
+	COUNT	//always last
+};
+
+#define KDATAGROUP_BINARY_VERSION (uint8)EDATAGROUP_BINARY_VERSION::COUNT - 1

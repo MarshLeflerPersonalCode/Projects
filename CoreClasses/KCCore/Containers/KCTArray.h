@@ -50,7 +50,7 @@ public:
 #endif
 
 	//assuming a memory copy - reserves the space needed and returns the memory. If bResetMemory is true, it'll do a clean first. If it's false, it'll append the memory copy
-	T *							_AttemptMemoryCopy(uint32 iIntendedMemorySize, bool bResetMemory = true) 
+	T *							_attemptMemoryCopy(uint32 iIntendedMemorySize, bool bResetMemory = true) 
 	{ 
 		if (bResetMemory)
 		{
@@ -61,7 +61,37 @@ public:
 		m_iCountOfItems += iIntendedMemorySize; 
 		return &m_Memory[iCurrentMemoryLocation];
 	}
+	//assuming a memory copy - reserves the space needed, and copys the memory. If bResetMemory is true, it'll do a clean first. If it's false, it'll append the memory copy
+	bool						_attemptMemoryCopy(const T *pMemoryToCopy, uint32 iIntendedMemorySize, bool bResetMemory = true)
+	{
+		T *pMemory = _attemptMemoryCopy(iIntendedMemorySize, bResetMemory);
+		if (pMemory)
+		{
+			for (uint32 iIndex = 0; iIndex < iIntendedMemorySize; iIndex++)
+			{
+				pMemory[iIndex] = pMemoryToCopy[iIndex];
+			}
+			return true;
+		}
+		return false;
+		
+	}
+	//strings have 0 at the end and length() or size() doesn't include it. So this is to help fix bugs when we copy strings
+	bool						_attemptCopyString(const KCString &strString, bool bResetMemory = true)
+	{
+		uint32 iIntendedMemorySize = (uint32)(strString.size() + 1);
+		T *pMemory = _attemptMemoryCopy(iIntendedMemorySize, bResetMemory);
+		if (pMemory)
+		{
+			for (uint32 iIndex = 0; iIndex < iIntendedMemorySize; iIndex++)
+			{
+				pMemory[iIndex] = (T)strString.c_str()[iIndex];
+			}
+			return true;
+		}
+		return false;
 
+	}
 	//sets the grow by number
 	void						setGrowBy(uint32 iGrowBy) { m_iGrowBy = iGrowBy; m_eGrowType = ETARRAY_GROW_BY_TYPES::PREDEFINED; }
 	//returns the grow by value
@@ -78,7 +108,7 @@ public:
 	//resets the contents but doesn't clear the memory
 	FORCEINLINE void			reset() { m_iCountOfItems = 0; }
 	//removes all the memory and resets the count - NOTE this will not delete the objects in it.
-	FORCEINLINE void			clean() { delete[] m_Memory; m_Memory = nullptr; m_iMemorySize = 0; m_iCountOfItems = 0; }
+	FORCEINLINE void			clean() { DELETE_ARRAY_SAFELY(m_Memory); m_iMemorySize = 0; m_iCountOfItems = 0; }
 
 	//returns the item at the index
 	FORCEINLINE T&			operator[](uint32 iIndex)
@@ -200,14 +230,14 @@ private:
 			return;
 		}
 				
-		T *mMemoryTemp = new T[iNewMemory];
+		T *mMemoryTemp = KC_NEW T[iNewMemory];
 
 		for (uint32 t = 0; t < m_iMemorySize; t++)
 		{
 			mMemoryTemp[t] = m_Memory[t];
 		}
 
-		delete[] m_Memory;
+		DELETE_ARRAY_SAFELY( m_Memory );
 		m_Memory = mMemoryTemp;
 		m_iMemorySize = iNewMemory;
 	}

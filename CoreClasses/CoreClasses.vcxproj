@@ -79,6 +79,8 @@
     <LinkIncremental>false</LinkIncremental>
     <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
     <IncludePath>$(VC_IncludePath)KCCore;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)bin\</OutDir>
+    <TargetName>$(ProjectName)_Debug</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -86,6 +88,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(VC_IncludePath)KCCore;$(IncludePath)</IncludePath>
+    <OutDir>$(SolutionDir)bin\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -161,6 +164,9 @@
   <ItemGroup>
     <ClCompile Include="CoreClasses.cpp" />
     <ClCompile Include="KCCore\Containers\KCName.cpp" />
+    <ClCompile Include="KCCore\DataGroup\FileTypes\KCDataGroupBinaryWriter.cpp" />
+    <ClCompile Include="KCCore\DataGroup\FileTypes\KCDataGroupStringParser.cpp" />
+    <ClCompile Include="KCCore\DataGroup\FileTypes\KCDataGroupStringWriter.cpp" />
     <ClCompile Include="KCCore\DataGroup\KCDataGroup.cpp" />
     <ClCompile Include="KCCore\DataGroup\Private\KCDataProperty.cpp" />
     <ClCompile Include="KCCore\IO\KCFileUtilities.cpp" />
@@ -173,10 +179,14 @@
     <ClInclude Include="KCCore\Containers\KCName.h" />
     <ClInclude Include="KCCore\Containers\KCStringTable.h" />
     <ClInclude Include="KCCore\Containers\KCTArray.h" />
+    <ClInclude Include="KCCore\DataGroup\FileTypes\KCDataGroupBinaryWriter.h" />
+    <ClInclude Include="KCCore\DataGroup\FileTypes\KCDataGroupStringParser.h" />
+    <ClInclude Include="KCCore\DataGroup\FileTypes\KCDataGroupStringWriter.h" />
     <ClInclude Include="KCCore\DataGroup\KCDataGroup.h" />
     <ClInclude Include="KCCore\DataGroup\Private\KCDataGroupEnumsAndStructs.h" />
     <ClInclude Include="KCCore\DataGroup\Private\KCDataProperty.h" />
     <ClInclude Include="KCCore\IO\KCByteReader.h" />
+    <ClInclude Include="KCCore\IO\KCByteWriter.h" />
     <ClInclude Include="KCCore\IO\KCFileUtilities.h" />
     <ClInclude Include="KCCore\KCDefines.h" />
     <ClInclude Include="KCCore\KCIncludes.h" />
@@ -187,6 +197,7 @@
     <ClInclude Include="KCCore\UnitTypes\UnitTypes\KCUnitTypesItems.h" />
     <ClInclude Include="KCCore\Utils\KCAsserts.h" />
     <ClInclude Include="SaveObjectTest.h" />
+    <ClInclude Include="TestCases\KCDataGroupTestCase.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

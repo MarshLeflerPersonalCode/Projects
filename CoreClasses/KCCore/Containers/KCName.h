@@ -8,6 +8,7 @@ class KCName
 {
 public:
 	KCName() {}
+	KCName(const char *strString) { _setString(KCString(strString)); }
 	KCName(const KCString strString) { _setString(strString); }
 	~KCName() {}
 
@@ -25,6 +26,9 @@ public:
 	KCName &				operator=(const KCName &mName)
 	{
 		m_iUniqueID = mName.m_iUniqueID;
+#ifdef _DEBUG
+		m_strString = mName.m_strString;
+#endif
 		return *this;
 	}
 

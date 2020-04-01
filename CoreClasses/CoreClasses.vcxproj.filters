@@ -28,6 +28,12 @@
     <Filter Include="KCCore\Utils">
       <UniqueIdentifier>{24bde16d-a036-4d02-ae3d-be773ab6ed18}</UniqueIdentifier>
     </Filter>
+    <Filter Include="KCCore\DataGroup\FileTypes">
+      <UniqueIdentifier>{84a8a90b-eaf3-4c3a-a4fe-f7130435b3bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestCases">
+      <UniqueIdentifier>{30588aac-bcaf-4269-9250-fc69cc5ed5f0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CoreClasses.cpp" />
@@ -54,6 +60,15 @@
     </ClCompile>
     <ClCompile Include="KCCore\DataGroup\Private\KCDataProperty.cpp">
       <Filter>KCCore\DataGroup\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="KCCore\DataGroup\FileTypes\KCDataGroupStringParser.cpp">
+      <Filter>KCCore\DataGroup\FileTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="KCCore\DataGroup\FileTypes\KCDataGroupStringWriter.cpp">
+      <Filter>KCCore\DataGroup\FileTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="KCCore\DataGroup\FileTypes\KCDataGroupBinaryWriter.cpp">
+      <Filter>KCCore\DataGroup\FileTypes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -107,6 +122,21 @@
     </ClInclude>
     <ClInclude Include="KCCore\Utils\KCAsserts.h">
       <Filter>KCCore\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\DataGroup\FileTypes\KCDataGroupStringParser.h">
+      <Filter>KCCore\DataGroup\FileTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\DataGroup\FileTypes\KCDataGroupStringWriter.h">
+      <Filter>KCCore\DataGroup\FileTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\IO\KCByteWriter.h">
+      <Filter>KCCore\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="TestCases\KCDataGroupTestCase.h">
+      <Filter>TestCases</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\DataGroup\FileTypes\KCDataGroupBinaryWriter.h">
+      <Filter>KCCore\DataGroup\FileTypes</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

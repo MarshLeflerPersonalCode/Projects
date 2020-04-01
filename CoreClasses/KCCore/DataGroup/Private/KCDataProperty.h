@@ -11,6 +11,8 @@ struct KCDataProperty
 	coreUnionData32Bit				m_Data;
 	KCName							m_strLookupName;
 
+	const KCString &				getNameAsString(){ return m_strLookupName.toString(); }
+
 	void operator<<( bool bValue)
 	{
 		m_Data.m_bValue[0] = bValue;
@@ -67,49 +69,36 @@ struct KCDataProperty
 
 	///////////////////////////////////////
 	//this is the harder one - we should probably try to cast
-	//per type of variable.
+	//per type of variable. These call the getAs functions. NOTE that uint64 and uint32
+	//just recast while the other don't.  This is because of casting of smaller number to larger
+	//numbers can lose their sign. If the memory doesn't change, you can cast between 4294967295(max uint32(0xFFFFFFFF)) and -1(int32 0xFFFFFFFFF)
 	/////////////////////////////////////
-	void operator>>(bool &bValue)
-	{		
-		bValue = m_Data.m_bValue[0];
-	}
-	void operator>>(char &cValue)
-	{
-		cValue = m_Data.m_cValue[0];
-	}
-	void operator>>(int8 &iValue)
-	{
-		iValue = m_Data.m_iValue8[0];
-	}
-	void operator>>(uint8 &iValue)
-	{
-		iValue = m_Data.m_uiValue8[0];
-	}
-	void operator>>(int16 &iValue)
-	{
-		iValue = m_Data.m_iValue16[0];
-	}
-	void operator>>(uint16 &iValue)
-	{
-		iValue = m_Data.m_uiValue16[0];
-	}
-	void operator>>(int32 &iValue)
-	{
-		iValue = m_Data.m_iValue32;
-	}
-	void operator>>(uint32 &iValue)
-	{
-		iValue = m_Data.m_uiValue32;
-	}
-	void operator>>(float &fValue)
-	{
-		fValue = m_Data.m_fValue;
-	}
-	void operator>>(KCName &strValue)
-	{
-		strValue = KCName::getNameFromID(m_Data.m_uiValue32);
-	}
-	void operator>>(KCString &strValue);
-	void operator>>(int64 &iValue);
-	void operator>>(uint64 &iValue);
+	FORCEINLINE void		operator>>(bool &bValue) {	bValue = getAsBool();}
+	FORCEINLINE void		operator>>(char &cValue){cValue = (char)getAsUInt8();}
+	FORCEINLINE void		operator>>(int8 &iValue){iValue = getAsInt8();}
+	FORCEINLINE void		operator>>(uint8 &iValue){iValue = getAsUInt8();}
+	FORCEINLINE void		operator>>(int16 &iValue){iValue = getAsInt16();}
+	FORCEINLINE void		operator>>(uint16 &iValue){iValue = getAsUInt16();}
+	FORCEINLINE void		operator>>(int32 &iValue){iValue = getAsInt32();}
+	FORCEINLINE void		operator>>(uint32 &iValue){iValue = getAsUInt32();}
+	FORCEINLINE void		operator>>(float &fValue) { fValue = getAsFloat();}
+	FORCEINLINE void		operator>>(KCName &strValue) { strValue = getAsString();}
+	FORCEINLINE void		operator>>(KCString &strValue) { strValue = getAsString(); }
+	FORCEINLINE void		operator>>(int64 &iValue) { iValue = getAsInt64(); }
+	FORCEINLINE void		operator>>(uint64 &iValue) { iValue = getAsUInt64(); }
+
+
+	KCString 				getAsString();
+	int64					getAsInt64();
+	FORCEINLINE uint64		getAsUInt64() { return (uint64)getAsInt64(); }
+	int32					getAsInt32();
+	uint32					getAsUInt32() { return (uint32)getAsInt32(); }
+	bool					getAsBool();
+	int8					getAsInt8();
+	uint8					getAsUInt8();
+	int16					getAsInt16();
+	uint16					getAsUInt16();
+	float					getAsFloat();
+
+	bool					setValueByString(const KCString &strString, EDATAGROUP_VARIABLE_TYPES eType);
 };

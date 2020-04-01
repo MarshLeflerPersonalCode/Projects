@@ -163,10 +163,30 @@ public:
 			{
 				return false;
 			}
-			strValue = std::string((char*)&m_pByteArray[m_iCurrentByteIndex], sizeof(char) * (size_t)iNumberOfCharacters);
+			strValue = KCString((char*)&m_pByteArray[m_iCurrentByteIndex], sizeof(char) * (size_t)iNumberOfCharacters);
 			m_iCurrentByteIndex += iNumberOfCharacters;
 			return true;
 		}		
+		return false;
+	}
+
+	FORCEINLINE bool operator<<(KCName &strValue)
+	{
+		uint16 iNumberOfCharacters(0);
+		if (readValue(&iNumberOfCharacters, sizeof(uint16)))
+		{
+			if (iNumberOfCharacters == 0)
+			{
+				return true;
+			}
+			if ((m_iCurrentByteIndex + iNumberOfCharacters) - 1 >= m_iArraySize)
+			{
+				return false;
+			}
+			strValue = KCString((char*)&m_pByteArray[m_iCurrentByteIndex], sizeof(char) * (size_t)iNumberOfCharacters);
+			m_iCurrentByteIndex += iNumberOfCharacters;
+			return true;
+		}
 		return false;
 	}
 	

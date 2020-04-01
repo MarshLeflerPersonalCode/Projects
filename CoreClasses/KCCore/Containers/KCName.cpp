@@ -27,6 +27,6 @@ void KCName::_setString(const KCString &strString)
 {
 	m_iUniqueID = g_StringTable.getStringID(strString);
 #ifdef _DEBUG
-	m_strString = strString;
+	m_strString = g_StringTable.getStringByID(m_iUniqueID);
 #endif
 }
