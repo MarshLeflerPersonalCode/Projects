@@ -10,13 +10,23 @@
 class KCByteReader
 {
 public:
+	KCByteReader() {}
 	KCByteReader(const KCTArray<uint8> &mArray)
+	{
+		configureByTArray(mArray);
+	}
+	KCByteReader(const uint8 *pArray, const int32 iCount = 0)
+	{
+		configureByByteArray( pArray, iCount);
+	}
+	void configureByTArray(const KCTArray<uint8> &mArray)
 	{
 		m_pByteArray = mArray.getMemory();
 		m_iArraySize = mArray.getCount();
 		m_iCurrentByteIndex = 0;
 	}
-	KCByteReader(const uint8 *pArray, const int32 iCount = 0)
+
+	void configureByByteArray(const uint8 *pArray, const int32 iCount = 0)
 	{
 		m_pByteArray = pArray;
 		m_iArraySize = iCount;

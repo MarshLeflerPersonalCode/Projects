@@ -70,6 +70,12 @@
     <ClCompile Include="KCCore\DataGroup\FileTypes\KCDataGroupBinaryWriter.cpp">
       <Filter>KCCore\DataGroup\FileTypes</Filter>
     </ClCompile>
+    <ClCompile Include="KCCore\DataGroup\FileTypes\KCDataGroupBinaryReader.cpp">
+      <Filter>KCCore\DataGroup\FileTypes</Filter>
+    </ClCompile>
+    <ClCompile Include="KCCore\Utils\KCStringUtils.cpp">
+      <Filter>KCCore\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KCCore\UnitTypes\KCUnitTypeManager.h">
@@ -137,6 +143,12 @@
     </ClInclude>
     <ClInclude Include="KCCore\DataGroup\FileTypes\KCDataGroupBinaryWriter.h">
       <Filter>KCCore\DataGroup\FileTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\DataGroup\FileTypes\KCDataGroupBinaryReader.h">
+      <Filter>KCCore\DataGroup\FileTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Utils\KCStringUtils.h">
+      <Filter>KCCore\Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

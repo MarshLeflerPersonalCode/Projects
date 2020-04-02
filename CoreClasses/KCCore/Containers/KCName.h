@@ -11,7 +11,8 @@ public:
 	KCName(const char *strString) { _setString(KCString(strString)); }
 	KCName(const KCString strString) { _setString(strString); }
 	~KCName() {}
-
+	//returns if its empty
+	FORCEINLINE bool		isEmpty() const { return (m_iUniqueID == INVALID || m_iUniqueID == 0 )?true:false; }
 	//returns the string table used for KCName
 	static class KCStringTable &	getStringTable();
 	//returns the KCName by ID

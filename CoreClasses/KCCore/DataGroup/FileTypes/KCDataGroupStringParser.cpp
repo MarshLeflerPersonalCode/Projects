@@ -166,5 +166,6 @@ bool KCDataGroupStringParser::parseDataGroupFromFile(const WCHAR *strPathAndFile
 			_parseDataGroup(mDataGroup, mStringStream);
 		}
 	}
+	mDataGroup.setProperty("_FILE_", strPathAndFile);
 	return true;
 }

@@ -110,8 +110,8 @@ void _writeDataGroup(KCDataGroup &mDataGroup, KCByteWriter &mWriter, std::map<KC
 		}		
 	}
 
-	
-
+	uint16 iChildrenCount((uint16)mDataGroup.getChildGroups().size());
+	mWriter << iChildrenCount;
 	for (auto mChildIter : mDataGroup.getChildGroups())
 	{
 		_writeDataGroup(mChildIter.second, mWriter, mStringLookupTable);
@@ -124,7 +124,7 @@ void _writeDataGroup(KCDataGroup &mDataGroup, KCByteWriter &mWriter, std::map<KC
 void _writeHeader(KCByteWriter &mWriter)
 {
 
-	uint8 iVersion(KDATAGROUP_BINARY_VERSION);
+	uint8 iVersion((uint8)KDATAGROUP_BINARY_VERSION);
 	mWriter << iVersion;
 }
 
@@ -134,7 +134,9 @@ void _writeStringTable(KCByteWriter &mWriter, std::map<KCString, uint16> &mStrin
 	mWriter << iCount;
 	for (auto mStringIter : mStringLookupTable)
 	{
-		mWriter << mStringIter.first;		
+		mWriter << mStringIter.second;
+		mWriter << mStringIter.first;	
+
 	}
 }
 

@@ -16,6 +16,6 @@
 #include "Containers/KCStringTable.h"
 #include "IO/KCByteReader.h"
 #include "IO/KCFileUtilities.h"
-
+#include "Utils/KCStringUtils.h"
 
 

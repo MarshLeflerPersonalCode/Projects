@@ -4,6 +4,7 @@
 #include "KCCore/DataGroup/FileTypes/KCDataGroupStringWriter.h"
 #include "KCCore/DataGroup/FileTypes/KCDataGroupStringParser.h"
 #include "KCCore/DataGroup/FileTypes/KCDataGroupBinaryWriter.h"
+#include "KCCore/DataGroup/FileTypes/KCDataGroupBinaryReader.h"
 #include "KCCore/KCIncludes.h"
 
 
@@ -48,6 +49,20 @@ static void				testDataGroupStringParser(const WCHAR *strPath)
 	float fChildValue = (pChild1)?pChild1->getProperty("CHILD1_TEST_FLOAT", -1.0f):-1.0f;
 	bool bWOrked = ( iValue == 13 && pChild1 && fChildValue == 13.0f)?true:false;
 	KCEnsureAlways(bWOrked);
+
+
+	KCDataGroup mDataGroupBinary;
+	std::wstring strAddBinaryHack(strPath);
+	strAddBinaryHack = strAddBinaryHack + L".bin";
+	KCEnsureAlwaysReturn(KCDataGroupBinaryReader::parseDataGroupFromFile(strAddBinaryHack.c_str(), mDataGroupBinary));
+	KCString strOutputBinary = mDataGroup.getStringRepresentingDataGroup();
+	//std::cout << strOutputBinary << std::endl;
+	bool bBinaryWorked = (strOutputBinary == strOutput) ? true : false;
+	if (bBinaryWorked)
+	{
+		std::cout << "Binary load worked. Same as text version." << std::endl;
+	}
+	KCEnsureAlways(bBinaryWorked);
 }
 
 

@@ -49,9 +49,9 @@ int main()
 	funTest();
 	funTest();
 	//KCEnsureOnce(false);
+	
 	testDataGroupSavingAndLoad(L".\\content\\DataGroupTestCast.dat");
-	KCString strInput;
-	std::getline(std::cin, strInput);
+	std::cin.ignore();	//just ignores the next key press
 	exit(0);
 
 }

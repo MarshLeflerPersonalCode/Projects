@@ -1,5 +1,7 @@
 #include "KCDataGroup.h"
 #include "FileTypes/KCDataGroupStringWriter.h"
+#include "utils/KCAsserts.h"
+
 KCDataGroup::KCDataGroup()
 {
 
@@ -15,6 +17,8 @@ KCDataGroup::~KCDataGroup()
 
 }
 
+
+
 KCDataGroup & KCDataGroup::getOrCreateChildGroup(const KCName &strName)
 {
 	auto mData = m_ChildGroups.find(strName);
@@ -24,6 +28,15 @@ KCDataGroup & KCDataGroup::getOrCreateChildGroup(const KCName &strName)
 		mData = m_ChildGroups.find(strName);
 	}
 	return mData->second;
+}
+
+bool KCDataGroup::addChildGroup(KCDataGroup &mGroup)
+{
+	KCEnsureAlwaysMsgReturnVal(!mGroup.getGroupName().isEmpty(), "No name specified in group.", false );
+	KCDataGroup *pChildWithName = getChildGroup(mGroup.getGroupName());
+	KCEnsureAlwaysMsgReturnVal(pChildWithName == nullptr, "Child with name: " + mGroup.getGroupName().toString() + " already exists.", false);
+	m_ChildGroups[mGroup.getGroupName()] = mGroup;	//copies
+	return true;
 }
 
 KCDataGroup * KCDataGroup::getChildGroup(const KCName &strName)
@@ -42,14 +55,7 @@ KCString KCDataGroup::getStringRepresentingDataGroup()
 }
 
 void KCDataGroup::setProperty(const KCName &strName, const WCHAR *strValue)
-{
-
-	//probably a better way to do this..
-	static char g_StringMemoryPool[1000];
-	std::wstring strString(strValue);
-	KCEnsureAlwaysMsgReturn(strString.size() * sizeof(WCHAR) < 1000, "Increase the memory pool value.");
-	size_t iSizeOutput(0);
-	wcstombs_s(&iSizeOutput, g_StringMemoryPool, 1000, strString.c_str(), strString.size());
-	getOrCreateProperty(strName) << KCString(g_StringMemoryPool);
+{	
+	getOrCreateProperty(strName) << KCStringUtils::converWideToUtf8(strValue);
 }
 

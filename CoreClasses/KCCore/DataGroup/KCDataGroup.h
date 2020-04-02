@@ -17,6 +17,8 @@ public:
 	const KCString &					getGroupNameAsString() const { return m_strGroupName.toString(); }
 	//attempts to add a group by name. If the group is already there it returns 
 	KCDataGroup &						getOrCreateChildGroup(const KCName &strName);
+	//attempts to add a group. if it doesn't have a name or the name is already taken false will be returned. 
+	bool								addChildGroup(KCDataGroup &mGroup);
 	//grabs a child by name. Returns null if not found
 	KCDataGroup *						getChildGroup(const KCName &strName);
 	//returns if the child group exists

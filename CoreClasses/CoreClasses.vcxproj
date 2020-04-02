@@ -164,6 +164,7 @@
   <ItemGroup>
     <ClCompile Include="CoreClasses.cpp" />
     <ClCompile Include="KCCore\Containers\KCName.cpp" />
+    <ClCompile Include="KCCore\DataGroup\FileTypes\KCDataGroupBinaryReader.cpp" />
     <ClCompile Include="KCCore\DataGroup\FileTypes\KCDataGroupBinaryWriter.cpp" />
     <ClCompile Include="KCCore\DataGroup\FileTypes\KCDataGroupStringParser.cpp" />
     <ClCompile Include="KCCore\DataGroup\FileTypes\KCDataGroupStringWriter.cpp" />
@@ -174,11 +175,13 @@
     <ClCompile Include="KCCore\UnitTypes\KCDefinedUnitTypes.cpp" />
     <ClCompile Include="KCCore\UnitTypes\KCUnitTypeManager.cpp" />
     <ClCompile Include="KCCore\UnitTypes\Private\KCUnitTypeCategory.cpp" />
+    <ClCompile Include="KCCore\Utils\KCStringUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KCCore\Containers\KCName.h" />
     <ClInclude Include="KCCore\Containers\KCStringTable.h" />
     <ClInclude Include="KCCore\Containers\KCTArray.h" />
+    <ClInclude Include="KCCore\DataGroup\FileTypes\KCDataGroupBinaryReader.h" />
     <ClInclude Include="KCCore\DataGroup\FileTypes\KCDataGroupBinaryWriter.h" />
     <ClInclude Include="KCCore\DataGroup\FileTypes\KCDataGroupStringParser.h" />
     <ClInclude Include="KCCore\DataGroup\FileTypes\KCDataGroupStringWriter.h" />
@@ -196,6 +199,7 @@
     <ClInclude Include="KCCore\UnitTypes\Private\KCUnitTypeCategory.h" />
     <ClInclude Include="KCCore\UnitTypes\UnitTypes\KCUnitTypesItems.h" />
     <ClInclude Include="KCCore\Utils\KCAsserts.h" />
+    <ClInclude Include="KCCore\Utils\KCStringUtils.h" />
     <ClInclude Include="SaveObjectTest.h" />
     <ClInclude Include="TestCases\KCDataGroupTestCase.h" />
   </ItemGroup>
