@@ -4,10 +4,15 @@ mByteWriter << m_strTest;\
 return true;\
 }\
 \
-bool serialize(KCDataGroup &mDataGroup)\
+bool serialize(KCDataGroup &mDataGroup, const KCString &strGroupName)\
 {\
+    if(mDataGroup.getGroupName().isEmpty()){ mDataGroup.setGroupName(strGroupName);}\
 	mDataGroup.setProperty("m_strTest", m_strTest);\
 	return true;\
+}\
+bool serialize(KCDataGroup &mDataGroup)\
+{\
+    return serialize(mDataGroup, "KCSerializeChild");\
 }\
 \
 bool deserialize(KCByteReader &mByteReader)\
@@ -32,13 +37,18 @@ m_SerializeChild.serialize(mByteWriter);\
 return true;\
 }\
 \
-bool serialize(KCDataGroup &mDataGroup)\
+bool serialize(KCDataGroup &mDataGroup, const KCString &strGroupName)\
 {\
+    if(mDataGroup.getGroupName().isEmpty()){ mDataGroup.setGroupName(strGroupName);}\
 	mDataGroup.setProperty("m_fX", m_fX);\
 	mDataGroup.setProperty("m_fY", m_fY);\
 	mDataGroup.setProperty("m_fZ", m_fZ);\
-	m_SerializeChild.serialize(mDataGroup);\
+	m_SerializeChild.serialize(mDataGroup, "m_SerializeChild");\
 	return true;\
+}\
+bool serialize(KCDataGroup &mDataGroup)\
+{\
+    return serialize(mDataGroup, "KCIncludeTest");\
 }\
 \
 bool deserialize(KCByteReader &mByteReader)\

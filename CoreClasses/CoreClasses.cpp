@@ -7,8 +7,8 @@
 #include "KCCore/UnitTypes/KCDefinedUnitTypes.h"
 #include "KCCore/Containers/KCName.h"
 #include "TestCases/KCDataGroupTestCase.h"
+#include "KCCore/DataGroup/FileTypes/KCDataGroupSimpleXMLWriter.h"
 #include <direct.h>
-#include <assert.h>
 #include "TestCases/SerializeTest/KCIncludeTest.h"
 #define GetCurrentDir _getcwd
 
@@ -53,16 +53,20 @@ int main()
 	
 	testDataGroupSavingAndLoad(L".\\content\\DataGroupTestCast.dat");
 	
-	
+	KCDataGroup mDataGroup;
+	const KCName &strGroupname = mDataGroup.getGroupName();
+	bool bIsEmpty = strGroupname == EMPTY_KCSTRING;
 	KCIncludeTest mTest1( 12.5f, 13.5, 14.5f);
 	KCByteWriter mWriter;
 	mTest1.serialize(mWriter);
+	mTest1.serialize(mDataGroup);
 	KCIncludeTest mTest2;
 	KCByteReader mReader(mWriter.getByteArray(), mWriter.getByteArrayCount());
 	mTest2.deserialize(mReader);
 
-
-
+	KCString strName = KCDataGroupSimpleXMLWriter::writeDataGroupToString(mDataGroup);
+	
+	
 	std::cin.ignore();	//just ignores the next key press
 	exit(0);
 

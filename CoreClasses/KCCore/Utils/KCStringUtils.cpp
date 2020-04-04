@@ -44,6 +44,32 @@ void KCStringUtils::removeCharactersFromFrontOfString(std::string &strString, co
 	}
 }
 
+
+bool KCStringUtils::chopEndOffOfString(std::string &strStringModifying, const std::string &strTokenToSearchFor, bool bIgnoreCase )
+{
+	if (strStringModifying.length() == 0)
+	{
+		return false;
+	}
+	size_t iTokenIndex(INVALID);
+	if (bIgnoreCase)
+	{
+		std::string strInputUpper = toUpperNewString(strStringModifying);
+		std::string strTokenUpper = toUpperNewString(strTokenToSearchFor);
+		iTokenIndex = strInputUpper.rfind(strTokenUpper);
+	}
+	else
+	{
+		iTokenIndex = strStringModifying.rfind(strTokenToSearchFor);
+	}
+	if (iTokenIndex == std::string::npos)
+	{		
+		return false;
+	}
+	strStringModifying.resize(iTokenIndex);
+	return true;
+}
+
 bool KCStringUtils::getTagName(std::string &strOutputString, const std::string &strStringSearching, const std::string &strTagOpen, const std::string &strTagClosed)
 {
 	strOutputString = "";

@@ -36,5 +36,6 @@ private:
 	float				m_fX = 0;
 	float				m_fY = 0;
 	float				m_fZ = 0;
+	UPROPERTY()
 	KCSerializeChild	m_SerializeChild;
 };

@@ -82,6 +82,9 @@
     <ClCompile Include="KCCore\Utils\KCStringUtils.cpp">
       <Filter>KCCore\Utils</Filter>
     </ClCompile>
+    <ClCompile Include="KCCore\DataGroup\FileTypes\KCDataGroupSimpleXMLWriter.cpp">
+      <Filter>KCCore\DataGroup\FileTypes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KCCore\UnitTypes\KCUnitTypeManager.h">
@@ -158,6 +161,12 @@
     </ClInclude>
     <ClInclude Include="KCCore\Serialization\KCSerializationDefines.h">
       <Filter>KCCore\Serialization</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\DataGroup\FileTypes\KCDataGroupSimpleXMLWriter.h">
+      <Filter>KCCore\DataGroup\FileTypes</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\DataGroup\FileTypes\KCDataGroupSimpleXMLInclude.h">
+      <Filter>KCCore\DataGroup\FileTypes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
