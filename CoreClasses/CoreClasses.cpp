@@ -8,6 +8,7 @@
 #include "KCCore/Containers/KCName.h"
 #include "TestCases/KCDataGroupTestCase.h"
 #include "KCCore/DataGroup/FileTypes/KCDataGroupSimpleXMLWriter.h"
+#include "KCCore/DataGroup/FileTypes/KCDataGroupSimpleXMLReader.h"
 #include <direct.h>
 #include "TestCases/SerializeTest/KCIncludeTest.h"
 #define GetCurrentDir _getcwd
@@ -64,8 +65,9 @@ int main()
 	KCByteReader mReader(mWriter.getByteArray(), mWriter.getByteArrayCount());
 	mTest2.deserialize(mReader);
 
-	KCString strName = KCDataGroupSimpleXMLWriter::writeDataGroupToString(mDataGroup);
-	
+	KCString strData = KCDataGroupSimpleXMLWriter::writeDataGroupToString(mDataGroup);
+	KCDataGroup mSecondGroup;
+	KCDataGroupSimpleXMLReader::parseDataGroupFromString(strData, mSecondGroup);
 	
 	std::cin.ignore();	//just ignores the next key press
 	exit(0);

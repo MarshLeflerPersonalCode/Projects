@@ -166,6 +166,7 @@
     <ClCompile Include="KCCore\Containers\KCName.cpp" />
     <ClCompile Include="KCCore\DataGroup\FileTypes\KCDataGroupBinaryReader.cpp" />
     <ClCompile Include="KCCore\DataGroup\FileTypes\KCDataGroupBinaryWriter.cpp" />
+    <ClCompile Include="KCCore\DataGroup\FileTypes\KCDataGroupSimpleXMLReader.cpp" />
     <ClCompile Include="KCCore\DataGroup\FileTypes\KCDataGroupSimpleXMLWriter.cpp" />
     <ClCompile Include="KCCore\DataGroup\FileTypes\KCDataGroupStringParser.cpp" />
     <ClCompile Include="KCCore\DataGroup\FileTypes\KCDataGroupStringWriter.cpp" />
@@ -185,6 +186,7 @@
     <ClInclude Include="KCCore\DataGroup\FileTypes\KCDataGroupBinaryReader.h" />
     <ClInclude Include="KCCore\DataGroup\FileTypes\KCDataGroupBinaryWriter.h" />
     <ClInclude Include="KCCore\DataGroup\FileTypes\KCDataGroupSimpleXMLInclude.h" />
+    <ClInclude Include="KCCore\DataGroup\FileTypes\KCDataGroupSimpleXMLReader.h" />
     <ClInclude Include="KCCore\DataGroup\FileTypes\KCDataGroupSimpleXMLWriter.h" />
     <ClInclude Include="KCCore\DataGroup\FileTypes\KCDataGroupStringParser.h" />
     <ClInclude Include="KCCore\DataGroup\FileTypes\KCDataGroupStringWriter.h" />
@@ -194,6 +196,8 @@
     <ClInclude Include="KCCore\IO\KCByteReader.h" />
     <ClInclude Include="KCCore\IO\KCByteWriter.h" />
     <ClInclude Include="KCCore\IO\KCFileUtilities.h" />
+    <ClInclude Include="KCCore\IO\KCMemoryReader.h" />
+    <ClInclude Include="KCCore\IO\KCMemoryWriter.h" />
     <ClInclude Include="KCCore\KCDefines.h" />
     <ClInclude Include="KCCore\KCIncludes.h" />
     <ClInclude Include="KCCore\Serialization\KCSerializationDefines.h" />

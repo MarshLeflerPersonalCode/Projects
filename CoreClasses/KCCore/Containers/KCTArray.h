@@ -101,7 +101,7 @@ public:
 	//returns the memory
 	uint32						getMemoryCount() const { return m_iMemorySize; }
 	//returns the amount of memory being taken up - does a sizeof(T) * getMemoryCount()
-	uint32						getMemorySize() const { return sizeof(T) * getMemoryCount(); }
+	size_t						getMemorySize() const { return sizeof(T) * (size_t)getMemoryCount(); }
 	//returns the count
 	FORCEINLINE uint32			getCount() const { return m_iCountOfItems; }
 
@@ -205,7 +205,7 @@ public:
 	//reserves the number of slots
 	void						reserve(uint32 iSize)
 	{
-		_expandMemoryTo(iSize);
+		_expandMemoryTo(iSize * sizeof(T));
 	}
 
 private:
@@ -218,7 +218,7 @@ private:
 			_expandMemoryTo((m_iMemorySize == 0) ? 2 : m_iMemorySize + m_iMemorySize);
 			break;
 		case ETARRAY_GROW_BY_TYPES::PREDEFINED:
-			_expandMemoryTo(m_iMemorySize + (m_iGrowBy <= 0) ? 10 : m_iGrowBy);
+			_expandMemoryTo(m_iMemorySize + (m_iGrowBy <= 0) ? (10 * sizeof(T)) : (m_iGrowBy * sizeof(T)));
 			break;
 		}
 	}
