@@ -193,6 +193,7 @@
     <ClInclude Include="KCCore\IO\KCFileUtilities.h" />
     <ClInclude Include="KCCore\KCDefines.h" />
     <ClInclude Include="KCCore\KCIncludes.h" />
+    <ClInclude Include="KCCore\Serialization\KCSerializationDefines.h" />
     <ClInclude Include="KCCore\UnitTypes\KCDefinedUnitTypes.h" />
     <ClInclude Include="KCCore\UnitTypes\KCUnitTypeManager.h" />
     <ClInclude Include="KCCore\UnitTypes\Private\KCUnitType.h" />
@@ -200,8 +201,11 @@
     <ClInclude Include="KCCore\UnitTypes\UnitTypes\KCUnitTypesItems.h" />
     <ClInclude Include="KCCore\Utils\KCAsserts.h" />
     <ClInclude Include="KCCore\Utils\KCStringUtils.h" />
-    <ClInclude Include="SaveObjectTest.h" />
     <ClInclude Include="TestCases\KCDataGroupTestCase.h" />
+    <ClInclude Include="TestCases\SerializeTest\KCIncludeTest.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TestCases\SerializeTest\KCIncludeTest.inc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

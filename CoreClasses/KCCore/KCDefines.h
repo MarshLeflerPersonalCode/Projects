@@ -1,3 +1,4 @@
+//copyright Marsh Lefler 2000-...
 #pragma once
 //defines to help ease the transition to and from UE4 and standard library
 #ifdef UE_BUILD_DEBUG
@@ -177,12 +178,6 @@ typedef union UNIONDATA64BIT
 
 
 
-#include <unordered_map>
-#include <mutex>
-#include <map>
-#include <string>
-#include <cctype>
-
 #define null 0
 #define KC_NEW new
 #define KC_NEW_ARRAY new []
@@ -194,5 +189,11 @@ static const KCString EMPTY_KCSTRING = "";
 
 
 
+#include <unordered_map>
+#include <mutex>
+#include <map>
+#include <string>
+#include <cctype>
+#include "Serialization/KCSerializationDefines.h"
 
 

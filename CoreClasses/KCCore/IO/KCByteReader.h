@@ -32,6 +32,7 @@ public:
 		m_iArraySize = iCount;
 		m_iCurrentByteIndex = 0;
 	}
+
 	FORCEINLINE int32 tell() { return m_iCurrentByteIndex; }
 	FORCEINLINE bool seek(int32 iLocation)
 	{

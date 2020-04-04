@@ -1,3 +1,4 @@
+//copyright Marsh Lefler 2000-...
 #pragma once
 //defines to help ease the transition to and from UE4 and standard library
 

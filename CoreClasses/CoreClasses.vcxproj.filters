@@ -34,6 +34,12 @@
     <Filter Include="TestCases">
       <UniqueIdentifier>{30588aac-bcaf-4269-9250-fc69cc5ed5f0}</UniqueIdentifier>
     </Filter>
+    <Filter Include="TestCases\serializeTest">
+      <UniqueIdentifier>{b53d2183-32d2-4c4e-8076-0b108324295c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KCCore\Serialization">
+      <UniqueIdentifier>{6f058dd3-90b9-4f16-ade9-2b931cb6cfb3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CoreClasses.cpp" />
@@ -105,9 +111,6 @@
     <ClInclude Include="KCCore\UnitTypes\KCDefinedUnitTypes.h">
       <Filter>KCCore\UnitTypes</Filter>
     </ClInclude>
-    <ClInclude Include="SaveObjectTest.h">
-      <Filter>KCCore</Filter>
-    </ClInclude>
     <ClInclude Include="KCCore\Containers\KCStringTable.h">
       <Filter>KCCore\Containers</Filter>
     </ClInclude>
@@ -150,5 +153,16 @@
     <ClInclude Include="KCCore\Utils\KCStringUtils.h">
       <Filter>KCCore\Utils</Filter>
     </ClInclude>
+    <ClInclude Include="TestCases\SerializeTest\KCIncludeTest.h">
+      <Filter>TestCases\serializeTest</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Serialization\KCSerializationDefines.h">
+      <Filter>KCCore\Serialization</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TestCases\SerializeTest\KCIncludeTest.inc">
+      <Filter>TestCases\serializeTest</Filter>
+    </None>
   </ItemGroup>
 </Project>

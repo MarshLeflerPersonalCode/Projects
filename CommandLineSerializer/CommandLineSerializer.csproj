@@ -4,16 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0411108C-CA88-41B8-8146-BF77EB6C8079}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Library</RootNamespace>
-    <AssemblyName>Library</AssemblyName>
+    <ProjectGuid>{0D9137FF-A156-41B3-843E-C76E97FF14FE}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>CommandLineSerializer</RootNamespace>
+    <AssemblyName>CommandLineSerializer</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,6 +23,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -41,17 +42,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommandLine\CommandLineArguments.cs" />
-    <Compile Include="CommandLine\CommandLineOption.cs" />
-    <Compile Include="CommandLine\CommandLineVariable.cs" />
-    <Compile Include="DataGroup\DataGroup.cs" />
-    <Compile Include="DataGroup\DataProperty.cs" />
-    <Compile Include="IO\ByteWriter.cs" />
-    <Compile Include="IO\LogFile.cs" />
+    <Compile Include="HeaderFile.cs" />
+    <Compile Include="ProcessHeaderFileList.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SerializerConfigFile.cs" />
+    <Compile Include="SerializerController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Utilities\" />
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\LibraryCSharp\Library.csproj">
+      <Project>{0411108c-ca88-41b8-8146-bf77eb6c8079}</Project>
+      <Name>Library</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

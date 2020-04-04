@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.960
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLineSerializer", "CommandLineSerializer.csproj", "{0D9137FF-A156-41B3-843E-C76E97FF14FE}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0411108C-CA88-41B8-8146-BF77EB6C8079} = {0411108C-CA88-41B8-8146-BF77EB6C8079}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library", "..\LibraryCSharp\Library.csproj", "{0411108C-CA88-41B8-8146-BF77EB6C8079}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0D9137FF-A156-41B3-843E-C76E97FF14FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D9137FF-A156-41B3-843E-C76E97FF14FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D9137FF-A156-41B3-843E-C76E97FF14FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D9137FF-A156-41B3-843E-C76E97FF14FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0411108C-CA88-41B8-8146-BF77EB6C8079}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0411108C-CA88-41B8-8146-BF77EB6C8079}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0411108C-CA88-41B8-8146-BF77EB6C8079}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0411108C-CA88-41B8-8146-BF77EB6C8079}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {53EA767F-1EA2-40C5-AC23-DBF1F3EFFC3C}
+	EndGlobalSection
+EndGlobal

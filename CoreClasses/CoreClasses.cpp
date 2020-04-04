@@ -9,6 +9,7 @@
 #include "TestCases/KCDataGroupTestCase.h"
 #include <direct.h>
 #include <assert.h>
+#include "TestCases/SerializeTest/KCIncludeTest.h"
 #define GetCurrentDir _getcwd
 
 static void funTest()
@@ -51,6 +52,17 @@ int main()
 	//KCEnsureOnce(false);
 	
 	testDataGroupSavingAndLoad(L".\\content\\DataGroupTestCast.dat");
+	
+	
+	KCIncludeTest mTest1( 12.5f, 13.5, 14.5f);
+	KCByteWriter mWriter;
+	mTest1.serialize(mWriter);
+	KCIncludeTest mTest2;
+	KCByteReader mReader(mWriter.getByteArray(), mWriter.getByteArrayCount());
+	mTest2.deserialize(mReader);
+
+
+
 	std::cin.ignore();	//just ignores the next key press
 	exit(0);
 
