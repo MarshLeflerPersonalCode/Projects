@@ -11,6 +11,7 @@ struct KCDataProperty
 	coreUnionData32Bit				m_Data;
 	KCName							m_strLookupName;
 
+
 	const KCString &				getNameAsString(){ return m_strLookupName.toString(); }
 
 	void operator<<( bool bValue)
@@ -100,5 +101,6 @@ struct KCDataProperty
 	uint16					getAsUInt16();
 	float					getAsFloat();
 
+	bool					setValueByString(const KCString &strString, const KCString &strType);
 	bool					setValueByString(const KCString &strString, EDATAGROUP_VARIABLE_TYPES eType);
 };

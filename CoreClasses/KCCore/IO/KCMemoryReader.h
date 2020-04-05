@@ -3,6 +3,7 @@
 #pragma once
 
 #include "KCDefines.h"
+#include "Utils/KCAsserts.h"
 #include "Containers/KCTArray.h"
 #include "Containers/KCName.h"
 
@@ -45,7 +46,9 @@ public:
 	}
 	//returns the next memory index
 	FORCEINLINE MemoryType next(){ seek(m_iCurrentByteIndex + 1); return m_pMemoryArray[m_iCurrentByteIndex];}
-	
+	//tells what the value is at a specific memory location
+	FORCEINLINE MemoryType memoryValueAtLocation(size_t iLocationInMemory){ KCEnsureAlwaysReturnVal(( iLocationInMemory < m_iArraySize ), (MemoryType)INVALID); return m_pMemoryArray[iLocationInMemory]; }
+	//is the current carrot at the end of memory?
 	FORCEINLINE bool eof() { return m_iCurrentByteIndex >= m_iArraySize; }
 
 	FORCEINLINE bool readValue(void *pValue, size_t iSize)

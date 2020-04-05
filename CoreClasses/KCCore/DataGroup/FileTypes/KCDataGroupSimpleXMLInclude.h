@@ -7,4 +7,5 @@
 #define SAME_GROUP_TAG_NAME_SPLIT "_A_"
 
 #define GROUP_TYPE_NAME "GROUP"
+#define ATTRIBUTE_TYPE "TYPE"
 

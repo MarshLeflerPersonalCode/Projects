@@ -65,10 +65,11 @@ int main()
 	KCByteReader mReader(mWriter.getByteArray(), mWriter.getByteArrayCount());
 	mTest2.deserialize(mReader);
 
-	KCString strData = KCDataGroupSimpleXMLWriter::writeDataGroupToString(mDataGroup);
+	//KCString strData = KCDataGroupSimpleXMLWriter::writeDataGroupToString(mDataGroup);
 	KCDataGroup mSecondGroup;
-	KCDataGroupSimpleXMLReader::parseDataGroupFromString(strData, mSecondGroup);
-	
+	KCDataGroupSimpleXMLReader::parseDataGroupFromFile(L"D:\\Personal\\Projects\\CoreClasses\\x64\\Intermediate\\CommandLineSerializer.cfg", mSecondGroup);
+	KCString strData = KCDataGroupSimpleXMLWriter::writeDataGroupToString(mSecondGroup);
+	std::cout << strData;
 	std::cin.ignore();	//just ignores the next key press
 	exit(0);
 

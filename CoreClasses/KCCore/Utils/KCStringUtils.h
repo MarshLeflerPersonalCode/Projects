@@ -18,6 +18,7 @@ namespace KCStringUtils
 
 	//converts a WChar to a String. 
 	KCString			converWideToUtf8(const WCHAR *pStringToConvert);
+	FORCEINLINE KCString toNarrowUtf8(const WCHAR *pStringToConvert){ return converWideToUtf8(pStringToConvert); }
 	//converts a wstring to a String. 
 	KCString			converWideToUtf8(const std::wstring &strStringToConvert);
 

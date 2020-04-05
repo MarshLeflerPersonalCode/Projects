@@ -153,12 +153,25 @@ public:
 		return m_Memory[iIndex];
 	}
 
+	FORCEINLINE bool removeLast()
+	{
+		if (m_iCountOfItems > 0)
+		{
+			m_iCountOfItems--;
+			return true;
+		}
+		return false;
+	}
+
 	//returns the last item in the list
 	FORCEINLINE T &			last()
 	{
 		
 		return m_Memory[m_iCountOfItems - 1];
 	}
+
+
+
 	//returns the last item in the list
 	FORCEINLINE const T &	last() const
 	{
@@ -205,7 +218,7 @@ public:
 	//reserves the number of slots
 	void						reserve(uint32 iSize)
 	{
-		_expandMemoryTo(iSize * sizeof(T));
+		_expandMemoryTo(iSize);
 	}
 
 private:
@@ -218,7 +231,7 @@ private:
 			_expandMemoryTo((m_iMemorySize == 0) ? 2 : m_iMemorySize + m_iMemorySize);
 			break;
 		case ETARRAY_GROW_BY_TYPES::PREDEFINED:
-			_expandMemoryTo(m_iMemorySize + (m_iGrowBy <= 0) ? (10 * sizeof(T)) : (m_iGrowBy * sizeof(T)));
+			_expandMemoryTo(m_iMemorySize + ((m_iGrowBy <= 0) ? 10 : m_iGrowBy));
 			break;
 		}
 	}

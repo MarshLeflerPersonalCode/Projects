@@ -318,7 +318,8 @@ bool KCDataProperty::setValueByString(const KCString &strString, EDATAGROUP_VARI
 		m_Data.m_bValue[0] = (strString.c_str()[0] == 'f' || strString.c_str()[0] == 'F') ? false : true;
 		return true;
 	}
-	if (strString == "")
+	if (strString == "" ||
+		eType == EDATAGROUP_VARIABLE_TYPES::COUNT)
 	{
 		return false;
 	}
@@ -387,4 +388,9 @@ bool KCDataProperty::setValueByString(const KCString &strString, EDATAGROUP_VARI
 		return false;	//we already did a check for zero. So if we are still at zero then we failed to parse the string
 	}
 	return true;
+}
+
+bool KCDataProperty::setValueByString(const KCString &strString, const KCString &strType)
+{
+	return setValueByString(strString, getDataGroupTypeByString(strType));
 }
