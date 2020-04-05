@@ -14,8 +14,8 @@ namespace Library.IO
 		private int m_iThreadsCreated = 0;
 		private Thread m_Thread = null;
 		private bool m_bPrintToConsole = false;
-		private static Mutex m_MutexListOfLogEntries = new Mutex();
-		private static Mutex m_MutexCopyOfListOfLogEntries = new Mutex();
+		private Mutex m_MutexListOfLogEntries = new Mutex();
+		private Mutex m_MutexCopyOfListOfLogEntries = new Mutex();
 		private System.Timers.Timer m_Timer = new System.Timers.Timer();
 		private string m_strLogFile = "";
 		private bool m_bIsValidLogFile = false;

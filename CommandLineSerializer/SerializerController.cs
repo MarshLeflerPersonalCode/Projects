@@ -7,6 +7,7 @@ using System.IO;
 using Library.CommandLine;
 using Library.IO;
 using Library.DataGroup;
+using System.Threading;
 namespace CommandLineSerializer
 {
 	public class SerializerController
@@ -15,32 +16,44 @@ namespace CommandLineSerializer
 		private List<HeaderFile> m_HeaderFiles = new List<HeaderFile>();
 		private List<ProcessHeaderFileList> m_Processes = new List<ProcessHeaderFileList>();
 		private SerializerConfigFile m_ConfigFile = new SerializerConfigFile();
+
 		public SerializerController(string[] args)
 		{
 			
 			_createCommandLineArguments(args);
 			_createLogFile();
-			if(_createIntermediateDirectory() == false) 
+			if (_createIntermediateDirectory() == false)
 			{
 				log("Closing down");
 				Environment.Exit(0);
 				return;
 			}
 			_loadConfigFile();
-			if( _findHeaders() == false )
+			if (_findHeaders() == false)
 			{
 				log("Closing down");
 				Environment.Exit(0);
 				return;
 			}
 			_startProcessingHeaders();
+			_waitForHeadersToDefineObjects();
+			if( _checkForErrors())
+			{
+
+			}
+			_waitForHeadersToWriteHeaders();
+			_waitForHeadersToProcess();
 			_saveConfigFile();
+			m_LogFile.flushLog();
+
 		}
+
 		//creates the command line arguments
 		private void _createCommandLineArguments(string[] args)
 		{
 			commandLineArguments = new CommandLineArguments();
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-Help", "-?" }, "Prints out all the commands"));
+			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-Pause", "-p" }, "Pauses at the end waiting for a key stroke"));
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-Debug", "-d" }, "Shows all the values of the commands processed"));
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-DisplayOff", "-DO" }, "Will make it so that logging info won't be printed to the screen."));
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-LogFile", "-LF" }, "The log file. Must include the file name.", ""));
@@ -53,7 +66,7 @@ namespace CommandLineSerializer
 			{
 				commandLineArguments.setCommand("-LogFile", Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "CommandLineSerializer.log"));
 			}
-			
+
 			if (commandLineArguments.getCommandValueAsBool("-?"))
 			{
 				Console.WriteLine(commandLineArguments.getCommandsAsAstring());
@@ -63,6 +76,8 @@ namespace CommandLineSerializer
 				Console.WriteLine(commandLineArguments.getCommandsAsDisplayString());
 			}
 		}
+
+		public bool shouldPauseOnExit { get { return (commandLineArguments != null)?commandLineArguments.getCommandValueAsBool("-Pause"):false; } }
 
 		private bool _createIntermediateDirectory()
 		{
@@ -81,6 +96,7 @@ namespace CommandLineSerializer
 		private void _loadConfigFile()
 		{
 			
+
 			string strFullPath = Path.Combine(commandLineArguments.getCommandValueAsString("-IntermediateDir"), "CommandLineSerializer.cfg");
 			
 			string strError = "";
@@ -105,42 +121,7 @@ namespace CommandLineSerializer
 			m_ConfigFile.save(commandLineArguments.getCommandValueAsString("-IntermediateDir"));
 		}
 
-		private void _startProcessingHeaders()
-		{
-			int iThreads = Math.Max(1, commandLineArguments.getCommandValueAsInt("-MaxThreads"));
-			
-			for( int iProcessIndex = 0; iProcessIndex < iThreads; iProcessIndex++)
-			{
-				m_Processes.Add(new ProcessHeaderFileList());
-			}
-			int iCurrentProcessBucket = 0;
-			bool bForce = commandLineArguments.getCommandValueAsBool("-ForceRecompile");
-			foreach (HeaderFile mHeaderFile in m_HeaderFiles)
-			{
-				if(bForce == false &&
-					m_ConfigFile.getHeaderFileNeedsToRecompile(mHeaderFile) == false )
-				{
-					log(mHeaderFile.headerFile + " is up to date.");
-				}
-				else
-				{
-					log(mHeaderFile.headerFile + " recompiling header.");
-				}
-				
-				m_Processes[iCurrentProcessBucket].addHeaderFileToProcess(mHeaderFile);
-				iCurrentProcessBucket++;
-				if( iCurrentProcessBucket >= iThreads)
-				{
-					iCurrentProcessBucket = 0;
-				}
-			}
-			log("Processing headers on " + iThreads.ToString() + " processors.");
-			for (int iProcessIndex = 0; iProcessIndex < m_Processes.Count; iProcessIndex++)
-			{
-				log("Thread_" + iProcessIndex.ToString() + ") Processing " + m_Processes[iProcessIndex].getNumberOfHeadersRemainingToProcess().ToString() + " headers.");
-			}
-			
-		}
+	
 
 		
 		//returns the command line arguments
@@ -178,6 +159,7 @@ namespace CommandLineSerializer
 			foreach( string strFile in mFiles)
 			{
 				HeaderFile mHeaderFile = new HeaderFile();
+				mHeaderFile.setLogFile(m_LogFile);
 				string strFileName = Path.GetFileName(strFile);
 
 				string strExportedHeaderFile = Path.Combine(strPathToIntermediateDir, Path.GetFileNameWithoutExtension(strFile) + "serialize.h");
@@ -193,6 +175,84 @@ namespace CommandLineSerializer
 			return true;
 		}
 
+		private void _startProcessingHeaders()
+		{
+			int iThreads = Math.Max(1, commandLineArguments.getCommandValueAsInt("-MaxThreads"));
 
+			for (int iProcessIndex = 0; iProcessIndex < iThreads; iProcessIndex++)
+			{
+				m_Processes.Add(new ProcessHeaderFileList());
+			}
+			int iCurrentProcessBucket = 0;
+			bool bForce = commandLineArguments.getCommandValueAsBool("-ForceRecompile");
+			foreach (HeaderFile mHeaderFile in m_HeaderFiles)
+			{
+				if (bForce == false &&
+					m_ConfigFile.getHeaderFileNeedsToRecompile(mHeaderFile) == false)
+				{
+					log(mHeaderFile.headerFile + " is up to date.");
+				}
+				else
+				{
+					log(mHeaderFile.headerFile + " recompiling header.");
+				}
+
+				m_Processes[iCurrentProcessBucket].addHeaderFileToProcess(mHeaderFile);
+				iCurrentProcessBucket++;
+				if (iCurrentProcessBucket >= iThreads)
+				{
+					iCurrentProcessBucket = 0;
+				}
+			}
+			log("Processing headers on " + iThreads.ToString() + " processors.");
+			for (int iProcessIndex = 0; iProcessIndex < m_Processes.Count; iProcessIndex++)
+			{
+				log("Thread_" + iProcessIndex.ToString() + ") Processing " + m_Processes[iProcessIndex].getNumberOfHeadersRemainingToProcess().ToString() + " headers.");
+				m_Processes[iProcessIndex].startProcessingHeaders();
+			}
+
+
+		}
+
+		private void _waitForHeadersToDefineObjects()
+		{
+
+		}
+
+		private bool _checkForErrors()
+		{
+			for (int iProcessIndex = 0; iProcessIndex < m_Processes.Count; iProcessIndex++)
+			{
+				//todo: check for errors
+				/*if( m_Processes[iProcessIndex].hasAnyErrors == true )
+				{
+					return true;
+				}*/
+			}
+			return false;
+		}
+
+		private void _waitForHeadersToWriteHeaders()
+		{
+
+		}
+
+
+		private void _waitForHeadersToProcess()
+		{
+			while(true)
+			{
+				bool bIsDone = true;
+				for (int iProcessIndex = 0; iProcessIndex < m_Processes.Count; iProcessIndex++)
+				{
+					bIsDone = bIsDone & m_Processes[iProcessIndex].isDoneProcessingHeaders;
+				}
+				if( bIsDone)
+				{
+					break;
+				}
+				Thread.Sleep(5);
+			};
+		}
 	}
 }

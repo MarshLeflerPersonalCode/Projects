@@ -10,7 +10,7 @@ struct KCSerializeChild
 public:
 	KCSERIALIZE_CODE();
 
-
+	UPROPERTY()
 	KCString		m_strTest;
 };
 
@@ -33,8 +33,11 @@ public:
 
 	void set(float x, float y, float z ){ m_fX = x; m_fY = y; m_fZ = z;}
 private:
+	UPROPERTY()
 	float				m_fX = 0;
+	UPROPERTY()
 	float				m_fY = 0;
+	UPROPERTY()
 	float				m_fZ = 0;
 	UPROPERTY()
 	KCSerializeChild	m_SerializeChild;

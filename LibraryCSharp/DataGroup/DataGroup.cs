@@ -25,11 +25,6 @@ namespace Library.DataGroup
 		{
 			dataGroupName = strName;
 		}
-		public DataGroup(Object obj)
-		{
-			dataGroupName = "";
-			_serialize(obj);
-		}
 		//get/set the name of the datagroup
 		public string dataGroupName { get; set; }
 		public DataGroup getOrCreateDataGroup(string strDataGroupName)
@@ -96,7 +91,11 @@ namespace Library.DataGroup
 		//returns "" if it was successful, otherwise the error message
 		public string saveToFile(string strFile)
 		{
-			string strOutputText = getDataGroupAsString();
+			if( dataGroupName == "" )
+			{
+				dataGroupName = "ROOT";				
+			}
+			string strOutputText = getDataGroupAsXmlString();
 			File.WriteAllText(strFile, strOutputText);
 			if( File.Exists(strFile) == false)
 			{
@@ -150,8 +149,8 @@ namespace Library.DataGroup
 		}
 
 
-		public string getDataGroupAsString() { return _getDataGroupAsString(""); }
-		private string _getDataGroupAsString(string strTab)
+		public string getDataGroupAsXmlString() { return _getDataGroupAsXmlString(""); }
+		private string _getDataGroupAsXmlString(string strTab)
 		{
 			string strGroupName = dataGroupName;
 			string strIndex = "0";
@@ -170,13 +169,13 @@ namespace Library.DataGroup
 			}
 			foreach (DataGroup mDataGroup in m_ChildGroups.Values)
 			{
-				strOutput = strOutput + mDataGroup._getDataGroupAsString(strTabForChildren);
+				strOutput = strOutput + mDataGroup._getDataGroupAsXmlString(strTabForChildren);
 			}
 			strOutput = strOutput + strTab + "</" + strGroupName + ">" + Environment.NewLine;
 			return strOutput;
 		}
 
-		public static DataGroup parseDataGroupByString(string strSerializedDataGroup)
+		public static DataGroup parseDataGroupByXmlString(string strSerializedDataGroup)
 		{
 			DataGroup mDataGroup = new DataGroup();
 			XmlDocument xmlDoc = new XmlDocument();
@@ -243,7 +242,7 @@ namespace Library.DataGroup
 				mNode = mNode.NextSibling;
 			}				
 		}
-		private void _parseChildren(XmlNode mNode)
+		private void _parseXmlChildren(XmlNode mNode)
 		{ 
 			//	XmlAttribute mAttribute = mElement.GetAttributeNode("Type");
 			if (mNode.HasChildNodes)
@@ -268,14 +267,14 @@ namespace Library.DataGroup
 			return true;
 		}
 		
-		public static DataGroup serialize(Object mObjectToSerialize)
+		public static DataGroup serializeObjectIntoDataGroup(Object mObjectToSerialize, ref string strError)
 		{
 			if(mObjectToSerialize == null) { return null; }
 			DataGroup mDataGroup = new DataGroup();
-			mDataGroup._serialize(mObjectToSerialize);
+			mDataGroup.serializeObject(mObjectToSerialize, ref strError);
 			return mDataGroup;
 		}
-		
+
 		//returns how many tags got filled out.
 		private int _getTag(string strLine, ref string strFirstTag, ref string strData, ref string strLastTag)
 		{
@@ -330,7 +329,7 @@ namespace Library.DataGroup
 			return strType;
 		}
 
-
+		//this is the crazy function that go through all the reflection and figures out what all the objects are. In theory we don't need this for the c++ side. But we do need some way to parse and know what the variable types are in c#. But we only really need, bool, int, uint32, int64, uint64 and String.
 		private void _defineTypesInXML(Type mTypeOfObject, MemberInfo mParentMemberInfo, ref StringReader mReader, ref StringWriter mWriter)
 		{
 			Type mParentPropertyType = (mParentMemberInfo != null && mParentMemberInfo.MemberType == MemberTypes.Property) ? ((PropertyInfo)mParentMemberInfo).PropertyType : null;
@@ -452,38 +451,46 @@ namespace Library.DataGroup
 
 			};
 		}
-		
-		private bool _serialize(Object mObjectToSerialize)
+		//does the actual serialization. First it serializes the object into an xml serializer, we then walk the objects serialzied to specify type.
+		public bool serializeObject(Object mObjectToSerialize, ref string strError )
 		{
 
-			Type mType = mObjectToSerialize.GetType();
-			System.Xml.Serialization.XmlSerializer mXmlSerailizer = new System.Xml.Serialization.XmlSerializer(mType);			
-			StringWriter mWriterXml = new StringWriter();			
-			mXmlSerailizer.Serialize(mWriterXml, mObjectToSerialize);			
-			string strValue = mWriterXml.ToString();
-			StringWriter mWriter = new StringWriter();
-			StringReader mReader = new StringReader(strValue);
-			//now fix up the tags...
-			_defineTypesInXML(mObjectToSerialize.GetType(), null, ref mReader, ref mWriter);
-			this.dataGroupName = "";
-			XmlDocument xmlDoc = new XmlDocument();
-			xmlDoc.LoadXml(mWriter.ToString());
-			bool bParsedOkay = _parseXmlStream(xmlDoc, this);
-			Type mTypeTest = Type.GetType(mType.AssemblyQualifiedName);
-			setProperty("CSharpObject", mType.GetTypeInfo().AssemblyQualifiedName);
-			return bParsedOkay;
-			/*File.WriteAllText("test.txt", strValue, Encoding.ASCII);
-			StringWriter mWriter = new StringWriter();
-			StringReader mReader = new StringReader(File.ReadAllText("test.txt"));
-			//Object mNewObject = mXmlSerailizer.Deserialize(mReader);
-			_defineTypesInXML(mObjectToSerialize.GetType(), null, ref mReader, ref mWriter);
-			File.WriteAllText("test.txt", mWriter.ToString(), Encoding.ASCII);
-			*/
-			
+			try
+			{
+				Type mType = mObjectToSerialize.GetType();
+				System.Xml.Serialization.XmlSerializer mXmlSerailizer = new System.Xml.Serialization.XmlSerializer(mType);
+				StringWriter mWriterXml = new StringWriter();
+				mXmlSerailizer.Serialize(mWriterXml, mObjectToSerialize);
+				string strValue = mWriterXml.ToString();
+				StringWriter mWriter = new StringWriter();
+				StringReader mReader = new StringReader(strValue);
+				//now fix up the tags...
+				_defineTypesInXML(mObjectToSerialize.GetType(), null, ref mReader, ref mWriter);
+				this.dataGroupName = "";
+				XmlDocument xmlDoc = new XmlDocument();
+				xmlDoc.LoadXml(mWriter.ToString());
+				bool bParsedOkay = _parseXmlStream(xmlDoc, this);
+				Type mTypeTest = Type.GetType(mType.AssemblyQualifiedName);
+				setProperty("CSharpObject", mType.GetTypeInfo().AssemblyQualifiedName);
+				return bParsedOkay;
+			}
+			catch(Exception e)
+			{
+				if (e.InnerException != null)
+				{
+					strError = e.Message + Environment.NewLine + e.InnerException.Message;
+				}
+				else
+				{
+					strError = e.Message;
+				}
+				return false;
+			}
+
 			
 		}
 
-
+		//loads the XML and attempts to create the object from it.
 		public static Object deserializeObjectFromFile(string strFile, ref string strError)
 		{
 			if( File.Exists(strFile) == false )
@@ -497,21 +504,25 @@ namespace Library.DataGroup
 			{
 				return null;
 			}
-			return mDataGroup.attemptToDeserializeIntoObject(ref strError);
-				
+			Object mObject = mDataGroup.deserializeIntoObject(ref strError);
+			if( mObject == null )
+			{
+				strError = strError + Environment.NewLine + "Unable to deserialize into object from file: " + strFile;
+			}
+			return mObject;	
 		}
 
-
-		public object attemptToDeserializeIntoObject(ref string strError)
+		//Note the data group must have been serialized as an object for this to work. The data group should have a CSharpObject tag that defines the object's assembly name
+		public object deserializeIntoObject(ref string strError)
 		{
 
 			Type mType = null;
-			string strAssemblyName = "";
+			
 			try
 			{
 				string strCSharpObjectName = getProperty("CSharpObject", "");
 				if (strCSharpObjectName != "")
-				{					
+				{
 					mType = Type.GetType(strCSharpObjectName);
 				}
 			}
@@ -531,10 +542,20 @@ namespace Library.DataGroup
 			{
 
 			}
-		
-			if( mType == null )
-			{				
-				strError = "Unable to get Type: (" + dataGroupName + ") or (" + strAssemblyName + ")";
+			if (mType == null)
+			{
+				strError = "Data Group could not define the type of object to create. The title of the object or the CSharpObject tag was invalid. Unable to create object.";
+				return null;
+			}
+
+			return deserializeIntoObject(mType, ref strError);
+		}
+
+		public object deserializeIntoObject(Type mObjectType, ref string strError)
+		{
+			if (mObjectType == null)
+			{
+				strError = "Type to deserialize into was null.";
 				return null;
 			}
 			try
@@ -542,11 +563,11 @@ namespace Library.DataGroup
 
 				
 				
-				System.Xml.Serialization.XmlSerializer mXmlSerailizer = new System.Xml.Serialization.XmlSerializer(mType);
-				Object mNewObject = mXmlSerailizer.Deserialize(new StringReader(getDataGroupAsString()));
+				System.Xml.Serialization.XmlSerializer mXmlSerailizer = new System.Xml.Serialization.XmlSerializer(mObjectType);
+				Object mNewObject = mXmlSerailizer.Deserialize(new StringReader(getDataGroupAsXmlString()));
 				if (mNewObject == null)
 				{
-					strError = "Unable to deserialize the object from data group: " + mType.Name;
+					strError = "Unable to deserialize the object from data group: " + mObjectType.Name;
 
 				}
 				return mNewObject;

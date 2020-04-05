@@ -22,6 +22,12 @@ namespace KCStringUtils
 	//converts a wstring to a String. 
 	KCString			converWideToUtf8(const std::wstring &strStringToConvert);
 
+	//returns if it's a number. Supports 1.0f as well.
+	bool				isNumber(const std::string &strStringToTest);
+
+	//will return STRING, INT64, INT32, FLOAT, BOOL from
+	std::string			getVariableType(const std::string &strValue);
+
 	//just as it says. Removes characters/string from the end of a string
 	void				removeCharactersFromEndOfString(std::string &strString, 
 														const std::string &strRemove = " ");

@@ -11,6 +11,7 @@
 #include "KCCore/DataGroup/FileTypes/KCDataGroupSimpleXMLReader.h"
 #include <direct.h>
 #include "TestCases/SerializeTest/KCIncludeTest.h"
+#include <chrono>
 #define GetCurrentDir _getcwd
 
 static void funTest()
@@ -66,10 +67,34 @@ int main()
 	mTest2.deserialize(mReader);
 
 	//KCString strData = KCDataGroupSimpleXMLWriter::writeDataGroupToString(mDataGroup);
+	
 	KCDataGroup mSecondGroup;
 	KCDataGroupSimpleXMLReader::parseDataGroupFromFile(L"D:\\Personal\\Projects\\CoreClasses\\x64\\Intermediate\\CommandLineSerializer.cfg", mSecondGroup);
+	std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
 	KCString strData = KCDataGroupSimpleXMLWriter::writeDataGroupToString(mSecondGroup);
-	std::cout << strData;
+	std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double> time_span = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
+	std::cout << strData << std::endl;
+	std::cout << "time to parse: " << time_span.count() << "second(s)" << std::endl;
+	KCDataGroupBinaryWriter::writeDataGroupToFile(L"D:\\Personal\\Projects\\CoreClasses\\x64\\Intermediate\\CommandLineSerializer.cfg.bin", mSecondGroup);
+	
+	bool bIsNumber1 = KCStringUtils::isNumber("-2323.0242f");
+	bool bIsNumber2 = KCStringUtils::isNumber("-f");
+	bool bIsNumber3 = KCStringUtils::isNumber("");
+	bool bIsNumber4 = KCStringUtils::isNumber("0");
+	bool bIsNumber5 = KCStringUtils::isNumber("3432");
+	bool bIsNumber6 = KCStringUtils::isNumber("Hello - 000.003 2223");
+	KCString strTypeString = KCStringUtils::getVariableType("testing");
+	KCString strTypeInt32 = KCStringUtils::getVariableType("-23232");
+	KCString strTypeInt32_2 = KCStringUtils::getVariableType("23232");
+	KCString strTypeUInt32 = KCStringUtils::getVariableType("4294967295");
+	KCString strTypeFloat = KCStringUtils::getVariableType("23232.0f");
+	KCString strTypeFloat2 = KCStringUtils::getVariableType("-23232.0f");
+	KCString strTypeInt64 = KCStringUtils::getVariableType("9223372036854775807");
+	KCString strTypeInt642 = KCStringUtils::getVariableType("-9223372036854775808");
+	KCString strTypeUInt64 = KCStringUtils::getVariableType("18446744073709551615");
+	KCString strTypeUnknow = KCStringUtils::getVariableType("18446744073709551616");
+	KCString strTypeUnknow2 = KCStringUtils::getVariableType("-9223372036854775809");
 	std::cin.ignore();	//just ignores the next key press
 	exit(0);
 

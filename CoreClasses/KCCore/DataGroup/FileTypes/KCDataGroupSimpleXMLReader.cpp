@@ -87,6 +87,8 @@ FIND_NEXT_DOUBLE_QUOTE:
 	return _findAttributesOfTag(mData, mDatagroup);
 }
 
+
+//the mTagNames is weird - XML can have the same tag names. We can not because of inheritance. So we keep a list per child, and that list increments with each use.
 bool parseXMLTagAndChildren(KCXMLParserData &mData, KCDataGroup &mDataGroup, std::map<KCString, int32> &mTagNames)
 {
 
@@ -98,11 +100,11 @@ bool parseXMLTagAndChildren(KCXMLParserData &mData, KCDataGroup &mDataGroup, std
 
 	KCEnsureAlwaysReturnVal(mData.m_CharReader.copyMemoryIntoStringToMemoryLocation(iIndexOfFirstSpace, mData.m_strTagName, true), false);
 	mData.m_CharReader.next(); //read past the space
-	mData.m_Attributes.clear();
+	/*mData.m_Attributes.clear();
 	if (_findAttributesOfTag(mData, mDataGroup) == false)
 	{
 		return false;
-	}
+	}*/
 
 	std::map<KCString, int32>::iterator mTagNameIterator = mTagNames.find(mData.m_strTagName);
 	if (mTagNameIterator != mTagNames.end())
@@ -114,11 +116,11 @@ bool parseXMLTagAndChildren(KCXMLParserData &mData, KCDataGroup &mDataGroup, std
 	{
 		mTagNames[mData.m_strTagName] = 0;
 	}
-	std::map<KCString, int32> mTmp;
-	std::map<KCString, int32> *pTagNamesToPass = &mTagNames;
-	KCDataGroup *pWorkingDataGroup = nullptr;
-	KCDataProperty *pWorkingDatProperty = nullptr;
-	std::map<KCString, KCString>::iterator mAttributeSearch = mData.m_Attributes.find(ATTRIBUTE_TYPE);
+	//std::map<KCString, int32> mTmp;
+	//std::map<KCString, int32> *pTagNamesToPass = &mTagNames;
+	//KCDataGroup *pWorkingDataGroup = nullptr;
+	//KCDataProperty *pWorkingDatProperty = nullptr;
+	/*std::map<KCString, KCString>::iterator mAttributeSearch = mData.m_Attributes.find(ATTRIBUTE_TYPE);
 	if (mAttributeSearch != mData.m_Attributes.end())
 	{		
 		if (mAttributeSearch->second == GROUP_TYPE_NAME)
@@ -139,7 +141,7 @@ bool parseXMLTagAndChildren(KCXMLParserData &mData, KCDataGroup &mDataGroup, std
 			pWorkingDatProperty = &mDataGroup.getOrCreateProperty(mData.m_strTagName);
 			pWorkingDatProperty->m_eType = getDataGroupTypeByString(mAttributeSearch->second);
 		}
-	}
+	}*/
 
 	//lets see if the next tag is open or closed
 	size_t iIndexOfNextTag = mData.m_CharReader.findIndexOfNextMemoryValue('<', false);
@@ -154,10 +156,14 @@ bool parseXMLTagAndChildren(KCXMLParserData &mData, KCDataGroup &mDataGroup, std
 	}
 	if (mData.m_CharReader.memoryValueAtLocation(iIndexOfNextTag + 1) == '/')
 	{
-		if (pWorkingDatProperty)
+		
+		EDATAGROUP_VARIABLE_TYPES eDataGroupType = configureDataGroupTypeFromStringValue(mData.m_strInnterText);
+		if (eDataGroupType == EDATAGROUP_VARIABLE_TYPES::COUNT)
 		{
-			pWorkingDatProperty->setValueByString(mData.m_strInnterText, pWorkingDatProperty->m_eType);
+			eDataGroupType = EDATAGROUP_VARIABLE_TYPES::INT32;
 		}
+		//if it gets here it's a property
+		mDataGroup.getOrCreateProperty(mData.m_strTagName).setValueByString(mData.m_strInnterText, eDataGroupType);
 		//lets move to the end of this tag
 		mData.m_CharReader.seek(iIndexOfNextTag + 1);
 		mData.m_CharReader.findIndexOfNextMemoryValue('>', true);
@@ -166,10 +172,16 @@ bool parseXMLTagAndChildren(KCXMLParserData &mData, KCDataGroup &mDataGroup, std
 	}
 	else //it's a child!
 	{
-		
+		KCDataGroup &mChild = (mDataGroup.getGroupName().isEmpty())?mDataGroup:mDataGroup.getOrCreateChildGroup(mData.m_strTagName);
+		if (&mChild == &mDataGroup)
+		{
+			mDataGroup.setGroupName(mData.m_strTagName);
+		}
+		std::map<KCString, int32> mChildTagNames;		
+		//if it gets here it's a child group. 
 		do 
 		{		
-			if (parseXMLTagAndChildren(mData,((pWorkingDataGroup)?*pWorkingDataGroup:mDataGroup), *pTagNamesToPass) == false)
+			if (parseXMLTagAndChildren(mData, mChild, mChildTagNames) == false)
 			{				
 				return false;
 			}

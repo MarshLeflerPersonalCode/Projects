@@ -14,20 +14,18 @@ namespace CommandLineSerializer
 	public class SerializerConfigFile
 	{
 		
-		public int m_iValue = 13;
+		
 		public SerializerConfigFile() 
 		{
-			//headerFiles = new List<HeaderFile>();
-			//configFile = "CommandLineSerializer.cfg";
-
 		}
 
 		public void initialize(SerializerController mSerializerController, string strConfigFile)
 		{
 			headerFiles = new List<HeaderFile>();
 			configFile = strConfigFile;
+			serializerController = mSerializerController;
 		}
-		private SerializerController serializerController { get; }
+		private SerializerController serializerController { get; set; }
 
 		private string configFile { get; set; }
 		public List<HeaderFile> headerFiles { get; set; }
@@ -56,8 +54,15 @@ namespace CommandLineSerializer
 		public bool save(string strDirectory)
 		{
 			string strFullPath = Path.Combine(strDirectory, configFile);
-			DataGroup mDataGroup = new DataGroup(this);
-			string strErrorMessage = mDataGroup.saveToFile(strFullPath);
+			DataGroup mDataGroup = new DataGroup();
+			string strErrorMessage = "";
+			mDataGroup.serializeObject(this, ref strErrorMessage);
+			if(strErrorMessage != "" )
+			{
+				_log("ERROR - Unable to save serializer config file. Reason: " + strErrorMessage);
+				return false;
+			}
+			strErrorMessage = mDataGroup.saveToFile(strFullPath);
 			if(strErrorMessage == "")
 			{
 				_log("Saved serializer config file correctly. At location: " + strFullPath);

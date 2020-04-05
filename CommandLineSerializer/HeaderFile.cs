@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
+using Library.IO;
 namespace CommandLineSerializer
 {
 	[Serializable]
 	public class HeaderFile
 	{
-
+		private LogFile m_LogFile = null;
 		public void initialize(string strHeaderFile, string strExportedFile)
 		{
 			headerFile = strHeaderFile;
@@ -26,6 +27,8 @@ namespace CommandLineSerializer
 		public DateTime headerFileWriteTime { get; set; }
 		public string exportedHeaderFile { get; set; }
 		public DateTime exportedHeaderFileWriteTime { get; set; }
+		public LogFile getLogFile() { return m_LogFile; }
+		public void setLogFile(LogFile mLogFile) { m_LogFile = mLogFile; }
 
 		public bool getNeedsToProcessHeader()
 		{
@@ -39,7 +42,13 @@ namespace CommandLineSerializer
 
 		public void processHeader()
 		{
+			
 			string[] mLines = File.ReadAllLines(headerFile);
+			foreach(string strLin in mLines)
+			{
+
+			}
+
 		}
 	}
 }
