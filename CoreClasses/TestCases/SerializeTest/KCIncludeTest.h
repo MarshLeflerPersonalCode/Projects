@@ -3,7 +3,7 @@
 #include "IO/KCByteReader.h"
 #include "IO/KCByteWriter.h"
 #include "DataGroup/KCDataGroup.h"
-#include "KCIncludeTest.inc"
+#include "KCIncludeTest.serialized.h"
 
 struct KCSerializeChild
 {	

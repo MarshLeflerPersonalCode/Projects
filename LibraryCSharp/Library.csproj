@@ -41,6 +41,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassParser\ClassParserManager.cs" />
+    <Compile Include="ClassParser\ClassStructure.cs" />
+    <Compile Include="ClassParser\EnumList.cs" />
+    <Compile Include="ClassParser\Private\ClassParserConfig.cs" />
+    <Compile Include="ClassParser\Private\ClassParser.cs" />
+    <Compile Include="ClassParser\Private\ProcessClassToStructureThreaded.cs" />
+    <Compile Include="ClassParser\ProjectWrapper.cs" />
     <Compile Include="CommandLine\CommandLineArguments.cs" />
     <Compile Include="CommandLine\CommandLineOption.cs" />
     <Compile Include="CommandLine\CommandLineVariable.cs" />
@@ -51,6 +58,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="ClassParser\UE4Converter\" />
     <Folder Include="Utilities\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

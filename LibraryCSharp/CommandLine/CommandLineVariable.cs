@@ -32,7 +32,7 @@ namespace Library.CommandLine
 		}
 		public CommandLineVariable(int iDefaultValue)
 		{
-			m_eType = EVARIABLE_TYPE.BOOL;
+			m_eType = EVARIABLE_TYPE.INTEGER;
 			m_iValue = iDefaultValue;
 		}
 		public bool setValueByString(string strValue)

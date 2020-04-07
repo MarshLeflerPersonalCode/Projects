@@ -8,6 +8,7 @@ using Library.CommandLine;
 using Library.IO;
 using Library.DataGroup;
 using System.Threading;
+using Library.ClassParser;
 namespace CommandLineSerializer
 {
 	public class SerializerController
@@ -16,7 +17,7 @@ namespace CommandLineSerializer
 		private List<HeaderFile> m_HeaderFiles = new List<HeaderFile>();
 		private List<ProcessHeaderFileList> m_Processes = new List<ProcessHeaderFileList>();
 		private SerializerConfigFile m_ConfigFile = new SerializerConfigFile();
-
+		private ClassParserManager m_ClassParserManager = new ClassParserManager();
 		public SerializerController(string[] args)
 		{
 			
@@ -31,8 +32,13 @@ namespace CommandLineSerializer
 			_loadConfigFile();
 			if (_findHeaders() == false)
 			{
-				log("Closing down");
-				Environment.Exit(0);
+				log("ERROR - Closing down because unable to find headers");				
+				return;
+			}
+			_buildClassStructures();
+			if(_waitForClassStructuresToParse() == false )
+			{
+				log("ERROR - Closing down because there were errors parsing the classes/structs.");
 				return;
 			}
 			_startProcessingHeaders();
@@ -79,6 +85,9 @@ namespace CommandLineSerializer
 
 		public bool shouldPauseOnExit { get { return (commandLineArguments != null)?commandLineArguments.getCommandValueAsBool("-Pause"):false; } }
 
+		public int getThreadsToUse() { return Math.Max(1, commandLineArguments.getCommandValueAsInt("-MaxThreads")); }
+
+		public bool getDoingFullRecompile() { return commandLineArguments.getCommandValueAsBool("-ForceRecompile"); }
 		private bool _createIntermediateDirectory()
 		{
 			string strPathToIntermediateDir = commandLineArguments.getCommandValueAsString("-IntermediateDir");
@@ -163,7 +172,7 @@ namespace CommandLineSerializer
 				string strFileName = Path.GetFileName(strFile);
 
 				string strExportedHeaderFile = Path.Combine(strPathToIntermediateDir, Path.GetFileNameWithoutExtension(strFile) + "serialize.h");
-				mHeaderFile.initialize(strFile, strExportedHeaderFile);
+				mHeaderFile.initialize(this, strFile, strExportedHeaderFile);
 				m_HeaderFiles.Add(mHeaderFile);
 			}
 			if(m_HeaderFiles.Count == 0 )
@@ -177,14 +186,14 @@ namespace CommandLineSerializer
 
 		private void _startProcessingHeaders()
 		{
-			int iThreads = Math.Max(1, commandLineArguments.getCommandValueAsInt("-MaxThreads"));
+			int iThreads = getThreadsToUse();
 
 			for (int iProcessIndex = 0; iProcessIndex < iThreads; iProcessIndex++)
 			{
 				m_Processes.Add(new ProcessHeaderFileList());
 			}
 			int iCurrentProcessBucket = 0;
-			bool bForce = commandLineArguments.getCommandValueAsBool("-ForceRecompile");
+			bool bForce = getDoingFullRecompile();
 			foreach (HeaderFile mHeaderFile in m_HeaderFiles)
 			{
 				if (bForce == false &&
@@ -253,6 +262,50 @@ namespace CommandLineSerializer
 				}
 				Thread.Sleep(5);
 			};
+		}
+
+		private void _buildClassStructures()
+		{
+			m_ClassParserManager.threadsToUse = getThreadsToUse();
+			m_ClassParserManager.logFile = m_LogFile;
+			foreach (HeaderFile mFile in m_HeaderFiles)
+			{
+				m_ClassParserManager.addFileToParse(mFile.headerFile);
+			}
+			string strFullPath = Path.Combine(commandLineArguments.getCommandValueAsString("-IntermediateDir"), "classParser.cfg");
+			m_ClassParserManager.compareToCachedData((getDoingFullRecompile())?"":strFullPath);
+			m_ClassParserManager.buildClassStructures();
+		}
+		private bool _waitForClassStructuresToParse()
+		{
+			while (true)
+			{
+				if( m_ClassParserManager.getDoneParsingClassesOnThreads())
+				{
+					break;
+				}
+				Thread.Sleep(10);
+			};
+
+
+			List<string> mErrors = new List<string>();
+			m_ClassParserManager.getErrors(mErrors);
+			foreach(string strError in mErrors)
+			{
+				log("ERROR - " + strError);
+			}
+			if( mErrors.Count == 0 )
+			{
+				string strFullPath = Path.Combine(commandLineArguments.getCommandValueAsString("-IntermediateDir"), "classParser.cfg");
+				m_ClassParserManager.saveCachedData(strFullPath);
+			}
+			return (mErrors.Count == 0) ? true : false;
+
+		}
+
+		public ProjectWrapper getProjectWrapper()
+		{
+			return m_ClassParserManager.getProjectWrapper();
 		}
 	}
 }

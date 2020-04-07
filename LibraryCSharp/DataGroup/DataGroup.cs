@@ -441,6 +441,11 @@ namespace Library.DataGroup
 						}
 						break;
 				}
+				if( mFieldInfo != null &&
+					mFieldInfo.IsNotSerialized)
+				{
+					continue;	//xml doesn't follow the serialization rules - balls.
+				}
 				strRawLine = strRawLine.Insert(indexOfTag + strFirstTag.Length - 1, strInsertTag);
 				mWriter.WriteLine(strRawLine);
 				if (bNewObject &&

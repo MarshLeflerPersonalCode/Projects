@@ -13,12 +13,14 @@ namespace CommandLineSerializer
 	[Serializable]
 	public class SerializerConfigFile
 	{
-		
+		//[System.Xml.Serialization.XmlIgnore]
+		[NonSerialized] public int m_iShouldNotShowUp = 13;
 		
 		public SerializerConfigFile() 
-		{
+		{			
 		}
 
+		
 		public void initialize(SerializerController mSerializerController, string strConfigFile)
 		{
 			headerFiles = new List<HeaderFile>();

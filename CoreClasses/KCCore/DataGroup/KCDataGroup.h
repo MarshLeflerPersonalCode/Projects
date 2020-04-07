@@ -7,6 +7,7 @@
 class KCDataGroup
 {
 public:
+	KCSERIALIZE_CODE();
 	KCDataGroup();
 	KCDataGroup(KCName strName);
 	~KCDataGroup();
