@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="OnCleanOnly" AfterTargets="Clean">
+    <Exec Command="..\CommandLineSerializer\bin\debug\CommandLineSerializer.exe -Clean -debug -SourceDir 'D:\Personal\Projects\CoreClasses\TestCases\SerializeTest' -IntermediateDir 'D:\Personal\Projects\CoreClasses\Intermediate\'" />
+    <Message Text="Clearing Cache" Importance="High" />
+  </Target>
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -78,7 +82,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
     <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
-    <IncludePath>$(VC_IncludePath)KCCore;$(IncludePath)</IncludePath>
+    <IncludePath>$(VC_IncludePath)KCCore;$(VC_IncludePath)Intermediate;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)bin\</OutDir>
     <TargetName>$(ProjectName)_Debug</TargetName>
   </PropertyGroup>
@@ -87,7 +91,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(VC_IncludePath)KCCore;$(IncludePath)</IncludePath>
+    <IncludePath>$(VC_IncludePath)KCCore;$(VC_IncludePath)Intermediate;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)bin\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -121,6 +125,9 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
     </Link>
+    <PreBuildEvent>
+      <Command>D:\Personal\Projects\CommandLineSerializer\bin\Debug\CommandLineSerializer.exe -debug -SourceDir 'D:\Personal\Projects\CoreClasses\' -IntermediateDir 'D:\Personal\Projects\CoreClasses\Intermediate\'</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -160,6 +167,9 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PreBuildEvent>
+      <Command>D:\Personal\Projects\CommandLineSerializer\bin\Debug\CommandLineSerializer.exe -debug -SourceDir 'D:\Personal\Projects\CoreClasses\' -IntermediateDir 'D:\Personal\Projects\CoreClasses\Intermediate\'</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CoreClasses.cpp" />

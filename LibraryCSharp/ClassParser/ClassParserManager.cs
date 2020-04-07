@@ -12,6 +12,7 @@ using System.IO;
 using Library.IO;
 using System.Timers;
 using System.Diagnostics;
+using Newtonsoft.Json;
 
 namespace Library.ClassParser
 {
@@ -32,7 +33,7 @@ namespace Library.ClassParser
 		private ProjectWrapper m_ProjectWrapper = new ProjectWrapper();
 		private List<string> m_FilesToUpdate = new List<string>();
 		private List<ProcessClassToStructureThreaded> m_ClassStructuresProcessing = new List<ProcessClassToStructureThreaded>();
-		private List<ClassStructure> m_ClassStructures = new List<ClassStructure>();
+		
 		public ClassParserManager()
 		{
 			threadsToUse = 4;
@@ -56,35 +57,11 @@ namespace Library.ClassParser
 			return m_Config.addFile(strHeaderFile);
 		}
 
-		//public List<ClassStructure> getClassStructures() { return m_ClassStructures; }
-
 		public ProjectWrapper getProjectWrapper() { return m_ProjectWrapper; }
 
-		public ClassStructure getClassStrutureByName(string strName)
-		{
-			foreach(ClassStructure mStructure in m_ClassStructures)
-			{
-				if(mStructure.name == strName )
-				{
-					return mStructure;
-				}
-			}
-			return null;
-		}
+		
 
-		private bool _removeClassStructure(string strName)
-		{
-			for (int iIndex = 0; iIndex < m_ClassStructures.Count; iIndex++ )
-			{
-				ClassStructure mStructure = m_ClassStructures[iIndex];
-				if (mStructure.name == strName)
-				{
-					m_ClassStructures.RemoveAt(iIndex);
-					return true;
-				}
-			}
-			return false;
-		}
+		
 
 		public List<string> filesNeedingUpdate { get { return m_FilesToUpdate; } }
 
@@ -93,8 +70,8 @@ namespace Library.ClassParser
 		{
 			m_FilesToUpdate.Clear();
 			ClassParserConfig mOldClassParserConfig = new ClassParserConfig();
-			if( strPathAndFile != null &&
-				strPathAndFile != "" &&
+			if( strPathAndFile == null ||
+				strPathAndFile == "" ||
 				mOldClassParserConfig.load(strPathAndFile) == false )
 			{
 				log("No cached data specified or found. Doing full recompile of class structures.");
@@ -109,6 +86,7 @@ namespace Library.ClassParser
 			foreach (FileStamp mFile in mFilesNeedingUpdate.files)
 			{
 				m_FilesToUpdate.Add(mFile.file);
+				m_ProjectWrapper.removeAllInsideFile(mFile.file);
 			}
 			if( m_FilesToUpdate.Count == 0 )
 			{
@@ -184,8 +162,12 @@ namespace Library.ClassParser
 				{
 					foreach (ClassStructure mStructure in mProcesser.classStructures)
 					{
-						_removeClassStructure(mStructure.name);
 						m_ProjectWrapper.addClassStructure(mStructure);
+
+					}
+					foreach (EnumList mEnumList in mProcesser.enumLists)
+					{											
+						m_ProjectWrapper.addEnumList(mEnumList);
 
 					}
 				}				
@@ -229,26 +211,38 @@ namespace Library.ClassParser
 		{
 			try
 			{
-				m_ClassStructures.Clear();
+				
 				
 				if (File.Exists(strPathAndFile) == false)
 				{
-					log("ERROR - No Class Parser Manager config found at at: " + strPathAndFile);
+					log("ERROR - No Class Parser Manager config found at: " + strPathAndFile);
 					return false; //nothing to load
 				}
-				Type mType = m_ClassStructures.GetType();
-				System.Xml.Serialization.XmlSerializer mXmlSerailizer = new System.Xml.Serialization.XmlSerializer(mType);
-				List<ClassStructure> mList = (List<ClassStructure>)mXmlSerailizer.Deserialize(new StringReader(File.ReadAllText(strPathAndFile)));
-				foreach(ClassStructure mStruct in mList)
+				Type mType = m_ProjectWrapper.GetType();
+				try
 				{
-					m_ClassStructures.Add(mStruct);
+					object mRawObject = JsonConvert.DeserializeObject(File.ReadAllText(strPathAndFile), mType);
+					if (mRawObject == null)
+					{
+						log("ERROR - unable to parse struct file: " + strPathAndFile);
+						return false;
+					}
+					m_ProjectWrapper = (ProjectWrapper)mRawObject;
+
 				}
-				if (m_ClassStructures.Count == 0)
+				catch (Exception e)
 				{
-					log("ERROR - No Class Structures found in file: " + strPathAndFile + strPathAndFile);
+					log("ERROR - unable to parse file: " + strPathAndFile + Environment.NewLine + "Error is: " + e.Message + ((e.InnerException != null)?Environment.NewLine + e.InnerException.Message:"") );
 					return false;
 				}
-				log("Loaded " + m_ClassStructures.Count.ToString() + "class structures from file: " + strPathAndFile);
+				
+				if (m_ProjectWrapper.classStructures.Count == 0 &&
+					m_ProjectWrapper.enums.Count == 0 )
+				{
+					log("ERROR - No Class Structures or Enums found in file: " + strPathAndFile + strPathAndFile);
+					return false;
+				}
+				log("Loaded " + m_ProjectWrapper.classStructures.Count.ToString() + "class structures and " + m_ProjectWrapper.enums.Count.ToString() + " enums from file: " + strPathAndFile);
 				return true;
 			}
 			catch (Exception e)
@@ -270,16 +264,13 @@ namespace Library.ClassParser
 			try
 			{
 				File.Delete(strPathAndFile);
-				if( m_ClassStructures.Count == 0 )
+				if( m_ProjectWrapper.classStructures.Count == 0 )
 				{
 					log("ERROR - No Class Structures to save.");
 					return true; //nothing to save
 				}
-				Type mType = m_ClassStructures.GetType();
-				System.Xml.Serialization.XmlSerializer mXmlSerailizer = new System.Xml.Serialization.XmlSerializer(mType);
-				StringWriter mWriterXml = new StringWriter();
-				mXmlSerailizer.Serialize(mWriterXml, m_ClassStructures);
-				string strValue = mWriterXml.ToString();
+				
+				string strValue = JsonConvert.SerializeObject(m_ProjectWrapper, Newtonsoft.Json.Formatting.Indented);							
 				if( strValue == null ||
 					strValue == "" )
 				{

@@ -41,7 +41,7 @@ namespace CommandLineSerializer
 				Console.Write("Press any key..");
 				Console.ReadKey();
 			}
-
+			
 			// Go to http://aka.ms/dotnet-get-started-console to continue learning how to build a console app! 
 		}
 	}

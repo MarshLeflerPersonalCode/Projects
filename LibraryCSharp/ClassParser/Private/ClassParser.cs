@@ -16,7 +16,7 @@ namespace Library.ClassParser.Private
 		{
 			inComment = false;
 			fileParsing = strFile;
-			classStructure = new List<ClassStructure>();
+			classStructures = new List<ClassStructure>();
 			enumLists = new List<EnumList>();
 		}
 
@@ -26,13 +26,14 @@ namespace Library.ClassParser.Private
 
 		public string fileParsing { get; set; }
 
-		public List<ClassStructure> classStructure { get; set; }
+		public List<ClassStructure> classStructures { get; set; }
 
 		public List<EnumList> enumLists { get; set; }
 
 		private ClassStructure pushClassOn()
 		{
 			m_StuctsOrClassesProcessing.Add(new ClassStructure());
+			
 			return getCurrentStructure();
 		}
 
@@ -43,8 +44,9 @@ namespace Library.ClassParser.Private
 				return;
 			}
 			ClassStructure mClassStructure = m_StuctsOrClassesProcessing.Last();
+			mClassStructure.file = fileParsing;
 			m_StuctsOrClassesProcessing.RemoveAt(m_StuctsOrClassesProcessing.Count - 1);
-			classStructure.Add(mClassStructure);
+			classStructures.Add(mClassStructure);
 		}
 
 		private ClassStructure getCurrentStructure()
@@ -65,21 +67,19 @@ namespace Library.ClassParser.Private
 			}
 		}
 
-		public ClassStructure parse(List<string> mErrors)
+		public bool parse(List<string> mErrors)
 		{
 			try
 			{
 
 
-				ClassStructure mClass = new ClassStructure();
-				mClass.file = fileParsing;
-				mClass.valid = false;
+
 				string strFileContents = File.ReadAllText(fileParsing);
 				if (strFileContents == null ||
 					strFileContents == "")
 				{
 					log("Empty File:" + fileParsing);
-					return mClass;
+					return false;
 				}
 
 				StringReader mStringReader = new StringReader(strFileContents);
@@ -88,7 +88,7 @@ namespace Library.ClassParser.Private
 
 
 				string strStructsAndClassesFound = "";
-				foreach (ClassStructure mStruct in classStructure)
+				foreach (ClassStructure mStruct in classStructures)
 				{
 					strStructsAndClassesFound = strStructsAndClassesFound + mStruct.name + ",";
 				}
@@ -96,15 +96,14 @@ namespace Library.ClassParser.Private
 				{
 					strStructsAndClassesFound = strStructsAndClassesFound.Substring(0, strStructsAndClassesFound.Length - 1);
 				}
-				log("Classes/Structures found in header file: " + Path.GetFileName(fileParsing) + " " + classStructure.Count.ToString() + "(" + strStructsAndClassesFound + ")");
-				mClass.valid = true;
-				return mClass;
+				log("Classes/Structures found in header file: " + Path.GetFileName(fileParsing) + " " + classStructures.Count.ToString() + "(" + strStructsAndClassesFound + ")");				
+				return (classStructures.Count > 0 )?true:false;
 			}
 			catch (Exception e)
 			{
 				log("ERROR - parsing error in file: " + fileParsing + Environment.NewLine + "Last line read was: ln:" +m_iLastLineIndex.ToString() + m_strLastLineParsing + Environment.NewLine + "Error was - " + e.Message + ((e.InnerException != null) ? e.InnerException.Message : ""));
 			}
-			return null;
+			return false;
 		}
 		private bool inComment { get; set; }
 
@@ -263,8 +262,7 @@ namespace Library.ClassParser.Private
 					}
 
 				};
-
-				return true;    //something like bool isLotsOfVariables( bool bOne,
+				
 			}
 
 			return false;
@@ -753,6 +751,7 @@ namespace Library.ClassParser.Private
 			//UPROPERTY(Category = AbilitySystem, VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 			//into
 			//Category = AbilitySystem, VisibleAnywhere, BlueprintReadOnly, AllowPrivateAccess = "true"
+			mVariable.isUE4Variable = true;
 			strLine = strLine.Replace("UPROPERTY", "");			
 			strLine = strLine.Replace("(", "");
 			strLine = strLine.Replace(")", "");
@@ -764,6 +763,7 @@ namespace Library.ClassParser.Private
 			{
 				return;	//just simply a UPROPERTY()
 			}
+			
 			_parseProperties(strLine, mVariable.variableProperties);
 			//mVariable.variableProperties[strPropertyName.Trim().ToUpper()] = strPropertyValue;
 
@@ -801,6 +801,7 @@ namespace Library.ClassParser.Private
 			strLine = strLine.Replace("class ", "");
 			strLine = strLine.Trim();
 			EnumList mEnum = new EnumList();
+			mEnum.file = fileParsing;
 			enumLists.Add(mEnum);
 			mEnum.enumName = strLine;
 			mEnum.comment = currentComment;
@@ -831,7 +832,8 @@ namespace Library.ClassParser.Private
 				for(int iIndex = 0; iIndex < strLine.Length; iIndex++)
 				{
 					if(strLine[iIndex] == ' ' ||
-						strLine[iIndex] == ',')
+						strLine[iIndex] == ',' ||
+						strLine[iIndex] == '=')
 					{
 						iEnumItemNameIndex = iIndex;
 						break;
@@ -841,18 +843,73 @@ namespace Library.ClassParser.Private
 				{
 					continue;
 				}
+				
 				string strNameOfEnumItem = strLine.Substring(0, iEnumItemNameIndex).Trim();
 				if (strNameOfEnumItem != "")
 				{
+					int iEnumIndex = mEnum.enumItems.Count;
+					string strRemaining = strLine.Substring(iEnumItemNameIndex, strLine.Length - iEnumItemNameIndex - ((strLine.EndsWith(",")) ? 1 : 0));
+					int iFirstCharacterFound = -1;
+					int iSecondCharacterFound = -1;
+					bool bEqualFound = false;
+					for (int iIndex = 0; iIndex < strRemaining.Length; iIndex++)
+					{
+						if (bEqualFound == false)
+						{
+							if (strRemaining[iIndex] == '=')
+							{
+								bEqualFound = true;
+							}
+							else if(strRemaining[iIndex] != ' ')
+							{
+								break;
+							}
+						}
+						else
+						{
+							if (iFirstCharacterFound < 0)
+							{
+								if (strRemaining[iIndex] != ' ')
+								{
+									iFirstCharacterFound = iIndex;
+								}
+							}
+							else if(iSecondCharacterFound < 0)
+							{
+								if (strRemaining[iIndex] == ' ')
+								{
+									iSecondCharacterFound = iIndex;
+									break;
+								}
+							}
+						}
+					}
+					if( iFirstCharacterFound > 0 &&
+						iSecondCharacterFound > 0 )
+					{
+						string strValue = strRemaining.Substring(iFirstCharacterFound, iSecondCharacterFound - iFirstCharacterFound);
+						strRemaining = strRemaining.Substring(iSecondCharacterFound, strRemaining.Length - iSecondCharacterFound);
+						if (strValue != "")
+						{
+							if( Int32.TryParse(strValue.Trim(), out int iResult) )
+							{
+								iEnumIndex = iResult;
+							}
+
+						}
+					}
+					
 					EnumItem mItem = new EnumItem();
 					mEnum.enumItems.Add(mItem);
 					mItem.name = strNameOfEnumItem;
 					mItem.comment = currentComment;
+					mItem.value = iEnumIndex;
 					currentComment = "";
 					iEnumItemNameIndex++;
 					if (iEnumItemNameIndex < strLine.Length - 2)
 					{
-						_parseProperties(strLine.Substring(iEnumItemNameIndex, strLine.Length - iEnumItemNameIndex - 1), mItem.properties); //removes comma
+
+						_parseProperties(strRemaining, mItem.properties); //removes comma
 					}
 
 				}

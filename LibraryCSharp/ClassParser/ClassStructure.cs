@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Library.ClassParser
 {
+	
 	public class ClassVariable
 	{
 		public ClassVariable()
@@ -19,6 +20,7 @@ namespace Library.ClassParser
 
 		}
 		public bool isPointer { get; set; }
+		public bool isUE4Variable { get; set; }
 		public string variableName { get; set; }
 		public string variableType { get; set; }
 		public string variableValue { get; set; }
@@ -29,6 +31,7 @@ namespace Library.ClassParser
 		public bool isStatic { get; set; }
 		public bool isConst { get; set; }		
 	}
+	
 	public class ClassStructure
 	{
 		public ClassStructure()

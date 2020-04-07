@@ -18,6 +18,23 @@ namespace Library.ClassParser
 		{
 		}
 
+
+		public ClassStructure getClassStructByName(string strName)
+		{
+			if(m_ClassStructures.ContainsKey(strName.ToUpper()))
+			{
+				return m_ClassStructures[strName.ToUpper()];
+			}
+			return null;
+		}
+		public EnumList getEnumListByName(string strName)
+		{
+			if (m_EnumLists.ContainsKey(strName.ToUpper()))
+			{
+				return m_EnumLists[strName.ToUpper()];
+			}
+			return null;
+		}
 		public bool addClassStructure(ClassStructure mStructure )
 		{
 			if( mStructure == null ||
@@ -75,7 +92,38 @@ namespace Library.ClassParser
 
 		public Dictionary<string, string> defines { get { return m_Defines; } }
 
-
+		public int removeAllInsideFile(string strFile)
+		{
+			int iRemoved = 0;
+			List<string> mRemove = new List<string>();
+			foreach (KeyValuePair<string, ClassStructure> mEntry in m_ClassStructures)
+			{
+				if( mEntry.Value.file == strFile )
+				{
+					mRemove.Add(mEntry.Key);
+				}
+			}
+			iRemoved = iRemoved + mRemove.Count;
+			foreach (string strRemove in mRemove)
+			{
+				m_ClassStructures.Remove(strRemove);
+			}
+			mRemove.Clear();
+			
+			foreach (KeyValuePair<string, EnumList> mEnum in m_EnumLists)
+			{
+				if (mEnum.Value.file == strFile)
+				{
+					mRemove.Add(mEnum.Key);
+				}
+			}
+			foreach (string strRemove in mRemove)
+			{
+				m_EnumLists.Remove(strRemove);
+			}
+			iRemoved = iRemoved + mRemove.Count;
+			return iRemoved;
+		}
 	}
 
 }

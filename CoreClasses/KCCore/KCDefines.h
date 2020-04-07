@@ -73,7 +73,7 @@ typedef unsigned long long uint64;
 #define UCLASS(...)
 #define UENUM(...)
 #define USTRUCT(...)
-
+#define UMETA(...)
 #define KCCORE_API
 
 

@@ -13,6 +13,8 @@ namespace Library.ClassParser.Private
 		private bool m_bDoneParsing = false;
 		private bool m_bParsedHeadersCalled = false;
 		private Thread m_Thread = null;
+		private List<EnumList> m_EnumList = new List<EnumList>();
+		private List<EnumList> m_EnumListForThreading = new List<EnumList>();
 		private List<ClassStructure> m_ClassStructures = new List<ClassStructure>();
 		private List<ClassStructure> m_EmptyListForThreading = new List<ClassStructure>();
 		public ProcessClassToStructureThreaded()
@@ -26,6 +28,7 @@ namespace Library.ClassParser.Private
 		public List<string> errorsParsing { get;set;}
 		public List<string> headersToParse { get; set; }
 		public List<ClassStructure> classStructures { get { return (getDoneParsing()) ? m_ClassStructures : m_EmptyListForThreading; } }
+		public List<EnumList> enumLists { get { return (getDoneParsing()) ? m_EnumList : m_EnumListForThreading; } }
 
 
 		private void log(string strMessage )
@@ -62,8 +65,17 @@ namespace Library.ClassParser.Private
 			{
 				ClassParser mParser = new ClassParser(strHeaderToParse);
 				mParser.logFile = logFile;
-				ClassStructure mStructure = mParser.parse( errorsParsing);
-				m_ClassStructures.Add(mStructure);
+				if (mParser.parse(errorsParsing))
+				{
+					foreach (ClassStructure mStruct in mParser.classStructures)
+					{
+						m_ClassStructures.Add(mStruct);
+					}
+					foreach(EnumList mList in mParser.enumLists)
+					{
+						m_EnumList.Add(mList);
+					}
+				}
 			}
 			m_bDoneParsing = true;
 			m_Thread = null;

@@ -29,6 +29,13 @@ namespace CommandLineSerializer
 				Environment.Exit(0);
 				return;
 			}
+			if( _runClean())
+			{
+				log("Closing down");
+				Environment.Exit(0);
+				return;
+
+			}
 			_loadConfigFile();
 			if (_findHeaders() == false)
 			{
@@ -67,6 +74,8 @@ namespace CommandLineSerializer
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-SourceDir", "-SD" }, "the directory where the header files will be parsed", ""));
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-IntermediateDir", "-ID" }, "the intermediate directory where the source files will be generated. The project must point there.", ""));
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-MaxThreads", "-MT" }, "Max threads allowed to process headers. Uses Max - 1", Environment.ProcessorCount - 1));
+			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-Clean", "-c" }, "Cleans all the configs for a full recompile and then exits."));
+			
 			commandLineArguments.parseArguments(args);
 			if (commandLineArguments.getCommandValueAsString("-LogFile") == "")
 			{
@@ -81,6 +90,32 @@ namespace CommandLineSerializer
 			{
 				Console.WriteLine(commandLineArguments.getCommandsAsDisplayString());
 			}
+
+		}
+
+		private bool _runClean()
+		{
+			if (commandLineArguments.getCommandValueAsBool("-Clean"))
+			{
+				log("Cleaning solution.");
+				string strPathToIntermediateDir = commandLineArguments.getCommandValueAsString("-IntermediateDir");
+				if (Directory.Exists(strPathToIntermediateDir) == false)
+				{
+					log("Unable to clean solution. IntermediateDir not set correct. Current value is = " + strPathToIntermediateDir);
+				}
+				else
+				{
+					string[] mFiles = Directory.GetFiles(strPathToIntermediateDir, "*.cfg*");
+					foreach (string strFile in mFiles)
+					{
+						log("CLEANING/DELETING - " + strFile);
+						File.Delete(strFile);
+					}
+				}				
+				return true;
+
+			}
+			return false;
 		}
 
 		public bool shouldPauseOnExit { get { return (commandLineArguments != null)?commandLineArguments.getCommandValueAsBool("-Pause"):false; } }
@@ -171,7 +206,7 @@ namespace CommandLineSerializer
 				mHeaderFile.setLogFile(m_LogFile);
 				string strFileName = Path.GetFileName(strFile);
 
-				string strExportedHeaderFile = Path.Combine(strPathToIntermediateDir, Path.GetFileNameWithoutExtension(strFile) + "serialize.h");
+				string strExportedHeaderFile = Path.Combine(strPathToIntermediateDir, Path.GetFileNameWithoutExtension(strFile) + ".serialize.inc");
 				mHeaderFile.initialize(this, strFile, strExportedHeaderFile);
 				m_HeaderFiles.Add(mHeaderFile);
 			}
@@ -184,8 +219,31 @@ namespace CommandLineSerializer
 			return true;
 		}
 
+		public HeaderFile getHeaderFile(string strFile)
+		{
+			foreach( HeaderFile mHeader in m_HeaderFiles)
+			{
+				if( mHeader.headerFile == strFile)
+				{
+					return mHeader;
+				}
+			}
+			return null;
+		}
+
 		private void _startProcessingHeaders()
 		{
+			if(m_ClassParserManager == null )
+			{
+				log("Error - Unable to process headers. Class Parser is null.");
+				return;
+			}
+			if(m_ClassParserManager.filesNeedingUpdate.Count == 0 )
+			{
+				log("All headers are up to date.");
+				return;
+			}
+
 			int iThreads = getThreadsToUse();
 
 			for (int iProcessIndex = 0; iProcessIndex < iThreads; iProcessIndex++)
@@ -194,8 +252,14 @@ namespace CommandLineSerializer
 			}
 			int iCurrentProcessBucket = 0;
 			bool bForce = getDoingFullRecompile();
-			foreach (HeaderFile mHeaderFile in m_HeaderFiles)
+			foreach (string strFile in m_ClassParserManager.filesNeedingUpdate)
 			{
+				HeaderFile mHeaderFile = getHeaderFile(strFile);
+				if( mHeaderFile == null )
+				{
+					log("Error - Header file appears to be missing: " + strFile);
+					return;
+				}
 				if (bForce == false &&
 					m_ConfigFile.getHeaderFileNeedsToRecompile(mHeaderFile) == false)
 				{

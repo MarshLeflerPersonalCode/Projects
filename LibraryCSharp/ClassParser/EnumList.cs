@@ -34,6 +34,7 @@ namespace Library.ClassParser
 		public string enumName { get; set; }
 		public string type { get; set; }
 		public string comment { get; set; }
+		public string file { get; set; }
 		public List<EnumItem> enumItems { get; set; }		
 
 	}

@@ -28,7 +28,7 @@ bool deserialize(KCDataGroup &mDataGroup)\
 }
 
 
-#define KCSERIALIZEOBJECT_20 bool serialize(KCByteWriter &mByteWriter)\
+#define KCSERIALIZEOBJECT_21 bool serialize(KCByteWriter &mByteWriter)\
 {\
 mByteWriter << m_fX;\
 mByteWriter << m_fY;\
