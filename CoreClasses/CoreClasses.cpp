@@ -63,8 +63,8 @@ int main()
 	mTest1.serialize(mWriter);
 	mTest1.serialize(mDataGroup);
 	KCIncludeTest mTest2;
-	KCByteReader mReader(mWriter.getByteArray(), mWriter.getByteArrayCount());
-	mTest2.deserialize(mReader);
+	KCByteReader mReader(mWriter.getMemory(), mWriter.getArrayCount());
+	mTest2.deserialize(mDataGroup);
 
 	//KCString strData = KCDataGroupSimpleXMLWriter::writeDataGroupToString(mDataGroup);
 	
@@ -84,17 +84,17 @@ int main()
 	bool bIsNumber4 = KCStringUtils::isNumber("0");
 	bool bIsNumber5 = KCStringUtils::isNumber("3432");
 	bool bIsNumber6 = KCStringUtils::isNumber("Hello - 000.003 2223");
-	KCString strTypeString = KCStringUtils::getVariableType("testing");
-	KCString strTypeInt32 = KCStringUtils::getVariableType("-23232");
-	KCString strTypeInt32_2 = KCStringUtils::getVariableType("23232");
-	KCString strTypeUInt32 = KCStringUtils::getVariableType("4294967295");
-	KCString strTypeFloat = KCStringUtils::getVariableType("23232.0f");
-	KCString strTypeFloat2 = KCStringUtils::getVariableType("-23232.0f");
-	KCString strTypeInt64 = KCStringUtils::getVariableType("9223372036854775807");
-	KCString strTypeInt642 = KCStringUtils::getVariableType("-9223372036854775808");
-	KCString strTypeUInt64 = KCStringUtils::getVariableType("18446744073709551615");
-	KCString strTypeUnknow = KCStringUtils::getVariableType("18446744073709551616");
-	KCString strTypeUnknow2 = KCStringUtils::getVariableType("-9223372036854775809");
+	EDATATYPES eDataTypeString = DATATYPES_UTILS::getDataTypeRepresentingValue("testing");
+	EDATATYPES eDataTypeInt32 = DATATYPES_UTILS::getDataTypeRepresentingValue("-23232");
+	EDATATYPES eDataTypeInt32_2 = DATATYPES_UTILS::getDataTypeRepresentingValue("23232");
+	EDATATYPES eDataTypeUInt32 = DATATYPES_UTILS::getDataTypeRepresentingValue("4294967295");
+	EDATATYPES eDataTypeFloat = DATATYPES_UTILS::getDataTypeRepresentingValue("23232.0f");
+	EDATATYPES eDataTypeFloat2 = DATATYPES_UTILS::getDataTypeRepresentingValue("-23232.0f");
+	EDATATYPES eDataTypeInt64 = DATATYPES_UTILS::getDataTypeRepresentingValue("9223372036854775807");
+	EDATATYPES eDataTypeInt642 = DATATYPES_UTILS::getDataTypeRepresentingValue("-9223372036854775808");
+	EDATATYPES eDataTypeUInt64 = DATATYPES_UTILS::getDataTypeRepresentingValue("18446744073709551615");
+	EDATATYPES eDataTypeUnknow = DATATYPES_UTILS::getDataTypeRepresentingValue("18446744073709551616");
+	EDATATYPES eDataTypeUnknow2 = DATATYPES_UTILS::getDataTypeRepresentingValue("-9223372036854775809");
 	std::cin.ignore();	//just ignores the next key press
 	exit(0);
 

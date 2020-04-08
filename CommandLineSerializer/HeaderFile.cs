@@ -233,6 +233,47 @@ namespace CommandLineSerializer
 			m_StringWriter.WriteLine("");
 		}
 
+		private bool _attemptToWritePointer(ClassVariable mVariable, StringWriter mStringWriter, string strSuffix)
+		{
+			if( mVariable.isPointer == false )
+			{
+				return false;
+			}
+			bool bReading = strSuffix.ToLower().Contains("deserialize");
+			if(bReading)
+			{
+				mStringWriter.WriteLine("     DELETE_SAFELY(" + mVariable.variableName + ");\\");	//we need to delete the object to reserialize it.
+			}
+			mStringWriter.WriteLine("     bool bIsValid(" + mVariable.variableName + " != nullptr);\\");
+			if(bReading == false )//writing
+			{
+				if(strSuffix.Contains("DataGroup"))
+				{
+					mStringWriter.WriteLine("     mDataGroup.setProperty(\"__b" + mVariable.variableName + "\", bIsValid);\\");
+				}
+				else
+				{
+					mStringWriter.WriteLine("     mByteWriter << bIsValid;\\");
+				}
+				
+				mStringWriter.WriteLine("     if(bIsValid){" + mVariable.variableName.Trim() + "->" + strSuffix + "}\\");
+			}
+			else //reading
+			{
+				if (strSuffix.Contains("DataGroup"))
+				{
+					mStringWriter.WriteLine("     bIsValid = mDataGroup.getProperty(\"__b" + mVariable.variableName + "\", false);\\");
+				}
+				else
+				{
+					mStringWriter.WriteLine("     mByteReader << bIsValid;\\");
+				}
+				m_StringWriter.WriteLine("     if(bIsValid){ " + mVariable.variableName + " = KC_NEW " + mVariable.variableType + "(); " + mVariable.variableName + "->" + strSuffix + " }\\");
+			}
+			return true;
+		}
+
+
 		private bool _attemptToWriteObject(ClassVariable mVariable, StringWriter mStringWriter, string strSuffix)
 		{
 			ClassStructure mClassStruct = m_Controller.getProjectWrapper().getClassStructByName(mVariable.variableType);
@@ -240,7 +281,8 @@ namespace CommandLineSerializer
 			{
 				if( mVariable.isPointer)
 				{
-					mStringWriter.WriteLine("     if(" + mVariable.variableName + " != nullptr){" + mVariable.variableName.Trim() + "->" + strSuffix + "}\\");
+					return _attemptToWritePointer(mVariable, mStringWriter, strSuffix);
+					//mStringWriter.WriteLine("     if(" + mVariable.variableName + " != nullptr){" + mVariable.variableName.Trim() + "->" + strSuffix + "}\\");
 				}
 				else
 				{

@@ -6,13 +6,13 @@
 
 
 
-static UNITTYPE::KCUnitTypeManager *g_pUnitTypeManager(nullptr);
+static UNITTYPE::KCUnitTypeManager *g_pStatManager(nullptr);
 
 UNITTYPE::KCUnitTypeManager::KCUnitTypeManager()
 {
-	if (g_pUnitTypeManager == nullptr)
+	if (g_pStatManager == nullptr)
 	{
-		g_pUnitTypeManager = this;
+		g_pStatManager = this;
 	}
 	m_Categories.setGrowBy(5);
 }
@@ -27,11 +27,11 @@ UNITTYPE::KCUnitTypeManager::~KCUnitTypeManager()
 
 UNITTYPE::KCUnitTypeManager * UNITTYPE::KCUnitTypeManager::getSingleton()
 {
-	if (g_pUnitTypeManager == nullptr)
+	if (g_pStatManager == nullptr)
 	{
 		KC_NEW KCUnitTypeManager();
 	}
-	return g_pUnitTypeManager;
+	return g_pStatManager;
 }
 
 bool UNITTYPE::KCUnitTypeManager::parseUnitTypeFile(const TCHAR *strPath)

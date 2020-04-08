@@ -157,10 +157,10 @@ bool parseXMLTagAndChildren(KCXMLParserData &mData, KCDataGroup &mDataGroup, std
 	if (mData.m_CharReader.memoryValueAtLocation(iIndexOfNextTag + 1) == '/')
 	{
 		
-		EDATAGROUP_VARIABLE_TYPES eDataGroupType = configureDataGroupTypeFromStringValue(mData.m_strInnterText);
-		if (eDataGroupType == EDATAGROUP_VARIABLE_TYPES::COUNT)
+		EDATATYPES eDataGroupType = DATATYPES_UTILS::getDataTypeRepresentingValue(mData.m_strInnterText);
+		if (eDataGroupType == EDATATYPES::COUNT)
 		{
-			eDataGroupType = EDATAGROUP_VARIABLE_TYPES::INT32;
+			eDataGroupType = EDATATYPES::INT32;
 		}
 		//if it gets here it's a property
 		mDataGroup.getOrCreateProperty(mData.m_strTagName).setValueByString(mData.m_strInnterText, eDataGroupType);

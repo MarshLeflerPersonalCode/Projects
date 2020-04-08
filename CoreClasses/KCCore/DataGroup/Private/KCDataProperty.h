@@ -7,7 +7,7 @@ struct KCDataProperty
 {
 	KCDataProperty() {}
 	KCDataProperty(const KCName &strName) { m_strLookupName = strName; }
-	EDATAGROUP_VARIABLE_TYPES		m_eType = EDATAGROUP_VARIABLE_TYPES::COUNT;
+	EDATATYPES		m_eType = EDATATYPES::COUNT;
 	coreUnionData32Bit				m_Data;
 	KCName							m_strLookupName;
 
@@ -17,52 +17,52 @@ struct KCDataProperty
 	void operator<<( bool bValue)
 	{
 		m_Data.m_bValue[0] = bValue;
-		m_eType = EDATAGROUP_VARIABLE_TYPES::BOOL;
+		m_eType = EDATATYPES::BOOL;
 	}
 	void operator<<(char cValue)
 	{
 		m_Data.m_cValue[0] = cValue;
-		m_eType = EDATAGROUP_VARIABLE_TYPES::CHAR;
+		m_eType = EDATATYPES::CHAR;
 	}
 	void operator<<(int8 iValue)
 	{
 		m_Data.m_iValue8[0] = iValue;
-		m_eType = EDATAGROUP_VARIABLE_TYPES::INT8;
+		m_eType = EDATATYPES::INT8;
 	}
 	void operator<<(uint8 iValue)
 	{
 		m_Data.m_uiValue8[0] = iValue;
-		m_eType = EDATAGROUP_VARIABLE_TYPES::UINT8;
+		m_eType = EDATATYPES::UINT8;
 	}
 	void operator<<(int16 iValue)
 	{
 		m_Data.m_iValue16[0] = iValue;
-		m_eType = EDATAGROUP_VARIABLE_TYPES::INT16;
+		m_eType = EDATATYPES::INT16;
 	}
 	void operator<<(uint16 iValue)
 	{
 		m_Data.m_uiValue16[0] = iValue;
-		m_eType = EDATAGROUP_VARIABLE_TYPES::UINT16;
+		m_eType = EDATATYPES::UINT16;
 	}
 	void operator<<(int32 iValue)
 	{
 		m_Data.m_iValue32 = iValue;
-		m_eType = EDATAGROUP_VARIABLE_TYPES::INT32;
+		m_eType = EDATATYPES::INT32;
 	}
 	void operator<<(uint32 iValue)
 	{
 		m_Data.m_uiValue32 = iValue;
-		m_eType = EDATAGROUP_VARIABLE_TYPES::UINT32;
+		m_eType = EDATATYPES::UINT32;
 	}
 	void operator<<(float fValue)
 	{
 		m_Data.m_fValue = fValue;
-		m_eType = EDATAGROUP_VARIABLE_TYPES::FLOAT;
+		m_eType = EDATATYPES::FLOAT;
 	}
 	void operator<<(const KCName &strValue)
 	{
 		m_Data.m_uiValue32 = strValue.getValue();
-		m_eType = EDATAGROUP_VARIABLE_TYPES::STRING;
+		m_eType = EDATATYPES::STRING;
 	}
 	void operator<<(const KCString &strValue);
 	void operator<<(int64 iValue);
@@ -102,5 +102,5 @@ struct KCDataProperty
 	float					getAsFloat();
 
 	bool					setValueByString(const KCString &strString, const KCString &strType);
-	bool					setValueByString(const KCString &strString, EDATAGROUP_VARIABLE_TYPES eType);
+	bool					setValueByString(const KCString &strString, EDATATYPES eType);
 };

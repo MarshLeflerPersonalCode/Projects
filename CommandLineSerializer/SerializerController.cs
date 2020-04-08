@@ -8,7 +8,10 @@ using Library.CommandLine;
 using Library.IO;
 using Library.DataGroup;
 using System.Threading;
+using System.Timers;
 using Library.ClassParser;
+using System.Diagnostics;
+
 namespace CommandLineSerializer
 {
 	public class SerializerController
@@ -18,19 +21,24 @@ namespace CommandLineSerializer
 		private List<ProcessHeaderFileList> m_Processes = new List<ProcessHeaderFileList>();
 		private SerializerConfigFile m_ConfigFile = new SerializerConfigFile();
 		private ClassParserManager m_ClassParserManager = new ClassParserManager();
+		private Stopwatch m_StopWatch = null;
 		public SerializerController(string[] args)
 		{
-			
+			m_StopWatch = Stopwatch.StartNew();
 			_createCommandLineArguments(args);
 			_createLogFile();
+			
+
 			if (_createIntermediateDirectory() == false)
 			{
+				_showTimeExecuting();
 				log("Closing down");
 				Environment.Exit(0);
 				return;
 			}
 			if( _runClean())
 			{
+				_showTimeExecuting();
 				log("Closing down");
 				Environment.Exit(0);
 				return;
@@ -39,13 +47,15 @@ namespace CommandLineSerializer
 			_loadConfigFile();
 			if (_findHeaders() == false)
 			{
-				log("ERROR - Closing down because unable to find headers");				
+				log("ERROR - Closing down because unable to find headers");
+				_showTimeExecuting();
 				return;
 			}
 			_buildClassStructures();
 			if(_waitForClassStructuresToParse() == false )
 			{
 				log("ERROR - Closing down because there were errors parsing the classes/structs.");
+				_showTimeExecuting();
 				return;
 			}
 			_startProcessingHeaders();
@@ -58,6 +68,7 @@ namespace CommandLineSerializer
 			_waitForHeadersToProcess();
 			_saveConfigFile();
 			m_LogFile.flushLog();
+			_showTimeExecuting();
 
 		}
 
@@ -66,8 +77,8 @@ namespace CommandLineSerializer
 		{
 			commandLineArguments = new CommandLineArguments();
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-Help", "-?" }, "Prints out all the commands"));
-			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-Pause", "-p" }, "Pauses at the end waiting for a key stroke"));
-			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-Debug", "-d" }, "Shows all the values of the commands processed"));
+			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-Pause", "-P" }, "Pauses at the end waiting for a key stroke"));
+			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-Debug", "-D" }, "Shows all the values of the commands processed"));
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-DisplayOff", "-DO" }, "Will make it so that logging info won't be printed to the screen."));
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-LogFile", "-LF" }, "The log file. Must include the file name.", ""));
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-ForceRecompile", "-FR" }, "Forces all headers to recompile."));
@@ -75,7 +86,8 @@ namespace CommandLineSerializer
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-IntermediateDir", "-ID" }, "the intermediate directory where the source files will be generated. The project must point there.", ""));
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-MaxThreads", "-MT" }, "Max threads allowed to process headers. Uses Max - 1", Environment.ProcessorCount - 1));
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-Clean", "-c" }, "Cleans all the configs for a full recompile and then exits."));
-			
+			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-FullLog", "-FL" }, "Writes all the details to the log."));
+
 			commandLineArguments.parseArguments(args);
 			if (commandLineArguments.getCommandValueAsString("-LogFile") == "")
 			{
@@ -91,6 +103,27 @@ namespace CommandLineSerializer
 				Console.WriteLine(commandLineArguments.getCommandsAsDisplayString());
 			}
 
+			
+			
+
+		}
+
+		private void _showTimeExecuting()
+		{
+			if( m_StopWatch != null)
+			{
+				int iCountOfFilesParsed = (m_ClassParserManager != null) ? m_ClassParserManager.filesNeedingUpdate.Count : 0;
+				string strTimeExecuting = "Executing Command Line Serializer on " + iCountOfFilesParsed.ToString() + " header files took :" + m_StopWatch.Elapsed.TotalSeconds.ToString() + " seconds.";
+				if (m_LogFile != null &&
+					m_LogFile.logOnlyErrors == false)
+				{
+					log(strTimeExecuting);
+				}
+				else
+				{
+					Console.WriteLine(strTimeExecuting);
+				}
+			}
 		}
 
 		private bool _runClean()
@@ -117,7 +150,7 @@ namespace CommandLineSerializer
 			}
 			return false;
 		}
-
+		public bool fullLog { get; set; } 
 		public bool shouldPauseOnExit { get { return (commandLineArguments != null)?commandLineArguments.getCommandValueAsBool("-Pause"):false; } }
 
 		public int getThreadsToUse() { return Math.Max(1, commandLineArguments.getCommandValueAsInt("-MaxThreads")); }
@@ -183,6 +216,7 @@ namespace CommandLineSerializer
 			m_LogFile = new LogFile(commandLineArguments.getCommandValueAsString("-LogFile"), 100, !commandLineArguments.getCommandValueAsBool("-DisplayOff"));
 			if (m_LogFile.getValidLogFile())
 			{
+				m_LogFile.logOnlyErrors = !commandLineArguments.getCommandValueAsBool("-FullLog");
 				log("Log file created at: " + commandLineArguments.getCommandValueAsString("-LogFile"));
 			}
 			else
@@ -193,7 +227,14 @@ namespace CommandLineSerializer
 		}
 
 		//logs the line and prints to the debug window
-		public void log(string strLine) { m_LogFile.log(strLine); }
+		public void log(string strLine) 
+		{
+			if (m_LogFile != null)
+			{
+				m_LogFile.log(strLine);
+			}
+		}
+
 
 		public bool _findHeaders()
 		{
@@ -259,7 +300,7 @@ namespace CommandLineSerializer
 				{
 					log("Error - Header file appears to be missing: " + strFile);
 					return;
-				}
+				}			
 				if (bForce == false &&
 					m_ConfigFile.getHeaderFileNeedsToRecompile(mHeaderFile) == false)
 				{

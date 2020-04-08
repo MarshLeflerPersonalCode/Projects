@@ -227,3 +227,8 @@ class KCCharWriter : public KCMemoryWriter<char>
 {
 public:
 };
+
+class KCByteWriter : public KCMemoryWriter<uint8>
+{
+public:
+};

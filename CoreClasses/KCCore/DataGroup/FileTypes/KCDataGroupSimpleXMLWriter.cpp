@@ -16,7 +16,7 @@ void _writeDataGroupToXML(KCDataGroup &mDataGroup, std::ostringstream  &mStringS
 	for (auto mPropertyIter : mDataGroup.getProperties())
 	{
 		KCDataProperty &mProperty = mPropertyIter.second;
-		mStringStream << strIndentChildren << "<" << mProperty.getNameAsString() << " Type=\""  << g_strDataGroupVariableTypeNames[(int32)mProperty.m_eType] << "\">" <<  mProperty.getAsString() << "</" << mProperty.getNameAsString() << ">" << std::endl;
+		mStringStream << strIndentChildren << "<" << mProperty.getNameAsString() << " Type=\""  << DATATYPES_UTILS::getDataTypeName(mProperty.m_eType) << "\">" <<  mProperty.getAsString() << "</" << mProperty.getNameAsString() << ">" << std::endl;
 	}
 
 	for (auto mChildIter : mDataGroup.getChildGroups()) 

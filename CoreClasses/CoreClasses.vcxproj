@@ -184,9 +184,11 @@
     <ClCompile Include="KCCore\DataGroup\Private\KCDataProperty.cpp" />
     <ClCompile Include="KCCore\IO\KCFileUtilities.cpp" />
     <ClCompile Include="KCCore\KCDefines.cpp" />
+    <ClCompile Include="KCCore\Stats\KCStatManager.cpp" />
     <ClCompile Include="KCCore\UnitTypes\KCDefinedUnitTypes.cpp" />
     <ClCompile Include="KCCore\UnitTypes\KCUnitTypeManager.cpp" />
     <ClCompile Include="KCCore\UnitTypes\Private\KCUnitTypeCategory.cpp" />
+    <ClCompile Include="KCCore\Utils\KCDataTypes.cpp" />
     <ClCompile Include="KCCore\Utils\KCStringUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -203,20 +205,21 @@
     <ClInclude Include="KCCore\DataGroup\KCDataGroup.h" />
     <ClInclude Include="KCCore\DataGroup\Private\KCDataGroupEnumsAndStructs.h" />
     <ClInclude Include="KCCore\DataGroup\Private\KCDataProperty.h" />
-    <ClInclude Include="KCCore\IO\KCByteReader.h" />
-    <ClInclude Include="KCCore\IO\KCByteWriter.h" />
     <ClInclude Include="KCCore\IO\KCFileUtilities.h" />
     <ClInclude Include="KCCore\IO\KCMemoryReader.h" />
     <ClInclude Include="KCCore\IO\KCMemoryWriter.h" />
     <ClInclude Include="KCCore\KCDefines.h" />
     <ClInclude Include="KCCore\KCIncludes.h" />
     <ClInclude Include="KCCore\Serialization\KCSerializationDefines.h" />
+    <ClInclude Include="KCCore\Stats\KCStatManager.h" />
+    <ClInclude Include="KCCore\Stats\Private\KCStatDefinition.h" />
     <ClInclude Include="KCCore\UnitTypes\KCDefinedUnitTypes.h" />
     <ClInclude Include="KCCore\UnitTypes\KCUnitTypeManager.h" />
     <ClInclude Include="KCCore\UnitTypes\Private\KCUnitType.h" />
     <ClInclude Include="KCCore\UnitTypes\Private\KCUnitTypeCategory.h" />
     <ClInclude Include="KCCore\UnitTypes\UnitTypes\KCUnitTypesItems.h" />
     <ClInclude Include="KCCore\Utils\KCAsserts.h" />
+    <ClInclude Include="KCCore\Utils\KCDataTypes.h" />
     <ClInclude Include="KCCore\Utils\KCStringUtils.h" />
     <ClInclude Include="TestCases\KCDataGroupTestCase.h" />
     <ClInclude Include="TestCases\SerializeTest\KCIncludeTest.h" />

@@ -21,49 +21,49 @@ static uint32 _setint64(int64 iValue)
 void KCDataProperty::operator<<(uint64 iValue)
 {
 	m_Data.m_uiValue32 = _setint64((int64)iValue);
-	m_eType = EDATAGROUP_VARIABLE_TYPES::INT64;
+	m_eType = EDATATYPES::INT64;
 }
 
 void KCDataProperty::operator<<(int64 iValue)
 {
 	m_Data.m_uiValue32 = _setint64(iValue);
-	m_eType = EDATAGROUP_VARIABLE_TYPES::INT64;
+	m_eType = EDATATYPES::INT64;
 }
 
 void KCDataProperty::operator<<(const KCString &strValue)
 {
 	m_Data.m_uiValue32 = KCName::getStringTable().getStringID(strValue);
-	m_eType = EDATAGROUP_VARIABLE_TYPES::STRING;
+	m_eType = EDATATYPES::STRING;
 }
 
  KCString KCDataProperty::getAsString()
 {
 	switch (m_eType)
 	{
-	case EDATAGROUP_VARIABLE_TYPES::BOOL:		
+	case EDATATYPES::BOOL:		
 		return (m_Data.m_bValue[0])?"true":"false";
-	case EDATAGROUP_VARIABLE_TYPES::CHAR:		
+	case EDATATYPES::CHAR:		
 		return std::to_string( m_Data.m_cValue[0]);
-	case EDATAGROUP_VARIABLE_TYPES::INT8:		
+	case EDATATYPES::INT8:		
 		return std::to_string(m_Data.m_iValue8[0]);
-	case EDATAGROUP_VARIABLE_TYPES::UINT8:
+	case EDATATYPES::UINT8:
 		return std::to_string(m_Data.m_uiValue8[0]);
-	case EDATAGROUP_VARIABLE_TYPES::INT16:		
+	case EDATATYPES::INT16:		
 		return std::to_string(m_Data.m_iValue16[0]);
-	case EDATAGROUP_VARIABLE_TYPES::UINT16:
+	case EDATATYPES::UINT16:
 		return std::to_string(m_Data.m_uiValue16[0]);
 	default:
-	case EDATAGROUP_VARIABLE_TYPES::INT32:		
+	case EDATATYPES::INT32:		
 		return std::to_string(m_Data.m_iValue32);
-	case EDATAGROUP_VARIABLE_TYPES::UINT32:
+	case EDATATYPES::UINT32:
 		return std::to_string(m_Data.m_uiValue32);
-	case EDATAGROUP_VARIABLE_TYPES::INT64:		
+	case EDATATYPES::INT64:		
 		return std::to_string(getAsInt64());
-	case EDATAGROUP_VARIABLE_TYPES::UINT64:
+	case EDATATYPES::UINT64:
 		return std::to_string((uint64)getAsInt64());
-	case EDATAGROUP_VARIABLE_TYPES::FLOAT:		
+	case EDATATYPES::FLOAT:		
 		return std::to_string(m_Data.m_fValue);
-	case EDATAGROUP_VARIABLE_TYPES::STRING:
+	case EDATATYPES::STRING:
 		return KCName::getStringTable().getStringByID(m_Data.m_uiValue32);
 	}	
 }
@@ -72,25 +72,25 @@ int64 KCDataProperty::getAsInt64()
 {
 	switch (m_eType)
 	{
-	case EDATAGROUP_VARIABLE_TYPES::BOOL:
+	case EDATATYPES::BOOL:
 		return (int64)m_Data.m_bValue[0];
-	case EDATAGROUP_VARIABLE_TYPES::CHAR:
+	case EDATATYPES::CHAR:
 		return (int64)m_Data.m_cValue[0];
-	case EDATAGROUP_VARIABLE_TYPES::INT8:
+	case EDATATYPES::INT8:
 		return (int64)m_Data.m_iValue8[0];
-	case EDATAGROUP_VARIABLE_TYPES::UINT8:
+	case EDATATYPES::UINT8:
 		return (int64)m_Data.m_uiValue8[0];
-	case EDATAGROUP_VARIABLE_TYPES::INT16:
+	case EDATATYPES::INT16:
 		return (int64)m_Data.m_iValue16[0];
-	case EDATAGROUP_VARIABLE_TYPES::UINT16:
+	case EDATATYPES::UINT16:
 		return (int64)m_Data.m_uiValue16[0];
 	default:
-	case EDATAGROUP_VARIABLE_TYPES::INT32:
+	case EDATATYPES::INT32:
 		return (int64)m_Data.m_iValue32;
-	case EDATAGROUP_VARIABLE_TYPES::UINT32:
+	case EDATATYPES::UINT32:
 		return (int64)m_Data.m_uiValue32;
-	case EDATAGROUP_VARIABLE_TYPES::INT64:
-	case EDATAGROUP_VARIABLE_TYPES::UINT64:
+	case EDATATYPES::INT64:
+	case EDATATYPES::UINT64:
 		{
 			auto mData = m_GetInt64FromLookupID.find(m_Data.m_uiValue32);
 			if (mData == m_GetInt64FromLookupID.end())
@@ -99,9 +99,9 @@ int64 KCDataProperty::getAsInt64()
 			}
 			return mData->second;
 		}		
-	case EDATAGROUP_VARIABLE_TYPES::FLOAT:
+	case EDATATYPES::FLOAT:
 		return (int64)m_Data.m_fValue;
-	case EDATAGROUP_VARIABLE_TYPES::STRING:
+	case EDATATYPES::STRING:
 		return (getAsString() != "")?1:0;
 	}
 }
@@ -110,29 +110,29 @@ int32 KCDataProperty::getAsInt32()
 {
 	switch (m_eType)
 	{
-	case EDATAGROUP_VARIABLE_TYPES::BOOL:
+	case EDATATYPES::BOOL:
 		return (int32)m_Data.m_bValue[0];
-	case EDATAGROUP_VARIABLE_TYPES::CHAR:
+	case EDATATYPES::CHAR:
 		return (int32)m_Data.m_cValue[0];
-	case EDATAGROUP_VARIABLE_TYPES::INT8:
+	case EDATATYPES::INT8:
 		return (int32)m_Data.m_iValue8[0];
-	case EDATAGROUP_VARIABLE_TYPES::UINT8:
+	case EDATATYPES::UINT8:
 		return (int32)m_Data.m_uiValue8[0];
-	case EDATAGROUP_VARIABLE_TYPES::INT16:
+	case EDATATYPES::INT16:
 		return (int32)m_Data.m_iValue16[0];
-	case EDATAGROUP_VARIABLE_TYPES::UINT16:
+	case EDATATYPES::UINT16:
 		return (int32)m_Data.m_uiValue16[0];
 	default:
-	case EDATAGROUP_VARIABLE_TYPES::INT32:
+	case EDATATYPES::INT32:
 		return m_Data.m_iValue32;
-	case EDATAGROUP_VARIABLE_TYPES::UINT32:
+	case EDATATYPES::UINT32:
 		return (int32)m_Data.m_uiValue32;
-	case EDATAGROUP_VARIABLE_TYPES::INT64:
-	case EDATAGROUP_VARIABLE_TYPES::UINT64:			
+	case EDATATYPES::INT64:
+	case EDATATYPES::UINT64:			
 		return (int32)getAsInt64();
-	case EDATAGROUP_VARIABLE_TYPES::FLOAT:
+	case EDATATYPES::FLOAT:
 		return (int32)m_Data.m_fValue;
-	case EDATAGROUP_VARIABLE_TYPES::STRING:
+	case EDATATYPES::STRING:
 		return (getAsString() != "") ? 1 : 0;
 	}
 }
@@ -141,7 +141,7 @@ bool KCDataProperty::getAsBool()
 {
 	switch (m_eType)
 	{
-	case EDATAGROUP_VARIABLE_TYPES::BOOL:
+	case EDATATYPES::BOOL:
 		return m_Data.m_bValue[0];
 	default:
 		return (m_Data.m_iValue32 != 0) ? true : false;
@@ -152,29 +152,29 @@ int8 KCDataProperty::getAsInt8()
 {
 	switch (m_eType)
 	{
-	case EDATAGROUP_VARIABLE_TYPES::BOOL:
+	case EDATATYPES::BOOL:
 		return (int8)m_Data.m_bValue[0];
-	case EDATAGROUP_VARIABLE_TYPES::CHAR:
+	case EDATATYPES::CHAR:
 		return (int8)m_Data.m_cValue[0];
-	case EDATAGROUP_VARIABLE_TYPES::INT8:
+	case EDATATYPES::INT8:
 		return m_Data.m_iValue8[0];
-	case EDATAGROUP_VARIABLE_TYPES::UINT8:
+	case EDATATYPES::UINT8:
 		return (int8)m_Data.m_uiValue8[0];
-	case EDATAGROUP_VARIABLE_TYPES::INT16:
+	case EDATATYPES::INT16:
 		return (int8)m_Data.m_iValue16[0];
-	case EDATAGROUP_VARIABLE_TYPES::UINT16:
+	case EDATATYPES::UINT16:
 		return (int8)m_Data.m_uiValue16[0];
 	default:
-	case EDATAGROUP_VARIABLE_TYPES::INT32:
+	case EDATATYPES::INT32:
 		return (int8)m_Data.m_iValue32;
-	case EDATAGROUP_VARIABLE_TYPES::UINT32:
+	case EDATATYPES::UINT32:
 		return (int8)m_Data.m_uiValue32;
-	case EDATAGROUP_VARIABLE_TYPES::INT64:
-	case EDATAGROUP_VARIABLE_TYPES::UINT64:
+	case EDATATYPES::INT64:
+	case EDATATYPES::UINT64:
 		return (int8)getAsInt64();
-	case EDATAGROUP_VARIABLE_TYPES::FLOAT:
+	case EDATATYPES::FLOAT:
 		return (int8)m_Data.m_fValue;
-	case EDATAGROUP_VARIABLE_TYPES::STRING:
+	case EDATATYPES::STRING:
 		return (getAsString() != "") ? 1 : 0;
 	}
 }
@@ -183,29 +183,29 @@ uint8 KCDataProperty::getAsUInt8()
 {
 	switch (m_eType)
 	{
-	case EDATAGROUP_VARIABLE_TYPES::BOOL:
+	case EDATATYPES::BOOL:
 		return (uint8)m_Data.m_bValue[0];
-	case EDATAGROUP_VARIABLE_TYPES::CHAR:
+	case EDATATYPES::CHAR:
 		return (uint8)m_Data.m_cValue[0];
-	case EDATAGROUP_VARIABLE_TYPES::INT8:
+	case EDATATYPES::INT8:
 		return (uint8)m_Data.m_iValue8[0];
-	case EDATAGROUP_VARIABLE_TYPES::UINT8:
+	case EDATATYPES::UINT8:
 		return m_Data.m_uiValue8[0];
-	case EDATAGROUP_VARIABLE_TYPES::INT16:
+	case EDATATYPES::INT16:
 		return (uint8)m_Data.m_iValue16[0];
-	case EDATAGROUP_VARIABLE_TYPES::UINT16:
+	case EDATATYPES::UINT16:
 		return (uint8)m_Data.m_uiValue16[0];
 	default:
-	case EDATAGROUP_VARIABLE_TYPES::INT32:
+	case EDATATYPES::INT32:
 		return (uint8)m_Data.m_iValue32;
-	case EDATAGROUP_VARIABLE_TYPES::UINT32:
+	case EDATATYPES::UINT32:
 		return (uint8)m_Data.m_uiValue32;
-	case EDATAGROUP_VARIABLE_TYPES::INT64:
-	case EDATAGROUP_VARIABLE_TYPES::UINT64:
+	case EDATATYPES::INT64:
+	case EDATATYPES::UINT64:
 		return (uint8)getAsInt64();
-	case EDATAGROUP_VARIABLE_TYPES::FLOAT:
+	case EDATATYPES::FLOAT:
 		return (uint8)m_Data.m_fValue;
-	case EDATAGROUP_VARIABLE_TYPES::STRING:
+	case EDATATYPES::STRING:
 		return (getAsString() != "") ? 1 : 0;
 	}
 }
@@ -214,29 +214,29 @@ int16 KCDataProperty::getAsInt16()
 {
 	switch (m_eType)
 	{
-	case EDATAGROUP_VARIABLE_TYPES::BOOL:
+	case EDATATYPES::BOOL:
 		return (int16)m_Data.m_bValue[0];
-	case EDATAGROUP_VARIABLE_TYPES::CHAR:
+	case EDATATYPES::CHAR:
 		return (int16)m_Data.m_cValue[0];
-	case EDATAGROUP_VARIABLE_TYPES::INT8:
+	case EDATATYPES::INT8:
 		return (int16)m_Data.m_iValue8[0];
-	case EDATAGROUP_VARIABLE_TYPES::UINT8:
+	case EDATATYPES::UINT8:
 		return (int16)m_Data.m_uiValue8[0];
-	case EDATAGROUP_VARIABLE_TYPES::INT16:
+	case EDATATYPES::INT16:
 		return m_Data.m_iValue16[0];
-	case EDATAGROUP_VARIABLE_TYPES::UINT16:
+	case EDATATYPES::UINT16:
 		return (int16)m_Data.m_uiValue16[0];
 	default:
-	case EDATAGROUP_VARIABLE_TYPES::INT32:
+	case EDATATYPES::INT32:
 		return (int16)m_Data.m_iValue32;
-	case EDATAGROUP_VARIABLE_TYPES::UINT32:
+	case EDATATYPES::UINT32:
 		return (int16)m_Data.m_uiValue32;
-	case EDATAGROUP_VARIABLE_TYPES::INT64:
-	case EDATAGROUP_VARIABLE_TYPES::UINT64:
+	case EDATATYPES::INT64:
+	case EDATATYPES::UINT64:
 		return (int16)getAsInt64();
-	case EDATAGROUP_VARIABLE_TYPES::FLOAT:
+	case EDATATYPES::FLOAT:
 		return (int16)m_Data.m_fValue;
-	case EDATAGROUP_VARIABLE_TYPES::STRING:
+	case EDATATYPES::STRING:
 		return (getAsString() != "") ? 1 : 0;
 	}
 }
@@ -245,29 +245,29 @@ uint16 KCDataProperty::getAsUInt16()
 {
 	switch (m_eType)
 	{
-	case EDATAGROUP_VARIABLE_TYPES::BOOL:
+	case EDATATYPES::BOOL:
 		return (uint16)m_Data.m_bValue[0];
-	case EDATAGROUP_VARIABLE_TYPES::CHAR:
+	case EDATATYPES::CHAR:
 		return (uint16)m_Data.m_cValue[0];
-	case EDATAGROUP_VARIABLE_TYPES::INT8:
+	case EDATATYPES::INT8:
 		return (uint16)m_Data.m_iValue8[0];
-	case EDATAGROUP_VARIABLE_TYPES::UINT8:
+	case EDATATYPES::UINT8:
 		return (uint16)m_Data.m_uiValue8[0];
-	case EDATAGROUP_VARIABLE_TYPES::INT16:
+	case EDATATYPES::INT16:
 		return (uint16)m_Data.m_iValue16[0];
-	case EDATAGROUP_VARIABLE_TYPES::UINT16:
+	case EDATATYPES::UINT16:
 		return m_Data.m_uiValue16[0];
 	default:
-	case EDATAGROUP_VARIABLE_TYPES::INT32:
+	case EDATATYPES::INT32:
 		return (uint16)m_Data.m_iValue32;
-	case EDATAGROUP_VARIABLE_TYPES::UINT32:
+	case EDATATYPES::UINT32:
 		return (uint16)m_Data.m_uiValue32;
-	case EDATAGROUP_VARIABLE_TYPES::INT64:
-	case EDATAGROUP_VARIABLE_TYPES::UINT64:
+	case EDATATYPES::INT64:
+	case EDATATYPES::UINT64:
 		return (uint16)getAsInt64();
-	case EDATAGROUP_VARIABLE_TYPES::FLOAT:
+	case EDATATYPES::FLOAT:
 		return (uint16)m_Data.m_fValue;
-	case EDATAGROUP_VARIABLE_TYPES::STRING:
+	case EDATATYPES::STRING:
 		return (getAsString() != "") ? 1 : 0;
 	}
 }
@@ -276,55 +276,55 @@ float KCDataProperty::getAsFloat()
 {
 	switch (m_eType)
 	{
-	case EDATAGROUP_VARIABLE_TYPES::BOOL:
+	case EDATATYPES::BOOL:
 		return (float)(m_Data.m_bValue[0])?1.0f:0.0f;
-	case EDATAGROUP_VARIABLE_TYPES::CHAR:
+	case EDATATYPES::CHAR:
 		return (float)m_Data.m_cValue[0];
-	case EDATAGROUP_VARIABLE_TYPES::INT8:
+	case EDATATYPES::INT8:
 		return (float)m_Data.m_iValue8[0];
-	case EDATAGROUP_VARIABLE_TYPES::UINT8:
+	case EDATATYPES::UINT8:
 		return (float)m_Data.m_uiValue8[0];
-	case EDATAGROUP_VARIABLE_TYPES::INT16:
+	case EDATATYPES::INT16:
 		return (float)m_Data.m_iValue16[0];
-	case EDATAGROUP_VARIABLE_TYPES::UINT16:
+	case EDATATYPES::UINT16:
 		return (float)m_Data.m_uiValue16[0];
 	default:
-	case EDATAGROUP_VARIABLE_TYPES::INT32:
+	case EDATATYPES::INT32:
 		return (float)m_Data.m_iValue32;
-	case EDATAGROUP_VARIABLE_TYPES::UINT32:
+	case EDATATYPES::UINT32:
 		return (float)m_Data.m_uiValue32;
-	case EDATAGROUP_VARIABLE_TYPES::INT64:
-	case EDATAGROUP_VARIABLE_TYPES::UINT64:
+	case EDATATYPES::INT64:
+	case EDATATYPES::UINT64:
 		return (float)getAsInt64();
-	case EDATAGROUP_VARIABLE_TYPES::FLOAT:
+	case EDATATYPES::FLOAT:
 		return m_Data.m_fValue;
-	case EDATAGROUP_VARIABLE_TYPES::STRING:
+	case EDATATYPES::STRING:
 		return (getAsString() != "") ? 1.0f : 0.0f;
 	}
 }
 
-bool KCDataProperty::setValueByString(const KCString &strString, EDATAGROUP_VARIABLE_TYPES eType)
+bool KCDataProperty::setValueByString(const KCString &strString, EDATATYPES eType)
 {
 	m_eType = eType;
 
-	if (m_eType == EDATAGROUP_VARIABLE_TYPES::STRING)
+	if (m_eType == EDATATYPES::STRING)
 	{
 		m_Data.m_uiValue32 = KCName::getStringTable().getStringID(strString);
-		m_eType = EDATAGROUP_VARIABLE_TYPES::STRING;
+		m_eType = EDATATYPES::STRING;
 		return true;
 	}
-	else if (m_eType == EDATAGROUP_VARIABLE_TYPES::BOOL)
+	else if (m_eType == EDATATYPES::BOOL)
 	{
 		m_Data.m_bValue[0] = (strString.c_str()[0] == 'f' || strString.c_str()[0] == 'F') ? false : true;
 		return true;
 	}
 	if (strString == "" ||
-		eType == EDATAGROUP_VARIABLE_TYPES::COUNT)
+		eType == EDATATYPES::COUNT)
 	{
 		return false;
 	}
 	//special case for char
-	if (m_eType == EDATAGROUP_VARIABLE_TYPES::CHAR)
+	if (m_eType == EDATATYPES::CHAR)
 	{
 		m_Data.m_cValue[0] = strString.c_str()[0];
 		return true;
@@ -340,24 +340,24 @@ bool KCDataProperty::setValueByString(const KCString &strString, EDATAGROUP_VARI
 	std::stringstream mParseStringStream(strString);
 	switch (m_eType)
 	{			
-	case EDATAGROUP_VARIABLE_TYPES::INT8:
+	case EDATATYPES::INT8:
 		mParseStringStream >> m_Data.m_iValue8[0];
 		break;
-	case EDATAGROUP_VARIABLE_TYPES::UINT8:
+	case EDATATYPES::UINT8:
 		mParseStringStream >> m_Data.m_uiValue8[0];
 		break;		
-	case EDATAGROUP_VARIABLE_TYPES::INT16:
+	case EDATATYPES::INT16:
 		mParseStringStream >> m_Data.m_iValue16[0];		
-	case EDATAGROUP_VARIABLE_TYPES::UINT16:
+	case EDATATYPES::UINT16:
 		mParseStringStream >> m_Data.m_uiValue16[0];
 	default:
-	case EDATAGROUP_VARIABLE_TYPES::INT32:
+	case EDATATYPES::INT32:
 		mParseStringStream >> m_Data.m_iValue32;		
 		break;
-	case EDATAGROUP_VARIABLE_TYPES::UINT32:
+	case EDATATYPES::UINT32:
 		mParseStringStream >> m_Data.m_uiValue32;
 		break;
-	case EDATAGROUP_VARIABLE_TYPES::INT64:
+	case EDATATYPES::INT64:
 		{
 			int64 iValue(0);
 			mParseStringStream >> iValue;
@@ -368,7 +368,7 @@ bool KCDataProperty::setValueByString(const KCString &strString, EDATAGROUP_VARI
 			m_Data.m_uiValue32 = _setint64(iValue);
 		}
 		break;
-	case EDATAGROUP_VARIABLE_TYPES::UINT64:
+	case EDATATYPES::UINT64:
 		{
 			uint64 iValue(0);
 			mParseStringStream >> iValue;
@@ -379,7 +379,7 @@ bool KCDataProperty::setValueByString(const KCString &strString, EDATAGROUP_VARI
 			m_Data.m_uiValue32 = _setint64(iValue);
 		}
 		break;
-	case EDATAGROUP_VARIABLE_TYPES::FLOAT:
+	case EDATATYPES::FLOAT:
 		mParseStringStream >> m_Data.m_fValue;
 		break;
 	}
@@ -392,5 +392,5 @@ bool KCDataProperty::setValueByString(const KCString &strString, EDATAGROUP_VARI
 
 bool KCDataProperty::setValueByString(const KCString &strString, const KCString &strType)
 {
-	return setValueByString(strString, getDataGroupTypeByString(strType));
+	return setValueByString(strString, DATATYPES_UTILS::getDataTypeByDataTypeName(strType));
 }

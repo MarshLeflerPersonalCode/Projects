@@ -1,6 +1,6 @@
 #include "KCDataGroupBinaryWriter.h"
 #include "IO/KCFileUtilities.h"
-#include "IO/KCByteWriter.h"
+#include "IO/KCMemoryWriter.h"
 #include "DataGroup/KCDataGroup.h"
 #include <sstream>
 
@@ -43,7 +43,7 @@ void _buildStringLookupTable(KCDataGroup &mDataGroup, std::map<KCString, uint16>
 	{
 		KCDataProperty &mProperty = mPropertyIter.second;
 		_addString(mProperty.m_strLookupName, mStringLookupTable);
-		if (mProperty.m_eType == EDATAGROUP_VARIABLE_TYPES::STRING)
+		if (mProperty.m_eType == EDATATYPES::STRING)
 		{
 			_addString(mProperty.getAsString(), mStringLookupTable);
 		}
@@ -68,41 +68,41 @@ void _writeDataGroup(KCDataGroup &mDataGroup, KCByteWriter &mWriter, std::map<KC
 		mWriter << eType;
 		switch (mProperty.m_eType)
 		{
-		case EDATAGROUP_VARIABLE_TYPES::BOOL:
+		case EDATATYPES::BOOL:
 			mWriter << mProperty.m_Data.m_bValue[0];
 			break;
-		case EDATAGROUP_VARIABLE_TYPES::CHAR:
+		case EDATATYPES::CHAR:
 			mWriter << mProperty.m_Data.m_cValue[0];
 			break;
-		case EDATAGROUP_VARIABLE_TYPES::INT8:
+		case EDATATYPES::INT8:
 			mWriter << mProperty.m_Data.m_iValue8[0];
 			break;
-		case EDATAGROUP_VARIABLE_TYPES::UINT8:
+		case EDATATYPES::UINT8:
 			mWriter << mProperty.m_Data.m_uiValue8[0];
 			break;
-		case EDATAGROUP_VARIABLE_TYPES::INT16:
+		case EDATATYPES::INT16:
 			mWriter << mProperty.m_Data.m_iValue16[0];
 			break;
-		case EDATAGROUP_VARIABLE_TYPES::UINT16:
+		case EDATATYPES::UINT16:
 			mWriter << mProperty.m_Data.m_uiValue16[0];
 			break;
 		default:
-		case EDATAGROUP_VARIABLE_TYPES::INT32:
+		case EDATATYPES::INT32:
 			mWriter << mProperty.m_Data.m_iValue32;
 			break;
-		case EDATAGROUP_VARIABLE_TYPES::UINT32:
+		case EDATATYPES::UINT32:
 			mWriter << mProperty.m_Data.m_uiValue32;
 			break;
-		case EDATAGROUP_VARIABLE_TYPES::INT64:
+		case EDATATYPES::INT64:
 			mWriter << mProperty.getAsInt64();
 			break;
-		case EDATAGROUP_VARIABLE_TYPES::UINT64:
+		case EDATATYPES::UINT64:
 			mWriter << mProperty.getAsUInt64();
 			break;
-		case EDATAGROUP_VARIABLE_TYPES::FLOAT:
+		case EDATATYPES::FLOAT:
 			mWriter << mProperty.m_Data.m_fValue;
 			break;
-		case EDATAGROUP_VARIABLE_TYPES::STRING:
+		case EDATATYPES::STRING:
 			{
 				mWriter << _getStringID(mProperty.getAsString(), mStringLookupTable);
 			}
@@ -150,7 +150,7 @@ bool KCDataGroupBinaryWriter::writeDataGroupToFile(const WCHAR *strPathAndFile, 
 	_writeHeader(mWriter);
 	_writeStringTable(mWriter, mStringLookupTable);
 	_writeDataGroup(mDataGroup, mWriter, mStringLookupTable);
-	KCFileUtilities::saveToFile(strPathAndFile, mWriter.getByteArrayAsChar(), mWriter.getByteArrayCount());
+	KCFileUtilities::saveToFile(strPathAndFile, (const char *)mWriter.getMemory(), mWriter.getArrayCount());
 	
 	return true;
 }

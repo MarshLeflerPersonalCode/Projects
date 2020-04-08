@@ -13,7 +13,7 @@ void _writeDataGroup(KCDataGroup &mDataGroup, std::ostringstream  &mStringStream
 	for (auto mPropertyIter : mDataGroup.getProperties())
 	{
 		KCDataProperty &mProperty = mPropertyIter.second;
-		mStringStream << strIndentChildren << "<" << g_strDataGroupVariableTypeNames[(int32)mProperty.m_eType] << ">" << mProperty.getNameAsString() << ":" << mProperty.getAsString() << std::endl;
+		mStringStream << strIndentChildren << "<" << DATATYPES_UTILS::getDataTypeName(mProperty.m_eType) << ">" << mProperty.getNameAsString() << ":" << mProperty.getAsString() << std::endl;
 	}
 
 	for (auto mChildIter : mDataGroup.getChildGroups()) 

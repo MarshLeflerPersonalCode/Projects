@@ -40,6 +40,12 @@
     <Filter Include="KCCore\Serialization">
       <UniqueIdentifier>{6f058dd3-90b9-4f16-ade9-2b931cb6cfb3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="KCCore\Stats">
+      <UniqueIdentifier>{3c002965-11c3-454b-906c-74ac36501164}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="KCCore\Stats\Private">
+      <UniqueIdentifier>{243f519e-1deb-4682-871d-312caf28a1e4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CoreClasses.cpp" />
@@ -88,13 +94,16 @@
     <ClCompile Include="KCCore\DataGroup\FileTypes\KCDataGroupSimpleXMLReader.cpp">
       <Filter>KCCore\DataGroup\FileTypes</Filter>
     </ClCompile>
+    <ClCompile Include="KCCore\Stats\KCStatManager.cpp">
+      <Filter>KCCore\Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="KCCore\Utils\KCDataTypes.cpp">
+      <Filter>KCCore\Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KCCore\UnitTypes\KCUnitTypeManager.h">
       <Filter>KCCore\UnitTypes</Filter>
-    </ClInclude>
-    <ClInclude Include="KCCore\IO\KCByteReader.h">
-      <Filter>KCCore\IO</Filter>
     </ClInclude>
     <ClInclude Include="KCCore\Containers\KCTArray.h">
       <Filter>KCCore\Containers</Filter>
@@ -144,9 +153,6 @@
     <ClInclude Include="KCCore\DataGroup\FileTypes\KCDataGroupStringWriter.h">
       <Filter>KCCore\DataGroup\FileTypes</Filter>
     </ClInclude>
-    <ClInclude Include="KCCore\IO\KCByteWriter.h">
-      <Filter>KCCore\IO</Filter>
-    </ClInclude>
     <ClInclude Include="TestCases\KCDataGroupTestCase.h">
       <Filter>TestCases</Filter>
     </ClInclude>
@@ -179,6 +185,15 @@
     </ClInclude>
     <ClInclude Include="KCCore\IO\KCMemoryWriter.h">
       <Filter>KCCore\IO</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Stats\KCStatManager.h">
+      <Filter>KCCore\Stats</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Stats\Private\KCStatDefinition.h">
+      <Filter>KCCore\Stats\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Utils\KCDataTypes.h">
+      <Filter>KCCore\Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

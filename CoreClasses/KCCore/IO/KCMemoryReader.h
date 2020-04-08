@@ -18,8 +18,17 @@ public:
 	}
 	KCMemoryReader(const MemoryType *pArray, const int32 iCount = 0)
 	{
-		configureByByteArray( pArray, iCount);
+		configureByTArray( pArray, iCount);
 	}
+	KCMemoryReader(const MemoryType *pArray, const uint32 iCount = 0)
+	{
+		configureByTArray(pArray, (int32)iCount);
+	}
+	KCMemoryReader(const MemoryType *pArray, const size_t iCount = 0)
+	{
+		configureByTArray(pArray, (int32)iCount);
+	}
+
 	void configureByTArray(const KCTArray<MemoryType> &mArray)
 	{
 		m_pMemoryArray = mArray.getMemory();
@@ -251,6 +260,23 @@ protected:
 class KCCharReader : public KCMemoryReader<char>
 {
 public:
+	KCCharReader() {}
+	KCCharReader(const KCTArray<char> &mArray)
+	{
+		configureByTArray(mArray);
+	}
+	KCCharReader(const char *pArray, const int32 iCount = 0)
+	{
+		configureByArray(pArray, iCount);
+	}
+	KCCharReader(const char *pArray, const uint32 iCount = 0)
+	{
+		configureByArray(pArray, (int32)iCount);
+	}
+	KCCharReader(const char *pArray, const size_t iCount = 0)
+	{
+		configureByArray(pArray, (int32)iCount);
+	}
 	//copies the memory into a string. REturns true if successful
 	bool				copyMemoryIntoString(size_t iCount, KCString &strString, bool bMoveCarrot = true)
 	{
@@ -278,5 +304,27 @@ public:
 			m_iCurrentByteIndex = iMemoryLocation;
 		}
 		return true;
+	}
+};
+
+class KCByteReader : public KCMemoryReader<uint8>
+{
+public:
+	KCByteReader(){}
+	KCByteReader(const KCTArray<uint8> &mArray)
+	{
+		configureByTArray(mArray);
+	}
+	KCByteReader(const uint8 *pArray, const int32 iCount = 0)
+	{
+		configureByArray(pArray, iCount);
+	}
+	KCByteReader(const uint8 *pArray, const uint32 iCount = 0)
+	{
+		configureByArray(pArray, (int32)iCount);
+	}
+	KCByteReader(const uint8 *pArray, const size_t iCount = 0)
+	{
+		configureByArray(pArray, (int32)iCount);
 	}
 };

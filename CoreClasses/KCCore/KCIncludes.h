@@ -15,8 +15,10 @@
 #include "Containers/KCName.h"
 #include "Containers/KCTArray.h"
 #include "Containers/KCStringTable.h"
-#include "IO/KCByteReader.h"
+#include "IO/KCMemoryReader.h"
+#include "IO/KCMemoryWriter.h"
 #include "IO/KCFileUtilities.h"
 #include "Utils/KCStringUtils.h"
+#include "Serialization/KCSerializationDefines.h"
 
 

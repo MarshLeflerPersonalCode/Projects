@@ -25,9 +25,6 @@ namespace KCStringUtils
 	//returns if it's a number. Supports 1.0f as well.
 	bool				isNumber(const std::string &strStringToTest);
 
-	//will return STRING, INT64, INT32, FLOAT, BOOL from
-	std::string			getVariableType(const std::string &strValue);
-
 	//just as it says. Removes characters/string from the end of a string
 	void				removeCharactersFromEndOfString(std::string &strString, 
 														const std::string &strRemove = " ");
@@ -44,5 +41,18 @@ namespace KCStringUtils
 								   const std::string &strStringSearching, 
 								   const std::string &strTagOpen, 
 								   const std::string &strTagClosed);
+
+	FORCEINLINE std::string		getAsString(int64 iValue){ return std::to_string(iValue); }
+	FORCEINLINE std::string 	getAsString(uint64 iValue) { return std::to_string(iValue); }
+	FORCEINLINE std::string 	getAsString(int32 iValue) { return std::to_string(iValue); }
+	FORCEINLINE std::string 	getAsString(uint32 iValue) { return std::to_string(iValue); }
+	std::string 				getAsString(bool bValue);
+	FORCEINLINE std::string 	getAsString(int8 iValue) { return std::to_string(iValue); }
+	FORCEINLINE std::string 	getAsString(uint8 iValue) { return std::to_string(iValue); }
+	FORCEINLINE std::string 	getAsString(int16 iValue) { return std::to_string(iValue); }
+	FORCEINLINE std::string 	getAsString(uint16 iValue) { return std::to_string(iValue); }
+	FORCEINLINE std::string 	getAsString(float fValue) { return std::to_string(fValue); }
+	FORCEINLINE std::string		getAsString(double dValue) { return std::to_string(dValue); }
+	std::string 				getAsString(const WCHAR *pStringToConvert);
 
 };	//end namespace

@@ -92,16 +92,8 @@ bool _parseDataGroupProperty(KCDataGroup &mDataGroupParent, std::string &strProp
 	std::string strName = strNameAndValue.substr(0, iPropertySplit);
 	std::string strValue = strNameAndValue.substr(iPropertySplit + 1, strNameAndValue.length() - iPropertySplit - 1);
 	KCEnsureAlwaysMsgReturnVal((strName.size() > 0 &&  strValue.size() > 0), ("Incorrectly formatted property line:" + strNameAndValue).c_str(), false);
-	EDATAGROUP_VARIABLE_TYPES eType = EDATAGROUP_VARIABLE_TYPES::COUNT;
-	for (int32 iTypeIndex = 0; iTypeIndex < (int32)EDATAGROUP_VARIABLE_TYPES::COUNT; iTypeIndex++)
-	{
-		if (g_strDataGroupVariableTypeNames[iTypeIndex] == strType)
-		{
-			eType = (EDATAGROUP_VARIABLE_TYPES)iTypeIndex;
-			break;
-		}
-	}
-	KCEnsureAlwaysMsgReturnVal((eType != EDATAGROUP_VARIABLE_TYPES::COUNT), ("Unknown Type " + strType + " found in string " + strPropertyLine).c_str(), false);
+	EDATATYPES eType = DATATYPES_UTILS::getDataTypeByDataTypeName(KCStringUtils::toUpper(strType));
+	KCEnsureAlwaysMsgReturnVal((eType != EDATATYPES::COUNT), ("Unknown Type " + strType + " found in string " + strPropertyLine).c_str(), false);
 	KCDataProperty &mProperty = mDataGroupParent.getOrCreateProperty(strName);	
 	bool bSetOkay = mProperty.setValueByString(strValue, eType);
 	KCEnsureAlwaysMsgReturnVal(bSetOkay, ("Was unable to set property " + strName + " with value " + strValue + ". Complete string is:" + strPropertyLine).c_str(), false);

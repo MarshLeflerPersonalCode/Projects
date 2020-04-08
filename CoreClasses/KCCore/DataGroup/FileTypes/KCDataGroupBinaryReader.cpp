@@ -1,7 +1,7 @@
 #include "KCDataGroupBinaryReader.h"
 #include "IO/KCFileUtilities.h"
 #include "DataGroup/KCDataGroup.h"
-#include "IO/KCByteReader.h"
+#include "IO/KCMemoryReader.h"
 #include <sstream>
 
 struct FKCDataGroupBinaryData
@@ -51,54 +51,54 @@ bool _readDataGroup(FKCDataGroupBinaryData &mData, KCDataGroup &mParentDataGroup
 		KCEnsureAlwaysMsgReturnVal(_readStringFromFile(strTmpString, mData), "Unable to read data property name from binary file: " + mData.m_strFile, false);
 		KCString strNameOfProperty = strTmpString;
 		mData.m_Reader << eType;
-		KCEnsureAlwaysMsgReturnVal(eType < (uint8)EDATAGROUP_VARIABLE_TYPES::COUNT, "Unable to type of property(" + strNameOfProperty + ") from binary file: " + mData.m_strFile, false);
+		KCEnsureAlwaysMsgReturnVal(eType < (uint8)EDATATYPES::COUNT, "Unable to type of property(" + strNameOfProperty + ") from binary file: " + mData.m_strFile, false);
 		KCDataProperty &mProperty = mDataGroup.getOrCreateProperty(strNameOfProperty);		
-		mProperty.m_eType = (EDATAGROUP_VARIABLE_TYPES)eType;
+		mProperty.m_eType = (EDATATYPES)eType;
 		switch (mProperty.m_eType)
 		{
-		case EDATAGROUP_VARIABLE_TYPES::BOOL:
+		case EDATATYPES::BOOL:
 			KCEnsureAlwaysMsgReturnVal(mData.m_Reader.readValue(&mProperty.m_Data.m_bValue[0], sizeof(bool)), "Bad bool property(" + strNameOfProperty  + ") in binary file: " + mData.m_strFile, false );
 			break;
-		case EDATAGROUP_VARIABLE_TYPES::CHAR:
+		case EDATATYPES::CHAR:
 			KCEnsureAlwaysMsgReturnVal(mData.m_Reader.readValue(&mProperty.m_Data.m_cValue[0], sizeof(char)), "Bad char property(" + strNameOfProperty + ") in binary file: " + mData.m_strFile, false);
 			break;
-		case EDATAGROUP_VARIABLE_TYPES::INT8:
+		case EDATATYPES::INT8:
 			KCEnsureAlwaysMsgReturnVal(mData.m_Reader.readValue(&mProperty.m_Data.m_iValue8[0], sizeof(int8)), "Bad int8 property(" + strNameOfProperty + ") in binary file: " + mData.m_strFile, false);
 			break;
-		case EDATAGROUP_VARIABLE_TYPES::UINT8:
+		case EDATATYPES::UINT8:
 			KCEnsureAlwaysMsgReturnVal(mData.m_Reader.readValue(&mProperty.m_Data.m_uiValue8[0], sizeof(uint8)), "Bad uint8 property(" + strNameOfProperty + ") in binary file: " + mData.m_strFile, false);
 			break;
-		case EDATAGROUP_VARIABLE_TYPES::INT16:
+		case EDATATYPES::INT16:
 			KCEnsureAlwaysMsgReturnVal(mData.m_Reader.readValue(&mProperty.m_Data.m_iValue16[0], sizeof(int16)), "Bad int16 property(" + strNameOfProperty + ") in binary file: " + mData.m_strFile, false);
 			break;
-		case EDATAGROUP_VARIABLE_TYPES::UINT16:
+		case EDATATYPES::UINT16:
 			KCEnsureAlwaysMsgReturnVal(mData.m_Reader.readValue(&mProperty.m_Data.m_uiValue16[0], sizeof(uint16)), "Bad uint16 property(" + strNameOfProperty + ") in binary file: " + mData.m_strFile, false);
 			break;
 		default:
-		case EDATAGROUP_VARIABLE_TYPES::INT32:
+		case EDATATYPES::INT32:
 			KCEnsureAlwaysMsgReturnVal(mData.m_Reader.readValue(&mProperty.m_Data.m_iValue32, sizeof(int32)), "Bad int32 property(" + strNameOfProperty + ") in binary file: " + mData.m_strFile, false);
 			break;
-		case EDATAGROUP_VARIABLE_TYPES::UINT32:
+		case EDATATYPES::UINT32:
 			KCEnsureAlwaysMsgReturnVal(mData.m_Reader.readValue(&mProperty.m_Data.m_uiValue32, sizeof(uint32)), "Bad uint32 property(" + strNameOfProperty + ") in binary file: " + mData.m_strFile, false);
 			break;
-		case EDATAGROUP_VARIABLE_TYPES::INT64:
+		case EDATATYPES::INT64:
 			{
 				int64 iInt64;
 				KCEnsureAlwaysMsgReturnVal(mData.m_Reader.readValue(&iInt64, sizeof(int64)), "Bad int64 property(" + strNameOfProperty + ") in binary file: " + mData.m_strFile, false);
 				mProperty << iInt64;
 			}			
 			break;
-		case EDATAGROUP_VARIABLE_TYPES::UINT64:
+		case EDATATYPES::UINT64:
 			{
 				int64 uInt64;
 				KCEnsureAlwaysMsgReturnVal(mData.m_Reader.readValue(&uInt64, sizeof(uint64)), "Bad uint64 property(" + strNameOfProperty + ") in binary file: " + mData.m_strFile, false);
 				mProperty << uInt64;
 			}
 			break;
-		case EDATAGROUP_VARIABLE_TYPES::FLOAT:
+		case EDATATYPES::FLOAT:
 			KCEnsureAlwaysMsgReturnVal(mData.m_Reader.readValue(&mProperty.m_Data.m_fValue, sizeof(float)), "Bad float property(" + strNameOfProperty + ") in binary file: " + mData.m_strFile, false);
 			break;
-		case EDATAGROUP_VARIABLE_TYPES::STRING:
+		case EDATATYPES::STRING:
 			{
 				KCEnsureAlwaysMsgReturnVal(_readStringFromFile(strTmpString, mData), "Bad string property(" + strNameOfProperty + ") in binary file: " + mData.m_strFile, false);							
 				mProperty << strTmpString;

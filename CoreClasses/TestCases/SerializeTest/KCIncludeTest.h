@@ -1,7 +1,5 @@
 //copyright Marsh Lefler 2000-...
 #pragma once
-#include "IO/KCByteReader.h"
-#include "IO/KCByteWriter.h"
 #include "DataGroup/KCDataGroup.h"
 #include "Serialization/KCSerializationDefines.h"
 #include "KCIncludeTest.serialize.inc"
@@ -32,13 +30,19 @@ class KCIncludeTest
 public:
 	KCSERIALIZE_CODE();
 
-	KCIncludeTest() {}
+	KCIncludeTest() 
+	{
+		m_pSerializeChildTest = new KCSerializeChild();
+		m_pSerializeChildTest->m_strTest = "Working!";
+
+	}
 	KCIncludeTest(float x, float y, float z)
 	{
 		m_SerializeChild.m_strTest = "WORKS!";
 		std::cout << __LINE__ << std::endl;
 		m_fX = x; m_fY = y; m_fZ = z;
-		m_pSerializeChildTest = new KCSerializeChild();
+		//m_pSerializeChildTest = new KCSerializeChild();
+		//m_pSerializeChildTest->m_strTest ="Working!";
 		m_eEnumTest = ETEST::FOUR;
 	}
 	~KCIncludeTest()

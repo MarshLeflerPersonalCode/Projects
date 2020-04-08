@@ -33,7 +33,7 @@ namespace Library.IO
 		{
 			_configure(strPathToLogFile, iUpdateTick, bShowInConsole);
 		}
-
+		public bool logOnlyErrors { get; set; }
 		private void _configure(string strPathToLogFile, int iUpdateTick, bool bShowInConsole)
 		{
 			m_bPrintToConsole = bShowInConsole;
@@ -129,15 +129,20 @@ namespace Library.IO
 		{
 			if (m_bPrintToConsole)
 			{
-				bool bChangeColor = strLineToLog.ToLower().StartsWith("error");
-				if( bChangeColor )
+				if(logOnlyErrors == false ||
+					strLineToLog.ToLower().Contains("error") )
 				{
-					Console.ForegroundColor = ConsoleColor.Red;
-				}
-				Console.WriteLine(strLineToLog);
-				if( bChangeColor )
-				{
-					Console.ResetColor();
+					bool bChangeColor = strLineToLog.ToLower().StartsWith("error");
+					if (bChangeColor)
+					{
+						Console.ForegroundColor = ConsoleColor.Red;
+					}
+					Console.WriteLine(strLineToLog);
+					if (bChangeColor)
+					{
+						Console.ResetColor();
+					}
+
 				}
 			}
 			if (getValidLogFile())
