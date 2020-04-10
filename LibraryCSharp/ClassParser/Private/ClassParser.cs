@@ -81,6 +81,10 @@ namespace Library.ClassParser.Private
 					log("Empty File:" + fileParsing);
 					return false;
 				}
+				if( fileParsing.Contains("KCIncludeTest"))
+				{
+					log("found it");
+				}
 
 				StringReader mStringReader = new StringReader(strFileContents);
 
@@ -97,7 +101,7 @@ namespace Library.ClassParser.Private
 					strStructsAndClassesFound = strStructsAndClassesFound.Substring(0, strStructsAndClassesFound.Length - 1);
 				}
 				log("Classes/Structures found in header file: " + Path.GetFileName(fileParsing) + " " + classStructures.Count.ToString() + "(" + strStructsAndClassesFound + ")");				
-				return (classStructures.Count > 0 )?true:false;
+				return (classStructures.Count > 0 || enumLists.Count > 0 )?true:false;
 			}
 			catch (Exception e)
 			{
@@ -178,6 +182,10 @@ namespace Library.ClassParser.Private
 					continue;
 				}
 				if(isParsingClassOrStructure == false )
+				{
+					continue;
+				}
+				if(_checkSerialized(ref strLine))
 				{
 					continue;
 				}
@@ -445,11 +453,21 @@ namespace Library.ClassParser.Private
 
 			if (inComment)
 			{
-				if (strLine.Contains("*/"))
+				int iIndexOf = strLine.IndexOf("*/");
+				if (iIndexOf > 0)
 				{
 					inComment = false;
-					return true;
+					iIndexOf += 2;					
+					currentComment = currentComment + strLine.Substring(0, iIndexOf) + Environment.NewLine;
+					strLine = strLine.Substring(iIndexOf, strLine.Length - iIndexOf).Trim();
+					if (strLine == "")
+					{
+						return true;
+					}
+					return false;
 				}
+				currentComment = currentComment + strLine + Environment.NewLine;
+				return true;
 			}
 			int iIndexOfCommentStart = strLine.IndexOf("/*");
 			int iIndexOfCommentEnd = -1;
@@ -475,7 +493,14 @@ namespace Library.ClassParser.Private
 			{
 				iIndexOfCommentEnd = strLine.Length;
 			}
-			currentComment = currentComment + strLine.Substring(iIndexOfCommentStart, iIndexOfCommentEnd - iIndexOfCommentStart);
+			if (currentComment == "")
+			{
+				currentComment = currentComment + strLine.Substring(iIndexOfCommentStart, iIndexOfCommentEnd - iIndexOfCommentStart);
+			}
+			else
+			{
+				currentComment = currentComment + strLine.Substring(iIndexOfCommentStart, iIndexOfCommentEnd - iIndexOfCommentStart) + Environment.NewLine;
+			}
 			strLine = strLine.Remove(iIndexOfCommentStart, iIndexOfCommentEnd - iIndexOfCommentStart);
 			if (strLine.Length == 0)
 			{
@@ -486,7 +511,7 @@ namespace Library.ClassParser.Private
 
 		private bool _handleMacro(ref string strLine)
 		{
-			bool bIsUProperty = strLine.Contains("UPROPERTY");
+			bool bIsUProperty = strLine.Contains("UPROPERTY") || strLine.Contains("KCPROPERTY");
 			if(inFunction)
 			{
 				return false;
@@ -530,7 +555,8 @@ namespace Library.ClassParser.Private
 		
 		private bool _handleUE4Property(ref string strLine)
 		{
-			if (strLine.StartsWith("UPROPERTY") == false)
+			if (strLine.StartsWith("UPROPERTY") == false &&
+				strLine.StartsWith("KCPROPERTY") == false)
 			{
 				return false;
 			}
@@ -588,11 +614,20 @@ namespace Library.ClassParser.Private
 				strVariableLine = strVariableLine.Replace("static ", "");
 			}
 			bool bIsPointer = false;
-			int iIndexOfPointer = strVariableLine.IndexOf("*");
+			int iIndexOfPointer = strVariableLine.LastIndexOf("*");
 			if(iIndexOfPointer > 0)
 			{
-				bIsPointer = true;
-				strVariableLine = strVariableLine.Replace("*", "");
+				int iIndexOfLessThan = strVariableLine.IndexOf("<");
+				int iIndexOfGreaterThan = strVariableLine.LastIndexOf(">");
+				if (iIndexOfPointer > iIndexOfLessThan &&
+					iIndexOfPointer < iIndexOfGreaterThan)
+				{
+				}
+				else
+				{
+					bIsPointer = true;
+					strVariableLine = strVariableLine.Replace("*", "");
+				}
 			}
 			while ( strVariableLine.Contains("  "))
 			{
@@ -641,6 +676,7 @@ namespace Library.ClassParser.Private
 		private void _parseProperties( string strLine, Dictionary<string, string> mProperties)
 		{
 			strLine = strLine.Replace("UPROPERTY", "");
+			strLine = strLine.Replace("KCPROPERTY", "");
 			strLine = strLine.Replace("UMETA", "");
 			strLine = strLine.Replace("(", "");
 			strLine = strLine.Replace(")", "");
@@ -752,7 +788,8 @@ namespace Library.ClassParser.Private
 			//into
 			//Category = AbilitySystem, VisibleAnywhere, BlueprintReadOnly, AllowPrivateAccess = "true"
 			mVariable.isUE4Variable = true;
-			strLine = strLine.Replace("UPROPERTY", "");			
+			strLine = strLine.Replace("UPROPERTY", "");
+			strLine = strLine.Replace("KCPROPERTY", "");
 			strLine = strLine.Replace("(", "");
 			strLine = strLine.Replace(")", "");
 			strLine = strLine.Replace("meta=", "");
@@ -921,6 +958,17 @@ namespace Library.ClassParser.Private
 			
 		}
 
-		
-	}
-}
+		private bool _checkSerialized(ref string strLine)
+		{
+			if(getCurrentStructure() != null&&
+				strLine.Contains("SERIALIZE_CODE"))
+			{
+				getCurrentStructure().isSerialized = true;
+			}
+			return false;
+		}
+
+
+
+	}//end of class
+}//end of namespace

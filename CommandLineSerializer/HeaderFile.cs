@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Library.IO;
 using Library.ClassParser;
+using CommandLineSerializer.codeWriters;
 namespace CommandLineSerializer
 {
 	[Serializable]
@@ -14,6 +15,7 @@ namespace CommandLineSerializer
 		private LogFile m_LogFile = null;
 		private SerializerController m_Controller = null;
 		private StringWriter m_StringWriter = null;
+		private List<CodeWriter> m_CodeWriters = new List<CodeWriter>();
 		public void initialize(SerializerController mController, string strHeaderFile, string strExportedFile)
 		{
 			m_Controller = mController;
@@ -21,28 +23,105 @@ namespace CommandLineSerializer
 			headerFileWriteTime = File.GetLastWriteTime(headerFile);
 			exportedHeaderFile = strExportedFile;
 			exportedHeaderFileWriteTime = File.GetLastWriteTime(exportedHeaderFile);
-			if(exportedHeaderFileWriteTime.Year < 2000 )
+			if (exportedHeaderFileWriteTime.Year < 2000)
 			{
 				exportedHeaderFileWriteTime = new DateTime(0);
 			}
+			//it's important we add these in specific orders - primary variables should always be last
+			m_CodeWriters.Add(new TArrayWriter());
+			m_CodeWriters.Add(new ClassOrStructWriter());
+			m_CodeWriters.Add(new EnumWriter());
+			m_CodeWriters.Add(new PrimaryVariableTypeWriter());
+
 		}
 
 		private void log(string strMessage)
 		{
 			m_Controller.log(strMessage);
 		}
-
+		public List<CodeWriter> getCodeWriters() { return m_CodeWriters; }
+		public Dictionary<string, ESERIALIZE_DATA_TYPE> getTypeDefs() { return m_Controller.getTypeDefs(); }
+		public ProjectWrapper getProjectWrapper() { return m_Controller.getProjectWrapper(); }
+		public EnumList getEnumList(string strEnumName) { return getProjectWrapper().getEnumListByName(strEnumName); }
+		public ClassStructure getClassStructure(string strClassStructureName) { return getProjectWrapper().getClassStructByName(strClassStructureName); }
 		public string headerFile { get; set; }
 		public DateTime headerFileWriteTime { get; set; }
 		public string exportedHeaderFile { get; set; }
 		public DateTime exportedHeaderFileWriteTime { get; set; }
 		public LogFile getLogFile() { return m_LogFile; }
 		public void setLogFile(LogFile mLogFile) { m_LogFile = mLogFile; }
+		
+		private int m_iBrackets = 0;
+		private string m_strPadding = "";
+		public void addLine(string strLine)
+		{
+			addLine(strLine, true);
+		}
+		public void addLine(string strLine, bool bIsMacroLine)
+		{
+			if (m_StringWriter == null)
+			{
+				m_StringWriter = new StringWriter();
+			}
+
+
+			int iBracketAdd = 0;
+			for (int iBracketIndex = 0; iBracketIndex < strLine.Length; iBracketIndex++)
+			{
+				if(strLine[iBracketIndex] == '{')
+				{
+					iBracketAdd++;
+				}
+				else if(strLine[iBracketIndex] == '}')
+				{
+					iBracketAdd--;
+				}
+			}
+			bool bWroteLine = false;
+			if(iBracketAdd != 0 )
+			{
+				m_iBrackets += iBracketAdd;
+				if( iBracketAdd > 0 )
+				{
+					if (bIsMacroLine)
+					{
+						m_StringWriter.WriteLine(m_strPadding + strLine + "\\");    //we have to add because it needs to be a macro.
+					}
+					else
+					{
+						m_StringWriter.WriteLine(strLine);
+					}
+					bWroteLine = true;
+				}
+				if( m_iBrackets > 0 )
+				{
+					m_strPadding = "".PadRight(m_iBrackets * 5, ' ');
+				}
+				else
+				{
+					m_strPadding = "";
+				}
+				
+			}
+			
+			if(bWroteLine == false)
+			{
+				if (bIsMacroLine)
+				{
+					m_StringWriter.WriteLine(m_strPadding + strLine + "\\");    //we have to add because it needs to be a macro.
+				}
+				else
+				{
+					m_StringWriter.WriteLine(strLine);
+				}
+			}
+
+		}
 
 		public bool getNeedsToProcessHeader()
 		{
-			if( exportedHeaderFileWriteTime == null ||
-				exportedHeaderFileWriteTime < headerFileWriteTime )
+			if (exportedHeaderFileWriteTime == null ||
+				exportedHeaderFileWriteTime < headerFileWriteTime)
 			{
 				return true;
 			}
@@ -51,11 +130,11 @@ namespace CommandLineSerializer
 
 		private string getClassName(string strLineParsing)
 		{
-		
-			if(strLineParsing == "" ||
-				strLineParsing[ strLineParsing.Length - 1 ] == ';' ||
+
+			if (strLineParsing == "" ||
+				strLineParsing[strLineParsing.Length - 1] == ';' ||
 				strLineParsing.Contains(',') ||
-				strLineParsing.Contains("(") )
+				strLineParsing.Contains("("))
 			{
 				return "";
 			}
@@ -67,7 +146,7 @@ namespace CommandLineSerializer
 				strLineParsing = strLineParsing.Replace("struct ", "");
 				strLineParsing = strLineParsing.Trim();
 				int iEndOfClassName = strLineParsing.IndexOf(" ");
-				if( iEndOfClassName < 0)
+				if (iEndOfClassName < 0)
 				{
 					iEndOfClassName = strLineParsing.Length;
 				}
@@ -79,20 +158,22 @@ namespace CommandLineSerializer
 
 		public void processHeader()
 		{
-			
+
 			string[] mLines = File.ReadAllLines(headerFile);
 			bool bSerializedHeader = false;
 			string strClassOrStructName = "";
-			for(int iLineIndex = 0; iLineIndex < mLines.Length; iLineIndex++)
+			//need to find a way to make this settable from external
+			addLine("#include \"Systems/DataGroup/KCDataGroup.h\"", false);	
+			for (int iLineIndex = 0; iLineIndex < mLines.Length; iLineIndex++)
 			{
 				string strLine = mLines[iLineIndex];
-				if( bSerializedHeader == false)
+				if (bSerializedHeader == false)
 				{
-					if(iLineIndex > 50 )
+					if (iLineIndex > 50)
 					{
 						return;
 					}
-					if(strLine.Trim().StartsWith("#include") &&
+					if (strLine.Trim().StartsWith("#include") &&
 					   strLine.Contains(".serialize.inc"))
 					{
 						bSerializedHeader = true;
@@ -100,19 +181,22 @@ namespace CommandLineSerializer
 					continue;
 				}
 				string strClassName = getClassName(strLine);
-				if(strClassName != "")
+				if (strClassName != "")
 				{
 					strClassOrStructName = strClassName;
-					
+
 				}
-				
-				if ( strLine.Contains("KCSERIALIZE_CODE") && strLine.Contains("//") == false)
+
+				if (strLine.Contains("KCSERIALIZE_CODE") && strLine.Contains("//") == false)
 				{
-					_createSerializeFile(strClassOrStructName, iLineIndex);
+					if (strLine.Contains("KCSERIALIZE_CODE_MANUAL") == false)
+					{
+						_createSerializeFile(strClassOrStructName, iLineIndex);
+					}
 				}
 			}
 
-			if( m_StringWriter != null )
+			if (m_StringWriter != null)
 			{
 				File.WriteAllText(exportedHeaderFile, m_StringWriter.ToString());
 				if (File.Exists(exportedHeaderFile))
@@ -131,188 +215,208 @@ namespace CommandLineSerializer
 
 		private void _createSerializeFile(string strClassName, int iLineNumber)
 		{
-			if(m_StringWriter == null )
-			{
-				m_StringWriter = new StringWriter();
-			}
 			ProjectWrapper mProjectWrapper = m_Controller.getProjectWrapper();
 			ClassStructure mClass = mProjectWrapper.getClassStructByName(strClassName);
-			if( mClass == null )
+			if (mClass == null)
 			{
 				log("ERROR - unable to find class :" + strClassName + " in file: " + headerFile);
 				return;
+			}
+			foreach (ClassVariable mVariable in mClass.variables)
+			{
+				if (mVariable.isUE4Variable)
+				{
+					if (_validateVariable(mVariable, true) == false)
+					{
+						mVariable.isUE4Variable = false;
+					}
+				}
 			}
 			int iPadSizeLeft = (100 - strClassName.Length) / 2;
 			string strComment = strClassName.PadLeft(iPadSizeLeft, '/');
 			strComment = strComment.PadRight(strComment.Length + iPadSizeLeft, '/');
 			string strLineComment = "".PadRight(strComment.Length, '/');
+			addLine(strLineComment, false);
+			addLine(strComment, false);
+			addLine("", false);
 
-			m_StringWriter.WriteLine(strLineComment);
-			m_StringWriter.WriteLine(strComment);
-			m_StringWriter.WriteLine("");
+			_writeMacroDefineCode(iLineNumber);
+			_writeByteWriterCode(mClass);
+			_writeByteReaderCode(mClass);
+			_writeDataGroupWriteCode(mClass);
+			_writeDataGroupReadCode(mClass);
+
+			addLine("", false);
+			addLine(strComment, false);
+			addLine(strLineComment, false);				
+
+		}
+
+		private void _writeMacroDefineCode(int iLineNumber)
+		{
 			string strMacroName = "KCSERIALIZEOBJECT_" + (iLineNumber + 1).ToString();
-			m_StringWriter.WriteLine("#ifdef " + strMacroName);
-			m_StringWriter.WriteLine("#undef " + strMacroName);
-			m_StringWriter.WriteLine("#endif");			
-			m_StringWriter.WriteLine("#define " + strMacroName + " bool serialize(KCByteWriter &mByteWriter)\\");
-			m_StringWriter.WriteLine("{\\");
-			foreach( ClassVariable mVariable in mClass.variables)
-			{
-				if( mVariable.isUE4Variable)
-				{
-					if (_attemptToWriteObject(mVariable, m_StringWriter, "serialize(mByteWriter);") == false &&
-						_attemptToWriteEnum(mVariable, m_StringWriter, "mByteWriter << (<EnumType>)<VarName>;") == false )
-					{
-						m_StringWriter.WriteLine("     mByteWriter << " + mVariable.variableName + ";\\");
-					}
-				}
-			}
-			m_StringWriter.WriteLine("     return true;\\");
-			m_StringWriter.WriteLine("}\\");
-			m_StringWriter.WriteLine("bool deserialize(KCByteReader &mByteReader)\\");
-			m_StringWriter.WriteLine("{\\");
-			foreach (ClassVariable mVariable in mClass.variables)
-			{
-				if (mVariable.isUE4Variable)
-				{
-					if (_attemptToWriteObject(mVariable, m_StringWriter, "deserialize(mByteReader);") == false &&
-						_attemptToWriteEnum(mVariable, m_StringWriter, "<EnumType> m_<VarName>((<EnumType>)<VarName>); mByteReader << m_<VarName>; <VarName> = (<EnumName>)m_<VarName>;") == false )
-					{						
-						m_StringWriter.WriteLine("     mByteReader << " + mVariable.variableName + ";\\");
-					}
-				}
-			}
-			m_StringWriter.WriteLine("     return true;\\");
-			m_StringWriter.WriteLine("}\\");
-
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////
-			////////////////////////////////////////////////data group////////////////////////////////////////////////
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////
-			
-			m_StringWriter.WriteLine("bool serialize(KCDataGroup &mDataGroup, const KCString &strGroupName)\\");
-			m_StringWriter.WriteLine("{\\");
-			m_StringWriter.WriteLine("     if (mDataGroup.getGroupName().isEmpty()) { mDataGroup.setGroupName(strGroupName); }\\");
-			//m_StringWriter.WriteLine("mDataGroup.setProperty("m_strTest", m_strTest);\\");
-			foreach (ClassVariable mVariable in mClass.variables)
-			{
-				if (mVariable.isUE4Variable)
-				{
-					if (_attemptToWriteObject(mVariable, m_StringWriter, "serialize(mDataGroup, \"" + mVariable.variableName + "\");") == false &&
-						_attemptToWriteEnum(mVariable, m_StringWriter, "mDataGroup.setProperty(\"<VarName>\", (<EnumType>)<VarName>);") == false)
-					{
-						m_StringWriter.WriteLine("     mDataGroup.setProperty(\"" + mVariable.variableName + "\", " + mVariable.variableName + ");\\");
-					}
-				}
-			}
-			m_StringWriter.WriteLine("     return true;\\");
-			m_StringWriter.WriteLine("}\\");
-			m_StringWriter.WriteLine("bool serialize(KCDataGroup &mDataGroup)\\");
-			m_StringWriter.WriteLine("{\\");
-			m_StringWriter.WriteLine("return serialize(mDataGroup, \"" + strClassName + "\");\\");
-			m_StringWriter.WriteLine("}\\");		
-			m_StringWriter.WriteLine("bool deserialize(KCDataGroup &mDataGroup)\\");
-			m_StringWriter.WriteLine("{\\");
-			foreach (ClassVariable mVariable in mClass.variables)
-			{
-				if (mVariable.isUE4Variable)
-				{
-					if (_attemptToWriteObject(mVariable, m_StringWriter, "deserialize(mDataGroup);") == false &&
-						_attemptToWriteEnum(mVariable, m_StringWriter, "<VarName> = (<EnumName>)mDataGroup.getProperty(\"<VarName>\", (<EnumType>)<VarName>);") == false)
-					{
-						m_StringWriter.WriteLine("     " + mVariable.variableName + " = mDataGroup.getProperty(\"" + mVariable.variableName + "\", " + mVariable.variableName + ");\\");
-					}
-				}
-			}
-			m_StringWriter.WriteLine("     return true;\\");
-			m_StringWriter.WriteLine("}");
-			m_StringWriter.WriteLine("");
-
-
-			m_StringWriter.WriteLine(strComment);
-			m_StringWriter.WriteLine(strLineComment);
-			m_StringWriter.WriteLine("");
+			addLine("#ifdef " + strMacroName, false);
+			addLine("#undef " + strMacroName, false);
+			addLine("#endif", false);
+			addLine("#define " + strMacroName + " ");
 		}
 
-		private bool _attemptToWritePointer(ClassVariable mVariable, StringWriter mStringWriter, string strSuffix)
+		private void _writeByteWriterCode(ClassStructure mClass)
 		{
-			if( mVariable.isPointer == false )
+			addLine("bool serialize(KCByteWriter &mByteWriter)");
+			addLine("{");
+			_addInheritance(mClass, "serialize(mByteWriter);");
+			foreach (ClassVariable mVariable in mClass.variables)
 			{
-				return false;
-			}
-			bool bReading = strSuffix.ToLower().Contains("deserialize");
-			if(bReading)
-			{
-				mStringWriter.WriteLine("     DELETE_SAFELY(" + mVariable.variableName + ");\\");	//we need to delete the object to reserialize it.
-			}
-			mStringWriter.WriteLine("     bool bIsValid(" + mVariable.variableName + " != nullptr);\\");
-			if(bReading == false )//writing
-			{
-				if(strSuffix.Contains("DataGroup"))
+				foreach (CodeWriter mCodeWriter in m_CodeWriters)
 				{
-					mStringWriter.WriteLine("     mDataGroup.setProperty(\"__b" + mVariable.variableName + "\", bIsValid);\\");
+					if (mCodeWriter.attemptByteWriterCode(this, mVariable))
+					{
+						break;
+					}
 				}
-				else
-				{
-					mStringWriter.WriteLine("     mByteWriter << bIsValid;\\");
-				}
-				
-				mStringWriter.WriteLine("     if(bIsValid){" + mVariable.variableName.Trim() + "->" + strSuffix + "}\\");
 			}
-			else //reading
-			{
-				if (strSuffix.Contains("DataGroup"))
-				{
-					mStringWriter.WriteLine("     bIsValid = mDataGroup.getProperty(\"__b" + mVariable.variableName + "\", false);\\");
-				}
-				else
-				{
-					mStringWriter.WriteLine("     mByteReader << bIsValid;\\");
-				}
-				m_StringWriter.WriteLine("     if(bIsValid){ " + mVariable.variableName + " = KC_NEW " + mVariable.variableType + "(); " + mVariable.variableName + "->" + strSuffix + " }\\");
-			}
-			return true;
+			addLine("return true;");
+			addLine("}");
 		}
-
-
-		private bool _attemptToWriteObject(ClassVariable mVariable, StringWriter mStringWriter, string strSuffix)
+		private void _writeByteReaderCode(ClassStructure mClass)
 		{
-			ClassStructure mClassStruct = m_Controller.getProjectWrapper().getClassStructByName(mVariable.variableType);
-			if( mClassStruct != null )
+			addLine("bool deserialize(KCByteReader &mByteReader)");
+			addLine("{");
+			_addInheritance(mClass, "deserialize(mByteReader);");
+			foreach (ClassVariable mVariable in mClass.variables)
 			{
-				if( mVariable.isPointer)
+				foreach (CodeWriter mCodeWriter in m_CodeWriters)
 				{
-					return _attemptToWritePointer(mVariable, mStringWriter, strSuffix);
-					//mStringWriter.WriteLine("     if(" + mVariable.variableName + " != nullptr){" + mVariable.variableName.Trim() + "->" + strSuffix + "}\\");
+					if (mCodeWriter.attemptByteReaderCode(this, mVariable))
+					{
+						break;
+					}
 				}
-				else
+			}
+			addLine("return true;");
+			addLine("}");
+		}
+		private void _writeDataGroupWriteCode(ClassStructure mClass)
+		{
+			addLine("bool serialize(KCDataGroup &mDataGroup, const KCString &strGroupName)");
+			addLine("{");
+			addLine("if (mDataGroup.getGroupName().isEmpty()) { mDataGroup.setGroupName(strGroupName); }");
+			_addInheritance(mClass, "serialize(mDataGroup, strGroupName);");
+			foreach (ClassVariable mVariable in mClass.variables)
+			{
+				foreach (CodeWriter mCodeWriter in m_CodeWriters)
 				{
-					mStringWriter.WriteLine("     " + mVariable.variableName.Trim() + "." + strSuffix + "\\");
+					if (mCodeWriter.attemptDataGroupWriteCode(this, mVariable, "mDataGroup"))
+					{
+						break;
+					}
 				}
+			}
+			addLine("return true;");
+			addLine("}");
+			addLine("bool serialize(KCDataGroup &mDataGroup)");
+			addLine("{");
+			addLine("return serialize(mDataGroup, \"" + mClass.name + "\");");
+			addLine("}");
+		}
+		private void _writeDataGroupReadCode(ClassStructure mClass)
+		{
+
+			addLine("bool deserialize(KCDataGroup &mDataGroup)");
+			addLine("{");
+			_addInheritance(mClass, "deserialize(mDataGroup);");
+			foreach (ClassVariable mVariable in mClass.variables)
+			{
+				foreach (CodeWriter mCodeWriter in m_CodeWriters)
+				{
+					if (mCodeWriter.attemptDataGroupReadCode(this, mVariable, "mDataGroup"))
+					{
+						break;
+					}
+				}
+			}
+			addLine("return true;");
+			addLine("}", false);	//this ends the macro
+		}
+		
+
+
+		private bool _validateVariable(ClassVariable mVariable, bool bLog)
+		{
+			string strVariableLowerCase = mVariable.variableType.ToLower();
+			if(m_Controller.getTypeDefs().ContainsKey(strVariableLowerCase))
+			{
 				return true;
 			}
 
-			return false;
-		}
-		private bool _attemptToWriteEnum(ClassVariable mVariable, StringWriter mStringWriter, string strStringToWrite)
-		{
 			EnumList mEnum = m_Controller.getProjectWrapper().getEnumListByName(mVariable.variableType);
 			if (mEnum != null)
 			{
-				strStringToWrite = strStringToWrite.Replace("<EnumName>", mEnum.enumName);
-				strStringToWrite = strStringToWrite.Replace("<VarName>", mVariable.variableName);
-				string strType = mEnum.type;
-				if( strType == null ||
-					strType == "" )
-				{
-					strType = "int32";
-				}
-				strStringToWrite = strStringToWrite.Replace("<EnumType>", strType);
-				mStringWriter.WriteLine("     " + strStringToWrite + "\\");
 				return true;
 			}
-			return false;
+			string strVariableType = mVariable.variableType;
+			if (strVariableType.Contains("<"))
+			{
+				strVariableType = strVariableType.Substring(0, strVariableType.IndexOf("<"));
+			}
+			ClassStructure mClassStruct = m_Controller.getProjectWrapper().getClassStructByName(strVariableType);
+			if (mClassStruct != null)
+			{
+				return true;
+			}
+			if (bLog)
+			{
+				log("ERROR - in attempting to serialize variable: " + mVariable.variableType + "  " + mVariable.variableName);
+			}
 
+			return false;
 		}
+
+		private bool _isSerialized(ClassStructure mClass)
+		{
+			if( mClass == null )
+			{
+				return false;
+			}
+			if( mClass.isSerialized)
+			{ 
+				return true;
+			}
+			foreach (string strInheritClass in mClass.classStructuresInheritingFrom)
+			{
+				ClassStructure mParent = getClassStructure(strInheritClass);
+				if (mParent == null)
+				{
+					//this might be okay. We could be inheriting from a class we don't know about
+					continue;
+				}
+				if( _isSerialized(mParent) )
+				{
+					return true;
+				}
+			}
+			return false;
+		}
+
+		private void _addInheritance(ClassStructure mClass, string strFunctionSuffix)
+		{
+			foreach( string strInheritClass in mClass.classStructuresInheritingFrom)
+			{
+				ClassStructure mParent = getClassStructure(strInheritClass);
+				if(mParent == null)
+				{
+					//this might be okay. We could be inheriting from a class we don't know about
+					continue;
+				}
+				if(_isSerialized(mParent))
+				{
+					addLine(mParent.name + "::" + strFunctionSuffix);
+				}
+			}
+		}
+
+
 	}
 
 

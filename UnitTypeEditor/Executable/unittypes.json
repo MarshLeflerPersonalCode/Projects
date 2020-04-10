@@ -3,7 +3,7 @@
   "categoryConfigs": [
     {
       "categoryName": "ITEMS",
-      "enumHeaderDirectory": "..\\..\\CoreClasses\\KCCore\\UnitTypes\\UnitTypes",
+      "enumHeaderDirectory": "..\\..\\CoreClasses\\KCCore\\UnitTypes\\Systems\\UnitTypes",
       "enumHeaderFile": "KCUnitTypesItems.h",
       "enumName": "EUNITTYPES_ITEMS",
       "unitTypes": [

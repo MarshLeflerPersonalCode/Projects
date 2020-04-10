@@ -50,6 +50,8 @@ namespace Library.ClassParser
 		public string comment { get; set; }
 		public string name { get; set; }
 		public bool valid { get; set; }
+		//this checks for a macro named SERIALIZE_CODE and if it find it, it flags it a serialized
+		public bool isSerialized { get; set; }
 		public string file { get; set; }
 		public List<ClassVariable> variables { get; set; }
 		public bool isClass { get; set; }

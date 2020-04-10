@@ -14,6 +14,12 @@ using System.Diagnostics;
 
 namespace CommandLineSerializer
 {
+	public enum ESERIALIZE_DATA_TYPE
+	{
+		NUMBER,
+		STRING,
+		COUNT
+	};
 	public class SerializerController
 	{
 		private LogFile m_LogFile = null;
@@ -22,12 +28,13 @@ namespace CommandLineSerializer
 		private SerializerConfigFile m_ConfigFile = new SerializerConfigFile();
 		private ClassParserManager m_ClassParserManager = new ClassParserManager();
 		private Stopwatch m_StopWatch = null;
+		private Dictionary<string, ESERIALIZE_DATA_TYPE> m_TypeDefs = new Dictionary<string, ESERIALIZE_DATA_TYPE>();
 		public SerializerController(string[] args)
 		{
 			m_StopWatch = Stopwatch.StartNew();
 			_createCommandLineArguments(args);
 			_createLogFile();
-			
+			_attemptToConfigureTypeDefs();
 
 			if (_createIntermediateDirectory() == false)
 			{
@@ -86,8 +93,9 @@ namespace CommandLineSerializer
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-IntermediateDir", "-ID" }, "the intermediate directory where the source files will be generated. The project must point there.", ""));
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-MaxThreads", "-MT" }, "Max threads allowed to process headers. Uses Max - 1", Environment.ProcessorCount - 1));
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-Clean", "-c" }, "Cleans all the configs for a full recompile and then exits."));
-			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-FullLog", "-FL" }, "Writes all the details to the log."));
-
+			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-Verbose", "-V" }, "Writes all the details to the log."));
+			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-TypeDefs", "-TD" }, "Type Definitions need to be passed in as a string,  wiith each value specifying if its a number or string. e.g. 'KCString=string, KCName=string, KCGuid=number'", ""));
+			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-LoadTypeDef", "-LTD" }, "Specifies a specific file to load for all the type defs. Each line should define a new type with an equal specifying if it's a number or string: e.g. KCString=string, KCGuid=number", ""));
 			commandLineArguments.parseArguments(args);
 			if (commandLineArguments.getCommandValueAsString("-LogFile") == "")
 			{
@@ -108,12 +116,116 @@ namespace CommandLineSerializer
 
 		}
 
+		public Dictionary<string, ESERIALIZE_DATA_TYPE> getTypeDefs() { return m_TypeDefs; }
+
+		private void _addTypeDef(string strName, ESERIALIZE_DATA_TYPE eType)
+		{
+			m_TypeDefs[strName.ToLower()] = eType;
+		}
+		private void _parseTypeDefs(string strLine)
+		{
+			strLine = strLine.Replace(" ", "");
+			strLine.Trim();
+			if (strLine == "")
+			{
+				return;
+			}
+			int iEqualSign = strLine.IndexOf('=');
+			if( iEqualSign < 0 )
+			{
+				log("ERROR - attempting to parse type def. Line is missing equal. e.g. variable=number or variable=string");
+				return;
+			}
+			string strVariableName = strLine.Substring(0, iEqualSign).Trim();
+			if (strVariableName.Length == 0)
+			{
+				log("ERROR - attempting to parse type def. Line is missing type. e.g. variable=number or variable=string");
+				return;
+			}
+			iEqualSign++;
+			string strVariableType = strLine.Substring(iEqualSign, strLine.Length - iEqualSign).Trim();
+			if (strVariableType.Length == 0)
+			{
+				log("ERROR - attempting to parse type def. Line is missing value. e.g. variable=number or variable=string");
+				return;
+			}
+			//we need to check to see if there are commas now
+			int iCommaIndex = strVariableType.IndexOf(',');
+			if( iCommaIndex > 0 )
+			{
+				iCommaIndex++;
+				string strKeepParsing = strVariableType.Substring(iCommaIndex, strVariableType.Length - iCommaIndex);
+				strVariableType = strVariableType.Substring(0, iCommaIndex - 1).Trim();
+				_parseTypeDefs(strKeepParsing);
+			}			
+			if (strVariableType.Length == 0)
+			{
+				log("ERROR - attempting to parse type def. Line is missing value. e.g. variable=number or variable=string");
+				return;
+			}
+			if (strVariableType.ToLower().StartsWith("s"))
+			{
+				_addTypeDef(strVariableName, ESERIALIZE_DATA_TYPE.STRING);
+			}
+			else
+			{
+				_addTypeDef(strVariableName, ESERIALIZE_DATA_TYPE.NUMBER);				
+			}
+
+		}
+		private void _attemptToConfigureTypeDefs()
+		{
+			_addTypeDef("string", ESERIALIZE_DATA_TYPE.STRING);
+			_addTypeDef("fstring", ESERIALIZE_DATA_TYPE.STRING);
+			_addTypeDef("fname", ESERIALIZE_DATA_TYPE.STRING);
+			_addTypeDef("kcstring", ESERIALIZE_DATA_TYPE.STRING);
+			_addTypeDef("kcname", ESERIALIZE_DATA_TYPE.STRING);
+			_addTypeDef("std::string", ESERIALIZE_DATA_TYPE.STRING);
+			_addTypeDef("char", ESERIALIZE_DATA_TYPE.NUMBER);
+			_addTypeDef("int", ESERIALIZE_DATA_TYPE.NUMBER);
+			_addTypeDef("int32", ESERIALIZE_DATA_TYPE.NUMBER);
+			_addTypeDef("int8", ESERIALIZE_DATA_TYPE.NUMBER);
+			_addTypeDef("int16", ESERIALIZE_DATA_TYPE.NUMBER);
+			_addTypeDef("int64", ESERIALIZE_DATA_TYPE.NUMBER);
+			_addTypeDef("uint", ESERIALIZE_DATA_TYPE.NUMBER);
+			_addTypeDef("uint32", ESERIALIZE_DATA_TYPE.NUMBER);
+			_addTypeDef("uint8", ESERIALIZE_DATA_TYPE.NUMBER);
+			_addTypeDef("uint16", ESERIALIZE_DATA_TYPE.NUMBER);
+			_addTypeDef("uint64", ESERIALIZE_DATA_TYPE.NUMBER);
+			_addTypeDef("float", ESERIALIZE_DATA_TYPE.NUMBER);
+			_addTypeDef("double", ESERIALIZE_DATA_TYPE.NUMBER);
+			if (commandLineArguments.getCommandValueAsString("-TypeDefs") != "")
+			{
+				_parseTypeDefs(commandLineArguments.getCommandValueAsString("-TypeDefs"));
+			}
+			if (commandLineArguments.getCommandValueAsString("-LoadTypeDef") == "")
+			{
+				return;
+			}
+			if(File.Exists(commandLineArguments.getCommandValueAsString("-LoadTypeDef")) == false )
+			{
+				log("ERROR - file not found. Unable to load type defs at location: " + commandLineArguments.getCommandValueAsString("-LoadTypeDef"));
+				return;
+			}
+			string[] mTypeDefs = File.ReadAllLines(commandLineArguments.getCommandValueAsString("-LoadTypeDef"));
+			if(mTypeDefs == null || mTypeDefs.Length == 0)
+			{
+				log("ERROR - type def file found but contents were empty. location loaded from: " + commandLineArguments.getCommandValueAsString("-LoadTypeDef"));
+				return;
+			}
+			foreach(string strLine in mTypeDefs)
+			{
+				_parseTypeDefs(strLine);
+			}
+
+		}
+
 		private void _showTimeExecuting()
 		{
 			if( m_StopWatch != null)
 			{
 				int iCountOfFilesParsed = (m_ClassParserManager != null) ? m_ClassParserManager.filesNeedingUpdate.Count : 0;
-				string strTimeExecuting = "Executing Command Line Serializer on " + iCountOfFilesParsed.ToString() + " header files took :" + m_StopWatch.Elapsed.TotalSeconds.ToString() + " seconds.";
+				string strTimeExecuting = "Executing Command Line Serializer on " + iCountOfFilesParsed.ToString() + " header files, on " + getThreadsToUse().ToString() + " threads took :" + m_StopWatch.Elapsed.TotalSeconds.ToString() + " seconds.";
 				if (m_LogFile != null &&
 					m_LogFile.logOnlyErrors == false)
 				{
@@ -150,7 +262,7 @@ namespace CommandLineSerializer
 			}
 			return false;
 		}
-		public bool fullLog { get; set; } 
+		
 		public bool shouldPauseOnExit { get { return (commandLineArguments != null)?commandLineArguments.getCommandValueAsBool("-Pause"):false; } }
 
 		public int getThreadsToUse() { return Math.Max(1, commandLineArguments.getCommandValueAsInt("-MaxThreads")); }
@@ -216,7 +328,7 @@ namespace CommandLineSerializer
 			m_LogFile = new LogFile(commandLineArguments.getCommandValueAsString("-LogFile"), 100, !commandLineArguments.getCommandValueAsBool("-DisplayOff"));
 			if (m_LogFile.getValidLogFile())
 			{
-				m_LogFile.logOnlyErrors = !commandLineArguments.getCommandValueAsBool("-FullLog");
+				m_LogFile.logOnlyErrors = !commandLineArguments.getCommandValueAsBool("-Verbose");
 				log("Log file created at: " + commandLineArguments.getCommandValueAsString("-LogFile"));
 			}
 			else

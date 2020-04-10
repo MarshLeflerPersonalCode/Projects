@@ -1,7 +1,6 @@
 //copyright Marsh Lefler 2000-...
 #pragma once
-#include "DataGroup/KCDataGroup.h"
-#include "Serialization/KCSerializationDefines.h"
+#include "Systems/DataGroup/KCDataGroup.h"
 #include "KCIncludeTest.serialize.inc"
 
 
@@ -44,10 +43,31 @@ public:
 		//m_pSerializeChildTest = new KCSerializeChild();
 		//m_pSerializeChildTest->m_strTest ="Working!";
 		m_eEnumTest = ETEST::FOUR;
+		for (int32 i = 0; i < 10; i++)
+		{
+			/*switch (i % 2)
+			{
+			default:
+				m_Array.add(ETEST::FOUR);
+				break;
+			case 0:
+				m_Array.Add(ETEST::ONE);
+				break;
+			case 1:
+				m_Array.Add(ETEST::TWO);
+				break;
+			}*/
+			//m_Array.add( rand());
+			//m_Array.add(std::to_string(rand()));
+			m_Array.Add(KC_NEW KCSerializeChild());
+			m_Array.Last()->m_strTest = std::to_string(rand());
+		}
 	}
 	~KCIncludeTest()
 	{
 		DELETE_SAFELY(m_pSerializeChildTest);
+		m_Array.deleteContents();
+		m_Array.clean();
 	}
 
 
@@ -66,4 +86,6 @@ private:
 	KCSerializeChild	*m_pSerializeChildTest = nullptr;
 	UPROPERTY()
 	ETEST				m_eEnumTest = ETEST::COUNT;
+	UPROPERTY()
+	KCTArray<KCSerializeChild *>	m_Array;
 };

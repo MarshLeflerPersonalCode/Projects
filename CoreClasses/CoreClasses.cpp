@@ -3,15 +3,17 @@
 
 
 #include "KCCore/KCDefines.h"
-#include "KCCore/UnitTypes/KCUnitTypeManager.h"
-#include "KCCore/UnitTypes/KCDefinedUnitTypes.h"
-#include "KCCore/Containers/KCName.h"
+#include "KCCore/Systems/UnitTypes/KCUnitTypeManager.h"
+#include "KCCore/Systems/UnitTypes/KCDefinedUnitTypes.h"
+#include "KCCore/Utils/Containers/KCName.h"
 #include "TestCases/KCDataGroupTestCase.h"
-#include "KCCore/DataGroup/FileTypes/KCDataGroupSimpleXMLWriter.h"
-#include "KCCore/DataGroup/FileTypes/KCDataGroupSimpleXMLReader.h"
+#include "KCCore/Systems/DataGroup/FileTypes/KCDataGroupSimpleXMLWriter.h"
+#include "KCCore/Systems/DataGroup/FileTypes/KCDataGroupSimpleXMLReader.h"
 #include <direct.h>
 #include "TestCases/SerializeTest/KCIncludeTest.h"
 #include <chrono>
+#include "Systems/Stats/Private/KCStatDefinition.h"
+
 #define GetCurrentDir _getcwd
 
 static void funTest()
@@ -63,9 +65,11 @@ int main()
 	mTest1.serialize(mWriter);
 	mTest1.serialize(mDataGroup);
 	KCIncludeTest mTest2;
+	KCIncludeTest mTest3;
 	KCByteReader mReader(mWriter.getMemory(), mWriter.getArrayCount());
-	mTest2.deserialize(mDataGroup);
-
+	mTest2.deserialize(mReader);
+	mTest3.deserialize(mDataGroup);
+	
 	//KCString strData = KCDataGroupSimpleXMLWriter::writeDataGroupToString(mDataGroup);
 	
 	KCDataGroup mSecondGroup;
@@ -95,6 +99,23 @@ int main()
 	EDATATYPES eDataTypeUInt64 = DATATYPES_UTILS::getDataTypeRepresentingValue("18446744073709551615");
 	EDATATYPES eDataTypeUnknow = DATATYPES_UTILS::getDataTypeRepresentingValue("18446744073709551616");
 	EDATATYPES eDataTypeUnknow2 = DATATYPES_UTILS::getDataTypeRepresentingValue("-9223372036854775809");
+
+
+	KCDatabaseGuid mGuid(UNINITIALIZED_DATABASE_GUID);
+	DATABASE::setDatabaseGuidTable(mGuid, 1);
+	uint8 iTableID = DATABASE::getDatabaseGuidTableMaskAsUInt8(mGuid);
+
+
+	KCDataGroup mSerializeStat;
+	STATS::FKCStatDefinition mStatDefinition;
+	mStatDefinition.m_strName = "HELLO!";
+	mStatDefinition.m_eStatType = STATS::ESTAT_PRIMITIVE_TYPES::FLOAT;
+	mStatDefinition.m_DatabaseGuid = 324234;
+	mStatDefinition.setDatabaseTable(DATABASE::EDATABASE_TABLES::STATS);
+	mStatDefinition.serialize(mSerializeStat);
+	STATS::FKCStatDefinition mStatDefinitionDeserialized;
+	mStatDefinitionDeserialized.deserialize(mSerializeStat);
+	KCEnsureAlways(mStatDefinition == mStatDefinitionDeserialized);
 	std::cin.ignore();	//just ignores the next key press
 	exit(0);
 

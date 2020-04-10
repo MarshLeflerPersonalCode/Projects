@@ -1,7 +1,7 @@
 //copyright Marsh Lefler 2000-...
 //bunch of string functions for helping parse strings
 #include "KCStringUtils.h"
-#include "KCDataTypes.h"
+#include "Utils/TypeDefinitions/KCDataTypes.h"
 #include <codecvt>
 #include <sstream>
 

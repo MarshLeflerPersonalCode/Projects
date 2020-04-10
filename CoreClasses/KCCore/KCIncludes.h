@@ -10,15 +10,16 @@
 
 #endif	//note using_ue4
 
-#include "Utils/KCAsserts.h"
 #include "KCDefines.h"
-#include "Containers/KCName.h"
-#include "Containers/KCTArray.h"
-#include "Containers/KCStringTable.h"
-#include "IO/KCMemoryReader.h"
-#include "IO/KCMemoryWriter.h"
-#include "IO/KCFileUtilities.h"
+#include "Utils/KCAsserts.h"
+#include "Utils/Containers/KCName.h"
+#include "Utils/Containers/KCTArray.h"
+#include "Utils/Containers/KCStringTable.h"
+#include "Utils/IO/KCMemoryReader.h"
+#include "Utils/IO/KCMemoryWriter.h"
+#include "Utils/IO/KCFileUtilities.h"
 #include "Utils/KCStringUtils.h"
-#include "Serialization/KCSerializationDefines.h"
+#include "Utils/TypeDefinitions/KCDataTypes.h"
+
 
 

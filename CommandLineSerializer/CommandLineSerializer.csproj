@@ -42,6 +42,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="codeWriters\ClassOrStructWriter.cs" />
+    <Compile Include="codeWriters\CodeWriter.cs" />
+    <Compile Include="codeWriters\EnumWriter.cs" />
+    <Compile Include="codeWriters\PrimaryVariableTypeWriter.cs" />
+    <Compile Include="codeWriters\TArrayWriter.cs" />
     <Compile Include="HeaderFile.cs" />
     <Compile Include="ProcessHeaderFileList.cs" />
     <Compile Include="Program.cs" />
