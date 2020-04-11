@@ -40,7 +40,7 @@ namespace StatEditor
 		{
 			InitializeComponent();
 			_createLogFile();
-
+			m_ClassManager.variableDefinitionHandler.addVariable("KCDatabaseGuid", EVARIABLE_CSHARP_TYPES.INT, true);
 
 		}
 
@@ -79,7 +79,7 @@ namespace StatEditor
 
 		private void _findClasses()
 		{
-			string[] mFiles = Directory.GetFiles(@"D:\Personal\Projects\CoreClasses\KCCore", "*.h", SearchOption.AllDirectories);
+			string[] mFiles = Directory.GetFiles(@"D:\Personal\Projects\CoreClasses\", "*.h", SearchOption.AllDirectories);
 			foreach(string mFile in mFiles)
 			{
 				m_ClassParser.addFileToParse(mFile);

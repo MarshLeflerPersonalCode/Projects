@@ -17,13 +17,13 @@ namespace STATS
 		UPROPERTY(Category = "GENERAL", DisplayName = "TYPE")
 		ESTAT_PRIMITIVE_TYPES				m_eStatType = ESTAT_PRIMITIVE_TYPES::INT32;
 
-		UPROPERTY(Category = "GENERAL", DisplayName = "DEFAULT VALUE")
+		UPROPERTY(Category = "GENERAL", DisplayName = "Default Value")
 		KCString							m_strDefaultValue = "0";
 
-		UPROPERTY(Category = "GENERAL", DisplayName = "DEFAULT VALUE")
+		UPROPERTY(Category = "GENERAL", DisplayName = "Min Value")
 		KCString							m_strMinValue = "0";
 
-		UPROPERTY(Category = "GENERAL", DisplayName = "DEFAULT VALUE")
+		UPROPERTY(Category = "GENERAL", DisplayName = "Max Value")
 		KCString							m_strMaxValue = "0";
 
 		UPROPERTY(Category = "STAT MODIFICATION", DisplayName = "Code Name")

@@ -17,6 +17,8 @@ namespace Library.ClassParser.Private
 		private List<EnumList> m_EnumListForThreading = new List<EnumList>();
 		private List<ClassStructure> m_ClassStructures = new List<ClassStructure>();
 		private List<ClassStructure> m_EmptyListForThreading = new List<ClassStructure>();
+		private Dictionary<string,string> m_DefinesList = new Dictionary<string, string>();
+		private Dictionary<string, string> m_DefinesListForThreading = new Dictionary<string, string>();
 		public ProcessClassToStructureThreaded()
 		{
 			errorsParsing = new List<string>();
@@ -30,6 +32,7 @@ namespace Library.ClassParser.Private
 		public List<ClassStructure> classStructures { get { return (getDoneParsing()) ? m_ClassStructures : m_EmptyListForThreading; } }
 		public List<EnumList> enumLists { get { return (getDoneParsing()) ? m_EnumList : m_EnumListForThreading; } }
 
+		public Dictionary<string, string> defines { get { return (getDoneParsing()) ? m_DefinesList : m_DefinesListForThreading; } }
 
 		private void log(string strMessage )
 		{
@@ -75,6 +78,11 @@ namespace Library.ClassParser.Private
 					{
 						m_EnumList.Add(mList);
 					}
+					foreach (KeyValuePair<string,string> mData in mParser.defines)
+					{
+						m_DefinesList[mData.Key] = mData.Value;
+					}
+					
 				}
 			}
 			m_bDoneParsing = true;

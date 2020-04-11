@@ -40,7 +40,7 @@ namespace DATABASE
 
 };//end namespace
 
-#define INVALID_DATABASE_GUID			DATABASE::DB_GUID_MASK_INVALID
+
 #define UNINITIALIZED_DATABASE_GUID		0
 
 //returns if the database guid is valid or not

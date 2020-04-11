@@ -18,6 +18,7 @@ namespace Library.ClassParser.Private
 			fileParsing = strFile;
 			classStructures = new List<ClassStructure>();
 			enumLists = new List<EnumList>();
+			defines = new Dictionary<string, string>();
 		}
 
 
@@ -29,6 +30,7 @@ namespace Library.ClassParser.Private
 		public List<ClassStructure> classStructures { get; set; }
 
 		public List<EnumList> enumLists { get; set; }
+		public Dictionary<string, string> defines { get; set; }
 
 		private ClassStructure pushClassOn()
 		{
@@ -101,7 +103,7 @@ namespace Library.ClassParser.Private
 					strStructsAndClassesFound = strStructsAndClassesFound.Substring(0, strStructsAndClassesFound.Length - 1);
 				}
 				log("Classes/Structures found in header file: " + Path.GetFileName(fileParsing) + " " + classStructures.Count.ToString() + "(" + strStructsAndClassesFound + ")");				
-				return (classStructures.Count > 0 || enumLists.Count > 0 )?true:false;
+				return (classStructures.Count > 0 || enumLists.Count > 0 || defines.Count > 0 )?true:false;
 			}
 			catch (Exception e)
 			{
@@ -168,7 +170,11 @@ namespace Library.ClassParser.Private
 				{
 					continue;
 				}
-				if(_parseEnum(ref strLine, ref mStringReader))
+				if (_handleDefinesAndStatics(ref strLine))
+				{
+					continue;
+				}
+				if (_parseEnum(ref strLine, ref mStringReader))
 				{
 					continue;
 				}
@@ -437,8 +443,7 @@ namespace Library.ClassParser.Private
 				return true;
 			}
 
-			if (strLine.StartsWith("#") ||
-				strLine.StartsWith("~") ||				
+			if (strLine.StartsWith("~") ||				
 				strLine.StartsWith("TypeDef") )
 			{
 				return true;
@@ -655,15 +660,18 @@ namespace Library.ClassParser.Private
 			mVariable.isConst = bIsConst;
 			mVariable.isStatic = bIsStatic;
 			mVariable.isPointer = bIsPointer;
+			mVariable.isPrivateVariable = isParsingPrivateVariables;
 			mVariable.variableType = strVariableType;
 			mVariable.variableName = strVariableName;
 			mVariable.variableValue = strValueSet;
 			mVariable.variableComment = currentComment;
-			if( unrealTag != null &&
+			mVariable.lineNumber = m_iLastLineIndex - 1;
+			if ( unrealTag != null &&
 				unrealTag != "")
 			{
 				_parseUE4UpropertyLine(unrealTag, mVariable);
 				unrealTag = "";
+				mVariable.isSerialized = true;
 			}
 			mVariable.category = (mVariable.variableProperties.ContainsKey("CATEGORY")) ? mVariable.variableProperties["CATEGORY"] : "";
 			mVariable.displayName = (mVariable.variableProperties.ContainsKey("DISPLAYNAME")) ? mVariable.variableProperties["DISPLAYNAME"] : mVariable.variableName;
@@ -968,6 +976,98 @@ namespace Library.ClassParser.Private
 			return false;
 		}
 
+		private bool _handleDefinesAndStatics(ref string strLine)
+		{
+			if(getCurrentStructure() != null)
+			{
+				return false;
+			}
+			if(strLine.StartsWith("#"))
+			{
+				if( strLine.StartsWith("#define") == false)
+				{
+					return true;//it's not a define but it's also not a valid line
+				}
+
+				if (strLine.Contains('('))
+				{
+					return false;	//this is a macro
+				}
+				strLine = strLine.Substring(7, strLine.Length - 7).Trim();  //removes #define
+				int iFirstSpace = strLine.IndexOf(' ');
+				if( iFirstSpace < 0)
+				{
+					if (defines.ContainsKey(strLine.ToUpper()) == false)
+					{
+						defines[strLine.ToUpper()] = "";
+					}
+				}
+				else
+				{
+					string strName = strLine.Substring(0, iFirstSpace).Trim();
+					iFirstSpace++;
+					string strValue = strLine.Substring(iFirstSpace, strLine.Length - iFirstSpace).Trim();
+					defines[strName.ToUpper()] = strValue; 
+				}
+				return true;
+			}
+			if(strLine.Contains("static") )
+			{
+				if (strLine.EndsWith(";") == false ||
+					strLine.Contains('{') ||
+					strLine.Contains('['))	//it's an array
+				{
+					return false;   //static defines must end with ; and can't be a function {}
+				}
+				string strValue = strLine.Substring(0, strLine.Length - 1 ); //removes ;
+				
+				while (true)
+				{
+					if (strValue.StartsWith("static")) { strValue = strValue.Substring(6, strValue.Length - 6).Trim(); continue; }
+					if (strValue.StartsWith("const")) { strValue = strValue.Substring(5, strValue.Length - 5).Trim(); continue; }
+					break;
+				};
+				//so now we should have Type, variable and value KCString EMPTY_STRING = ""
+				//lets just drop the type
+				int iFirstSpace = strValue.IndexOf(' ');
+				if( iFirstSpace < 0)
+				{
+					//don't even know what to think.
+					log("ERROR - attempting to parse line " + strLine + " for a static value but failed.");
+					return false;
+				}
+				iFirstSpace++;
+				strValue = strValue.Substring(iFirstSpace, strValue.Length - iFirstSpace).Trim();
+				int iEqualIndex = strValue.IndexOf('=');
+				if( iEqualIndex < 0)
+				{
+					int iParenIndex = strValue.IndexOf('(');
+					if (iParenIndex < 0)
+					{
+						//this is something like static int32 ANY;						
+						return false;
+					}
+					iEqualIndex = iParenIndex;
+					strValue = strValue.Substring(0, strValue.Length - 1);	//removes ) at the end
+				}
+				if ( iEqualIndex > 0)
+				{
+					string strName = strValue.Substring(0, iEqualIndex).Trim();
+					iEqualIndex++;
+					strValue = strValue.Substring(iEqualIndex, strValue.Length - iEqualIndex).Trim();
+					if(strValue.Contains("\"") == false &&
+						strValue.IndexOf(' ') >= 0 )
+					{
+						return false;   //this is static KCString &  getDataTypeName(EDATATYPES eType);
+					}
+					defines[strName.ToUpper()] = strValue;
+					return true;
+				}
+				log("ERROR - attempting to parse line " + strLine + " for a static value but failed.");
+				return false;
+			}
+			return false;
+		}
 
 
 	}//end of class

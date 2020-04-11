@@ -170,6 +170,11 @@ namespace Library.ClassParser
 						m_ProjectWrapper.addEnumList(mEnumList);
 
 					}
+					foreach (KeyValuePair<string,string> mDefine in mProcesser.defines)
+					{
+						m_ProjectWrapper.addDefine(mDefine.Key, mDefine.Value);
+
+					}
 				}				
 
 			}

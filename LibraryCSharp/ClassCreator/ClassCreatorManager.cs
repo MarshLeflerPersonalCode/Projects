@@ -31,16 +31,17 @@ namespace Library.ClassCreator
 		private bool m_bDoneCompiling = false;
 		private string m_strExportedDLL = "";
 		private string m_strInitialContentsOfMasterFile = "";
-		private VariableDefinitionHandler m_DefinitionHandler = null;
+		
 		private Dictionary<ClassStructure, string> m_ClassesAsCode = new Dictionary<ClassStructure, string>();
 		private Dictionary<EnumList, string> m_EnumsAsCode = new Dictionary<EnumList, string>();
 		public ClassCreatorManager()
 		{
 			m_strInitialContentsOfMasterFile = _createInitialFile();
-			m_DefinitionHandler = new VariableDefinitionHandler();
-			m_DefinitionHandler.load("VariableDefinitions.json");
+			variableDefinitionHandler = new VariableDefinitionHandler("VariableDefinitions.json");
 
 		}
+
+		public VariableDefinitionHandler variableDefinitionHandler { get; set; }
 
 		public void setInitialContentsOfMasterFile(string strInitialContentsOfMasterFile) { m_strInitialContentsOfMasterFile = strInitialContentsOfMasterFile; }
 
@@ -48,7 +49,7 @@ namespace Library.ClassCreator
 		{
 			m_ClassParser = mClassParser;
 			m_strExportedDLL = strExportedDLLName;
-			m_DefinitionHandler.logFile = logFile;
+			
 			try
 			{
 				m_Thread = new Thread(new ThreadStart(_processClassesAndCompile));
@@ -73,7 +74,7 @@ namespace Library.ClassCreator
 			{
 				if (mClass.isSerialized)
 				{
-					string strClass = ClassWriter.writeClass(mClass, m_ClassParser.getProjectWrapper());
+					string strClass = ClassWriter.writeClass(this, mClass, m_ClassParser.getProjectWrapper());
 					m_ClassesAsCode[mClass] = strClass;
 				}
 			}
@@ -161,7 +162,8 @@ namespace Library.ClassCreator
 				{
 					m_LogFile.log("registered Class Creator Manager.");					
 				}
-				m_DefinitionHandler.logFile = value;
+				variableDefinitionHandler.logFile = logFile;
+				
 			} 
 		}
 		public void log(string strLogMessage)
@@ -198,7 +200,7 @@ namespace Library.ClassCreator
 			try
 			{
 				File.WriteAllText("mastercode.cs", strMasterFile);				
-				m_DefinitionHandler.save("VariableDefinitions.json");
+				
 				do
 				{					
 					CompilerParameters parms = new CompilerParameters();

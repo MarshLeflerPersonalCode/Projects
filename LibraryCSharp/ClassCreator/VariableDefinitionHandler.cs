@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 
 namespace Library.ClassCreator
 {
+
 	public enum EVARIABLE_CSHARP_TYPES
 	{
 		NOT_DEFINED,
@@ -27,6 +28,27 @@ namespace Library.ClassCreator
 		ENUM,
 		COUNT
 	};
+	public static class EVARIABLE_CSHARP_TYPES_NAMES
+	{
+		public static string[] g_Names = new string[] {
+			"",			//NOT_DEFINED
+			"byte",
+			"sbyte",
+			"short",
+			"ushort",
+			"int",
+			"uint",
+			"long",		
+			"ulong",	
+			"string",	
+			"float",	
+			"double",	
+			"",			//CLASS
+			"",			//ENUM
+			""			//COUNT
+		};
+
+	}
 	public class VariableDefinition
 	{
 		public VariableDefinition()
@@ -49,9 +71,13 @@ namespace Library.ClassCreator
 	public class VariableDefinitionHandler
 	{
 		public List<VariableDefinition> m_VariableDefinitions = new List<VariableDefinition>();
-		public VariableDefinitionHandler()
+		public VariableDefinitionHandler(string strDefinitionsFile)
 		{
-			defineInitialVariables();
+			if (load(strDefinitionsFile) == false)
+			{
+				defineInitialVariables();
+				save(strDefinitionsFile);
+			}
 		}
 
 		public void defineInitialVariables()
@@ -130,7 +156,7 @@ namespace Library.ClassCreator
 			return false;
 		}
 
-
+		public List<VariableDefinition> getVariableDefinitions() { return m_VariableDefinitions; }
 
 		public VariableDefinition addVariable(string strVariableName, EVARIABLE_CSHARP_TYPES eVariableType, bool bIsPrimitive)
 		{

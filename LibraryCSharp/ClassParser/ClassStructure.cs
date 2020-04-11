@@ -30,6 +30,9 @@ namespace Library.ClassParser
 		public string variableComment { get; set; }
 		public bool isStatic { get; set; }
 		public bool isConst { get; set; }		
+		public bool isPrivateVariable { get; set; }
+		public bool isSerialized { get; set; }
+		public int lineNumber { get; set; }
 	}
 	
 	public class ClassStructure
