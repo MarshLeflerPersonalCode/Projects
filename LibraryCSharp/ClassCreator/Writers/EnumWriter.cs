@@ -10,7 +10,7 @@ namespace Library.ClassCreator.Writers
 	{
 		public static string writeEnum(EnumList mList, ProjectWrapper mProjectWrapper)
 		{
-			   string strEnum = "    enum " + mList.enumName + Environment.NewLine;
+			   string strEnum = "    public enum " + mList.enumName + Environment.NewLine;
 			strEnum = strEnum + "    {" + Environment.NewLine;
 			foreach (EnumItem mEnumItem in mList.enumItems)
 			{

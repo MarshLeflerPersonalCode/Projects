@@ -33,6 +33,9 @@ namespace Library.ClassCreator.Writers
 
 		private static string _getVariable(ProjectWrapper mProjectWrapper, ClassStructure mClass, ClassVariable mVariable)
 		{
+
+
+
 			return "";
 		}
 

@@ -31,11 +31,15 @@ namespace Library.ClassCreator
 		private bool m_bDoneCompiling = false;
 		private string m_strExportedDLL = "";
 		private string m_strInitialContentsOfMasterFile = "";
+		private VariableDefinitionHandler m_DefinitionHandler = null;
 		private Dictionary<ClassStructure, string> m_ClassesAsCode = new Dictionary<ClassStructure, string>();
 		private Dictionary<EnumList, string> m_EnumsAsCode = new Dictionary<EnumList, string>();
 		public ClassCreatorManager()
 		{
 			m_strInitialContentsOfMasterFile = _createInitialFile();
+			m_DefinitionHandler = new VariableDefinitionHandler();
+			m_DefinitionHandler.load("VariableDefinitions.json");
+
 		}
 
 		public void setInitialContentsOfMasterFile(string strInitialContentsOfMasterFile) { m_strInitialContentsOfMasterFile = strInitialContentsOfMasterFile; }
@@ -44,6 +48,7 @@ namespace Library.ClassCreator
 		{
 			m_ClassParser = mClassParser;
 			m_strExportedDLL = strExportedDLLName;
+			m_DefinitionHandler.logFile = logFile;
 			try
 			{
 				m_Thread = new Thread(new ThreadStart(_processClassesAndCompile));
@@ -142,8 +147,23 @@ namespace Library.ClassCreator
 			
 		}
 
-
-		public LogFile logFile { get; set; }
+		private LogFile m_LogFile = null;
+		public LogFile logFile 
+		{ 
+			get 
+			{ 
+				return m_LogFile; 
+			} 
+			set 
+			{ 
+				m_LogFile = value; 
+				if(m_LogFile != null)
+				{
+					m_LogFile.log("registered Class Creator Manager.");					
+				}
+				m_DefinitionHandler.logFile = value;
+			} 
+		}
 		public void log(string strLogMessage)
 		{
 			if(logFile != null)
@@ -177,8 +197,8 @@ namespace Library.ClassCreator
 			int iDllLockTest = 1;
 			try
 			{
-				File.WriteAllText("mastercode.cs", strMasterFile);
-
+				File.WriteAllText("mastercode.cs", strMasterFile);				
+				m_DefinitionHandler.save("VariableDefinitions.json");
 				do
 				{					
 					CompilerParameters parms = new CompilerParameters();

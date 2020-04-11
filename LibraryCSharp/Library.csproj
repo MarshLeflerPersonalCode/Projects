@@ -46,6 +46,7 @@
   <ItemGroup>
     <Compile Include="ClassCreator\ClassCreatorManager.cs" />
     <Compile Include="ClassCreator\ClassInstance.cs" />
+    <Compile Include="ClassCreator\VariableDefinitionHandler.cs" />
     <Compile Include="ClassCreator\Writers\ClassWriter.cs" />
     <Compile Include="ClassCreator\Writers\EnumWriter.cs" />
     <Compile Include="ClassParser\ClassParserManager.cs" />
