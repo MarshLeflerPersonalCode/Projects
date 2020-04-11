@@ -40,10 +40,18 @@ namespace Library.ClassCreator.Writers
 		private static string _writeVariable(ClassCreatorManager mManager, ProjectWrapper mProjectWrapper, ClassStructure mClass, ClassVariable mVariable)
 		{
 			VariableDefinitionHandler mVariableTypes = mManager.variableDefinitionHandler;
+			if(mProjectWrapper.enums.ContainsKey(mVariable.variableType.ToUpper()) )
+			{
+				//it's an enum.
+				return _writeVariableInfo(mClass, mVariable) + _writeEnumVariable(mManager, mProjectWrapper, mClass, mVariable);
+			}
+
+
 			foreach(VariableDefinition mVariableDef in mVariableTypes.getVariableDefinitions())
 			{
 				if(mVariable.variableType !=  mVariableDef.variableName)
 				{
+					
 					continue;
 				}
 				if(mVariableDef.eCSharpVariable == EVARIABLE_CSHARP_TYPES.COUNT ||
@@ -55,6 +63,7 @@ namespace Library.ClassCreator.Writers
 				{
 					return _writeVariableInfo( mClass, mVariable) + _writePrimitiveVariable(mProjectWrapper, mVariableDef, mVariable);
 				}
+				
 
 			}
 			mManager.log("ERROR - found variable " + mVariable.variableName + " of type " + mVariable.variableType + " in class " + mClass.name + ". No definition was found defining the type.");
@@ -92,18 +101,17 @@ namespace Library.ClassCreator.Writers
 			{
 				default:
 					{
-						if( mClassVariable.variableValue.Contains("UNINITIALIZED_DATABASE_GUID"))
-						{
-							strClass = "";
-						}
+						
 						string strValue = mClassVariable.variableValue.Trim().Replace("\"", "");
 						if(strValue.Length > 0 )
 						{
-							if(mProjectWrapper.defines.ContainsKey(strValue))
+							bool bFound = false;
+							while (mProjectWrapper.defines.ContainsKey(strValue))
 							{
+								bFound = true;
 								strValue = mProjectWrapper.defines[strValue];
 							}
-							else
+							if(bFound == false)
 							{
 								strValue = strValue.Replace("f", ""); //fixes issue with defining 0.0f
 							}
@@ -115,7 +123,7 @@ namespace Library.ClassCreator.Writers
 				case EVARIABLE_CSHARP_TYPES.STRING:
 					{
 						string strValue = mClassVariable.variableValue.Trim();
-						if (mProjectWrapper.defines.ContainsKey(strValue))
+						while (mProjectWrapper.defines.ContainsKey(strValue))
 						{
 							strValue = mProjectWrapper.defines[strValue];
 						}
@@ -206,6 +214,29 @@ namespace Library.ClassCreator.Writers
 			}
 			strDetails = strDetails.Substring(0, strDetails.Length - 2); //remove ", "
 			return "[" + strDetails + "]" + Environment.NewLine;
+		}
+
+
+		public static string _writeEnumVariable(ClassCreatorManager mManager, ProjectWrapper mProjectWrapper, ClassStructure mClass, ClassVariable mVariable)
+		{
+			string strEnumLine = "";
+			string strValue = mVariable.variableValue;
+			if( strValue != "")
+			{
+				strValue = " = " + strValue.Replace("::", ".") + ";";
+			}
+			else
+			{
+				strValue = ";";
+			}
+			strEnumLine = strEnumLine + "private " + mVariable.variableType + " _" + mVariable.variableName + strValue + Environment.NewLine;
+			strEnumLine = strEnumLine + _writeVaraibleComponentModelDetails(mVariable);
+			strEnumLine = strEnumLine + "public " + mVariable.variableType + " " + mVariable.variableName + Environment.NewLine;
+			strEnumLine = strEnumLine + "{" + Environment.NewLine;
+			strEnumLine = strEnumLine + "    get{ return _" + mVariable.variableName + "; }" + Environment.NewLine;
+			strEnumLine = strEnumLine + "    set{ _" + mVariable.variableName + " = value; }" + Environment.NewLine;
+			strEnumLine = strEnumLine + "}" + Environment.NewLine;
+			return strEnumLine;
 		}
 
 	}//end class

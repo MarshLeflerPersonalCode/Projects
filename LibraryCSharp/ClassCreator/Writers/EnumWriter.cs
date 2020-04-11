@@ -14,6 +14,11 @@ namespace Library.ClassCreator.Writers
 			strEnum = strEnum + "    {" + Environment.NewLine;
 			foreach (EnumItem mEnumItem in mList.enumItems)
 			{
+				if (mEnumItem.properties.ContainsKey("TOOLTIP"))
+				{
+					strEnum = strEnum + "         [DescriptionAttribute(\"" + mEnumItem.properties["TOOLTIP"] + "\")]" + Environment.NewLine;
+				}
+
 				strEnum = strEnum + "         " + mEnumItem.name + "," + Environment.NewLine;
 			}
 			strEnum = strEnum + "    };" + Environment.NewLine;
