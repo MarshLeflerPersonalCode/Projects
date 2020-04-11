@@ -40,14 +40,9 @@ namespace Library.ClassCreator.Writers
 		private static string _writeVariable(ClassCreatorManager mManager, ProjectWrapper mProjectWrapper, ClassStructure mClass, ClassVariable mVariable)
 		{
 			VariableDefinitionHandler mVariableTypes = mManager.variableDefinitionHandler;
-			if(mProjectWrapper.enums.ContainsKey(mVariable.variableType.ToUpper()) )
-			{
-				//it's an enum.
-				return _writeVariableInfo(mClass, mVariable) + _writeEnumVariable(mManager, mProjectWrapper, mClass, mVariable);
-			}
 
 
-			foreach(VariableDefinition mVariableDef in mVariableTypes.getVariableDefinitions())
+			foreach (VariableDefinition mVariableDef in mVariableTypes.getVariableDefinitions())
 			{
 				if(mVariable.variableType !=  mVariableDef.variableName)
 				{
@@ -66,6 +61,21 @@ namespace Library.ClassCreator.Writers
 				
 
 			}
+
+
+			if (mProjectWrapper.enums.ContainsKey(mVariable.variableType.ToUpper()))
+			{
+				//it's an enum.
+				return _writeVariableInfo(mClass, mVariable) + _writeEnumVariable(mManager, mProjectWrapper, mClass, mVariable);
+			}
+			if (mProjectWrapper.classStructures.ContainsKey(mVariable.variableType.ToUpper()))
+			{
+				//it's an enum.
+				return _writeVariableInfo(mClass, mVariable) + _writeClassVariable(mManager, mProjectWrapper, mClass, mVariable);
+			}
+
+
+
 			mManager.log("ERROR - found variable " + mVariable.variableName + " of type " + mVariable.variableType + " in class " + mClass.name + ". No definition was found defining the type.");
 			return "";
 		}
@@ -238,7 +248,19 @@ namespace Library.ClassCreator.Writers
 			strEnumLine = strEnumLine + "}" + Environment.NewLine;
 			return strEnumLine;
 		}
-
+		public static string _writeClassVariable(ClassCreatorManager mManager, ProjectWrapper mProjectWrapper, ClassStructure mClass, ClassVariable mVariable)
+		{
+			string strClassLine = "";
+			
+			strClassLine = strClassLine + "private " + mVariable.variableType + " _" + mVariable.variableName + " = new " + mVariable.variableType + "();" + Environment.NewLine;
+			strClassLine = strClassLine + _writeVaraibleComponentModelDetails(mVariable);
+			strClassLine = strClassLine + "public " + mVariable.variableType + " " + mVariable.variableName + Environment.NewLine;
+			strClassLine = strClassLine + "{" + Environment.NewLine;
+			strClassLine = strClassLine + "    get{ return _" + mVariable.variableName + "; }" + Environment.NewLine;
+			strClassLine = strClassLine + "    set{ _" + mVariable.variableName + " = value; }" + Environment.NewLine;
+			strClassLine = strClassLine + "}" + Environment.NewLine;
+			return strClassLine;
+		}
 	}//end class
 
 } //end namespace

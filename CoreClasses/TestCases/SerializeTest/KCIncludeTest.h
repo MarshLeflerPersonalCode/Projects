@@ -73,7 +73,7 @@ public:
 
 
 	void set(float x, float y, float z ){ m_fX = x; m_fY = y; m_fZ = z;}
-private:
+protected:
 	UPROPERTY()
 	float				m_fX = 0;
 	UPROPERTY()
