@@ -26,6 +26,7 @@ namespace Library.ClassCreator
 		DOUBLE,
 		CLASS,
 		ENUM,
+        LIST,
 		COUNT
 	};
 	public static class EVARIABLE_CSHARP_TYPES_NAMES
@@ -45,7 +46,8 @@ namespace Library.ClassCreator
 			"double",	
 			"",			//CLASS
 			"",			//ENUM
-			""			//COUNT
+            "",         //LIST
+			""			//COUNT            
 		};
 
 	}
@@ -58,7 +60,11 @@ namespace Library.ClassCreator
 		//this is something like int32 or uint64
 		public string variableName { get; set; }
 
-		public EVARIABLE_CSHARP_TYPES eCSharpVariable { get; set; }
+        //This is the class that the variable name will turn into
+        public string variableClassName { get; set; }
+        //This is enum that the variable name will turn into
+        public string variableEnumName { get; set; }
+        public EVARIABLE_CSHARP_TYPES eCSharpVariable { get; set; }
 
 		//these are if the variable is a core type of variable. such as an int or a float. Usually things get defined as these
 		public bool isPrimitiveType { get; set; }
@@ -82,23 +88,26 @@ namespace Library.ClassCreator
 
 		public void defineInitialVariables()
 		{
-			addVariable("int32", EVARIABLE_CSHARP_TYPES.INT, true);
-			addVariable("uint32", EVARIABLE_CSHARP_TYPES.UINT, true);
-			addVariable("int8", EVARIABLE_CSHARP_TYPES.SBYTE, true);
-			addVariable("uint8", EVARIABLE_CSHARP_TYPES.BYTE, true);
-			addVariable("char", EVARIABLE_CSHARP_TYPES.BYTE, true);
-			addVariable("int16", EVARIABLE_CSHARP_TYPES.SHORT, true);
-			addVariable("uint16", EVARIABLE_CSHARP_TYPES.USHORT, true);
-			addVariable("int64", EVARIABLE_CSHARP_TYPES.LONG, true);
-			addVariable("uint64", EVARIABLE_CSHARP_TYPES.ULONG, true);
-			addVariable("float", EVARIABLE_CSHARP_TYPES.FLOAT, true);
-			addVariable("float", EVARIABLE_CSHARP_TYPES.DOUBLE, true);
-			addVariable("string", EVARIABLE_CSHARP_TYPES.STRING, true);
-			addVariable("fname", EVARIABLE_CSHARP_TYPES.STRING, true);
-			addVariable("fstring", EVARIABLE_CSHARP_TYPES.STRING, true);
-			addVariable("KCName", EVARIABLE_CSHARP_TYPES.STRING, true);
-			addVariable("KCString", EVARIABLE_CSHARP_TYPES.STRING, true);
-		}
+			addVariablePrimitive("int32", EVARIABLE_CSHARP_TYPES.INT);
+            addVariablePrimitive("uint32", EVARIABLE_CSHARP_TYPES.UINT);
+            addVariablePrimitive("int8", EVARIABLE_CSHARP_TYPES.SBYTE);
+            addVariablePrimitive("uint8", EVARIABLE_CSHARP_TYPES.BYTE);
+            addVariablePrimitive("char", EVARIABLE_CSHARP_TYPES.BYTE);
+            addVariablePrimitive("int16", EVARIABLE_CSHARP_TYPES.SHORT);
+            addVariablePrimitive("uint16", EVARIABLE_CSHARP_TYPES.USHORT);
+            addVariablePrimitive("int64", EVARIABLE_CSHARP_TYPES.LONG);
+            addVariablePrimitive("uint64", EVARIABLE_CSHARP_TYPES.ULONG);
+            addVariablePrimitive("float", EVARIABLE_CSHARP_TYPES.FLOAT);
+            addVariablePrimitive("float", EVARIABLE_CSHARP_TYPES.DOUBLE);
+            addVariablePrimitive("string", EVARIABLE_CSHARP_TYPES.STRING);
+            addVariablePrimitive("fname", EVARIABLE_CSHARP_TYPES.STRING);
+            addVariablePrimitive("fstring", EVARIABLE_CSHARP_TYPES.STRING);
+            addVariablePrimitive("KCName", EVARIABLE_CSHARP_TYPES.STRING);
+            addVariablePrimitive("KCString", EVARIABLE_CSHARP_TYPES.STRING);
+            addVariablePrimitive("KCDatabaseGuid", EVARIABLE_CSHARP_TYPES.INT);
+            addVariableList("KCTArray");
+            
+        }
 
 		public LogFile logFile { get; set; }
 		public void log(string strMessage)
@@ -158,37 +167,36 @@ namespace Library.ClassCreator
 
 		public List<VariableDefinition> getVariableDefinitions() { return m_VariableDefinitions; }
 
-		public VariableDefinition addVariable(string strVariableName, EVARIABLE_CSHARP_TYPES eVariableType, bool bIsPrimitive)
+		public VariableDefinition addVariablePrimitive(string strVariableName, EVARIABLE_CSHARP_TYPES eVariableType)
 		{
-			if (eVariableType == EVARIABLE_CSHARP_TYPES.CLASS)
-			{
-				return addVariableAsClass(strVariableName);
-			}
-			else if (eVariableType == EVARIABLE_CSHARP_TYPES.ENUM)
-			{
-				return addVariableAsEnum(strVariableName);
+			if (EVARIABLE_CSHARP_TYPES_NAMES.g_Names[(int)eVariableType] == "")
+            {
+                return null;
 			}
 			else
 			{
 				VariableDefinition mVariable = new VariableDefinition();
 				mVariable.variableName = strVariableName;
 				mVariable.eCSharpVariable = eVariableType;
-				mVariable.isPrimitiveType = bIsPrimitive;
+				mVariable.isPrimitiveType = true;
 				return addVariable(mVariable);
 			}
 		}
-		public VariableDefinition addVariableAsClass(string strVariableName)
+		public VariableDefinition addVariableAsClass(string strVariableName, string strClassName)
 		{
 			VariableDefinition mVariable = new VariableDefinition();
 			mVariable.variableName = strVariableName;
+            mVariable.variableClassName = strClassName;
 			mVariable.eCSharpVariable = EVARIABLE_CSHARP_TYPES.CLASS;
 			return addVariable(mVariable);
 		}
-		public VariableDefinition addVariableAsEnum(string strVariableName)
+		public VariableDefinition addVariableAsEnum(string strVariableName, string strEnumName)
 		{
 			VariableDefinition mVariable = new VariableDefinition();
-			mVariable.variableName = strVariableName;
-			mVariable.eCSharpVariable = EVARIABLE_CSHARP_TYPES.CLASS;
+
+            mVariable.variableName = strVariableName;
+            mVariable.variableEnumName = strEnumName;
+            mVariable.eCSharpVariable = EVARIABLE_CSHARP_TYPES.ENUM;
 			return addVariable(mVariable);
 		}
 	
@@ -205,6 +213,14 @@ namespace Library.ClassCreator
 			m_VariableDefinitions.Add(mVariable);
 			return mVariable;
 		}
+
+        public VariableDefinition addVariableList(string strListName)
+        {
+            VariableDefinition mVariable = new VariableDefinition();
+            mVariable.variableName = strListName;            
+            mVariable.eCSharpVariable = EVARIABLE_CSHARP_TYPES.LIST;
+            return addVariable(mVariable);
+        }
 
 	} //end of class
 }//end of namespace

@@ -42,9 +42,9 @@ namespace StatEditor
 			this.NameHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.AppliciableHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
 			this.GraphHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-			this.panel2 = new System.Windows.Forms.Panel();
-			this.filteredPropertyGrid1 = new CustomControls.FilteredPropertyGrid();
 			this.timerProcessClasses = new System.Windows.Forms.Timer(this.components);
+			this.testToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.statObjectViewer = new CustomControls.ObjectViewer();
 			this.menuStrip1.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
@@ -60,21 +60,23 @@ namespace StatEditor
             this.fileToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(768, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(850, 24);
 			this.menuStrip1.TabIndex = 0;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
 			// fileToolStripMenuItem
 			// 
+			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.testToolStripMenuItem});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
 			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
 			this.fileToolStripMenuItem.Text = "&File";
 			// 
 			// statusStrip1
 			// 
-			this.statusStrip1.Location = new System.Drawing.Point(0, 517);
+			this.statusStrip1.Location = new System.Drawing.Point(0, 651);
 			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(768, 22);
+			this.statusStrip1.Size = new System.Drawing.Size(850, 22);
 			this.statusStrip1.TabIndex = 1;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
@@ -86,7 +88,7 @@ namespace StatEditor
 			this.tabControl1.Location = new System.Drawing.Point(0, 24);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(768, 493);
+			this.tabControl1.Size = new System.Drawing.Size(850, 627);
 			this.tabControl1.TabIndex = 2;
 			// 
 			// tabPage1
@@ -95,7 +97,7 @@ namespace StatEditor
 			this.tabPage1.Location = new System.Drawing.Point(4, 22);
 			this.tabPage1.Name = "tabPage1";
 			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(760, 467);
+			this.tabPage1.Size = new System.Drawing.Size(842, 601);
 			this.tabPage1.TabIndex = 0;
 			this.tabPage1.Text = "Stats";
 			this.tabPage1.UseVisualStyleBackColor = true;
@@ -105,7 +107,7 @@ namespace StatEditor
 			this.tabPage2.Location = new System.Drawing.Point(4, 22);
 			this.tabPage2.Name = "tabPage2";
 			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(760, 467);
+			this.tabPage2.Size = new System.Drawing.Size(842, 601);
 			this.tabPage2.TabIndex = 1;
 			this.tabPage2.Text = "Configuration";
 			this.tabPage2.UseVisualStyleBackColor = true;
@@ -124,10 +126,9 @@ namespace StatEditor
 			// 
 			// splitContainer1.Panel2
 			// 
-			this.splitContainer1.Panel2.Controls.Add(this.filteredPropertyGrid1);
-			this.splitContainer1.Panel2.Controls.Add(this.panel2);
-			this.splitContainer1.Size = new System.Drawing.Size(754, 461);
-			this.splitContainer1.SplitterDistance = 237;
+			this.splitContainer1.Panel2.Controls.Add(this.statObjectViewer);
+			this.splitContainer1.Size = new System.Drawing.Size(836, 595);
+			this.splitContainer1.SplitterDistance = 262;
 			this.splitContainer1.SplitterWidth = 8;
 			this.splitContainer1.TabIndex = 0;
 			// 
@@ -137,7 +138,7 @@ namespace StatEditor
 			this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
 			this.panel1.Location = new System.Drawing.Point(0, 0);
 			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(235, 66);
+			this.panel1.Size = new System.Drawing.Size(260, 66);
 			this.panel1.TabIndex = 0;
 			// 
 			// m_StatListView
@@ -154,16 +155,17 @@ namespace StatEditor
 			this.m_StatListView.Location = new System.Drawing.Point(0, 66);
 			this.m_StatListView.MultiSelect = false;
 			this.m_StatListView.Name = "m_StatListView";
-			this.m_StatListView.Size = new System.Drawing.Size(235, 393);
+			this.m_StatListView.Size = new System.Drawing.Size(260, 527);
 			this.m_StatListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
 			this.m_StatListView.TabIndex = 1;
 			this.m_StatListView.UseCompatibleStateImageBehavior = false;
-			this.m_StatListView.View = System.Windows.Forms.View.List;
+			this.m_StatListView.View = System.Windows.Forms.View.Details;
+			this.m_StatListView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.m_StatListView_MouseDown);
 			// 
 			// TypeHeader
 			// 
 			this.TypeHeader.Tag = "Type";
-			this.TypeHeader.Text = "TYPE";
+			this.TypeHeader.Text = "Type";
 			this.TypeHeader.Width = 40;
 			// 
 			// NameHeader
@@ -180,38 +182,31 @@ namespace StatEditor
 			// 
 			this.GraphHeader.Text = "Graph";
 			// 
-			// panel2
-			// 
-			this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-			this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-			this.panel2.Location = new System.Drawing.Point(0, 0);
-			this.panel2.Name = "panel2";
-			this.panel2.Size = new System.Drawing.Size(507, 66);
-			this.panel2.TabIndex = 0;
-			// 
-			// filteredPropertyGrid1
-			// 
-			this.filteredPropertyGrid1.BrowsableProperties = null;
-			this.filteredPropertyGrid1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.filteredPropertyGrid1.FilterIsCaseSensitive = false;
-			this.filteredPropertyGrid1.FilterString = "";
-			this.filteredPropertyGrid1.HiddenAttributes = null;
-			this.filteredPropertyGrid1.HiddenProperties = null;
-			this.filteredPropertyGrid1.Location = new System.Drawing.Point(0, 66);
-			this.filteredPropertyGrid1.Name = "filteredPropertyGrid1";
-			this.filteredPropertyGrid1.Size = new System.Drawing.Size(507, 393);
-			this.filteredPropertyGrid1.TabIndex = 1;
-			// 
 			// timerProcessClasses
 			// 
 			this.timerProcessClasses.Interval = 10;
 			this.timerProcessClasses.Tick += new System.EventHandler(this.timerProcessClasses_Tick);
 			// 
+			// testToolStripMenuItem
+			// 
+			this.testToolStripMenuItem.Name = "testToolStripMenuItem";
+			this.testToolStripMenuItem.Size = new System.Drawing.Size(93, 22);
+			this.testToolStripMenuItem.Text = "test";
+			this.testToolStripMenuItem.Click += new System.EventHandler(this.testToolStripMenuItem_Click);
+			// 
+			// statObjectViewer
+			// 
+			this.statObjectViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.statObjectViewer.Location = new System.Drawing.Point(0, 0);
+			this.statObjectViewer.Name = "statObjectViewer";
+			this.statObjectViewer.Size = new System.Drawing.Size(564, 593);
+			this.statObjectViewer.TabIndex = 0;
+			// 
 			// StatEditorForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(768, 539);
+			this.ClientSize = new System.Drawing.Size(850, 673);
 			this.Controls.Add(this.tabControl1);
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.menuStrip1);
@@ -248,9 +243,9 @@ namespace StatEditor
 		private System.Windows.Forms.ColumnHeader GraphHeader;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.TabPage tabPage2;
-		private CustomControls.FilteredPropertyGrid filteredPropertyGrid1;
-		private System.Windows.Forms.Panel panel2;
 		private System.Windows.Forms.Timer timerProcessClasses;
+		private CustomControls.ObjectViewer statObjectViewer;
+		private System.Windows.Forms.ToolStripMenuItem testToolStripMenuItem;
 	}
 }
 

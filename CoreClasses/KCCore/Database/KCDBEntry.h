@@ -44,4 +44,7 @@ struct FKCDBEntry
 	//the name of the entry. Must be unique
 	KCPROPERTY(Category = "DATABASE", DisplayName = "Name")
 	KCName							m_strName;
+	//The filename of this entry
+	KCPROPERTY(Category = "DATABASE", DisplayName = "Name", ReadOnly)
+	KCString						m_strFileName;
 };

@@ -49,9 +49,44 @@
     <Compile Include="FilteredPropertyGrid.Designer.cs">
       <DependentUpon>FilteredPropertyGrid.cs</DependentUpon>
     </Compile>
+    <Compile Include="ObjectViewer.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ObjectViewer.Designer.cs">
+      <DependentUpon>ObjectViewer.cs</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="ObjectWrapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Service Include="{94E38DFF-614B-4cbd-B67C-F211BB35CE8B}" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ObjectViewer.resx">
+      <DependentUpon>ObjectViewer.cs</DependentUpon>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\UpArrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DownArrow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\UpArrow16x16.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DownArrow16x16.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

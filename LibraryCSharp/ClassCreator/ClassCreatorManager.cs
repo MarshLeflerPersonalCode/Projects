@@ -31,9 +31,11 @@ namespace Library.ClassCreator
 		private bool m_bDoneCompiling = false;
 		private string m_strExportedDLL = "";
 		private string m_strInitialContentsOfMasterFile = "";
-		
+        private string m_strNamespace = "Dynamic";//.ClassCreator";
+		private Dictionary<string, Type> m_ClassesCompiled = new Dictionary<string, Type>();
 		private Dictionary<ClassStructure, string> m_ClassesAsCode = new Dictionary<ClassStructure, string>();
-		private Dictionary<EnumList, string> m_EnumsAsCode = new Dictionary<EnumList, string>();
+        private Dictionary<string, ClassStructure> m_ClassStructuresByName = new Dictionary<string, ClassStructure>();
+        private Dictionary<EnumList, string> m_EnumsAsCode = new Dictionary<EnumList, string>();
 		public ClassCreatorManager()
 		{
 			m_strInitialContentsOfMasterFile = _createInitialFile();
@@ -41,7 +43,47 @@ namespace Library.ClassCreator
 
 		}
 
+        //shouldn't include the period at the end. Should be something like "Dynamic" or "Dynamic.Class". Default is "Dynamic"
+        public void setNamespace(string strNamespace) { m_strNamespace = strNamespace; }
+
 		public VariableDefinitionHandler variableDefinitionHandler { get; set; }
+
+		public object createNewClass(string strClassName)
+		{
+			try
+			{
+				if(m_ClassesCompiled.ContainsKey(strClassName) == false)
+				{
+					log("Error - no class with name: " + strClassName + " was created in the classes created.");
+					return null;
+				}				
+				object mObjectCreated = Activator.CreateInstance(m_ClassesCompiled[strClassName]);
+				ClassInstance mInstance = mObjectCreated as ClassInstance;
+				if (mInstance != null)
+				{
+                    mInstance.m_ClassStructure = m_ClassStructuresByName[strClassName];
+                    mInstance.m_strClassName = strClassName;
+                    mInstance.m_bIsDirty = false;
+				}
+
+				return mObjectCreated;
+
+			}
+			catch (Exception e)
+			{
+				log("Error in creating class: " + strClassName + ". Exception thrown was: " + e.Message);
+			}
+			return null;
+		}
+
+        public Type getClassType(string strClassName)
+        {
+            if(m_ClassesCompiled.ContainsKey(strClassName))
+            {
+                return m_ClassesCompiled[strClassName];
+            }
+            return null;
+        }
 
 		public void setInitialContentsOfMasterFile(string strInitialContentsOfMasterFile) { m_strInitialContentsOfMasterFile = strInitialContentsOfMasterFile; }
 
@@ -76,11 +118,23 @@ namespace Library.ClassCreator
 				{
 					string strClass = ClassWriter.writeClass(this, mClass, m_ClassParser.getProjectWrapper());
 					m_ClassesAsCode[mClass] = strClass;
+                    m_ClassStructuresByName[mClass.name] = mClass;
 				}
 			}
 
 			_buildMasterFile();
-			_compileCode();
+			_compileCode();			
+			m_ClassesCompiled.Clear();
+            if (m_CompileResults.Errors.HasErrors == false)
+            {
+                foreach (Type mType in m_CompileResults.CompiledAssembly.GetTypes())
+                {
+                    m_ClassesCompiled[mType.Name] = mType;
+                }
+
+
+                AppDomain.CurrentDomain.Load(m_CompileResults.CompiledAssembly.GetName());
+            }
 			m_bDoneCompiling = true;
 			m_Thread = null;
 		}
@@ -253,7 +307,7 @@ namespace Library.ClassCreator
 
 		private string _createInitialFile()
 		{
-			return @"
+            return @"
 using System;                                 
 using System.Collections.Generic;
 using System.Text;
@@ -268,7 +322,8 @@ using System.Windows.Forms.Design;
 using Library.ClassParser;
 using Library.ClassCreator;
 using Library.IO;
-namespace Library.ClassCreator
+using Library;
+namespace " + m_strNamespace + @"
 {
 <CLASSES>
 } //end of namespace

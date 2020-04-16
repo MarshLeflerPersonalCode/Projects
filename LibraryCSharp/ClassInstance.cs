@@ -7,8 +7,12 @@ using System.Reflection;
 using System.ComponentModel;
 using Library.ClassParser;
 using Library.IO;
-namespace Library.ClassCreator
+namespace Library
 {
+    public interface IClassInstanceCallbacks
+    {
+        void _notifyOfPropertySetOnClassInstance(ClassInstance mInstance, string strProperty);
+    }
 	public class ClassInstance
 	{
 		[Browsable(false)]
@@ -19,9 +23,23 @@ namespace Library.ClassCreator
 		[NonSerialized] public LogFile m_LogFile = null;
 		[Browsable(false)]
 		[NonSerialized] public bool m_bIsDirty = false;
+        [Browsable(false)]
+        [NonSerialized] public List<IClassInstanceCallbacks> m_CallBacks = new List<IClassInstanceCallbacks>();
 
 
-		public void log(string strLog)
+        protected void _notifyOfPropertyChanged( string strProperty)
+        {
+            m_bIsDirty = true;
+            foreach(IClassInstanceCallbacks iCallback in m_CallBacks)
+            {
+                if( iCallback != null )
+                {
+                    iCallback._notifyOfPropertySetOnClassInstance(this, strProperty);
+                }
+            }
+        }
+
+        public void log(string strLog)
 		{
 			if( m_LogFile != null)
 			{
@@ -211,7 +229,7 @@ namespace Library.ClassCreator
 			}
 			return bDefaultValue;
 		}
-		public int getPropertyValueChar(string strProperty, ref char iDefaultValue)
+		public char getPropertyValueChar(string strProperty, char iDefaultValue)
 		{
 			string strReturnValue = "";
 			if (getPropertyValue(strProperty, ref strReturnValue))
@@ -220,7 +238,7 @@ namespace Library.ClassCreator
 			}
 			return iDefaultValue;
 		}
-		public sbyte getPropertyValueSByte(string strProperty, ref sbyte iDefaultValue)
+		public sbyte getPropertyValueSByte(string strProperty, sbyte iDefaultValue)
 		{
 			string strReturnValue = "";
 			if (getPropertyValue(strProperty, ref strReturnValue))
@@ -229,7 +247,7 @@ namespace Library.ClassCreator
 			}
 			return iDefaultValue;
 		}
-		public short getPropertyValueShort(string strProperty, ref short iDefaultValue)
+		public short getPropertyValueShort(string strProperty, short iDefaultValue)
 		{
 			string strReturnValue = "";
 			if (getPropertyValue(strProperty, ref strReturnValue))
@@ -238,7 +256,7 @@ namespace Library.ClassCreator
 			}
 			return iDefaultValue;
 		}
-		public int getPropertyValueInt(string strProperty, ref int iDefaultValue)
+		public int getPropertyValueInt(string strProperty,  int iDefaultValue)
 		{
 			string strReturnValue = "";
 			if (getPropertyValue(strProperty, ref strReturnValue))
@@ -247,7 +265,7 @@ namespace Library.ClassCreator
 			}
 			return iDefaultValue;
 		}
-		public long getPropertyValueLong(string strProperty, ref long iDefaultValue)
+		public long getPropertyValueLong(string strProperty, long iDefaultValue)
 		{
 			string strReturnValue = "";
 			if (getPropertyValue(strProperty, ref strReturnValue))
@@ -257,7 +275,7 @@ namespace Library.ClassCreator
 			return iDefaultValue;
 		}
 
-		public byte getPropertyValueByte(string strProperty, ref byte iDefaultValue)
+		public byte getPropertyValueByte(string strProperty, byte iDefaultValue)
 		{
 			string strReturnValue = "";
 			if (getPropertyValue(strProperty, ref strReturnValue))
@@ -266,7 +284,7 @@ namespace Library.ClassCreator
 			}
 			return iDefaultValue;
 		}
-		public ushort getPropertyValueUShort(string strProperty, ref ushort iDefaultValue)
+		public ushort getPropertyValueUShort(string strProperty, ushort iDefaultValue)
 		{
 			string strReturnValue = "";
 			if (getPropertyValue(strProperty, ref strReturnValue))
@@ -275,7 +293,7 @@ namespace Library.ClassCreator
 			}
 			return iDefaultValue;
 		}
-		public uint getPropertyValueUInt(string strProperty, ref uint iDefaultValue)
+		public uint getPropertyValueUInt(string strProperty, uint iDefaultValue)
 		{
 			string strReturnValue = "";
 			if (getPropertyValue(strProperty, ref strReturnValue))
@@ -284,7 +302,7 @@ namespace Library.ClassCreator
 			}
 			return iDefaultValue;
 		}
-		public ulong getPropertyValueULong(string strProperty, ref ulong iDefaultValue)
+		public ulong getPropertyValueULong(string strProperty, ulong iDefaultValue)
 		{
 			string strReturnValue = "";
 			if (getPropertyValue(strProperty, ref strReturnValue))
@@ -294,7 +312,7 @@ namespace Library.ClassCreator
 			return iDefaultValue;
 		}
 
-		public float getPropertyValueFloat(string strProperty, ref float fDefaultValue)
+		public float getPropertyValueFloat(string strProperty, float fDefaultValue)
 		{
 			string strReturnValue = "";
 			if (getPropertyValue(strProperty, ref strReturnValue))
@@ -303,7 +321,7 @@ namespace Library.ClassCreator
 			}
 			return fDefaultValue;
 		}
-		public double getPropertyValueDouble(string strProperty, ref double fDefaultValue)
+		public double getPropertyValueDouble(string strProperty, double fDefaultValue)
 		{
 			string strReturnValue = "";
 			if (getPropertyValue(strProperty, ref strReturnValue))
@@ -334,8 +352,9 @@ namespace Library.ClassCreator
 				try
 				{
 					mProperty.SetValue(this, mValue);
-					m_bIsDirty = true;
-				}
+                    _notifyOfPropertyChanged(strProperty);
+
+                }
 				catch(Exception e)
 				{
 					log("ERROR - attempting to set property " + strProperty + " on object type " + GetType().Name + ". Error was: " + e.Message);
@@ -344,18 +363,18 @@ namespace Library.ClassCreator
 			}
 			return true;
 		}
-
-		private bool setProperty(string strProperty, bool bValue) { return _setPropertyValue(strProperty, bValue); }
-		private bool setProperty(string strProperty, char iValue) { return _setPropertyValue(strProperty, iValue); }
-		private bool setProperty(string strProperty, sbyte iValue) { return _setPropertyValue(strProperty, iValue); }
-		private bool setProperty(string strProperty, byte iValue) { return _setPropertyValue(strProperty, iValue); }
-		private bool setProperty(string strProperty, short iValue) { return _setPropertyValue(strProperty, iValue); }
-		private bool setProperty(string strProperty, ushort iValue) { return _setPropertyValue(strProperty, iValue); }
-		private bool setProperty(string strProperty, int iValue) { return _setPropertyValue(strProperty, iValue); }
-		private bool setProperty(string strProperty, uint iValue) { return _setPropertyValue(strProperty, iValue); }
-		private bool setProperty(string strProperty, long iValue) { return _setPropertyValue(strProperty, iValue); }
-		private bool setProperty(string strProperty, ulong iValue) { return _setPropertyValue(strProperty, iValue); }
-		private bool setProperty(string strProperty, float fValue) { return _setPropertyValue(strProperty, fValue); }
+        public bool setProperty(string strProperty, string strValue) { return _setPropertyValue(strProperty, strValue); }
+        public bool setProperty(string strProperty, bool bValue) { return _setPropertyValue(strProperty, bValue); }
+		public bool setProperty(string strProperty, char iValue) { return _setPropertyValue(strProperty, iValue); }
+		public bool setProperty(string strProperty, sbyte iValue) { return _setPropertyValue(strProperty, iValue); }
+		public bool setProperty(string strProperty, byte iValue) { return _setPropertyValue(strProperty, iValue); }
+		public bool setProperty(string strProperty, short iValue) { return _setPropertyValue(strProperty, iValue); }
+		public bool setProperty(string strProperty, ushort iValue) { return _setPropertyValue(strProperty, iValue); }
+		public bool setProperty(string strProperty, int iValue) { return _setPropertyValue(strProperty, iValue); }
+		public bool setProperty(string strProperty, uint iValue) { return _setPropertyValue(strProperty, iValue); }
+		public bool setProperty(string strProperty, long iValue) { return _setPropertyValue(strProperty, iValue); }
+		public bool setProperty(string strProperty, ulong iValue) { return _setPropertyValue(strProperty, iValue); }
+		public bool setProperty(string strProperty, float fValue) { return _setPropertyValue(strProperty, fValue); }
 		#endregion
 		/////////////////////////////////////////////////////////////////
 		//End set property

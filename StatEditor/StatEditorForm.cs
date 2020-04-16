@@ -31,16 +31,17 @@ namespace StatEditor
 	public partial class StatEditorForm : Form
 	{
 		private ELOAD_STATE m_eLoadState = ELOAD_STATE.GetFileList;
-		
+		ContextMenu m_StatListViewContextMenu = new ContextMenu();
 		private ProgressBar m_ProgressBar = null;
 		private LogFile m_LogFile = null;
 		private ClassCreatorManager m_ClassManager = new ClassCreatorManager();
 		private ClassParserManager m_ClassParser = new ClassParserManager();
+		private ListViewItem m_ContextMenuItem = null;
 		public StatEditorForm()
 		{
 			InitializeComponent();
 			_createLogFile();
-			m_ClassManager.variableDefinitionHandler.addVariable("KCDatabaseGuid", EVARIABLE_CSHARP_TYPES.INT, true);
+			
 
 		}
 
@@ -51,6 +52,8 @@ namespace StatEditor
 			timerProcessClasses.Enabled = true;
 			
 		}
+
+		
 
 		private void _showProgressBar()
 		{
@@ -134,13 +137,15 @@ namespace StatEditor
 							if (strErrors != null && strErrors.Length != 0)
 							{
 								MessageBox.Show(this, "Error in Compiling. Check Log for more details.\n\n" + strErrors, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-							}
-							
+							}							
 						}
 					}
 					break;
 				case ELOAD_STATE.Done:
 					{
+                    object mObject = m_ClassManager.createNewClass("KCIncludeTest");// FKCStatDefinition");// new ClassTestingObjectViewer();
+						statObjectViewer.setObjectViewing(mObject);
+
 						timerProcessClasses.Enabled = false;
 						m_ProgressBar.Hide();
 						m_ProgressBar = null;
@@ -149,5 +154,60 @@ namespace StatEditor
 			}
 
 		}
-	}
-}
+
+		private void testToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			ClassTestingObjectViewer mObject = new ClassTestingObjectViewer();
+			statObjectViewer.setObjectViewing(mObject);
+		}
+		private void _createContextMenu(Point mousePoint)
+		{
+
+			m_StatListViewContextMenu.MenuItems.Clear();
+			m_StatListViewContextMenu.MenuItems.Add("Create New Stat", _createNewStat);
+
+
+			m_ContextMenuItem = m_StatListView.GetItemAt(mousePoint.X, mousePoint.Y);
+			if (m_ContextMenuItem != null)
+			{
+				
+				m_StatListViewContextMenu.MenuItems.Add("Rename " + m_ContextMenuItem.SubItems[1].Text, _renameStat);
+				m_StatListViewContextMenu.MenuItems.Add("-");
+				m_StatListViewContextMenu.MenuItems.Add("Delete " + m_ContextMenuItem.SubItems[1].Text, _deleteStat);
+			}
+		}
+
+		private void _createNewStat(object sender, EventArgs e)
+		{
+
+		}
+		private void _renameStat(object sender, EventArgs e)
+		{
+
+		}
+		private void _deleteStat(object sender, EventArgs e)
+		{
+
+		}
+
+		private void m_StatListView_MouseDown(object sender, MouseEventArgs e)
+		{
+			Point mControlLocation = PointToClient(PointToScreen(m_StatListView.Location));
+			Point mousePoint = new Point(e.X, e.Y);// + mControlLocation.X, e.Y + mControlLocation.Y);
+
+
+
+			if (e.Button == MouseButtons.Right)
+			{
+				//context menu
+				_createContextMenu(mousePoint);
+				if (m_StatListViewContextMenu.MenuItems.Count != 0)
+				{
+					mousePoint.X += 8;
+					mousePoint.Y -= 5;
+					m_StatListViewContextMenu.Show(m_StatListView, mousePoint);
+				}
+			}
+		}
+	}//end class
+} //end namespace

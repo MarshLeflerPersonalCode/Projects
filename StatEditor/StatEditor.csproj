@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassTestingObjectViewer.cs" />
     <Compile Include="ProgressBar.cs">
       <SubType>Form</SubType>
     </Compile>

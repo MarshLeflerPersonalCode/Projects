@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ClassCreator\ClassCreatorManager.cs" />
-    <Compile Include="ClassCreator\ClassInstance.cs" />
+    <Compile Include="ClassInstance.cs" />
     <Compile Include="ClassCreator\VariableDefinitionHandler.cs" />
     <Compile Include="ClassCreator\Writers\ClassWriter.cs" />
     <Compile Include="ClassCreator\Writers\EnumWriter.cs" />
@@ -59,6 +59,10 @@
     <Compile Include="CommandLine\CommandLineArguments.cs" />
     <Compile Include="CommandLine\CommandLineOption.cs" />
     <Compile Include="CommandLine\CommandLineVariable.cs" />
+    <Compile Include="Database\Database.cs" />
+    <Compile Include="Database\DatabaseConfig.cs" />
+    <Compile Include="Database\DatabaseDetails.cs" />
+    <Compile Include="Database\DatabaseManager.cs" />
     <Compile Include="DataGroup\DataGroup.cs" />
     <Compile Include="DataGroup\DataProperty.cs" />
     <Compile Include="IO\ByteWriter.cs" />
@@ -70,6 +74,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CustomControls\CustomControls.csproj">
+      <Project>{0632b60d-0438-46f9-ba76-1ebc9f0263c0}</Project>
+      <Name>CustomControls</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
