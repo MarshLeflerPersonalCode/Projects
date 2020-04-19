@@ -29,7 +29,7 @@ namespace Library.Database
         bool m_bIgnorePropertySetCallback = false;
         DatabaseManager m_DatabaseManager = null;
         DatabaseConfig m_DatabaseConfig = new DatabaseConfig();
-        
+        private Type m_ClassType = null;
         List<ClassInstance> m_Instances = new List<ClassInstance>();
 		Dictionary<int, ClassInstance> m_InstancesByGuid = new Dictionary<int, ClassInstance>();
 		Dictionary<string, ClassInstance> m_InstancesByName = new Dictionary<string, ClassInstance>();
@@ -51,7 +51,16 @@ namespace Library.Database
         public int uniqueMask { get { return m_DatabaseConfig.uniqueMask; } set { m_DatabaseConfig.uniqueMask = value; } }
         //This is the mask in which the guid is actually generated in. Should be a number that represents something like 0xFFFF(65535)
         public int guidMask { get { return m_DatabaseConfig.guidMask; } set { m_DatabaseConfig.guidMask = value; } }
-
+        //returns the C# type defining object
+        public Type getDatabaseEntryClassType()
+        {
+            if(m_ClassType != null )
+            {
+                return m_ClassType;
+            }
+            m_ClassType = m_DatabaseManager.getDatabaseEntryType(databaseName);
+            return m_ClassType;
+        }
 
         public void _notifyOfPropertySetOnClassInstance(ClassInstance mInstance, string strProperty)
         {
@@ -59,7 +68,8 @@ namespace Library.Database
             {
                 return;
             }
-            switch(strProperty)
+            
+            switch (strProperty)
             {
                 case "m_DatabaseGuid":
                 {
@@ -69,18 +79,21 @@ namespace Library.Database
                         {
                             m_InstancesByGuid.Remove(mData.Key);
                             m_InstancesByGuid[getEntryGuid(mInstance)] = mInstance;
+                            break;
                         }
                     }
                 }
                     break;
                 case "m_strName":
                 {
+                    
                     foreach (KeyValuePair<string, ClassInstance> mData in m_InstancesByName)
                     {
                         if (mData.Value == mInstance)
-                        {
+                        {                            
                             m_InstancesByName.Remove(mData.Key);
                             m_InstancesByName[getEntryName(mInstance).ToUpper()] = mInstance;
+                            break;
                         }
                     }
                 }
@@ -93,11 +106,13 @@ namespace Library.Database
                         {
                             m_InstancesByFileName.Remove(mData.Key);
                             m_InstancesByFileName[getEntryFileName(mInstance).ToUpper()] = mInstance;
+                            break;
                         }
                     }
                 }
                 break;
             }
+            
         }
 
 
@@ -246,8 +261,7 @@ namespace Library.Database
 
 		public ClassInstance getEntryByGuid(int iGuid)
 		{
-            iGuid = iGuid & m_DatabaseConfig.uniqueMask;
-            iGuid = iGuid | m_DatabaseConfig.guidMask;
+            iGuid = iGuid & (m_DatabaseConfig.guidMask | m_DatabaseConfig.uniqueMask);            
             if( m_InstancesByGuid.ContainsKey(iGuid))
             {
                 return m_InstancesByGuid[iGuid];
@@ -278,7 +292,7 @@ namespace Library.Database
 
         public EERROR_ADDING createEntry(string strUniqueName)
         {
-            Type mType = m_DatabaseManager.getDatabaseEntryType(databaseName);
+            Type mType = getDatabaseEntryClassType();
             if (mType == null)
             {
                 log("Unable to create classes(" + databaseEntryClass + ") for database " + databaseName + ". Class type not found.");                

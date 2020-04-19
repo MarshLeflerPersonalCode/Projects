@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Reflection;
 using Library.IO;
 using Library.ClassParser;
 using Library.ClassCreator;
@@ -110,11 +111,8 @@ namespace StatEditor
 				break;				
 				case ELOAD_STATE.done:
 				{
-                    m_StatsDatabase = m_Core.databaseManager.getDatabase("Stats");
-                    foreach(ClassInstance mInstance in m_StatsDatabase.getEntries())
-                    {
-                        _addInstanceToListView(mInstance);
-                    }
+                    _setDatabase("Stats");
+                    
                     //object mObject = m_Core.classCreatorManager.createNewClass("KCIncludeTest");// FKCStatDefinition");// new ClassTestingObjectViewer();
                     //statObjectViewer.setObjectViewing(mObject);
                     timerProcessClasses.Enabled = false;
@@ -126,6 +124,82 @@ namespace StatEditor
 			}
 
 		}
+
+        private ColumnHeader _addColumn(string strVariableName, PropertyFilterData mPropertyFilterData)
+        {
+            if(m_StatsDatabase == null)
+            {
+                return null;
+            }
+            Type mType = m_StatsDatabase.getDatabaseEntryClassType();
+            if( mType == null )
+            {
+                log("Error - unable to add column. The class :" + m_StatsDatabase.databaseEntryClass + " could not be found.");
+                return null;
+            }
+            PropertyInfo mProperty = mType.GetProperty(strVariableName);
+            if(mProperty == null )
+            {
+                log("Error - unable to add column. property: " + strVariableName + " could not be found inside class: " + m_StatsDatabase.databaseEntryClass);
+                return null;
+            }
+            string strDisplayName = strVariableName;
+            object[] mAttributes = mProperty.GetCustomAttributes(typeof(DisplayNameAttribute), true);
+            if (mAttributes.Length != 0)
+            {
+                strDisplayName = (mAttributes[0] as DisplayNameAttribute).DisplayName;
+                if(strDisplayName == "")
+                {
+                    strDisplayName = strVariableName;
+                }
+            }
+            ColumnHeader mHeader = new ColumnHeader();
+            mHeader.DisplayIndex = m_StatListView.Columns.Count;
+            mHeader.Text = strDisplayName;
+            if (mPropertyFilterData != null )
+            { 
+                if(mPropertyFilterData.OverrideName != "")
+                {
+                    mHeader.Text = mPropertyFilterData.OverrideName;
+                }
+                if (mPropertyFilterData.ColumnWidth > 0)
+                {
+                    mHeader.Width = mPropertyFilterData.ColumnWidth;
+                }
+
+            }
+
+            m_StatListView.Columns.Add(mHeader);
+            return mHeader;
+        }
+
+        private void _setDatabase(string strDatabase)
+        {
+            m_StatsDatabase = m_Core.databaseManager.getDatabase(strDatabase);      
+            if( m_StatsDatabase == null)
+            {
+                log("ERROR - unable to find database: " + strDatabase);
+            }
+            m_StatListView.SuspendLayout();
+            m_StatListView.Items.Clear();
+            m_StatListView.Columns.Clear();
+            foreach(PropertyFilterData mPropertyFilterData in m_StatsDatabase.getConfig().propertyFilters)
+            {
+
+                ColumnHeader mHeader = _addColumn(mPropertyFilterData.VariableName, mPropertyFilterData);
+                
+            }
+
+            if(m_StatListView.Columns.Count == 0 )
+            {
+                _addColumn("m_strName", null);
+            }
+            foreach (ClassInstance mInstance in m_StatsDatabase.getEntries())
+            {
+                _addInstanceToListView(mInstance);
+            }
+            m_StatListView.ResumeLayout();
+        }
 
 		private void _createContextMenu(Point mousePoint)
 		{
@@ -168,13 +242,45 @@ namespace StatEditor
             string strType = mInstance.getAnyPropertyAsString("m_eStatType");
             string strGraph = mInstance.getAnyPropertyAsString("m_strGraph");
 
-            mNewListViewItem.SubItems.Clear();
-            mNewListViewItem.Text = strName;
-            mNewListViewItem.SubItems.Add(strGuid);
-            mNewListViewItem.SubItems.Add(strType);
-            mNewListViewItem.SubItems.Add(strGraph);
+            bool bChanged = false;
+            if (mNewListViewItem.Text != strName)
+            {
+                mNewListViewItem.Text = strName;
+                bChanged = true;
+            }
+            if (mNewListViewItem.SubItems.Count < 2)
+            {
+                mNewListViewItem.SubItems.Add(strGuid);
+                bChanged = true;
+            }
+            else if(mNewListViewItem.SubItems[1].Text != strGuid)
+            {
+                mNewListViewItem.SubItems[1].Text = strGuid;
+                bChanged = true;
+            }
+            if (mNewListViewItem.SubItems.Count < 3)
+            {
+                mNewListViewItem.SubItems.Add(strType);
+                bChanged = true;
+            }
+            else if (mNewListViewItem.SubItems[2].Text != strType)
+            {
+                mNewListViewItem.SubItems[2].Text = strType;
+                bChanged = true;
+            }
+            if (mNewListViewItem.SubItems.Count < 4)
+            {
+                mNewListViewItem.SubItems.Add(strGraph);
+                bChanged = true;
+            }
+            else if (mNewListViewItem.SubItems[3].Text != strGraph)
+            {
+                mNewListViewItem.SubItems[3].Text = strGraph;
+                bChanged = true;
+            }
+            
 
-            return true;
+            return bChanged;
         }
 
         private bool _addInstanceToListView(ClassInstance mInstance)
@@ -388,6 +494,26 @@ namespace StatEditor
                     e.SuppressKeyPress = true;
                 }
             }
+        }
+
+        private void statObjectViewer_PropertyValueChanged(object m, EventArgs e)
+        {
+            m_StatListView.SuspendLayout();
+            foreach (ListViewItem mItem in m_StatListView.SelectedItems)
+            {
+                int iGuid = -1;
+                int.TryParse(mItem.SubItems[1].Text, out iGuid);                    
+                ClassInstance mInstance = m_StatsDatabase.getEntryByGuid(iGuid);
+                if (mInstance != null)
+                {
+                    _updateListItemByInstance(mInstance);
+                    
+                        
+                    
+                }
+            }
+            m_StatListView.ResumeLayout();
+            _setDirty(true);
         }
     }//end class
 } //end namespace

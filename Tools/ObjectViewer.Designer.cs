@@ -342,6 +342,7 @@
             this.objectFilteredPropertyGrid.showObjects = true;
             this.objectFilteredPropertyGrid.Size = new System.Drawing.Size(436, 644);
             this.objectFilteredPropertyGrid.TabIndex = 2;
+            this.objectFilteredPropertyGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.objectFilteredPropertyGrid_PropertyValueChanged);
             // 
             // ObjectViewer
             // 

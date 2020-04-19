@@ -42,7 +42,6 @@ namespace StatEditor
             this.panel1 = new System.Windows.Forms.Panel();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.timerProcessClasses = new System.Windows.Forms.Timer(this.components);
-            this.statObjectViewer = new CustomControls.ObjectViewer();
             this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.databasesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,6 +51,7 @@ namespace StatEditor
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyNamectrlcToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyGuidctrlgToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.statObjectViewer = new CustomControls.ObjectViewer();
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -194,14 +194,6 @@ namespace StatEditor
             this.timerProcessClasses.Interval = 5;
             this.timerProcessClasses.Tick += new System.EventHandler(this.timerProcessClasses_Tick);
             // 
-            // statObjectViewer
-            // 
-            this.statObjectViewer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.statObjectViewer.Location = new System.Drawing.Point(0, 0);
-            this.statObjectViewer.Name = "statObjectViewer";
-            this.statObjectViewer.Size = new System.Drawing.Size(564, 593);
-            this.statObjectViewer.TabIndex = 0;
-            // 
             // configurationToolStripMenuItem
             // 
             this.configurationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -215,13 +207,13 @@ namespace StatEditor
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.toolsToolStripMenuItem.Text = "&Tools";
             // 
             // databasesToolStripMenuItem
             // 
             this.databasesToolStripMenuItem.Name = "databasesToolStripMenuItem";
-            this.databasesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.databasesToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.databasesToolStripMenuItem.Text = "&Databases";
             this.databasesToolStripMenuItem.Click += new System.EventHandler(this.databasesToolStripMenuItem_Click);
             // 
@@ -234,14 +226,14 @@ namespace StatEditor
             // variableTypesToolStripMenuItem
             // 
             this.variableTypesToolStripMenuItem.Name = "variableTypesToolStripMenuItem";
-            this.variableTypesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.variableTypesToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.variableTypesToolStripMenuItem.Text = "Variable Types";
             this.variableTypesToolStripMenuItem.Click += new System.EventHandler(this.variableTypesToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.saveToolStripMenuItem.Text = "&Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -257,14 +249,23 @@ namespace StatEditor
             // copyNamectrlcToolStripMenuItem
             // 
             this.copyNamectrlcToolStripMenuItem.Name = "copyNamectrlcToolStripMenuItem";
-            this.copyNamectrlcToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.copyNamectrlcToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
             this.copyNamectrlcToolStripMenuItem.Text = "&Copy Name(ctrl+c)";
             // 
             // copyGuidctrlgToolStripMenuItem
             // 
             this.copyGuidctrlgToolStripMenuItem.Name = "copyGuidctrlgToolStripMenuItem";
-            this.copyGuidctrlgToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.copyGuidctrlgToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
             this.copyGuidctrlgToolStripMenuItem.Text = "Copy &Guid(ctrl+g)";
+            // 
+            // statObjectViewer
+            // 
+            this.statObjectViewer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.statObjectViewer.Location = new System.Drawing.Point(0, 0);
+            this.statObjectViewer.Name = "statObjectViewer";
+            this.statObjectViewer.Size = new System.Drawing.Size(564, 593);
+            this.statObjectViewer.TabIndex = 0;
+            this.statObjectViewer.PropertyValueChanged += new CustomControls.ObjectViewer.PropertyValueChangedHandler(this.statObjectViewer_PropertyValueChanged);
             // 
             // StatEditorForm
             // 

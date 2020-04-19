@@ -11,6 +11,24 @@ using Newtonsoft.Json;
 
 namespace Library.Database
 {
+    public class PropertyFilterData
+    {
+        public PropertyFilterData()
+        {
+            VariableName = "";
+            OverrideName = "";
+            ColumnWidth = 60;
+        }
+        public PropertyFilterData(string strVarName, int columnWidth)
+        {
+            VariableName = strVarName;
+            OverrideName = "";
+            ColumnWidth = columnWidth;
+        }
+        public string VariableName { get; set; }
+        public int ColumnWidth { get; set; }
+        public string OverrideName { get; set; }
+    }
     public class DatabaseConfig
     {
         private string m_strConfigPath = "";
@@ -22,7 +40,10 @@ namespace Library.Database
             // 0x‭8000000‬;
             uniqueMask = 134217728;
             //0xFFFF
-            guidMask = 65535; 
+            guidMask = 65535;
+            propertyFilters = new List<PropertyFilterData>();
+            propertyFilters.Add(new PropertyFilterData("m_strName", 120));
+            propertyFilters.Add(new PropertyFilterData("m_DatabaseGuid", 80));
 
         }
 
@@ -40,6 +61,12 @@ namespace Library.Database
 
         [DisplayName("Guid Mask"), Description("This is the mask in which the guid is actually generated in. Should be a number that represents something like 0xFFFF(65535)")]
         public int guidMask { get; set; }
+
+        [Category("Properties To Filter By"), DisplayName("Variables"), Description("This should be a variable you want to display. This will be the code value. Such as m_strName")]
+        public List<PropertyFilterData> propertyFilters { get; set; }
+
+
+
 
         //load the database - returning any errors.
         public static DatabaseConfig createDatabaseConfigFromJson(Database mDatabase, string strPathToFile)
@@ -65,6 +92,8 @@ namespace Library.Database
                     }
 
                 }
+                mNewConfig.propertyFilters.RemoveAt(0); //removes the default m_strName
+                mNewConfig.propertyFilters.RemoveAt(0); //removes the default m_Guid
                 mNewConfig.setDatabaseConfigPathAndFile(strPathToFile);
                 return mNewConfig;
             }

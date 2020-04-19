@@ -690,6 +690,28 @@ namespace CustomControls
                 _updateArrayListView();
             }
         }
+
+        ///////////////////////////////////////////////////////////////////////////////
+        #region events
+        ///////////////////////////////////////////////////////////////////////////////        
+        public event PropertyValueChangedHandler PropertyValueChanged;
+        public delegate void PropertyValueChangedHandler(Object m, EventArgs e);
+
+        private void objectFilteredPropertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        {
+            if(PropertyValueChanged != null)
+            {
+                PropertyValueChanged(s, e);
+            }
+        }
+
+
+        ///////////////////////////////////////////////////////////////////////////////
+        #endregion
+        ///////////////////////////////////////////////////////////////////////////////
+
+
+
     }   //end class
     public class ClassObjectViewerData
 	{

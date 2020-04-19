@@ -15,7 +15,7 @@ namespace STATS
 		~FKCStatDefinition() {}
 
 		//The stat type dictates how it will be used in game.
-		UPROPERTY(Category = "GENERAL", DisplayName = "TYPE")
+		UPROPERTY(Category = "GENERAL", DisplayName = "Type")
 		ESTAT_PRIMITIVE_TYPES				m_eStatType = ESTAT_PRIMITIVE_TYPES::INT32;
 		//The default value of the stat.
 		UPROPERTY(Category = "GENERAL", DisplayName = "Default Value")
