@@ -161,6 +161,17 @@ namespace Library.Database
             return (getEntryByName(strName) == null) ? true : false;
         }
 
+        public bool renameEntry(ClassInstance mEntry, string strNewName )
+        {
+            if(mEntry != null &&
+                isValidName(strNewName))
+            {
+                mEntry.setProperty("m_strName", strNewName);                
+                mEntry.m_bIsDirty = true;
+                return true;
+            }
+            return false;
+        }
         public string getEntryName(ClassInstance mEntry)
         {
             return mEntry.getPropertyValueString("m_strName", "");
@@ -356,6 +367,32 @@ namespace Library.Database
             
             return EERROR_ADDING.NO_ERRORS;
 		}
+
+        public bool deleteEntry(ClassInstance mNewEntry)
+        {
+            if(mNewEntry == null )
+            {
+                return false;
+            }
+            string strEntryname = getEntryName(mNewEntry);
+            string strEntryFileName = getEntryFileName(mNewEntry);
+            try
+            {
+
+                m_Instances.Remove(mNewEntry);
+                m_InstancesByGuid.Remove(getEntryGuid(mNewEntry));
+                m_InstancesByName.Remove(strEntryname);
+                m_InstancesByFileName.Remove(strEntryFileName);
+                string strPathToDatabaseFolder = Path.Combine(m_DatabaseManager.getDatabaseDirectory(), databaseName.Replace(" ", "_") + "\\");
+                File.Delete(Path.Combine(strPathToDatabaseFolder, strEntryFileName));
+            }
+            catch(Exception e)
+            {
+                log("Error - in deleting entry " + strEntryname + " in database " + databaseName);
+                return false;
+            }
+            return true;
+        }
 
         public bool loadDatabase(string strPathToFile)
         {

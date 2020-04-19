@@ -31,7 +31,7 @@ namespace StatEditor
             done
         };
         private bool m_bDirty = false;
-        private Database m_StatsDatabase = null;
+        private Database m_ActiveDatabase = null;
         private ELOAD_STATE m_eLoadState = ELOAD_STATE.configure;
         private ContextMenu m_StatListViewContextMenu = new ContextMenu();
 		private ListViewItem m_ContextMenuItem = null;
@@ -127,20 +127,20 @@ namespace StatEditor
 
         private ColumnHeader _addColumn(string strVariableName, PropertyFilterData mPropertyFilterData)
         {
-            if(m_StatsDatabase == null)
+            if(m_ActiveDatabase == null)
             {
                 return null;
             }
-            Type mType = m_StatsDatabase.getDatabaseEntryClassType();
+            Type mType = m_ActiveDatabase.getDatabaseEntryClassType();
             if( mType == null )
             {
-                log("Error - unable to add column. The class :" + m_StatsDatabase.databaseEntryClass + " could not be found.");
+                log("Error - unable to add column. The class :" + m_ActiveDatabase.databaseEntryClass + " could not be found.");
                 return null;
             }
             PropertyInfo mProperty = mType.GetProperty(strVariableName);
             if(mProperty == null )
             {
-                log("Error - unable to add column. property: " + strVariableName + " could not be found inside class: " + m_StatsDatabase.databaseEntryClass);
+                log("Error - unable to add column. property: " + strVariableName + " could not be found inside class: " + m_ActiveDatabase.databaseEntryClass);
                 return null;
             }
             string strDisplayName = strVariableName;
@@ -175,15 +175,15 @@ namespace StatEditor
 
         private void _setDatabase(string strDatabase)
         {
-            m_StatsDatabase = m_Core.databaseManager.getDatabase(strDatabase);      
-            if( m_StatsDatabase == null)
+            m_ActiveDatabase = m_Core.databaseManager.getDatabase(strDatabase);      
+            if( m_ActiveDatabase == null)
             {
                 log("ERROR - unable to find database: " + strDatabase);
             }
             m_StatListView.SuspendLayout();
             m_StatListView.Items.Clear();
             m_StatListView.Columns.Clear();
-            foreach(PropertyFilterData mPropertyFilterData in m_StatsDatabase.getConfig().propertyFilters)
+            foreach(PropertyFilterData mPropertyFilterData in m_ActiveDatabase.getConfig().propertyFilters)
             {
 
                 ColumnHeader mHeader = _addColumn(mPropertyFilterData.VariableName, mPropertyFilterData);
@@ -194,7 +194,7 @@ namespace StatEditor
             {
                 _addColumn("m_strName", null);
             }
-            foreach (ClassInstance mInstance in m_StatsDatabase.getEntries())
+            foreach (ClassInstance mInstance in m_ActiveDatabase.getEntries())
             {
                 _addInstanceToListView(mInstance);
             }
@@ -205,16 +205,19 @@ namespace StatEditor
 		{
 
 			m_StatListViewContextMenu.MenuItems.Clear();
-			m_StatListViewContextMenu.MenuItems.Add("Create New Stat", _createNewStat);
+			m_StatListViewContextMenu.MenuItems.Add("Create New Entry", _createNewStat);
 
 
 			m_ContextMenuItem = m_StatListView.GetItemAt(mousePoint.X, mousePoint.Y);
 			if (m_ContextMenuItem != null)
 			{
-				
-				m_StatListViewContextMenu.MenuItems.Add("Rename " + m_ContextMenuItem.SubItems[1].Text, _renameStat);
+
+                if (m_StatListView.SelectedItems.Count == 1)
+                {
+                    m_StatListViewContextMenu.MenuItems.Add("Rename " + m_ContextMenuItem.SubItems[0].Text, _renameStat);
+                }
 				m_StatListViewContextMenu.MenuItems.Add("-");
-				m_StatListViewContextMenu.MenuItems.Add("Delete " + m_ContextMenuItem.SubItems[1].Text, _deleteStat);
+				m_StatListViewContextMenu.MenuItems.Add("Delete " + m_ContextMenuItem.SubItems[0].Text, _deleteStat);
 			}
 		}
         
@@ -314,11 +317,11 @@ namespace StatEditor
             mInputBox.message = "Please enter in a unique name for the stat.";
             if( mInputBox.ShowDialog(this) == DialogResult.OK)
             {
-                if (m_StatsDatabase.isValidName(mInputBox.inputBox))
+                if (m_ActiveDatabase.isValidName(mInputBox.inputBox))
                 {
-                    if(m_StatsDatabase.createEntry(mInputBox.inputBox) == EERROR_ADDING.NO_ERRORS)
+                    if(m_ActiveDatabase.createEntry(mInputBox.inputBox) == EERROR_ADDING.NO_ERRORS)
                     {
-                        ClassInstance mInstance = m_StatsDatabase.getEntryByName(mInputBox.inputBox);
+                        ClassInstance mInstance = m_ActiveDatabase.getEntryByName(mInputBox.inputBox);
                         if(mInstance != null)
                         {
                             _addInstanceToListView(mInstance);
@@ -335,13 +338,70 @@ namespace StatEditor
                 }
             }
         }
-		private void _renameStat(object sender, EventArgs e)
-		{
+        private void _renameStat(object sender, EventArgs e)
+        {
+            if(m_StatListView.SelectedItems.Count != 1)
+            {
+                return;
+            }
+            InputBox mInputBox = new InputBox();
+            mInputBox.Text = "Rename";
+            mInputBox.inputBox = m_StatListView.SelectedItems[0].Text;
+            mInputBox.message = "Please enter in a NEW unique name.";
+            if (mInputBox.ShowDialog(this) == DialogResult.OK)
+            {
+                if (m_ActiveDatabase.isValidName(mInputBox.inputBox))
+                {
+                    ClassInstance mInstance = m_ActiveDatabase.getEntryByName(m_StatListView.SelectedItems[0].Text);
+                    if( mInstance != null &&
+                        m_ActiveDatabase.renameEntry(mInstance, mInputBox.inputBox) )
+                    {
+                        if (_updateListItemByInstance(mInstance))
+                        {
+                            _setDirty(true);
+                        }
+                        return;
+                    }
 
-		}
-		private void _deleteStat(object sender, EventArgs e)
-		{
 
+                }
+                MessageBox.Show("Invalid name. Name appears to not be unique.", "invalid name", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+
+            }
+        }
+        private void _deleteStat(object sender, EventArgs e)
+        {
+            List<ClassInstance> mList = new List<ClassInstance>();
+            getClassInstancesSelected(mList);
+            if (mList.Count == 0)
+            {
+                return;
+            }
+
+            string strInstanceNames = "";
+            foreach(ClassInstance mInstance in mList)
+            {
+                strInstanceNames = strInstanceNames + m_ActiveDatabase.getEntryName(mInstance) + Environment.NewLine;
+            }
+            strInstanceNames = strInstanceNames.Substring(0, strInstanceNames.Length - 1);
+            DialogResult mResult = MessageBox.Show("Are you sure you want to delete(" + mList.Count + "): " + Environment.NewLine + strInstanceNames, "Delete?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+            if( mResult == DialogResult.Yes)
+            {
+                List<ListViewItem> mItems = new List<ListViewItem>();
+                foreach (ListViewItem mItem in m_StatListView.SelectedItems)
+                {
+                    mItems.Add(mItem);
+                }
+                foreach (ListViewItem mItem in mItems)
+                {
+                    m_StatListView.Items.Remove(mItem);
+                }
+                foreach (ClassInstance mInstance in mList)
+                {
+                    m_ActiveDatabase.deleteEntry(mInstance);
+                }
+
+            }
 		}
 
 		private void m_StatListView_MouseDown(object sender, MouseEventArgs e)
@@ -403,9 +463,9 @@ namespace StatEditor
 
         private bool _save()
         {
-            if( m_StatsDatabase.saveDatabase())
+            if( m_ActiveDatabase.saveDatabase())
             {
-                if( m_StatsDatabase.getEntrysDirtyCount() > 0)
+                if( m_ActiveDatabase.getEntrysDirtyCount() > 0)
                 {
                     _setDirty(true);
                     return false;
@@ -421,7 +481,7 @@ namespace StatEditor
             mSelected.Clear();
             foreach (ListViewItem mItem in m_StatListView.SelectedItems)
             {
-                ClassInstance mInstance = m_StatsDatabase.getEntryByName(mItem.Text);
+                ClassInstance mInstance = m_ActiveDatabase.getEntryByName(mItem.Text);
                 if(mInstance != null)
                 {
                     mSelected.Add(mInstance);
@@ -439,7 +499,7 @@ namespace StatEditor
             }
             if(m_StatListView.SelectedIndices.Count == 1)
             {
-                ClassInstance mInstance = m_StatsDatabase.getEntryByName(m_StatListView.SelectedItems[0].Text);
+                ClassInstance mInstance = m_ActiveDatabase.getEntryByName(m_StatListView.SelectedItems[0].Text);
                 statObjectViewer.setObjectViewing(mInstance);
             }
             else
@@ -447,7 +507,7 @@ namespace StatEditor
                 statObjectViewer.setObjectViewing(null);
                 foreach(ListViewItem mItem in m_StatListView.SelectedItems)
                 {
-                    ClassInstance mInstance = m_StatsDatabase.getEntryByName(mItem.Text);
+                    ClassInstance mInstance = m_ActiveDatabase.getEntryByName(mItem.Text);
                     statObjectViewer.addObjectViewing(mInstance);
                 }
             }
@@ -471,7 +531,7 @@ namespace StatEditor
                     string strCopyString = "";
                     foreach (ClassInstance mInstance in mInstances)
                     {
-                        strCopyString = strCopyString + m_StatsDatabase.getEntryName(mInstance) + Environment.NewLine;
+                        strCopyString = strCopyString + m_ActiveDatabase.getEntryName(mInstance) + Environment.NewLine;
                     }
                     strCopyString = strCopyString.Substring(0, strCopyString.Length - 1);
                     Clipboard.SetText(strCopyString);
@@ -487,7 +547,7 @@ namespace StatEditor
                     string strCopyString = "";
                     foreach (ClassInstance mInstance in mInstances)
                     {
-                        strCopyString = strCopyString + m_StatsDatabase.getEntryGuid(mInstance) + Environment.NewLine;
+                        strCopyString = strCopyString + m_ActiveDatabase.getEntryGuid(mInstance) + Environment.NewLine;
                     }
                     strCopyString = strCopyString.Substring(0, strCopyString.Length - 1);
                     Clipboard.SetText(strCopyString);
@@ -503,7 +563,7 @@ namespace StatEditor
             {
                 int iGuid = -1;
                 int.TryParse(mItem.SubItems[1].Text, out iGuid);                    
-                ClassInstance mInstance = m_StatsDatabase.getEntryByGuid(iGuid);
+                ClassInstance mInstance = m_ActiveDatabase.getEntryByGuid(iGuid);
                 if (mInstance != null)
                 {
                     _updateListItemByInstance(mInstance);

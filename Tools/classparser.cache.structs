@@ -758,11 +758,11 @@
           "variableName": "m_eStatType",
           "variableType": "ESTAT_PRIMITIVE_TYPES",
           "variableValue": "ESTAT_PRIMITIVE_TYPES::INT32",
-          "displayName": "TYPE",
+          "displayName": "Type",
           "category": "GENERAL",
           "variableProperties": {
             "CATEGORY": "GENERAL",
-            "DISPLAYNAME": "TYPE"
+            "DISPLAYNAME": "Type"
           },
           "variableComment": "//The stat type dictates how it will be used in game.",
           "isStatic": false,
@@ -1178,7 +1178,8 @@
           "category": "DATABASE",
           "variableProperties": {
             "CATEGORY": "DATABASE",
-            "DISPLAYNAME": "Name"
+            "DISPLAYNAME": "Name",
+            "READONLY": ""
           },
           "variableComment": "//the name of the entry. Must be unique",
           "isStatic": false,

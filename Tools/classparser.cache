@@ -1,7 +1,7 @@
 637221055922383629|..\CoreClasses\KCCore\KCDefines.h
 637220993005458864|..\CoreClasses\KCCore\KCIncludes.h
 637221130508415066|..\CoreClasses\KCCore\Database\KCDatabaseManager.h
-637226231542258827|..\CoreClasses\KCCore\Database\KCDBEntry.h
+637228855135209312|..\CoreClasses\KCCore\Database\KCDBEntry.h
 637224448615467308|..\CoreClasses\KCCore\Database\Private\KCDBDefinition.h
 637221041261692180|..\CoreClasses\KCCore\Database\Private\KCDBInclude.h
 637221129252871150|..\CoreClasses\KCCore\Database\Private\KCDBTable.h
@@ -16,7 +16,7 @@
 637220993005398927|..\CoreClasses\KCCore\Systems\DataGroup\Private\KCDataGroupEnumsAndStructs.h
 637219287149838972|..\CoreClasses\KCCore\Systems\DataGroup\Private\KCDataProperty.h
 637220905252242000|..\CoreClasses\KCCore\Systems\Stats\KCStatManager.h
-637228790693036767|..\CoreClasses\KCCore\Systems\Stats\Private\KCStatDefinition.h
+637228847965898231|..\CoreClasses\KCCore\Systems\Stats\Private\KCStatDefinition.h
 637228788964665822|..\CoreClasses\KCCore\Systems\Stats\Private\KCStatInclude.h
 637212388559960572|..\CoreClasses\KCCore\Systems\UnitTypes\KCDefinedUnitTypes.h
 637220953959480554|..\CoreClasses\KCCore\Systems\UnitTypes\KCUnitTypeManager.h

@@ -294,9 +294,9 @@ namespace Dynamic
         //Variable Type:KCName
         //Variable Value:
         //Variable Line Number:44
-        //Variable Properties: CATEGORY = DATABASE, DISPLAYNAME = Name
+        //Variable Properties: CATEGORY = DATABASE, DISPLAYNAME = Name, READONLY = 
         private string _m_strName = "";
-        [DisplayName("Name"), Category("DATABASE"), Description("the name of the entry. Must be unique")]
+        [DisplayName("Name"), Category("DATABASE"), ReadOnly(true), Description("the name of the entry. Must be unique")]
         public string m_strName
         {
             get{ return _m_strName; }
@@ -326,9 +326,9 @@ namespace Dynamic
         //Variable Type:ESTAT_PRIMITIVE_TYPES
         //Variable Value:ESTAT_PRIMITIVE_TYPES::INT32
         //Variable Line Number:17
-        //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = TYPE
+        //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Type
         private ESTAT_PRIMITIVE_TYPES _m_eStatType = ESTAT_PRIMITIVE_TYPES.INT32;
-        [DisplayName("TYPE"), Category("GENERAL"), Description("The stat type dictates how it will be used in game.")]
+        [DisplayName("Type"), Category("GENERAL"), Description("The stat type dictates how it will be used in game.")]
         public ESTAT_PRIMITIVE_TYPES m_eStatType
         {
             get{ return _m_eStatType; }
@@ -617,9 +617,9 @@ namespace Dynamic
         //Variable Type:KCName
         //Variable Value:
         //Variable Line Number:44
-        //Variable Properties: CATEGORY = DATABASE, DISPLAYNAME = Name
+        //Variable Properties: CATEGORY = DATABASE, DISPLAYNAME = Name, READONLY = 
         private string _m_strName = "";
-        [DisplayName("Name"), Category("DATABASE"), Description("the name of the entry. Must be unique")]
+        [DisplayName("Name"), Category("DATABASE"), ReadOnly(true), Description("the name of the entry. Must be unique")]
         public string m_strName
         {
             get{ return _m_strName; }
