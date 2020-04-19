@@ -8,8 +8,7 @@ using Library.ClassCreator;
 using Library.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Xml.Serialization;
-using System.Xml;
+using Newtonsoft.Json;
 
 namespace Library.Database
 {
@@ -42,6 +41,8 @@ namespace Library.Database
             isLoaded = false;
 		}
         public bool isLoaded { get; set; }
+
+        public DatabaseConfig getConfig() { return m_DatabaseConfig; }
         //the class representing this database
         public string databaseEntryClass { get { return m_DatabaseConfig.databaseEntryClass; } set { m_DatabaseConfig.databaseEntryClass = value; } }
         //the database name.
@@ -50,6 +51,8 @@ namespace Library.Database
         public int uniqueMask { get { return m_DatabaseConfig.uniqueMask; } set { m_DatabaseConfig.uniqueMask = value; } }
         //This is the mask in which the guid is actually generated in. Should be a number that represents something like 0xFFFF(65535)
         public int guidMask { get { return m_DatabaseConfig.guidMask; } set { m_DatabaseConfig.guidMask = value; } }
+
+
         public void _notifyOfPropertySetOnClassInstance(ClassInstance mInstance, string strProperty)
         {
             if(m_bIgnorePropertySetCallback )
@@ -77,7 +80,7 @@ namespace Library.Database
                         if (mData.Value == mInstance)
                         {
                             m_InstancesByName.Remove(mData.Key);
-                            m_InstancesByName[getEntryName(mInstance)] = mInstance;
+                            m_InstancesByName[getEntryName(mInstance).ToUpper()] = mInstance;
                         }
                     }
                 }
@@ -89,7 +92,7 @@ namespace Library.Database
                         if (mData.Value == mInstance)
                         {
                             m_InstancesByFileName.Remove(mData.Key);
-                            m_InstancesByFileName[getEntryFileName(mInstance)] = mInstance;
+                            m_InstancesByFileName[getEntryFileName(mInstance).ToUpper()] = mInstance;
                         }
                     }
                 }
@@ -105,8 +108,8 @@ namespace Library.Database
                 return;
             }
             m_Instances.Remove(mEntry);
-            m_InstancesByFileName.Remove(getEntryFileName(mEntry));
-            m_InstancesByName.Remove(getEntryName(mEntry));
+            m_InstancesByFileName.Remove(getEntryFileName(mEntry).ToUpper());
+            m_InstancesByName.Remove(getEntryName(mEntry).ToUpper());
             m_InstancesByGuid.Remove(getEntryGuid(mEntry));
             mEntry.m_CallBacks.Remove(this);
         }
@@ -114,7 +117,7 @@ namespace Library.Database
         public string getEntryFileName(ClassInstance mEntry)
         {
 
-            string strFileName = mEntry.getPropertyValue("m_strFileName", "");
+            string strFileName = mEntry.getPropertyValueString("m_strFileName", "");
             if (strFileName != "")
             {
                 return strFileName;
@@ -124,22 +127,31 @@ namespace Library.Database
             {
                 return strFileName;
             }
-            return strFileName + ".xml";
+            return strFileName + ".json";
         }
         private void _setEntryFileName(ClassInstance mEntry, string strFileName)
         {
-            if( strFileName.EndsWith(".xml") == false )
+            if( strFileName.EndsWith(".json") == false )
             {
-                strFileName = strFileName + ".xml";
+                strFileName = strFileName + ".json";
             }
             m_bIgnorePropertySetCallback = true;
             mEntry.setProperty("m_strFileName", strFileName);
             m_bIgnorePropertySetCallback = false;
         }
+
+        //returns if the name is valid for this database
+        public bool isValidName(string strName)
+        {
+            return (getEntryByName(strName) == null) ? true : false;
+        }
+
         public string getEntryName(ClassInstance mEntry)
         {
-            return mEntry.getPropertyValue("m_strName", "");
+            return mEntry.getPropertyValueString("m_strName", "");
         }
+
+
         private void _setEntryName(ClassInstance mEntry, string strName)
         {
             m_bIgnorePropertySetCallback = true;
@@ -153,8 +165,9 @@ namespace Library.Database
         private void _setEntryGuid(ClassInstance mEntry, int iGuid)
         {
             m_bIgnorePropertySetCallback = true;
-            iGuid = iGuid & m_DatabaseConfig.uniqueMask; //we always put the guid mask and the unique mask on.
-            iGuid = iGuid | m_DatabaseConfig.guidMask;  //we always put the guid mask and the unique mask on.
+            iGuid = iGuid & m_DatabaseConfig.guidMask;  //we always put the guid mask and the unique mask on.
+            iGuid = iGuid | m_DatabaseConfig.uniqueMask; //we always put the guid mask and the unique mask on.
+            
             mEntry.setProperty("m_DatabaseGuid", iGuid);
             m_bIgnorePropertySetCallback = false;
         }
@@ -163,12 +176,12 @@ namespace Library.Database
         private bool _createUniqueGuidForEntry(ClassInstance mEntry)
         {
             int iTries = 1000;
-            int iMask = m_DatabaseConfig.guidMask | m_DatabaseConfig.uniqueMask;
+            
             Random mRandom = new Random();
             while(iTries > 0 )
             {
-                int iGuid = mRandom.Next() & m_DatabaseConfig.uniqueMask;                
-                iGuid = iGuid | m_DatabaseConfig.guidMask;
+                int iGuid = mRandom.Next() & m_DatabaseConfig.guidMask;                
+                iGuid = iGuid | m_DatabaseConfig.uniqueMask;
                 ClassInstance mEntryWithGuid = getEntryByGuid(iGuid);
                 if( mEntryWithGuid == null )
                 {
@@ -324,8 +337,8 @@ namespace Library.Database
             mNewEntry.m_CallBacks.Add(this);
             m_Instances.Add(mNewEntry);            
             m_InstancesByGuid[getEntryGuid(mNewEntry)] = mNewEntry;
-            m_InstancesByName[getEntryName(mNewEntry)] = mNewEntry;
-            m_InstancesByFileName[getEntryFileName(mNewEntry)] = mNewEntry;
+            m_InstancesByName[getEntryName(mNewEntry).ToUpper()] = mNewEntry;
+            m_InstancesByFileName[getEntryFileName(mNewEntry).ToUpper()] = mNewEntry;
             
             return EERROR_ADDING.NO_ERRORS;
 		}
@@ -333,22 +346,78 @@ namespace Library.Database
         public bool loadDatabase(string strPathToFile)
         {
             isLoaded = false;
-            DatabaseConfig mNewConfig = DatabaseConfig.createDatabaseConfigFromXML(this, strPathToFile);
+            DatabaseConfig mNewConfig = DatabaseConfig.createDatabaseConfigFromJson(this, strPathToFile);
             if(mNewConfig != null)
             {
                 m_DatabaseConfig = mNewConfig;
-                _loadData();
+                return _loadData();
+
+            }
+            else
+            {
+                isLoaded = true;
             }
             return false;
         }
+
+        public int getEntrysDirtyCount()
+        {
+            int iCount = 0;
+            foreach (ClassInstance mInstance in m_Instances)
+            {
+                if (mInstance.m_bIsDirty)
+                {
+                    iCount++;
+                }
+            }
+            return iCount;
+        }
+
         public bool saveDatabase()
         {
-            return m_DatabaseConfig.saveDatabaseConfigToXML(this);
+            string strPathToDatabaseFolder = Path.Combine(m_DatabaseManager.getDatabaseDirectory(), databaseName.Replace(" ", "_") + "\\");
+            string strDatabaseFile = "database.json";
+
+            if( m_DatabaseConfig.saveDatabaseConfigToJson(this, Path.Combine(strPathToDatabaseFolder, strDatabaseFile)))
+            {
+                foreach( ClassInstance mInstance in m_Instances)
+                {
+                    if( mInstance.m_bIsDirty)
+                    {
+                        try
+                        {
+
+
+                            string strInstanceSerialized = JsonConvert.SerializeObject(mInstance, Formatting.Indented);
+                            string strFileName = getEntryFileName(mInstance);
+                            if (strFileName != null &&
+                                strFileName != "")
+                            {
+                                string strFullPath = Path.Combine(strPathToDatabaseFolder, strFileName);
+                                File.WriteAllText(strFullPath, strInstanceSerialized, Encoding.ASCII);
+                                if(File.Exists(strFullPath))
+                                {
+                                    mInstance.m_bIsDirty = false;
+                                }
+                                else
+                                {
+                                    log("Error - in saving instance: " + getEntryName(mInstance));
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            log("Error - in saving instance: " + getEntryName(mInstance) + ". Error was " + e.Message);
+                        }
+                    }
+                }
+            }
+                return true;
         }
 
 
 
-        private void _loadData()
+        private bool _loadData()
         {
             cleanDatabase();
             Type mType = m_DatabaseManager.getDatabaseEntryType(databaseName);
@@ -356,19 +425,22 @@ namespace Library.Database
             {
                 log("Unable to create classes(" + databaseEntryClass + ") for database " + databaseName + ". Class type not found.");
                 isLoaded = true;
-                return;
+                return false;
             }
 
             string strPathToSearch = Path.GetFullPath(getDatabaseConfigPathAndFile());
-            string[] mFiles = Directory.GetFiles(strPathToSearch);
-            System.Xml.Serialization.XmlSerializer mXmlSerailizer = new System.Xml.Serialization.XmlSerializer(mType);
+            strPathToSearch = strPathToSearch.Substring(0, strPathToSearch.Length - Path.GetFileName(strPathToSearch).Length);
+            string[] mFiles = Directory.GetFiles(strPathToSearch, "*.json", SearchOption.AllDirectories);
+            
             foreach (string strFile in mFiles)
             {
                 try
                 {
-                    
-                    
-                    ClassInstance mEntry = (ClassInstance)mXmlSerailizer.Deserialize(File.OpenRead(strFile));
+                    if( strFile.Contains("database.json"))
+                    {
+                        continue;
+                    }
+                    ClassInstance mEntry = JsonConvert.DeserializeObject(File.ReadAllText(strFile), mType) as ClassInstance;
                     if (mEntry == null)
                     {
                         log("ERROR - Unable to deserialize file: " + strFile);
@@ -379,10 +451,14 @@ namespace Library.Database
                 }
                 catch (Exception e)
                 {
-                        log("ERROR - Unable to deserialize Database config. File attempting to deserialize is: " + strFile + Environment.NewLine + "Error message was: " + e.Message); 
+                    log("ERROR - Unable to deserialize Database config. File attempting to deserialize is: " + strFile + Environment.NewLine + "Error message was: " + e.Message);
+                    isLoaded = true;
+                    return false;
+
                 }
             }
             isLoaded = true;
+            return true;
         }
 
     } //end class

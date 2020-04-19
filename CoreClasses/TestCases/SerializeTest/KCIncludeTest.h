@@ -86,6 +86,6 @@ protected:
 	KCSerializeChild	*m_pSerializeChildTest = nullptr;
 	UPROPERTY()
 	ETEST				m_eEnumTest = ETEST::COUNT;
-	UPROPERTY()
+	UPROPERTY(DisplayName="Child Serialized Objects")
 	KCTArray<KCSerializeChild *>	m_Array;
 };

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Library.DataGroup
+namespace Library
 {
 	public enum EDATAGROUP_VARIABLE_TYPES
 	{

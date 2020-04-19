@@ -8,8 +8,7 @@ namespace STATS
 	enum class ESTAT_PRIMITIVE_TYPES
 	{
 		INT32,
-		FLOAT,
-		COUNT
+		FLOAT
 	};
 
 

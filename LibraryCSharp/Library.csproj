@@ -36,6 +36,8 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -44,7 +46,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassContructionAndDBHandler.cs" />
     <Compile Include="ClassCreator\ClassCreatorManager.cs" />
+    <Compile Include="ClassCreator\VariableDefinitionEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ClassCreator\VariableDefinitionEditor.Designer.cs">
+      <DependentUpon>VariableDefinitionEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="ClassInstance.cs" />
     <Compile Include="ClassCreator\VariableDefinitionHandler.cs" />
     <Compile Include="ClassCreator\Writers\ClassWriter.cs" />
@@ -61,10 +70,28 @@
     <Compile Include="CommandLine\CommandLineVariable.cs" />
     <Compile Include="Database\Database.cs" />
     <Compile Include="Database\DatabaseConfig.cs" />
+    <Compile Include="Database\DatabaseConfigForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Database\DatabaseConfigForm.Designer.cs">
+      <DependentUpon>DatabaseConfigForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Database\DatabaseDetails.cs" />
     <Compile Include="Database\DatabaseManager.cs" />
     <Compile Include="DataGroup\DataGroup.cs" />
     <Compile Include="DataGroup\DataProperty.cs" />
+    <Compile Include="Helpers\InputBox\InputBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Helpers\InputBox\InputBox.Designer.cs">
+      <DependentUpon>InputBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\Progressbar\ProgressBar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Helpers\Progressbar\ProgressBar.Designer.cs">
+      <DependentUpon>ProgressBar.cs</DependentUpon>
+    </Compile>
     <Compile Include="IO\ByteWriter.cs" />
     <Compile Include="IO\LogFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -80,6 +107,20 @@
       <Project>{0632b60d-0438-46f9-ba76-1ebc9f0263c0}</Project>
       <Name>CustomControls</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ClassCreator\VariableDefinitionEditor.resx">
+      <DependentUpon>VariableDefinitionEditor.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Database\DatabaseConfigForm.resx">
+      <DependentUpon>DatabaseConfigForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Helpers\InputBox\InputBox.resx">
+      <DependentUpon>InputBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Helpers\Progressbar\ProgressBar.resx">
+      <DependentUpon>ProgressBar.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,13 @@
+{
+  "m_strName": "Rank",
+  "m_strFileName": "Rank.json",
+  "m_DatabaseGuid": 134249129,
+  "m_eStatType": 0,
+  "m_bApplicableToCharacters": true,
+  "m_bApplicableToItems": true,
+  "m_strGraph": "",
+  "m_strDefaultValue": "0",
+  "m_strMinValue": "0",
+  "m_strMaxValue": "0",
+  "m_strGraphStat": "Rank"
+}

@@ -7,8 +7,7 @@ using System.IO;
 using System.ComponentModel;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Xml.Serialization;
-using System.Xml;
+using Newtonsoft.Json;
 
 namespace Library.Database
 {
@@ -43,7 +42,7 @@ namespace Library.Database
         public int guidMask { get; set; }
 
         //load the database - returning any errors.
-        public static DatabaseConfig createDatabaseConfigFromXML(Database mDatabase, string strPathToFile)
+        public static DatabaseConfig createDatabaseConfigFromJson(Database mDatabase, string strPathToFile)
         {
             
             if (File.Exists(strPathToFile) == false)
@@ -57,8 +56,7 @@ namespace Library.Database
             try
             {
                 Type mType = Type.GetType("Library.Database.DatabaseConfig");
-                System.Xml.Serialization.XmlSerializer mXmlSerailizer = new System.Xml.Serialization.XmlSerializer(mType);
-                DatabaseConfig mNewConfig = (DatabaseConfig)mXmlSerailizer.Deserialize(File.OpenRead(strPathToFile));
+                DatabaseConfig mNewConfig = (DatabaseConfig)JsonConvert.DeserializeObject(File.ReadAllText(strPathToFile), mType);
                 if (mNewConfig == null)
                 {
                     if (mDatabase != null)
@@ -80,21 +78,19 @@ namespace Library.Database
             return null;
         }
 
-        public bool saveDatabaseConfigToXML(Database mDatabase)
+        public bool saveDatabaseConfigToJson(Database mDatabase)
         {
-            return saveDatabaseConfigToXML(mDatabase, m_strConfigPath);
+            return saveDatabaseConfigToJson(mDatabase, m_strConfigPath);
         }
-        public bool saveDatabaseConfigToXML(Database mDatabase, string strPathToFile)
+        public bool saveDatabaseConfigToJson(Database mDatabase, string strPathToFile)
         {
             m_strConfigPath = strPathToFile;
           
             try
             {
-                
-                System.Xml.Serialization.XmlSerializer mXmlSerailizer = new System.Xml.Serialization.XmlSerializer(GetType());
-                StringWriter mWriterXml = new StringWriter();
-                mXmlSerailizer.Serialize(mWriterXml, this);
-                File.WriteAllText(m_strConfigPath,mWriterXml.ToString());
+
+                string strValue = JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
+                File.WriteAllText(m_strConfigPath, strValue, Encoding.ASCII);
                 if (File.Exists(m_strConfigPath) == false)
                 {
                     if (mDatabase != null)

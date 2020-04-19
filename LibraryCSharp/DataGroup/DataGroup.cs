@@ -10,7 +10,7 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
 using System.Xml;
-namespace Library.DataGroup
+namespace Library
 {
 	public class DataGroup
 	{

@@ -1,0 +1,146 @@
+[
+  {
+    "variableName": "int32",
+    "variableClassName": null,
+    "variableEnumName": null,
+    "eCSharpVariable": 5,
+    "isPrimitiveType": true,
+    "typeConverter": null
+  },
+  {
+    "variableName": "uint32",
+    "variableClassName": null,
+    "variableEnumName": null,
+    "eCSharpVariable": 6,
+    "isPrimitiveType": true,
+    "typeConverter": null
+  },
+  {
+    "variableName": "int8",
+    "variableClassName": null,
+    "variableEnumName": null,
+    "eCSharpVariable": 2,
+    "isPrimitiveType": true,
+    "typeConverter": null
+  },
+  {
+    "variableName": "uint8",
+    "variableClassName": null,
+    "variableEnumName": null,
+    "eCSharpVariable": 1,
+    "isPrimitiveType": true,
+    "typeConverter": null
+  },
+  {
+    "variableName": "char",
+    "variableClassName": null,
+    "variableEnumName": null,
+    "eCSharpVariable": 1,
+    "isPrimitiveType": true,
+    "typeConverter": null
+  },
+  {
+    "variableName": "int16",
+    "variableClassName": null,
+    "variableEnumName": null,
+    "eCSharpVariable": 3,
+    "isPrimitiveType": true,
+    "typeConverter": null
+  },
+  {
+    "variableName": "uint16",
+    "variableClassName": null,
+    "variableEnumName": null,
+    "eCSharpVariable": 4,
+    "isPrimitiveType": true,
+    "typeConverter": null
+  },
+  {
+    "variableName": "int64",
+    "variableClassName": null,
+    "variableEnumName": null,
+    "eCSharpVariable": 7,
+    "isPrimitiveType": true,
+    "typeConverter": null
+  },
+  {
+    "variableName": "uint64",
+    "variableClassName": null,
+    "variableEnumName": null,
+    "eCSharpVariable": 8,
+    "isPrimitiveType": true,
+    "typeConverter": null
+  },
+  {
+    "variableName": "float",
+    "variableClassName": null,
+    "variableEnumName": null,
+    "eCSharpVariable": 10,
+    "isPrimitiveType": true,
+    "typeConverter": null
+  },
+  {
+    "variableName": "string",
+    "variableClassName": null,
+    "variableEnumName": null,
+    "eCSharpVariable": 9,
+    "isPrimitiveType": true,
+    "typeConverter": null
+  },
+  {
+    "variableName": "fname",
+    "variableClassName": null,
+    "variableEnumName": null,
+    "eCSharpVariable": 9,
+    "isPrimitiveType": true,
+    "typeConverter": null
+  },
+  {
+    "variableName": "fstring",
+    "variableClassName": null,
+    "variableEnumName": null,
+    "eCSharpVariable": 9,
+    "isPrimitiveType": true,
+    "typeConverter": null
+  },
+  {
+    "variableName": "KCName",
+    "variableClassName": null,
+    "variableEnumName": null,
+    "eCSharpVariable": 9,
+    "isPrimitiveType": true,
+    "typeConverter": null
+  },
+  {
+    "variableName": "KCString",
+    "variableClassName": null,
+    "variableEnumName": null,
+    "eCSharpVariable": 9,
+    "isPrimitiveType": true,
+    "typeConverter": null
+  },
+  {
+    "variableName": "KCDatabaseGuid",
+    "variableClassName": null,
+    "variableEnumName": null,
+    "eCSharpVariable": 5,
+    "isPrimitiveType": true,
+    "typeConverter": null
+  },
+  {
+    "variableName": "KCTArray",
+    "variableClassName": null,
+    "variableEnumName": null,
+    "eCSharpVariable": 15,
+    "isPrimitiveType": false,
+    "typeConverter": null
+  },
+  {
+    "variableName": "bool",
+    "variableClassName": null,
+    "variableEnumName": null,
+    "eCSharpVariable": 12,
+    "isPrimitiveType": true,
+    "typeConverter": null
+  }
+]

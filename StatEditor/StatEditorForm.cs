@@ -11,155 +11,122 @@ using System.IO;
 using Library.IO;
 using Library.ClassParser;
 using Library.ClassCreator;
-
+using Library;
+using Library.Database;
 // This is the code for your desktop app.
 // Press Ctrl+F5 (or go to Debug > Start Without Debugging) to run your app.
 
 namespace StatEditor
 {
-	enum ELOAD_STATE
-	{
-		GetFileList,
-		CompareFileList,
-		BuildClassStructures,
-		WaitForClassStructuresToBeBuilt,
-		CreateCSharpClasses,
-		CompileCSharpClasses,
-		Done
-	};
+
 
 	public partial class StatEditorForm : Form
 	{
-		private ELOAD_STATE m_eLoadState = ELOAD_STATE.GetFileList;
-		ContextMenu m_StatListViewContextMenu = new ContextMenu();
-		private ProgressBar m_ProgressBar = null;
-		private LogFile m_LogFile = null;
-		private ClassCreatorManager m_ClassManager = new ClassCreatorManager();
-		private ClassParserManager m_ClassParser = new ClassParserManager();
+		
+        enum ELOAD_STATE
+        {
+            configure,
+            waiting_for_core,
+            done
+        };
+        private bool m_bDirty = false;
+        private Database m_StatsDatabase = null;
+        private ELOAD_STATE m_eLoadState = ELOAD_STATE.configure;
+        private ContextMenu m_StatListViewContextMenu = new ContextMenu();
 		private ListViewItem m_ContextMenuItem = null;
+        private ClassContructionAndDBHandler m_Core = null;
+        private Dictionary<ClassInstance, ListViewItem> m_ObjectsToListViewItem = new Dictionary<ClassInstance, ListViewItem>();
 		public StatEditorForm()
 		{
 			InitializeComponent();
-			_createLogFile();
+#if DEBUG
+            this.TopMost = false;
+#else
+            this.TopMost = true;
+#endif
+
+        }
+
+        private void _setDirty(bool bDirty)
+        {
+            if( bDirty == m_bDirty)
+            {
+                return;
+            }
+            m_bDirty = bDirty;
+            if(bDirty)
+            {
+                this.Text = "Stat Editor *";
+            }
+            else
+            {
+                this.Text = "Stat Editor";
+            }
+        }
+
+        private void StatEditorForm_Shown(object sender, EventArgs e)
+		{
+           
+            timerProcessClasses.Enabled = true;
 			
-
 		}
-
-		private void StatEditorForm_Shown(object sender, EventArgs e)
-		{
-			_showProgressBar();
-			_findClasses();
-			timerProcessClasses.Enabled = true;
-			
-		}
-
-		
-
-		private void _showProgressBar()
-		{
-			m_ProgressBar = new ProgressBar();
-			m_ProgressBar.Show(this);
-		}
-
-		private void _createLogFile()
-		{
-			if (m_LogFile == null)
-			{
-				m_LogFile = new LogFile("./StatEditor.log");
-				m_ClassParser.logFile = m_LogFile;
-				m_ClassManager.logFile = m_LogFile;
-			}
-		}
+        
 
 		public void log(string strMessage)
 		{
-			if(m_ProgressBar != null)
+			if(m_Core != null)
 			{
-				m_ProgressBar.setMessage(strMessage);
+                m_Core.log(strMessage);
 			}
-			m_LogFile.log(strMessage);
+			
 		}
-
-		private void _findClasses()
-		{
-			string[] mFiles = Directory.GetFiles(@"D:\Personal\Projects\CoreClasses\", "*.h", SearchOption.AllDirectories);
-			foreach(string mFile in mFiles)
-			{
-				m_ClassParser.addFileToParse(mFile);
-			}
-			log("Processing " + mFiles.Length + " files.");
-		}
+        
 
 		private void timerProcessClasses_Tick(object sender, EventArgs e)
 		{
 
 			switch(m_eLoadState)
 			{
-				case ELOAD_STATE.GetFileList:
-					{
-						_findClasses();
-						m_eLoadState = ELOAD_STATE.CompareFileList;
-					}
-					break;
-				case ELOAD_STATE.CompareFileList:
-					{
-						m_ClassParser.compareToCachedData("");
-						m_eLoadState++;
-					}
-					break;
-				case ELOAD_STATE.BuildClassStructures:
-					{
-						m_ClassParser.buildClassStructures();
-						m_eLoadState++;
-					}
-					break;
-				case ELOAD_STATE.WaitForClassStructuresToBeBuilt:
-					{
-						if (m_ClassParser.getDoneParsingClassesOnThreads())
-						{
-							m_ClassParser.saveCachedData("classparser.cache");
-							m_eLoadState = ELOAD_STATE.CreateCSharpClasses;
-						}
-					}
-					break;
-				case ELOAD_STATE.CreateCSharpClasses:
-					{
-						m_ClassManager.intialize(m_ClassParser, "classcompile.dll");
-						m_eLoadState = ELOAD_STATE.CompileCSharpClasses;
-					}
-					break;
-				case ELOAD_STATE.CompileCSharpClasses:
-					{
-						if (m_ClassManager.isDoneParsingAndCompiling())
-						{
-							m_eLoadState = ELOAD_STATE.Done;
-							string strErrors = m_ClassManager.getErrorsAsString();
-							if (strErrors != null && strErrors.Length != 0)
-							{
-								MessageBox.Show(this, "Error in Compiling. Check Log for more details.\n\n" + strErrors, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-							}							
-						}
-					}
-					break;
-				case ELOAD_STATE.Done:
-					{
-                    object mObject = m_ClassManager.createNewClass("KCIncludeTest");// FKCStatDefinition");// new ClassTestingObjectViewer();
-						statObjectViewer.setObjectViewing(mObject);
-
-						timerProcessClasses.Enabled = false;
-						m_ProgressBar.Hide();
-						m_ProgressBar = null;
-					}
-					break;
+				case ELOAD_STATE.configure:
+				{
+                    m_eLoadState = ELOAD_STATE.waiting_for_core;
+                    if (m_Core == null)
+                    {
+                        m_Core = new ClassContructionAndDBHandler();
+                        m_Core.showProgressBar(this);
+                    }
+                    
+                }
+                break;
+                case ELOAD_STATE.waiting_for_core:
+				{
+					if(m_Core != null &&
+                        m_Core.isLoaded())
+                    {
+                        m_eLoadState = ELOAD_STATE.done;
+                    }
+					
+				}
+				break;				
+				case ELOAD_STATE.done:
+				{
+                    m_StatsDatabase = m_Core.databaseManager.getDatabase("Stats");
+                    foreach(ClassInstance mInstance in m_StatsDatabase.getEntries())
+                    {
+                        _addInstanceToListView(mInstance);
+                    }
+                    //object mObject = m_Core.classCreatorManager.createNewClass("KCIncludeTest");// FKCStatDefinition");// new ClassTestingObjectViewer();
+                    //statObjectViewer.setObjectViewing(mObject);
+                    timerProcessClasses.Enabled = false;
+                    this.Focus();
+                    this.Activate();
+                    this.TopMost = false;
+                }
+				break;
 			}
 
 		}
 
-		private void testToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			ClassTestingObjectViewer mObject = new ClassTestingObjectViewer();
-			statObjectViewer.setObjectViewing(mObject);
-		}
 		private void _createContextMenu(Point mousePoint)
 		{
 
@@ -176,11 +143,92 @@ namespace StatEditor
 				m_StatListViewContextMenu.MenuItems.Add("Delete " + m_ContextMenuItem.SubItems[1].Text, _deleteStat);
 			}
 		}
+        
+
+        private bool _updateListItemByInstance(ClassInstance mInstance)
+        {
+            if(m_ObjectsToListViewItem.ContainsKey(mInstance) == false)
+            {
+                MessageBox.Show("The map containing entries to the list view items appears to be out of sync.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            ListViewItem mNewListViewItem = m_ObjectsToListViewItem[mInstance];
+            if( mNewListViewItem == null)
+            {
+                MessageBox.Show("The map containing entries to the list view items appears to be out of sync.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            string strName = mInstance.getAnyPropertyAsString("m_strName");
+            if (strName == null || strName == "")
+            {
+                MessageBox.Show("Unable to get name from object.", "Unknown Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            string strGuid = mInstance.getAnyPropertyAsString("m_DatabaseGuid");
+            string strType = mInstance.getAnyPropertyAsString("m_eStatType");
+            string strGraph = mInstance.getAnyPropertyAsString("m_strGraph");
+
+            mNewListViewItem.SubItems.Clear();
+            mNewListViewItem.Text = strName;
+            mNewListViewItem.SubItems.Add(strGuid);
+            mNewListViewItem.SubItems.Add(strType);
+            mNewListViewItem.SubItems.Add(strGraph);
+
+            return true;
+        }
+
+        private bool _addInstanceToListView(ClassInstance mInstance)
+        {
+            if( mInstance == null)
+            {
+                return false;
+            }
+            string strName = mInstance.getPropertyValueString("m_strName", "");
+            if( strName == null || strName == "")
+            {
+                MessageBox.Show("Unable to get name from object.", "Unknown Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+            ListViewItem mNewListViewItem = new ListViewItem(strName);
+            m_StatListView.Items.Add(mNewListViewItem);
+            m_ObjectsToListViewItem.Add(mInstance, mNewListViewItem);
+            
+            if( _updateListItemByInstance(mInstance))
+            {
+                statObjectViewer.setObjectViewing(mInstance);
+                return true;
+            }
+            return false;
+        }
 
 		private void _createNewStat(object sender, EventArgs e)
 		{
+            InputBox mInputBox = new InputBox();
+            mInputBox.Text = "New Stat Name";
+            mInputBox.message = "Please enter in a unique name for the stat.";
+            if( mInputBox.ShowDialog(this) == DialogResult.OK)
+            {
+                if (m_StatsDatabase.isValidName(mInputBox.inputBox))
+                {
+                    if(m_StatsDatabase.createEntry(mInputBox.inputBox) == EERROR_ADDING.NO_ERRORS)
+                    {
+                        ClassInstance mInstance = m_StatsDatabase.getEntryByName(mInputBox.inputBox);
+                        if(mInstance != null)
+                        {
+                            _addInstanceToListView(mInstance);
+                            _setDirty(true);
+                            return;
+                        }
+                    }
+                    MessageBox.Show("An error occurred adding the stat. Please check the log.", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Error);
 
-		}
+                }
+                else
+                {
+                    MessageBox.Show("Invalid name. Name appears to not be unique.", "invalid name", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                }
+            }
+        }
 		private void _renameStat(object sender, EventArgs e)
 		{
 
@@ -209,5 +257,137 @@ namespace StatEditor
 				}
 			}
 		}
-	}//end class
+
+        private void databasesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_Core.databaseManager.showConfigDialog(this);
+        }
+
+        private void variableTypesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_Core.classCreatorManager.showVariableDefinitionEditor(this);
+        }
+
+        private void StatEditorForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if( m_bDirty)
+            {
+                DialogResult mResult = MessageBox.Show("You have unsaved changes. Do you want to save first?", "Save first?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                if( mResult == DialogResult.Cancel)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+                if( mResult == DialogResult.Yes)
+                {
+                    if( _save() == false )
+                    {
+                        MessageBox.Show("Error in saving. Check log. Not quiting.", "Error?", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        e.Cancel = true;
+                        return;
+                    }
+                }
+            }
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _save();
+        }
+
+        private bool _save()
+        {
+            if( m_StatsDatabase.saveDatabase())
+            {
+                if( m_StatsDatabase.getEntrysDirtyCount() > 0)
+                {
+                    _setDirty(true);
+                    return false;
+                }
+                _setDirty(false);
+                return true;
+            }
+            return false;
+        }
+
+        public int getClassInstancesSelected(List<ClassInstance> mSelected)
+        {
+            mSelected.Clear();
+            foreach (ListViewItem mItem in m_StatListView.SelectedItems)
+            {
+                ClassInstance mInstance = m_StatsDatabase.getEntryByName(mItem.Text);
+                if(mInstance != null)
+                {
+                    mSelected.Add(mInstance);
+                }
+            }
+            return mSelected.Count;
+        }
+
+        private void m_StatListView_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if( m_StatListView.SelectedIndices.Count == 0 )
+            {
+                statObjectViewer.setObjectViewing(null);
+                return;
+            }
+            if(m_StatListView.SelectedIndices.Count == 1)
+            {
+                ClassInstance mInstance = m_StatsDatabase.getEntryByName(m_StatListView.SelectedItems[0].Text);
+                statObjectViewer.setObjectViewing(mInstance);
+            }
+            else
+            {
+                statObjectViewer.setObjectViewing(null);
+                foreach(ListViewItem mItem in m_StatListView.SelectedItems)
+                {
+                    ClassInstance mInstance = m_StatsDatabase.getEntryByName(mItem.Text);
+                    statObjectViewer.addObjectViewing(mInstance);
+                }
+            }
+        }
+
+        private void m_StatListView_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (m_StatListView.SelectedIndices.Count == 0)
+            {
+                return;
+            }
+            
+
+            if (e.Control &&
+                e.KeyCode == Keys.C)
+            {
+                List<ClassInstance> mInstances = new List<ClassInstance>();
+                
+                if(getClassInstancesSelected(mInstances) > 0)
+                {
+                    string strCopyString = "";
+                    foreach (ClassInstance mInstance in mInstances)
+                    {
+                        strCopyString = strCopyString + m_StatsDatabase.getEntryName(mInstance) + Environment.NewLine;
+                    }
+                    strCopyString = strCopyString.Substring(0, strCopyString.Length - 1);
+                    Clipboard.SetText(strCopyString);
+                    e.SuppressKeyPress = true;
+                }                                
+            }
+            else if (e.Control &&
+                     e.KeyCode == Keys.G)
+            {
+                List<ClassInstance> mInstances = new List<ClassInstance>();
+                if (getClassInstancesSelected(mInstances) > 0)
+                {
+                    string strCopyString = "";
+                    foreach (ClassInstance mInstance in mInstances)
+                    {
+                        strCopyString = strCopyString + m_StatsDatabase.getEntryGuid(mInstance) + Environment.NewLine;
+                    }
+                    strCopyString = strCopyString.Substring(0, strCopyString.Length - 1);
+                    Clipboard.SetText(strCopyString);
+                    e.SuppressKeyPress = true;
+                }
+            }
+        }
+    }//end class
 } //end namespace

@@ -24,6 +24,7 @@ namespace Library.ClassCreator
 		STRING,
 		FLOAT,
 		DOUBLE,
+        BOOL,
 		CLASS,
 		ENUM,
         LIST,
@@ -44,6 +45,7 @@ namespace Library.ClassCreator
 			"string",	
 			"float",	
 			"double",	
+            "bool",
 			"",			//CLASS
 			"",			//ENUM
             "",         //LIST
@@ -76,6 +78,7 @@ namespace Library.ClassCreator
 
 	public class VariableDefinitionHandler
 	{
+        private string m_strCurrentFileAndPath = "";
 		public List<VariableDefinition> m_VariableDefinitions = new List<VariableDefinition>();
 		public VariableDefinitionHandler(string strDefinitionsFile)
 		{
@@ -100,6 +103,7 @@ namespace Library.ClassCreator
             addVariablePrimitive("float", EVARIABLE_CSHARP_TYPES.FLOAT);
             addVariablePrimitive("float", EVARIABLE_CSHARP_TYPES.DOUBLE);
             addVariablePrimitive("string", EVARIABLE_CSHARP_TYPES.STRING);
+            addVariablePrimitive("bool", EVARIABLE_CSHARP_TYPES.BOOL);
             addVariablePrimitive("fname", EVARIABLE_CSHARP_TYPES.STRING);
             addVariablePrimitive("fstring", EVARIABLE_CSHARP_TYPES.STRING);
             addVariablePrimitive("KCName", EVARIABLE_CSHARP_TYPES.STRING);
@@ -122,12 +126,14 @@ namespace Library.ClassCreator
 		{
 			try
 			{
+
 				if (File.Exists(strPathAndFile))
 				{
 					object mRawObject = JsonConvert.DeserializeObject(File.ReadAllText(strPathAndFile), m_VariableDefinitions.GetType());
 					if (mRawObject != null)
 					{
-						m_VariableDefinitions = (List<VariableDefinition>)mRawObject;
+                        m_strCurrentFileAndPath = strPathAndFile;
+                        m_VariableDefinitions = (List<VariableDefinition>)mRawObject;
 						return true;
 					}
 				}
@@ -139,6 +145,10 @@ namespace Library.ClassCreator
 			return false;
 		}
 
+        public bool save()
+        {
+            return save(m_strCurrentFileAndPath);
+        }
 		public bool save(string strPathAndFile)
 		{
 			try
@@ -156,7 +166,8 @@ namespace Library.ClassCreator
 					log("ERROR - unable to save variable definitions to " + strPathAndFile);
 					return false;
 				}
-				return true;
+                m_strCurrentFileAndPath = strPathAndFile;
+                return true;
 			}
 			catch (Exception e)
 			{

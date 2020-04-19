@@ -215,7 +215,7 @@ namespace Library
 		//start get property
 		/////////////////////////////////////////////////////////////////
 
-		public string getPropertyValue(string strProperty, string strDefaultValue)
+		public string getPropertyValueString(string strProperty, string strDefaultValue)
 		{
 			getPropertyValue(strProperty, ref strDefaultValue);
 			return strDefaultValue;
@@ -330,6 +330,33 @@ namespace Library
 			}
 			return fDefaultValue;
 		}
+
+        public string getAnyPropertyAsString(string strProperty)
+        {
+            PropertyInfo mProperty = GetType().GetProperty(strProperty);
+            if (mProperty != null)
+            {
+                try
+                {
+                    object mObject = mProperty.GetValue(this);
+                    Type mType = mObject.GetType();
+                    if(mType.IsPrimitive ||
+                       mType == Type.GetType("System.String"))
+                    {
+                        return mObject.ToString();
+                    }
+
+                    return mObject.ToString();
+                }
+                catch (Exception e)
+                {
+                    log("ERROR - attempting to get property " + strProperty + " from object type " + GetType().Name + ". Error was: " + e.Message);
+                    
+                    return "";
+                }
+            }
+            return "";
+        }
 		#endregion
 		/////////////////////////////////////////////////////////////////
 		//End get property
@@ -381,6 +408,9 @@ namespace Library
 		/////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+        
 
 	}
 }

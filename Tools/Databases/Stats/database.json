@@ -1,0 +1,6 @@
+{
+  "databaseName": "Stats",
+  "databaseEntryClass": "FKCStatDefinition",
+  "uniqueMask": 134217728,
+  "guidMask": 65535
+}

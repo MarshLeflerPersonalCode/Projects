@@ -10,6 +10,7 @@ using Library.ClassParser;
 using Library.IO;
 using Library.ClassCreator.Writers;
 using System.Threading;
+using System.Windows.Forms;
 namespace Library.ClassCreator
 {
 
@@ -42,6 +43,12 @@ namespace Library.ClassCreator
 			variableDefinitionHandler = new VariableDefinitionHandler("VariableDefinitions.json");
 
 		}
+
+        public void showVariableDefinitionEditor(Form mParent)
+        {
+            VariableDefinitionEditor mEditor = new VariableDefinitionEditor(this);
+            mEditor.ShowDialog(mParent);
+        }
 
         //shouldn't include the period at the end. Should be something like "Dynamic" or "Dynamic.Class". Default is "Dynamic"
         public void setNamespace(string strNamespace) { m_strNamespace = strNamespace; }
@@ -125,7 +132,8 @@ namespace Library.ClassCreator
 			_buildMasterFile();
 			_compileCode();			
 			m_ClassesCompiled.Clear();
-            if (m_CompileResults.Errors.HasErrors == false)
+            if (m_CompileResults != null &&
+                m_CompileResults.Errors.HasErrors == false)
             {
                 foreach (Type mType in m_CompileResults.CompiledAssembly.GetTypes())
                 {
@@ -267,7 +275,11 @@ namespace Library.ClassCreator
 					AppDomain currentDomain = AppDomain.CurrentDomain;
 					foreach (Assembly mAssembly in currentDomain.GetAssemblies())
 					{
-						parms.ReferencedAssemblies.Add(mAssembly.Location);
+                        try
+                        {
+                            parms.ReferencedAssemblies.Add(mAssembly.Location);
+                        }
+                        catch { }
 					}
 					string strExecutableAssembly = Assembly.GetExecutingAssembly().Location;
 					//parms.ReferencedAssemblies.Add(strExecutableAssembly);

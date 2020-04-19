@@ -27,7 +27,14 @@ namespace Library.ClassParser.Private
 			{
 				strFileContents = strFileContents + mFile.writeTime.Ticks.ToString() + "|" + mFile.file + Environment.NewLine;
 			}
-			File.WriteAllText(strPathAndFile, strFileContents);
+            try
+            {
+                File.WriteAllText(strPathAndFile, strFileContents);
+            }
+            catch
+            {
+                return false;
+            }
 			return File.Exists(strPathAndFile);
 		}
 

@@ -873,7 +873,7 @@ namespace Library.ClassParser.Private
 					return true;
 				}
 
-				int iEnumItemNameIndex = -1;
+				int iEnumItemNameIndex = strLine.Length;
 				for(int iIndex = 0; iIndex < strLine.Length; iIndex++)
 				{
 					if(strLine[iIndex] == ' ' ||

@@ -429,6 +429,12 @@ namespace CustomControls
 				arrayListView.Items[arrayListView.Items.Count - 1].Focused = true;
 				arrayListView.Items[arrayListView.Items.Count - 1].Selected = true;
 			}
+
+            if(objectListView.SelectedItems != null &&
+                objectListView.SelectedItems.Count == 1 )
+            {
+                objectListView.SelectedItems[0].SubItems[0].Text = m_ArrayList.Count.ToString();
+            }
 		}
 		private ArrayViewerData getSelectedArray()
 		{

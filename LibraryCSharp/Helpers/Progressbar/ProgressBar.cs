@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
 
-namespace StatEditor
+namespace Library
 {
 	public partial class ProgressBar : Form
 	{
@@ -25,8 +25,8 @@ namespace StatEditor
 			m_LabelForDisplay.Text = "";
 			m_StopWatch = Stopwatch.StartNew();
 		}
-
-		public void setEstimated(double fEstimated)
+        public double getTime() { return m_StopWatch.Elapsed.TotalSeconds; }
+        public void setEstimated(double fEstimated)
 		{
 			m_fEstimatedTime = fEstimated;
 		}
@@ -44,7 +44,7 @@ namespace StatEditor
 			m_LabelForDisplay.Text = m_strMessageToShow;
 			m_Mutex.ReleaseMutex();
 			double fPercent = Math.Min(1.0, m_StopWatch.Elapsed.TotalSeconds / m_fEstimatedTime);
-			m_ProgressBar.Value = Math.Max(1, (int)(fPercent * (double)m_ProgressBar.Maximum) );
+			m_ProgressBar.Value = Math.Max(0, (int)(fPercent * (double)m_ProgressBar.Maximum) );
 		}
 	}
 }

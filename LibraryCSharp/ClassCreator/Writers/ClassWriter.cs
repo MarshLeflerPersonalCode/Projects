@@ -20,8 +20,31 @@ namespace Library.ClassCreator.Writers
             strClass = strClass + "    public class " + mClass.name + ": ClassInstance" + Environment.NewLine;
 
 
-            strClass = strClass + "    {" + Environment.NewLine;
-            //todo add properties in.
+            strClass = strClass + "    {" + Environment.NewLine;            
+            strClass = strClass + _writeVariables(mManager, mClass, mProjectWrapper);           
+            strClass = strClass + Environment.NewLine + "    } //end of " + mClass.name + Environment.NewLine;
+
+            return strClass;
+        }
+        private static string _writeHierarchy(ClassCreatorManager mManager, ClassStructure mClass, ProjectWrapper mProjectWrapper)
+        {
+            string strHierarchyVariables = "";
+            foreach(string strClass in mClass.classStructuresInheritingFrom)
+            {
+                ClassStructure mClassParent = mProjectWrapper.getClassStructByName(strClass);
+                if(mClassParent == null )
+                {
+                    mManager.log("WARNING - class " + mClass.name + " is inheriting from " + strClass + ". But the class doesn't seem to be serialized. This might be okay depending on if those properties need to be serialized or not.");
+                    continue;
+                }
+                strHierarchyVariables = strHierarchyVariables + _writeVariables(mManager, mClassParent, mProjectWrapper);
+            }
+            return strHierarchyVariables;
+        }
+        private static string _writeVariables(ClassCreatorManager mManager, ClassStructure mClass, ProjectWrapper mProjectWrapper)
+        {
+            string strClass = "";
+            strClass = strClass + _writeHierarchy(mManager, mClass, mProjectWrapper);
             foreach (ClassVariable mVariable in mClass.variables)
             {
                 if (mVariable.isPrivateVariable == false &&
@@ -32,8 +55,6 @@ namespace Library.ClassCreator.Writers
                     strClass = strClass + strReplace;
                 }
             }
-            strClass = strClass + Environment.NewLine + "    } //end of " + mClass.name + Environment.NewLine;
-
             return strClass;
         }
 
