@@ -15,8 +15,10 @@ namespace Library
         public InputBox()
         {
             InitializeComponent();
+            isSafeInput = true;
         }
 
+        public bool isSafeInput { get; set; }
         public string inputBox
         {
             get
@@ -59,6 +61,34 @@ namespace Library
                 this.DialogResult = DialogResult.OK;
                 this.Close();
             }
+            if(e.Control ||
+                e.Alt)
+            {
+                return;
+            }
+            
+        }
+
+        private void txtBox_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (isSafeInput == false ||
+                char.IsDigit(e.KeyChar) ||
+                char.IsLetter(e.KeyChar) ||
+                e.KeyChar == (char)Keys.Space ||
+                e.KeyChar == (char)Keys.Back ||
+                e.KeyChar == (char)Keys.Left ||
+                e.KeyChar == (char)Keys.Right ||
+                e.KeyChar == (char)Keys.Delete)
+            {
+                if (e.KeyChar != '%' &&
+                   e.KeyChar != '\'' &&
+                   e.KeyChar != '.')
+                {
+                    e.Handled = false;
+                    return;
+                }
+            }
+            e.Handled = true;
         }
     }
 }

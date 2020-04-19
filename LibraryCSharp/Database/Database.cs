@@ -142,11 +142,12 @@ namespace Library.Database
             {
                 return strFileName;
             }
-            return strFileName + ".json";
+            return strFileName.Replace(" ", "_") + ".json";
         }
         private void _setEntryFileName(ClassInstance mEntry, string strFileName)
         {
-            if( strFileName.EndsWith(".json") == false )
+            strFileName = strFileName.Replace(" ", "_");
+            if ( strFileName.EndsWith(".json") == false )
             {
                 strFileName = strFileName + ".json";
             }

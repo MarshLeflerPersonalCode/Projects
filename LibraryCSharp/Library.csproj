@@ -86,6 +86,7 @@
     <Compile Include="Helpers\InputBox\InputBox.Designer.cs">
       <DependentUpon>InputBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ListViewComparer.cs" />
     <Compile Include="Helpers\Progressbar\ProgressBar.cs">
       <SubType>Form</SubType>
     </Compile>

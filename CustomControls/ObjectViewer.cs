@@ -36,13 +36,21 @@ namespace CustomControls
 		//sets the object you want to see
 		public void setObjectViewing(object obj)
 		{
-			m_ObjectsList.Clear();
+            if (obj == null)
+            {
+                return;
+            }
+            m_ObjectsList.Clear();
 			m_ObjectsList.Add(obj);
 			m_bObjectListDirty = true;
 			_invalidateObjectsModifying();
 		}
 		public bool addObjectViewing(object obj)
 		{			
+            if(obj == null)
+            {
+                return false;
+            }
 			if( m_ObjectsList.Count > 0 )
 			{
 				if( m_ObjectsList[0].GetType() != obj.GetType())

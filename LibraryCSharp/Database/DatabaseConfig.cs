@@ -44,7 +44,7 @@ namespace Library.Database
             propertyFilters = new List<PropertyFilterData>();
             propertyFilters.Add(new PropertyFilterData("m_strName", 120));
             propertyFilters.Add(new PropertyFilterData("m_DatabaseGuid", 80));
-
+            multiSelect = false;
         }
 
         public string getDatabaseConfigPathAndFile() { return m_strConfigPath; }
@@ -61,6 +61,9 @@ namespace Library.Database
 
         [DisplayName("Guid Mask"), Description("This is the mask in which the guid is actually generated in. Should be a number that represents something like 0xFFFF(65535)")]
         public int guidMask { get; set; }
+
+        [DisplayName("Multiselect"), Description("If true you can multiselect multiple items to edit.")]
+        public bool multiSelect { get; set; }
 
         [Category("Properties To Filter By"), DisplayName("Variables"), Description("This should be a variable you want to display. This will be the code value. Such as m_strName")]
         public List<PropertyFilterData> propertyFilters { get; set; }

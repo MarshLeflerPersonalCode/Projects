@@ -55,6 +55,7 @@
             this.txtBox.Size = new System.Drawing.Size(432, 20);
             this.txtBox.TabIndex = 1;
             this.txtBox.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtBox_KeyDown);
+            this.txtBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtBox_KeyPress);
             // 
             // panel1
             // 

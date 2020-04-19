@@ -30,6 +30,7 @@ namespace StatEditor
             waiting_for_core,
             done
         };
+        
         private bool m_bDirty = false;
         private Database m_ActiveDatabase = null;
         private ELOAD_STATE m_eLoadState = ELOAD_STATE.configure;
@@ -180,7 +181,9 @@ namespace StatEditor
             {
                 log("ERROR - unable to find database: " + strDatabase);
             }
+
             m_StatListView.SuspendLayout();
+            m_StatListView.MultiSelect = m_ActiveDatabase.getConfig().multiSelect;
             m_StatListView.Items.Clear();
             m_StatListView.Columns.Clear();
             foreach(PropertyFilterData mPropertyFilterData in m_ActiveDatabase.getConfig().propertyFilters)
@@ -194,10 +197,7 @@ namespace StatEditor
             {
                 _addColumn("m_strName", null);
             }
-            foreach (ClassInstance mInstance in m_ActiveDatabase.getEntries())
-            {
-                _addInstanceToListView(mInstance);
-            }
+            _filter(false);
             m_StatListView.ResumeLayout();
         }
 
@@ -298,6 +298,13 @@ namespace StatEditor
                 MessageBox.Show("Unable to get name from object.", "Unknown Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return false;
             }
+
+            if(txtBoxFilterListView.Text != "" &&
+                strName.ToUpper().Contains(txtBoxFilterListView.Text.ToUpper()) == false)
+            {
+                return false;
+            }
+
             ListViewItem mNewListViewItem = new ListViewItem(strName);
             m_StatListView.Items.Add(mNewListViewItem);
             m_ObjectsToListViewItem.Add(mInstance, mNewListViewItem);
@@ -574,6 +581,51 @@ namespace StatEditor
             }
             m_StatListView.ResumeLayout();
             _setDirty(true);
+        }
+
+        private void m_StatListView_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            switch( m_StatListView.Sorting)
+            {
+                case SortOrder.Ascending:
+                    m_StatListView.Sorting = SortOrder.Descending;
+                    break;
+                case SortOrder.Descending:
+                    m_StatListView.Sorting = SortOrder.Ascending;
+                    break;
+            }
+            m_StatListView.ListViewItemSorter = new ListViewComparer(e.Column, m_StatListView.Sorting);
+            m_StatListView.Sort();
+        }
+
+        private void txtBoxFilterListView_TextChanged(object sender, EventArgs e)
+        {
+            timerForFilter.Enabled = true;
+        }
+
+        private void timerForFilter_Tick(object sender, EventArgs e)
+        {
+            _filter(true);
+            timerForFilter.Enabled = false;
+        }
+
+        private void _filter( bool bSuspendLayout)
+        {
+            if( bSuspendLayout )
+            {
+                m_StatListView.SuspendLayout();
+            }
+            m_ObjectsToListViewItem.Clear();
+            m_StatListView.Items.Clear();
+            //todo show all
+            foreach (ClassInstance mInstance in m_ActiveDatabase.getEntries())
+            {
+                _addInstanceToListView(mInstance);
+            }
+            if ( bSuspendLayout )
+            {
+                m_StatListView.ResumeLayout();
+            }
         }
     }//end class
 } //end namespace

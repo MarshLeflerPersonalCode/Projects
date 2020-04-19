@@ -31,27 +31,28 @@ namespace StatEditor
             this.components = new System.ComponentModel.Container();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyNamectrlcToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyGuidctrlgToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.databasesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.variableTypesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.m_StatListView = new System.Windows.Forms.ListView();
-            this.TypeHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.NameHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.GraphHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.GuidHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.panel1 = new System.Windows.Forms.Panel();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.timerProcessClasses = new System.Windows.Forms.Timer(this.components);
-            this.configurationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.databasesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.GuidHeader = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.variableTypesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.copyNamectrlcToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.copyGuidctrlgToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statObjectViewer = new CustomControls.ObjectViewer();
+            this.txtBoxFilterListView = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.timerForFilter = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -59,6 +60,7 @@ namespace StatEditor
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -80,6 +82,64 @@ namespace StatEditor
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
+            // 
+            // saveToolStripMenuItem
+            // 
+            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.saveToolStripMenuItem.Text = "&Save";
+            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
+            // 
+            // editToolStripMenuItem
+            // 
+            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyNamectrlcToolStripMenuItem,
+            this.copyGuidctrlgToolStripMenuItem});
+            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.editToolStripMenuItem.Text = "&Edit";
+            // 
+            // copyNamectrlcToolStripMenuItem
+            // 
+            this.copyNamectrlcToolStripMenuItem.Name = "copyNamectrlcToolStripMenuItem";
+            this.copyNamectrlcToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.copyNamectrlcToolStripMenuItem.Text = "&Copy Name(ctrl+c)";
+            // 
+            // copyGuidctrlgToolStripMenuItem
+            // 
+            this.copyGuidctrlgToolStripMenuItem.Name = "copyGuidctrlgToolStripMenuItem";
+            this.copyGuidctrlgToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+            this.copyGuidctrlgToolStripMenuItem.Text = "Copy &Guid(ctrl+g)";
+            // 
+            // configurationToolStripMenuItem
+            // 
+            this.configurationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolsToolStripMenuItem,
+            this.databasesToolStripMenuItem,
+            this.variableTypesToolStripMenuItem});
+            this.configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
+            this.configurationToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
+            this.configurationToolStripMenuItem.Text = "&Configuration";
+            // 
+            // toolsToolStripMenuItem
+            // 
+            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.toolsToolStripMenuItem.Text = "&Tools";
+            // 
+            // databasesToolStripMenuItem
+            // 
+            this.databasesToolStripMenuItem.Name = "databasesToolStripMenuItem";
+            this.databasesToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.databasesToolStripMenuItem.Text = "&Databases";
+            this.databasesToolStripMenuItem.Click += new System.EventHandler(this.databasesToolStripMenuItem_Click);
+            // 
+            // variableTypesToolStripMenuItem
+            // 
+            this.variableTypesToolStripMenuItem.Name = "variableTypesToolStripMenuItem";
+            this.variableTypesToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.variableTypesToolStripMenuItem.Text = "Variable Types";
+            this.variableTypesToolStripMenuItem.Click += new System.EventHandler(this.variableTypesToolStripMenuItem_Click);
             // 
             // statusStrip1
             // 
@@ -135,29 +195,23 @@ namespace StatEditor
             // 
             this.m_StatListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.NameHeader,
-            this.GuidHeader,
-            this.TypeHeader,
-            this.GraphHeader});
+            this.GuidHeader});
             this.m_StatListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_StatListView.FullRowSelect = true;
             this.m_StatListView.GridLines = true;
             this.m_StatListView.HideSelection = false;
-            this.m_StatListView.Location = new System.Drawing.Point(0, 66);
+            this.m_StatListView.Location = new System.Drawing.Point(0, 50);
             this.m_StatListView.MultiSelect = false;
             this.m_StatListView.Name = "m_StatListView";
-            this.m_StatListView.Size = new System.Drawing.Size(260, 527);
+            this.m_StatListView.Size = new System.Drawing.Size(260, 543);
             this.m_StatListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.m_StatListView.TabIndex = 1;
             this.m_StatListView.UseCompatibleStateImageBehavior = false;
             this.m_StatListView.View = System.Windows.Forms.View.Details;
+            this.m_StatListView.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.m_StatListView_ColumnClick);
             this.m_StatListView.SelectedIndexChanged += new System.EventHandler(this.m_StatListView_SelectedIndexChanged);
             this.m_StatListView.KeyDown += new System.Windows.Forms.KeyEventHandler(this.m_StatListView_KeyDown);
             this.m_StatListView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.m_StatListView_MouseDown);
-            // 
-            // TypeHeader
-            // 
-            this.TypeHeader.Tag = "Type";
-            this.TypeHeader.Text = "Type";
             // 
             // NameHeader
             // 
@@ -165,18 +219,22 @@ namespace StatEditor
             this.NameHeader.Text = "Name";
             this.NameHeader.Width = 150;
             // 
-            // GraphHeader
+            // GuidHeader
             // 
-            this.GraphHeader.Text = "Graph";
-            this.GraphHeader.Width = 200;
+            this.GuidHeader.Text = "Guid";
+            this.GuidHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.GuidHeader.Width = 80;
             // 
             // panel1
             // 
             this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.txtBoxFilterListView);
+            this.panel1.Controls.Add(this.label3);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(260, 66);
+            this.panel1.Padding = new System.Windows.Forms.Padding(10);
+            this.panel1.Size = new System.Drawing.Size(260, 50);
             this.panel1.TabIndex = 0;
             // 
             // tabPage2
@@ -194,70 +252,6 @@ namespace StatEditor
             this.timerProcessClasses.Interval = 5;
             this.timerProcessClasses.Tick += new System.EventHandler(this.timerProcessClasses_Tick);
             // 
-            // configurationToolStripMenuItem
-            // 
-            this.configurationToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolsToolStripMenuItem,
-            this.databasesToolStripMenuItem,
-            this.variableTypesToolStripMenuItem});
-            this.configurationToolStripMenuItem.Name = "configurationToolStripMenuItem";
-            this.configurationToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
-            this.configurationToolStripMenuItem.Text = "&Configuration";
-            // 
-            // toolsToolStripMenuItem
-            // 
-            this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.toolsToolStripMenuItem.Text = "&Tools";
-            // 
-            // databasesToolStripMenuItem
-            // 
-            this.databasesToolStripMenuItem.Name = "databasesToolStripMenuItem";
-            this.databasesToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.databasesToolStripMenuItem.Text = "&Databases";
-            this.databasesToolStripMenuItem.Click += new System.EventHandler(this.databasesToolStripMenuItem_Click);
-            // 
-            // GuidHeader
-            // 
-            this.GuidHeader.Text = "Guid";
-            this.GuidHeader.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.GuidHeader.Width = 80;
-            // 
-            // variableTypesToolStripMenuItem
-            // 
-            this.variableTypesToolStripMenuItem.Name = "variableTypesToolStripMenuItem";
-            this.variableTypesToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.variableTypesToolStripMenuItem.Text = "Variable Types";
-            this.variableTypesToolStripMenuItem.Click += new System.EventHandler(this.variableTypesToolStripMenuItem_Click);
-            // 
-            // saveToolStripMenuItem
-            // 
-            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
-            this.saveToolStripMenuItem.Text = "&Save";
-            this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
-            // 
-            // editToolStripMenuItem
-            // 
-            this.editToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.copyNamectrlcToolStripMenuItem,
-            this.copyGuidctrlgToolStripMenuItem});
-            this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
-            this.editToolStripMenuItem.Text = "&Edit";
-            // 
-            // copyNamectrlcToolStripMenuItem
-            // 
-            this.copyNamectrlcToolStripMenuItem.Name = "copyNamectrlcToolStripMenuItem";
-            this.copyNamectrlcToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
-            this.copyNamectrlcToolStripMenuItem.Text = "&Copy Name(ctrl+c)";
-            // 
-            // copyGuidctrlgToolStripMenuItem
-            // 
-            this.copyGuidctrlgToolStripMenuItem.Name = "copyGuidctrlgToolStripMenuItem";
-            this.copyGuidctrlgToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
-            this.copyGuidctrlgToolStripMenuItem.Text = "Copy &Guid(ctrl+g)";
-            // 
             // statObjectViewer
             // 
             this.statObjectViewer.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -266,6 +260,29 @@ namespace StatEditor
             this.statObjectViewer.Size = new System.Drawing.Size(564, 593);
             this.statObjectViewer.TabIndex = 0;
             this.statObjectViewer.PropertyValueChanged += new CustomControls.ObjectViewer.PropertyValueChangedHandler(this.statObjectViewer_PropertyValueChanged);
+            // 
+            // txtBoxFilterListView
+            // 
+            this.txtBoxFilterListView.Dock = System.Windows.Forms.DockStyle.Top;
+            this.txtBoxFilterListView.Location = new System.Drawing.Point(10, 23);
+            this.txtBoxFilterListView.Name = "txtBoxFilterListView";
+            this.txtBoxFilterListView.Size = new System.Drawing.Size(238, 20);
+            this.txtBoxFilterListView.TabIndex = 7;
+            this.txtBoxFilterListView.TextChanged += new System.EventHandler(this.txtBoxFilterListView_TextChanged);
+            // 
+            // label3
+            // 
+            this.label3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(10, 10);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(238, 13);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Filter";
+            // 
+            // timerForFilter
+            // 
+            this.timerForFilter.Tick += new System.EventHandler(this.timerForFilter_Tick);
             // 
             // StatEditorForm
             // 
@@ -289,6 +306,8 @@ namespace StatEditor
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -303,9 +322,7 @@ namespace StatEditor
 		private System.Windows.Forms.TabPage tabPage1;
 		private System.Windows.Forms.SplitContainer splitContainer1;
 		private System.Windows.Forms.ListView m_StatListView;
-		private System.Windows.Forms.ColumnHeader TypeHeader;
 		private System.Windows.Forms.ColumnHeader NameHeader;
-		private System.Windows.Forms.ColumnHeader GraphHeader;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.TabPage tabPage2;
 		private System.Windows.Forms.Timer timerProcessClasses;
@@ -319,6 +336,9 @@ namespace StatEditor
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyNamectrlcToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem copyGuidctrlgToolStripMenuItem;
+        private System.Windows.Forms.TextBox txtBoxFilterListView;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Timer timerForFilter;
     }
 }
 

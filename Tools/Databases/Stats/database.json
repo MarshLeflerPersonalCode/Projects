@@ -3,6 +3,7 @@
   "databaseEntryClass": "FKCStatDefinition",
   "uniqueMask": 134217728,
   "guidMask": 65535,
+  "multiSelect": true,
   "propertyFilters": [
     {
       "VariableName": "m_strName",
