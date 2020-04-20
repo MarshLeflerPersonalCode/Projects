@@ -333,10 +333,6 @@ namespace Library
             Type mType = mObject.GetType();
 
             string strFieldName = mFieldInfo.Name;
-            if( strFieldName == "m_eTest")
-            {
-                mLogFile.log("Test");
-            }
             if (mType.IsEnum)
             {
                 return;
