@@ -292,17 +292,20 @@ namespace CommandLineSerializer
 		{
 			
 
-			string strFullPath = Path.Combine(commandLineArguments.getCommandValueAsString("-IntermediateDir"), "CommandLineSerializer.cfg");
-			
-			string strError = "";
-			DataGroup mDataGroupTest = DataGroup.createFromFile(strFullPath, ref strError);
-			m_ConfigFile = DataGroup.deserializeObjectFromFile(strFullPath, ref strError) as SerializerConfigFile;
-			if( strError != "" )
+			string strFullPath = Path.Combine(commandLineArguments.getCommandValueAsString("-IntermediateDir"), "CommandLineSerializer.json");
+
+            string strErrors = "";
+			m_ConfigFile = SerializerConfigFile.createConfigFile(strFullPath, ref strErrors);
+			if(m_ConfigFile == null)
 			{
-				log("ERROR - " + strError);
+                if(strErrors != "")
+                {
+                    log(strErrors);
+                }
+                log("Creating new config file for command line parser.");
 				m_ConfigFile = new SerializerConfigFile();
 			}
-			m_ConfigFile.initialize( this, "CommandLineSerializer.cfg");
+			m_ConfigFile.initialize( this, "CommandLineSerializer.json");
 			
 		}
 
@@ -353,8 +356,9 @@ namespace CommandLineSerializer
 			}
 		}
 
+        public LogFile getLogFile() { return m_LogFile; }
 
-		public bool _findHeaders()
+        public bool _findHeaders()
 		{
 			string strPathToIntermediateDir = commandLineArguments.getCommandValueAsString("-IntermediateDir");
 

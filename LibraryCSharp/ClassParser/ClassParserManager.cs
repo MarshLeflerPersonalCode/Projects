@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using Library.ClassParser.Private;
 using System.Reflection;
 using System.Runtime.Serialization;
-using System.Xml.Serialization;
-using System.Xml;
 using System.IO;
 using Library.IO;
 using System.Timers;
@@ -279,7 +277,7 @@ namespace Library.ClassParser
 				if( strValue == null ||
 					strValue == "" )
 				{
-					log("ERROR - Unable to parse Class Structures into XML.");
+					log("ERROR - Unable to parse Class Structures into json.");
 					return false;
 				}
 				File.WriteAllText(strPathAndFile, strValue);

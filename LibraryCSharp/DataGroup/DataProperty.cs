@@ -22,10 +22,29 @@ namespace Library
 		STRING,
 		COUNT
 	};
+    public static class EDATAGROUP_CSHARP_TYPES_NAMES
+    {
+        
+        public static KeyValuePair<string, EDATAGROUP_VARIABLE_TYPES>[] g_Names = new KeyValuePair<string, EDATAGROUP_VARIABLE_TYPES>[] {
+            new KeyValuePair<string, EDATAGROUP_VARIABLE_TYPES>( "Boolean", EDATAGROUP_VARIABLE_TYPES.BOOL ),
+            new KeyValuePair<string, EDATAGROUP_VARIABLE_TYPES>( "Byte",EDATAGROUP_VARIABLE_TYPES.CHAR ),
+            new KeyValuePair<string, EDATAGROUP_VARIABLE_TYPES>( "SByte",EDATAGROUP_VARIABLE_TYPES.INT8 ),
+            new KeyValuePair<string, EDATAGROUP_VARIABLE_TYPES>( "Byte",EDATAGROUP_VARIABLE_TYPES.UINT8 ),
+            new KeyValuePair<string, EDATAGROUP_VARIABLE_TYPES>( "Int16",EDATAGROUP_VARIABLE_TYPES.INT16 ),
+            new KeyValuePair<string, EDATAGROUP_VARIABLE_TYPES>( "UInt16",EDATAGROUP_VARIABLE_TYPES.UINT16 ),
+            new KeyValuePair<string, EDATAGROUP_VARIABLE_TYPES>( "Int32",EDATAGROUP_VARIABLE_TYPES.INT32 ),
+            new KeyValuePair<string, EDATAGROUP_VARIABLE_TYPES>( "UInt32",EDATAGROUP_VARIABLE_TYPES.UINT32 ),
+            new KeyValuePair<string, EDATAGROUP_VARIABLE_TYPES>( "Int64",EDATAGROUP_VARIABLE_TYPES.INT64 ),
+            new KeyValuePair<string, EDATAGROUP_VARIABLE_TYPES>( "UInt64",EDATAGROUP_VARIABLE_TYPES.UINT64),
+            new KeyValuePair<string, EDATAGROUP_VARIABLE_TYPES>( "Single",EDATAGROUP_VARIABLE_TYPES.FLOAT),
+            new KeyValuePair<string, EDATAGROUP_VARIABLE_TYPES>( "Double",EDATAGROUP_VARIABLE_TYPES.FLOAT),
+            new KeyValuePair<string, EDATAGROUP_VARIABLE_TYPES>( "String", EDATAGROUP_VARIABLE_TYPES.STRING )
+		};
+
+    }
 
 
-
-	public class DataProperty
+    public class DataProperty
 	{
 		private static Dictionary<string, EDATAGROUP_VARIABLE_TYPES> g_NamesToTypes = new Dictionary<string, EDATAGROUP_VARIABLE_TYPES>();
 		
@@ -101,8 +120,8 @@ namespace Library
 					}
 					break;
 				case EDATAGROUP_VARIABLE_TYPES.CHAR:
-				case EDATAGROUP_VARIABLE_TYPES.INT8:
-					{
+                case EDATAGROUP_VARIABLE_TYPES.UINT8:
+                {
 						byte iValue = 0;
 						if (Byte.TryParse(strValue, out iValue))
 						{
@@ -111,7 +130,7 @@ namespace Library
 						}
 					}
 					break;
-				case EDATAGROUP_VARIABLE_TYPES.UINT8:
+                case EDATAGROUP_VARIABLE_TYPES.INT8:                
 					{
 						sbyte iValue = 0;
 						if (SByte.TryParse(strValue, out iValue))
@@ -215,9 +234,104 @@ namespace Library
 		public void setProperty(double fValue) { m_fValue = Convert.ToDouble(fValue); propertyType = EDATAGROUP_VARIABLE_TYPES.FLOAT; }
 		public void setProperty(string strValue) { m_strValue = strValue; propertyType = EDATAGROUP_VARIABLE_TYPES.STRING; }
 
-		//gets/sets the data property name
-		
-		public bool getAsBool() { return Convert.ToBoolean(m_iValue); }
+        public bool setPropertyByPrimitiveType(Object mObject)
+        {
+            if( mObject == null)
+            {
+                return false;
+            }
+            Type mType = mObject.GetType();
+            foreach(KeyValuePair<string, EDATAGROUP_VARIABLE_TYPES> mTypeConvert in EDATAGROUP_CSHARP_TYPES_NAMES.g_Names)
+            {
+                if (mTypeConvert.Key == mType.Name)
+                {
+                    try
+                    {
+                        switch (mTypeConvert.Value)
+                        {
+                            case EDATAGROUP_VARIABLE_TYPES.COUNT:
+                                return false;
+                            case EDATAGROUP_VARIABLE_TYPES.BOOL:
+                            {
+                                setProperty((bool)mObject);
+                            }
+                            break;
+
+                            case EDATAGROUP_VARIABLE_TYPES.INT8:
+                            {
+                                setProperty((sbyte)mObject);
+                            }
+                            break;
+                            case EDATAGROUP_VARIABLE_TYPES.CHAR:
+                            case EDATAGROUP_VARIABLE_TYPES.UINT8:
+                            {
+                                setProperty((byte)mObject);
+                            }
+                            break;
+                            case EDATAGROUP_VARIABLE_TYPES.INT16:
+                            {
+                                setProperty((short)mObject);
+                            }
+                            break;
+                            case EDATAGROUP_VARIABLE_TYPES.UINT16:
+                            {
+                                setProperty((ushort)mObject);
+                            }
+                            break;
+                            default:
+                            case EDATAGROUP_VARIABLE_TYPES.INT32:
+                            {
+                                setProperty((int)mObject);
+                            }
+                            break;
+                            case EDATAGROUP_VARIABLE_TYPES.UINT32:
+                            {
+                                setProperty((uint)mObject);
+                            }
+                            break;
+                            case EDATAGROUP_VARIABLE_TYPES.INT64:
+                            {
+                                setProperty((long)mObject);
+                            }
+                            break;
+                            case EDATAGROUP_VARIABLE_TYPES.UINT64:
+                            {
+                                setProperty((ulong)mObject);
+                            }
+                            break;
+                            case EDATAGROUP_VARIABLE_TYPES.FLOAT:
+                            {
+                                try
+                                {
+                                    setProperty((Single)mObject);
+                                }
+                                catch
+                                {
+                                    setProperty((double)mObject);
+                                }
+                            }
+                            break;
+                            case EDATAGROUP_VARIABLE_TYPES.STRING:
+                            {
+                                setProperty((string)mObject);
+                            }
+                            break;
+                        }
+                        return true;
+                    }
+                    catch(Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    return false;
+                }
+            }
+            return false;
+        }
+
+        //gets/sets the data property name
+
+        public bool getAsBool() { return Convert.ToBoolean(m_iValue); }
 		public sbyte getAsInt8() { return Convert.ToSByte(m_iValue); }
 		public byte getAsUInt8() { return Convert.ToByte(m_iValue); }
 		public short getAsInt16() { return Convert.ToInt16(m_iValue); }
@@ -304,7 +418,7 @@ namespace Library
 
 		public string getSaveString() 
 		{ 
-			return "<" + propertyName + " Type=\"" + getPropertyTypeName() +"\">" + getPropertyValueAsString() + "</" + propertyName + ">"; 
+			return "<" + getPropertyTypeName() + ">"+ propertyName +":" + getPropertyValueAsString() + Environment.NewLine; 
 		}
 
 		public static DataProperty createPropertyFromSaveString(string strStringToParse)
