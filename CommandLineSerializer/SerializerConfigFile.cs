@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 using System.ComponentModel;
 using System.IO;
-using Library.DataGroup;
+using Library;
 
 namespace CommandLineSerializer
 {

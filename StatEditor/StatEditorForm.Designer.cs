@@ -124,8 +124,9 @@ namespace StatEditor
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.toolsToolStripMenuItem.Text = "&Tools";
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.toolsToolStripMenuItem.Text = "&Editor";
+            this.toolsToolStripMenuItem.Click += new System.EventHandler(this.toolsToolStripMenuItem_Click);
             // 
             // databasesToolStripMenuItem
             // 
@@ -137,8 +138,8 @@ namespace StatEditor
             // variableTypesToolStripMenuItem
             // 
             this.variableTypesToolStripMenuItem.Name = "variableTypesToolStripMenuItem";
-            this.variableTypesToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.variableTypesToolStripMenuItem.Text = "Variable Types";
+            this.variableTypesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.variableTypesToolStripMenuItem.Text = "&Variable Types";
             this.variableTypesToolStripMenuItem.Click += new System.EventHandler(this.variableTypesToolStripMenuItem_Click);
             // 
             // statusStrip1

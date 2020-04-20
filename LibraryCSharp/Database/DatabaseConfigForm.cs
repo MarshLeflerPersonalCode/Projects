@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Library.Database
@@ -37,7 +38,7 @@ namespace Library.Database
 
         private void _refresh()
         {
-            txtBoxRootFolder.Text = m_DatabaseManager.getDatabaseDirectory();
+            txtBoxRootFolder.Text = Path.GetFullPath( m_DatabaseManager.getDatabaseDirectory());
             lstViewDatabases.Items.Clear();
             foreach (Database mDatabase in m_DatabaseManager.databases)
             {

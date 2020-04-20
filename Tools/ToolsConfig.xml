@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-16"?>
-<ClassConstructionAndDBHandlerConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <sourcePath>..\CoreClasses\</sourcePath>
-  <databaseFolder>.\Databases\</databaseFolder>
-  <estimatedLoadTime>1</estimatedLoadTime>
-</ClassConstructionAndDBHandlerConfig>

@@ -10,8 +10,7 @@ using Library.ClassCreator;
 using Library.ClassParser;
 using Library.Database;
 using Library.IO;
-using System.Xml.Serialization;
-using System.Xml;
+using Newtonsoft.Json;
 
 namespace Library
 {
@@ -180,13 +179,18 @@ namespace Library
             }
         }
 
+        public void showEditorConfigForm(Form mParent)
+        {
+            ClassConstructionAndDBHandlerForm mConfigForm = new ClassConstructionAndDBHandlerForm(m_Config);
+            mConfigForm.ShowDialog(mParent);
+        }
 
     }//end class
 
 
     public class ClassConstructionAndDBHandlerConfig
     {
-        private string m_strFileNameAndPath = "ToolsConfig.xml";
+        private string m_strFileNameAndPath = "ToolsConfig.json";
         public ClassConstructionAndDBHandlerConfig()
         {
             sourcePath = "..\\CoreClasses\\";
@@ -206,18 +210,23 @@ namespace Library
 
         public static ClassConstructionAndDBHandlerConfig create()
         {
-            return create("ToolsConfig.xml");
+            return create("ToolsConfig.json");
         }
         public static ClassConstructionAndDBHandlerConfig create(string strPath)
         {
             
-            Type mType = Type.GetType("Library.ClassConstructionAndDBHandlerConfig");            
-            System.Xml.Serialization.XmlSerializer mXmlSerailizer = new System.Xml.Serialization.XmlSerializer(mType);
+            Type mType = Type.GetType("Library.ClassConstructionAndDBHandlerConfig");                        
             try
             {
-                ClassConstructionAndDBHandlerConfig mConfig = (ClassConstructionAndDBHandlerConfig)mXmlSerailizer.Deserialize(File.OpenRead(strPath));
-                mConfig.setFileName(strPath);
-                return mConfig;
+                if (File.Exists(strPath))
+                {
+                    ClassConstructionAndDBHandlerConfig mConfig = JsonConvert.DeserializeObject(File.ReadAllText(strPath), mType) as ClassConstructionAndDBHandlerConfig;
+                    if (mConfig != null)
+                    {
+                        mConfig.setFileName(strPath);
+                        return mConfig;
+                    }
+                }
                 
             }
             catch
@@ -235,11 +244,8 @@ namespace Library
         {
             try
             {
-
-                System.Xml.Serialization.XmlSerializer mXmlSerailizer = new System.Xml.Serialization.XmlSerializer(GetType());
-                StringWriter mWriterXml = new StringWriter();
-                mXmlSerailizer.Serialize(mWriterXml, this);
-                File.WriteAllText(strPath, mWriterXml.ToString());
+                string strValue = JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
+                File.WriteAllText(strPath, strValue);
                 if (File.Exists(strPath) == false)
                 {
                     return false;

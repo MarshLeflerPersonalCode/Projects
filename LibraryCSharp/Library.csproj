@@ -46,6 +46,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClassConstructionAndDBHandlerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ClassConstructionAndDBHandlerForm.Designer.cs">
+      <DependentUpon>ClassConstructionAndDBHandlerForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ClassContructionAndDBHandler.cs" />
     <Compile Include="ClassCreator\ClassCreatorManager.cs" />
     <Compile Include="ClassCreator\VariableDefinitionEditor.cs">
@@ -104,12 +110,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CustomControls\CustomControls.csproj">
-      <Project>{0632b60d-0438-46f9-ba76-1ebc9f0263c0}</Project>
-      <Name>CustomControls</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
+    <EmbeddedResource Include="ClassConstructionAndDBHandlerForm.resx">
+      <DependentUpon>ClassConstructionAndDBHandlerForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ClassCreator\VariableDefinitionEditor.resx">
       <DependentUpon>VariableDefinitionEditor.cs</DependentUpon>
     </EmbeddedResource>

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using Library.CommandLine;
 using Library.IO;
-using Library.DataGroup;
+using Library;
 using System.Threading;
 using System.Timers;
 using Library.ClassParser;
@@ -90,7 +90,11 @@ namespace CommandLineSerializer
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-LogFile", "-LF" }, "The log file. Must include the file name.", ""));
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-ForceRecompile", "-FR" }, "Forces all headers to recompile."));
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-SourceDir", "-SD" }, "the directory where the header files will be parsed", ""));
-			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-IntermediateDir", "-ID" }, "the intermediate directory where the source files will be generated. The project must point there.", ""));
+            string strIntermediatePath = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            strIntermediatePath = strIntermediatePath.Substring(0, strIntermediatePath.Length - Path.GetFileName(strIntermediatePath).Length);
+            strIntermediatePath = Path.Combine(strIntermediatePath, "Intermediate");
+
+            commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-IntermediateDir", "-ID" }, "the intermediate directory where the source files will be generated. The project must point there.", strIntermediatePath));
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-MaxThreads", "-MT" }, "Max threads allowed to process headers. Uses Max - 1", Environment.ProcessorCount - 1));
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-Clean", "-c" }, "Cleans all the configs for a full recompile and then exits."));
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-Verbose", "-V" }, "Writes all the details to the log."));
@@ -193,7 +197,8 @@ namespace CommandLineSerializer
 			_addTypeDef("uint16", ESERIALIZE_DATA_TYPE.NUMBER);
 			_addTypeDef("uint64", ESERIALIZE_DATA_TYPE.NUMBER);
 			_addTypeDef("float", ESERIALIZE_DATA_TYPE.NUMBER);
-			_addTypeDef("double", ESERIALIZE_DATA_TYPE.NUMBER);
+            _addTypeDef("bool", ESERIALIZE_DATA_TYPE.NUMBER);
+            _addTypeDef("double", ESERIALIZE_DATA_TYPE.NUMBER);
 			if (commandLineArguments.getCommandValueAsString("-TypeDefs") != "")
 			{
 				_parseTypeDefs(commandLineArguments.getCommandValueAsString("-TypeDefs"));
@@ -244,6 +249,7 @@ namespace CommandLineSerializer
 			{
 				log("Cleaning solution.");
 				string strPathToIntermediateDir = commandLineArguments.getCommandValueAsString("-IntermediateDir");
+                Directory.CreateDirectory(strPathToIntermediateDir);
 				if (Directory.Exists(strPathToIntermediateDir) == false)
 				{
 					log("Unable to clean solution. IntermediateDir not set correct. Current value is = " + strPathToIntermediateDir);

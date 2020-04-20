@@ -627,5 +627,10 @@ namespace StatEditor
                 m_StatListView.ResumeLayout();
             }
         }
+
+        private void toolsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_Core.showEditorConfigForm(this);
+        }
     }//end class
 } //end namespace

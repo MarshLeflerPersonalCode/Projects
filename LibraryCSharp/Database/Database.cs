@@ -389,7 +389,7 @@ namespace Library.Database
             }
             catch(Exception e)
             {
-                log("Error - in deleting entry " + strEntryname + " in database " + databaseName);
+                log("Error - in deleting entry " + strEntryname + " in database " + databaseName + Environment.NewLine + e.Message);
                 return false;
             }
             return true;

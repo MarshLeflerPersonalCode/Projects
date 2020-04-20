@@ -34,7 +34,6 @@
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.btnRootFolder = new System.Windows.Forms.Button();
             this.txtBoxRootFolder = new System.Windows.Forms.TextBox();
             this.propertyGridDBView = new System.Windows.Forms.PropertyGrid();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -107,7 +106,6 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.txtBoxRootFolder);
-            this.groupBox1.Controls.Add(this.btnRootFolder);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox1.Location = new System.Drawing.Point(0, 0);
             this.groupBox1.Name = "groupBox1";
@@ -116,22 +114,13 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Root Folder";
             // 
-            // btnRootFolder
-            // 
-            this.btnRootFolder.Dock = System.Windows.Forms.DockStyle.Right;
-            this.btnRootFolder.Location = new System.Drawing.Point(395, 16);
-            this.btnRootFolder.Name = "btnRootFolder";
-            this.btnRootFolder.Size = new System.Drawing.Size(46, 21);
-            this.btnRootFolder.TabIndex = 0;
-            this.btnRootFolder.Text = "...";
-            this.btnRootFolder.UseVisualStyleBackColor = true;
-            // 
             // txtBoxRootFolder
             // 
             this.txtBoxRootFolder.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtBoxRootFolder.Enabled = false;
             this.txtBoxRootFolder.Location = new System.Drawing.Point(3, 16);
             this.txtBoxRootFolder.Name = "txtBoxRootFolder";
-            this.txtBoxRootFolder.Size = new System.Drawing.Size(392, 20);
+            this.txtBoxRootFolder.Size = new System.Drawing.Size(438, 20);
             this.txtBoxRootFolder.TabIndex = 1;
             // 
             // propertyGridDBView
@@ -185,17 +174,19 @@
             // columnHeader1
             // 
             this.columnHeader1.Text = "Name";
-            this.columnHeader1.Width = 100;
+            this.columnHeader1.Width = 150;
             // 
             // columnHeader2
             // 
+            this.columnHeader2.DisplayIndex = 2;
             this.columnHeader2.Text = "Path";
-            this.columnHeader2.Width = 120;
+            this.columnHeader2.Width = 300;
             // 
             // columnHeader3
             // 
+            this.columnHeader3.DisplayIndex = 1;
             this.columnHeader3.Text = "Class";
-            this.columnHeader3.Width = 200;
+            this.columnHeader3.Width = 150;
             // 
             // DatabaseConfigForm
             // 
@@ -232,7 +223,6 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.TextBox txtBoxRootFolder;
-        private System.Windows.Forms.Button btnRootFolder;
         private System.Windows.Forms.PropertyGrid propertyGridDBView;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button btnNew;
