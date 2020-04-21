@@ -85,6 +85,7 @@
     <Compile Include="Database\DatabaseDetails.cs" />
     <Compile Include="Database\DatabaseManager.cs" />
     <Compile Include="DataGroup\DataGroup.cs" />
+    <Compile Include="DataGroup\DataGroupConvert.cs" />
     <Compile Include="DataGroup\DataProperty.cs" />
     <Compile Include="Helpers\InputBox\InputBox.cs">
       <SubType>Form</SubType>

@@ -233,7 +233,52 @@ namespace Library
 		public void setProperty(float fValue) { m_fValue = Convert.ToDouble(fValue); propertyType = EDATAGROUP_VARIABLE_TYPES.FLOAT; }
 		public void setProperty(double fValue) { m_fValue = Convert.ToDouble(fValue); propertyType = EDATAGROUP_VARIABLE_TYPES.FLOAT; }
 		public void setProperty(string strValue) { m_strValue = strValue; propertyType = EDATAGROUP_VARIABLE_TYPES.STRING; }
-
+        public object getPropertyAsObjectByType(Type mType)
+        {
+            foreach (KeyValuePair<string, EDATAGROUP_VARIABLE_TYPES> mTypeConvert in EDATAGROUP_CSHARP_TYPES_NAMES.g_Names)
+            {
+                if (mTypeConvert.Key == mType.Name)
+                {
+                    try
+                    {
+                        switch (mTypeConvert.Value)
+                        {
+                            case EDATAGROUP_VARIABLE_TYPES.COUNT:
+                                return null;
+                            case EDATAGROUP_VARIABLE_TYPES.BOOL:                            
+                                return getAsBool();                            
+                            case EDATAGROUP_VARIABLE_TYPES.INT8:
+                                return getAsInt8();
+                            case EDATAGROUP_VARIABLE_TYPES.CHAR:
+                            case EDATAGROUP_VARIABLE_TYPES.UINT8:
+                                return getAsUInt8();
+                            case EDATAGROUP_VARIABLE_TYPES.INT16:
+                                return getAsInt16();
+                            case EDATAGROUP_VARIABLE_TYPES.UINT16:
+                                return getAsUInt16();                           
+                            case EDATAGROUP_VARIABLE_TYPES.INT32:
+                                return getAsInt32();
+                            case EDATAGROUP_VARIABLE_TYPES.UINT32:
+                                return getAsUInt32();
+                            case EDATAGROUP_VARIABLE_TYPES.INT64:
+                                return getAsInt64();
+                            case EDATAGROUP_VARIABLE_TYPES.UINT64:
+                                return getAsUInt64();
+                            case EDATAGROUP_VARIABLE_TYPES.FLOAT:
+                                return getAsFloat();
+                            case EDATAGROUP_VARIABLE_TYPES.STRING:
+                                return getAsString();
+                        }                        
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                    }
+                    return null;
+                }
+            }
+            return null;
+        }
         public bool setPropertyByPrimitiveType(Object mObject)
         {
             if( mObject == null)

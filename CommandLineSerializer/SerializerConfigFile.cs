@@ -49,7 +49,8 @@ namespace CommandLineSerializer
 		public void initialize(SerializerController mSerializerController, string strConfigFile)
 		{
 			headerFiles = new List<HeaderFile>();
-			configFile = strConfigFile;
+            emptyList = new List<HeaderFile>();
+            configFile = strConfigFile;
 			serializerController = mSerializerController;
             dictionaryTest = new Dictionary<string, HeaderFile>();
             dictionaryTest["test0"] = new HeaderFile();
@@ -60,6 +61,8 @@ namespace CommandLineSerializer
 
 		private string configFile { get; set; }
 		public List<HeaderFile> headerFiles { get; set; }
+
+        public List<HeaderFile> emptyList { get; set; }
         public Dictionary<string, HeaderFile> dictionaryTest { get; set; }
         public void addHeaderFile(HeaderFile mFile)
 		{
@@ -85,9 +88,9 @@ namespace CommandLineSerializer
 		public bool save(string strDirectory)
 		{
 			string strFullPath = Path.Combine(strDirectory, configFile);
-			DataGroup mDataGroup = new DataGroup();            
-            mDataGroup.serialize(this, serializerController.getLogFile());
+			DataGroup mDataGroup = DataGroupConvert.serialize(this, serializerController.getLogFile());            
             mDataGroup.saveToFile(Path.Combine(strDirectory, "test.txt"));
+            SerializerConfigFile mConfig = DataGroupConvert.DeserializeObject(mDataGroup, GetType(), serializerController.getLogFile()) as SerializerConfigFile;
             string strErrorMessage = "";
             try
             {
