@@ -13,9 +13,57 @@ using System.Windows.Forms.Design;
 using Library.ClassParser;
 using Library.ClassCreator;
 using Library.IO;
+using Library.Database;
+using Library.UnitType;
 using Library;
 namespace Dynamic
 {
+
+    public class ListTypeConverter_GRAPHS : StringConverter
+    {
+       StandardValuesCollection m_ReturnStandardCollection = null;
+       public override bool GetStandardValuesSupported(ITypeDescriptorContext context){ return true; }
+       public override bool GetStandardValuesExclusive(ITypeDescriptorContext context){ return true; }
+       public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+       {
+           if(m_ReturnStandardCollection == null )
+           {
+                List<String> mEnumList = new List<String>();
+                mEnumList.Add("Melee");
+                mEnumList.Add("Ranged");
+                mEnumList.Add("Magic");
+                m_ReturnStandardCollection = new StandardValuesCollection(mEnumList);
+           }
+           return m_ReturnStandardCollection;
+       }
+    }
+
+
+
+    public class ListTypeConverter_STATS : StringConverter
+    {
+       public override bool GetStandardValuesSupported(ITypeDescriptorContext context){ return true; }
+       public override bool GetStandardValuesExclusive(ITypeDescriptorContext context){ return true; }
+       public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+       {
+           return new StandardValuesCollection(DatabaseManager.getDatabaseManager().getDatabase("Stats").getListOfNames());
+       }
+    }
+
+
+
+    public class UnitTypeConverter_ITEMS_NEW4 : StringConverter
+    {
+       public override bool GetStandardValuesSupported(ITypeDescriptorContext context){ return true; }
+       public override bool GetStandardValuesExclusive(ITypeDescriptorContext context){ return true; }
+       public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+       {
+           return new StandardValuesCollection(UnitTypeManager.getUnitTypeManager().getUnitTypeNames("ITEMS","NEW4"));
+       }
+    }
+
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////EUNITTYPES_ITEMS//////////////////////////////////
     public enum EUNITTYPES_ITEMS
@@ -422,9 +470,10 @@ namespace Dynamic
         //Variable Type:KCString
         //Variable Value:""
         //Variable Line Number:35
-        //Variable Properties: CATEGORY = GRAPH, DISPLAYNAME = Graph Name
+        //Variable Properties: CATEGORY = GRAPH, DISPLAYNAME = Graph Name, LIST = Graphs
         private string _m_strGraph = "";
         [DisplayName("Graph Name"), Category("GRAPH"), Description("the graph that will be used to generate the final value. The graph stat should be a float")]
+        [TypeConverter(typeof(ListTypeConverter_GRAPHS))]
         public string m_strGraph
         {
             get{ return _m_strGraph; }
@@ -438,13 +487,31 @@ namespace Dynamic
         //Variable Type:KCString
         //Variable Value:"Rank"
         //Variable Line Number:38
-        //Variable Properties: CATEGORY = GRAPH, DISPLAYNAME = Graph Stat
+        //Variable Properties: CATEGORY = GRAPH, DISPLAYNAME = Graph Stat, LIST = Stats
         private string _m_strGraphStat = "Rank";
         [DisplayName("Graph Stat"), Category("GRAPH"), Description("The stat which will be used in the graph. Most times it's the rank.")]
+        [TypeConverter(typeof(ListTypeConverter_STATS))]
         public string m_strGraphStat
         {
             get{ return _m_strGraphStat; }
             set{ _m_strGraphStat = value; _notifyOfPropertyChanged("m_strGraphStat");}
+        }
+                
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\KCCore\Systems\Stats\Private\KCStatDefinition.h
+        //Class Name:FKCStatDefinition
+        //Variable Name:m_strUnitType
+        //Variable Type:KCString
+        //Variable Value:""
+        //Variable Line Number:41
+        //Variable Properties: CATEGORY = GRAPH, DISPLAYNAME = Unit Type Test, UNITTYPECATEGORY = Items, UNITTYPEFILTER = New4, LIST = ITEMS_NEW4
+        private string _m_strUnitType = "";
+        [DisplayName("Unit Type Test"), Category("GRAPH"), Description("The stat which will be used in the graph. Most times it's the rank.")]
+        [TypeConverter(typeof(UnitTypeConverter_ITEMS_NEW4))]
+        public string m_strUnitType
+        {
+            get{ return _m_strUnitType; }
+            set{ _m_strUnitType = value; _notifyOfPropertyChanged("m_strUnitType");}
         }
         
     } //end of FKCStatDefinition

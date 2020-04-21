@@ -10,6 +10,7 @@ using Library.ClassCreator;
 using Library.ClassParser;
 using Library.Database;
 using Library.IO;
+using Library.UnitType;
 using Newtonsoft.Json;
 
 namespace Library
@@ -35,6 +36,7 @@ namespace Library
         private ClassCreatorManager m_ClassCreatorManager = new ClassCreatorManager();
         private ClassParserManager m_ClassParser = new ClassParserManager();
         private DatabaseManager m_DatabaseManager = new DatabaseManager();
+        private UnitTypeManager m_UnitTypeManager = new UnitTypeManager();
         
         
         public ClassContructionAndDBHandler()
@@ -77,6 +79,12 @@ namespace Library
         public ClassCreatorManager classCreatorManager { get { return m_ClassCreatorManager; } }
         public ClassParserManager classParserManager { get { return m_ClassParser; } }
         public DatabaseManager databaseManager { get { return m_DatabaseManager; } }
+
+        public LogFile getLogFile() { return m_LogFile;  }
+        public UnitTypeManager unitTypeManager
+        {
+            get { return m_UnitTypeManager; }
+        }
 
         //logs a message
         public void log(string strMessage)

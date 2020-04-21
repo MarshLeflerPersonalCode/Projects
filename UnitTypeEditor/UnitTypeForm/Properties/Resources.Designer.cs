@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace UnitTypeForm.Properties
+namespace Library.UnitTypeForm.Properties
 {
 
 

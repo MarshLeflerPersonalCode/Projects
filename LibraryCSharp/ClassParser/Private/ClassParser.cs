@@ -685,12 +685,14 @@ namespace Library.ClassParser.Private
 		{
 			strLine = strLine.Replace("UPROPERTY", "");
 			strLine = strLine.Replace("KCPROPERTY", "");
-			strLine = strLine.Replace("UMETA", "");
+			strLine = strLine.Replace("UMETA", ",");
 			strLine = strLine.Replace("(", "");
 			strLine = strLine.Replace(")", "");
-			strLine = strLine.Replace("meta=", "");
-			strLine = strLine.Replace("meta =", "");
-			bool bInDoubleQuote = false;
+			strLine = strLine.Replace("meta=", ",");
+			strLine = strLine.Replace("meta =", ",");
+            strLine = strLine.Replace("Meta=", ",");
+            strLine = strLine.Replace("Meta =", ",");
+            bool bInDoubleQuote = false;
 			char[] mCharArray = new char[strLine.Length];
 			Array.Clear(mCharArray, 0, strLine.Length);
 			int iCharArrayIndex = 0;
@@ -800,9 +802,11 @@ namespace Library.ClassParser.Private
 			strLine = strLine.Replace("KCPROPERTY", "");
 			strLine = strLine.Replace("(", "");
 			strLine = strLine.Replace(")", "");
-			strLine = strLine.Replace("meta=", "");
-			strLine = strLine.Replace("meta =", "");
-			_cleanLine(ref strLine);
+			strLine = strLine.Replace("meta=", ",");
+			strLine = strLine.Replace("meta =", ",");
+            strLine = strLine.Replace("Meta=", ",");
+            strLine = strLine.Replace("Meta =", ",");
+            _cleanLine(ref strLine);
 			if( strLine.Length == 0 ||
 				mVariable == null)
 			{

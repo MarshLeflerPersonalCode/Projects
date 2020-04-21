@@ -33,12 +33,14 @@ namespace STATS
 		UPROPERTY(Category = "APPLICABLE", DisplayName = "Items")
 		bool								m_bApplicableToItems = true;
 		//the graph that will be used to generate the final value. The graph stat should be a float
-		UPROPERTY(Category = "GRAPH", DisplayName = "Graph Name")
+		UPROPERTY(Category = "GRAPH", DisplayName = "Graph Name", Meta = (List = "Graphs"))
 		KCString							m_strGraph = "";
 		//The stat which will be used in the graph. Most times it's the rank.
-		UPROPERTY(Category = "GRAPH", DisplayName = "Graph Stat")
+		UPROPERTY(Category = "GRAPH", DisplayName = "Graph Stat", Meta = (List = "Stats"))
 		KCString							m_strGraphStat = "Rank";
-
+		//The stat which will be used in the graph. Most times it's the rank.
+		UPROPERTY(Category = "GRAPH", DisplayName = "Unit Type Test", Meta = (UnitTypeCategory = "Items", UnitTypeFilter="New4"))
+		KCString							m_strUnitType = "";
 	};
 
 

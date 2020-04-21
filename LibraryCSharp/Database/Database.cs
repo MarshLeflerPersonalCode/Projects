@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,7 +9,7 @@ using Library.ClassCreator;
 using Library.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
-using Newtonsoft.Json;
+
 
 namespace Library.Database
 {
@@ -39,7 +40,11 @@ namespace Library.Database
 		{
             m_DatabaseManager = mDatabaseManager;
             isLoaded = false;
-		}
+            
+
+        }
+
+        public ICollection getListOfNames() { return m_InstancesByName.Keys; }
         public bool isLoaded { get; set; }
 
         public DatabaseConfig getConfig() { return m_DatabaseConfig; }
@@ -142,14 +147,14 @@ namespace Library.Database
             {
                 return strFileName;
             }
-            return strFileName.Replace(" ", "_") + ".json";
+            return strFileName.Replace(" ", "_") + ".dat";
         }
         private void _setEntryFileName(ClassInstance mEntry, string strFileName)
         {
             strFileName = strFileName.Replace(" ", "_");
-            if ( strFileName.EndsWith(".json") == false )
+            if ( strFileName.EndsWith(".dat") == false )
             {
-                strFileName = strFileName + ".json";
+                strFileName = strFileName + ".dat";
             }
             m_bIgnorePropertySetCallback = true;
             mEntry.setProperty("m_strFileName", strFileName);
@@ -425,7 +430,7 @@ namespace Library.Database
             return iCount;
         }
 
-        public bool saveDatabase()
+        public bool saveDatabase( bool bForce )
         {
             string strPathToDatabaseFolder = Path.Combine(m_DatabaseManager.getDatabaseDirectory(), databaseName.Replace(" ", "_") + "\\");
             string strDatabaseFile = "database.json";
@@ -434,13 +439,14 @@ namespace Library.Database
             {
                 foreach( ClassInstance mInstance in m_Instances)
                 {
-                    if( mInstance.m_bIsDirty)
+                    if( mInstance.m_bIsDirty ||
+                        bForce)
                     {
                         try
                         {
 
 
-                            string strInstanceSerialized = JsonConvert.SerializeObject(mInstance, Formatting.Indented);
+                            string strInstanceSerialized = DataGroupConvert.serializeObjectIntoString(mInstance, m_DatabaseManager.logFile);
                             string strFileName = getEntryFileName(mInstance);
                             if (strFileName != null &&
                                 strFileName != "")
@@ -482,17 +488,13 @@ namespace Library.Database
 
             string strPathToSearch = Path.GetFullPath(getDatabaseConfigPathAndFile());
             strPathToSearch = strPathToSearch.Substring(0, strPathToSearch.Length - Path.GetFileName(strPathToSearch).Length);
-            string[] mFiles = Directory.GetFiles(strPathToSearch, "*.json", SearchOption.AllDirectories);
+            string[] mFiles = Directory.GetFiles(strPathToSearch, "*.dat", SearchOption.AllDirectories);
             
             foreach (string strFile in mFiles)
             {
                 try
                 {
-                    if( strFile.Contains("database.json"))
-                    {
-                        continue;
-                    }
-                    ClassInstance mEntry = JsonConvert.DeserializeObject(File.ReadAllText(strFile), mType) as ClassInstance;
+                    ClassInstance mEntry = DataGroupConvert.deserializeObjectFromFile(strFile, mType, m_DatabaseManager.logFile) as ClassInstance;
                     if (mEntry == null)
                     {
                         log("ERROR - Unable to deserialize file: " + strFile);

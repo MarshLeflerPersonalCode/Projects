@@ -1,4 +1,4 @@
-﻿namespace UnitTypeForm
+﻿namespace Library.UnitTypeForm
 {
 	partial class unitTypeForm
 	{

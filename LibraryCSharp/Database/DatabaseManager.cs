@@ -13,6 +13,7 @@ namespace Library.Database
 {
     public class DatabaseManager
     {
+        private static DatabaseManager g_GlobalDatabaseManager = null;
         private string m_strDirectory = ".\\Databases\\";
         private Mutex m_Mutex = new Mutex();
         private List<Thread> m_Threads = new List<Thread>();
@@ -21,9 +22,9 @@ namespace Library.Database
         {
             databases = new List<Database>();
             classCreators = new List<ClassCreatorManager>();
-            
+            g_GlobalDatabaseManager = this;
         }
-
+        public static DatabaseManager getDatabaseManager() { return g_GlobalDatabaseManager; }
         public List<Database> databases { get; set; }
         public string getDatabaseDirectory() { return m_strDirectory; }
         //when creating classes if we create dynamic classes we to use the class creator manager
@@ -53,7 +54,7 @@ namespace Library.Database
             Database mNewDatabase = new Database(this);
             mNewDatabase.getConfig().databaseName = strDatabaseName;
             databases.Add(mNewDatabase);
-            mNewDatabase.saveDatabase();
+            mNewDatabase.saveDatabase(false);
             return true;
 
         }

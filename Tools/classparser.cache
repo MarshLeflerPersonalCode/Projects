@@ -16,7 +16,7 @@
 637220993005398927|..\CoreClasses\KCCore\Systems\DataGroup\Private\KCDataGroupEnumsAndStructs.h
 637219287149838972|..\CoreClasses\KCCore\Systems\DataGroup\Private\KCDataProperty.h
 637220905252242000|..\CoreClasses\KCCore\Systems\Stats\KCStatManager.h
-637228847965898231|..\CoreClasses\KCCore\Systems\Stats\Private\KCStatDefinition.h
+637230780797359545|..\CoreClasses\KCCore\Systems\Stats\Private\KCStatDefinition.h
 637228788964665822|..\CoreClasses\KCCore\Systems\Stats\Private\KCStatInclude.h
 637212388559960572|..\CoreClasses\KCCore\Systems\UnitTypes\KCDefinedUnitTypes.h
 637220953959480554|..\CoreClasses\KCCore\Systems\UnitTypes\KCUnitTypeManager.h

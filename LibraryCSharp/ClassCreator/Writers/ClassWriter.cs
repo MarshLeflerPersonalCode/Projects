@@ -274,7 +274,12 @@ namespace Library.ClassCreator.Writers
                 return "";
             }
             strDetails = strDetails.Substring(0, strDetails.Length - 2); //remove ", "
-            return "[" + strDetails + "]" + Environment.NewLine;
+            string strReturnString = "[" + strDetails + "]" + Environment.NewLine;
+            if(mClassVariable.typeConverter != "")
+            {
+                return strReturnString + mClassVariable.typeConverter + Environment.NewLine;
+            }
+            return strReturnString;
         }
 
 

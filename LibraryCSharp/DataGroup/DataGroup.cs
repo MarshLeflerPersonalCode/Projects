@@ -137,6 +137,16 @@ namespace Library
             _parseDataGroup(mFile, ref strError);
             return strError;
         }
+        public string loadFromString(string strDataGroupContents)
+        {
+           
+
+            StringReader mFile = new StringReader(strDataGroupContents);
+            string strError = "";
+            dataGroupName = "";
+            _parseDataGroup(mFile, ref strError);
+            return strError;
+        }
         private bool _parseDataGroup(StringReader mFile, ref string strError )
         {
             bool bHadErrors = false;
@@ -201,11 +211,22 @@ namespace Library
 
 			return mDataGroup;
 		}
-       
+
+        public static DataGroup createFromString(string strDataGroupContents, ref string strError)
+        {
+
+            DataGroup mDataGroup = new DataGroup();
+            strError = mDataGroup.loadFromString(strDataGroupContents);
+            if (strError != "")
+            {
+                return null;
+            }
+
+            return mDataGroup;
+        }
 
 
-		
 
 
-	} //end class
+    } //end class
 }//end namespace

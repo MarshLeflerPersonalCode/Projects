@@ -36,6 +36,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
@@ -60,6 +61,7 @@
     <Compile Include="ClassCreator\VariableDefinitionEditor.Designer.cs">
       <DependentUpon>VariableDefinitionEditor.cs</DependentUpon>
     </Compile>
+    <Compile Include="ClassCreator\Writers\TypeConverterWriter.cs" />
     <Compile Include="ClassInstance.cs" />
     <Compile Include="ClassCreator\VariableDefinitionHandler.cs" />
     <Compile Include="ClassCreator\Writers\ClassWriter.cs" />
@@ -83,6 +85,12 @@
       <DependentUpon>DatabaseConfigForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Database\DatabaseDetails.cs" />
+    <Compile Include="Database\DatabaseEditorControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Database\DatabaseEditorControl.Designer.cs">
+      <DependentUpon>DatabaseEditorControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Database\DatabaseManager.cs" />
     <Compile Include="DataGroup\DataGroup.cs" />
     <Compile Include="DataGroup\DataGroupConvert.cs" />
@@ -103,15 +111,47 @@
     <Compile Include="IO\ByteWriter.cs" />
     <Compile Include="IO\LogFile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UnitType\Forms\ChildSelectForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UnitType\Forms\ChildSelectForm.Designer.cs">
+      <DependentUpon>ChildSelectForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UnitType\Forms\UnitTypeControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UnitType\Forms\UnitTypeControl.Designer.cs">
+      <DependentUpon>UnitTypeControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UnitType\Forms\UnitTypeManagerConfigForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UnitType\Forms\UnitTypeManagerConfigForm.Designer.cs">
+      <DependentUpon>UnitTypeManagerConfigForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UnitType\LoadAndSave\CategoryConfig.cs" />
+    <Compile Include="UnitType\LoadAndSave\UnitTypeBinaryWriter.cs" />
+    <Compile Include="UnitType\LoadAndSave\UnitTypeFile.cs" />
+    <Compile Include="UnitType\LoadAndSave\UnitTypeManagerConfig.cs" />
+    <Compile Include="UnitType\LoadAndSave\UnitTypeSaveToHeader.cs" />
+    <Compile Include="UnitType\UnitType.cs" />
+    <Compile Include="UnitType\UnitTypeCategory.cs" />
+    <Compile Include="UnitType\UnitTypeCategoryListBoxManager.cs" />
+    <Compile Include="UnitType\UnitTypeManager.cs" />
+    <Compile Include="UnitType\UnitTypeTreeViewManager.cs" />
+    <Compile Include="UnitType\Wrappers\UnitTypeListBox.cs" />
+    <Compile Include="UnitType\Wrappers\UnitTypeListComboBox.cs" />
+    <Compile Include="UnitType\Wrappers\UnitTypeTreeNode.cs" />
     <Compile Include="Utilities\SerializationToJson.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="packages.config" />
+    <None Include="UnitType\packages.config" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ClassConstructionAndDBHandlerForm.resx">
       <DependentUpon>ClassConstructionAndDBHandlerForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="ClassCreator\VariableDefinitionEditor.resx">
       <DependentUpon>VariableDefinitionEditor.cs</DependentUpon>
@@ -119,12 +159,30 @@
     <EmbeddedResource Include="Database\DatabaseConfigForm.resx">
       <DependentUpon>DatabaseConfigForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Database\DatabaseEditorControl.resx">
+      <DependentUpon>DatabaseEditorControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Helpers\InputBox\InputBox.resx">
       <DependentUpon>InputBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Helpers\Progressbar\ProgressBar.resx">
       <DependentUpon>ProgressBar.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UnitType\Forms\ChildSelectForm.resx">
+      <DependentUpon>ChildSelectForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnitType\Forms\UnitTypeControl.resx">
+      <DependentUpon>UnitTypeControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UnitType\Forms\UnitTypeManagerConfigForm.resx">
+      <DependentUpon>UnitTypeManagerConfigForm.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CustomControls\CustomControls.csproj">
+      <Project>{0632b60d-0438-46f9-ba76-1ebc9f0263c0}</Project>
+      <Name>CustomControls</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -17,8 +17,8 @@ namespace Library.ClassParser
 			variableValue = "";
 			category = "";
 			variableComment = "";
-
-		}
+            typeConverter = "";
+        }
 		public bool isPointer { get; set; }
 		public bool isUE4Variable { get; set; }
 		public string variableName { get; set; }
@@ -33,6 +33,7 @@ namespace Library.ClassParser
 		public bool isPrivateVariable { get; set; }
 		public bool isSerialized { get; set; }
 		public int lineNumber { get; set; }
+        public string typeConverter { get; set; }
 	}
 	
 	public class ClassStructure

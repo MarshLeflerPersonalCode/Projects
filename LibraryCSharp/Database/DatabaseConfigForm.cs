@@ -82,7 +82,7 @@ namespace Library.Database
         {
             foreach (Database mDatabase in m_DatabaseManager.databases)
             {
-                mDatabase.saveDatabase();
+                mDatabase.saveDatabase(false );
             }
             _updateDirty(false);
         }

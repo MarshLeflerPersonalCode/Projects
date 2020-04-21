@@ -12,6 +12,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomControls", "..\CustomControls\CustomControls.csproj", "{0632B60D-0438-46F9-BA76-1EBC9F0263C0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Library", "..\LibraryCSharp\Library.csproj", "{0411108C-CA88-41B8-8146-BF77EB6C8079}"
+	ProjectSection(ProjectDependencies) = postProject
+		{0632B60D-0438-46F9-BA76-1EBC9F0263C0} = {0632B60D-0438-46F9-BA76-1EBC9F0263C0}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

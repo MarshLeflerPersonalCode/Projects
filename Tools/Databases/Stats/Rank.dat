@@ -1,0 +1,14 @@
+[FKCStatDefinition]
+     <STRING>CSHARP:Dynamic.FKCStatDefinition, classcompile, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+     <STRING>m_strName:Rank
+     <INT32>m_DatabaseGuid:134230123
+     <STRING>m_eStatType:INT32
+     <STRING>m_strFileName:Rank.dat
+     <STRING>m_strGraph:
+     <STRING>m_strDefaultValue:0
+     <STRING>m_strMinValue:0
+     <STRING>m_strMaxValue:0
+     <BOOL>m_bApplicableToCharacters:True
+     <BOOL>m_bApplicableToItems:True
+     <STRING>m_strGraphStat:Rank
+[/FKCStatDefinition]

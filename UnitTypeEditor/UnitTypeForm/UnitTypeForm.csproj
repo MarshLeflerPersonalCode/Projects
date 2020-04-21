@@ -90,9 +90,9 @@
       <Project>{0632b60d-0438-46f9-ba76-1ebc9f0263c0}</Project>
       <Name>CustomControls</Name>
     </ProjectReference>
-    <ProjectReference Include="..\UnitTypeCore\UnitTypeCore.csproj">
-      <Project>{936b040f-6505-46ec-86b0-33434f08a660}</Project>
-      <Name>UnitTypeCore</Name>
+    <ProjectReference Include="..\..\LibraryCSharp\Library.csproj">
+      <Project>{0411108c-ca88-41b8-8146-bf77eb6c8079}</Project>
+      <Name>Library</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

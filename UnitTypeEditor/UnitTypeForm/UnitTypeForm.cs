@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Reflection;
 using System.IO;
-using UnitTypeCore;
-using UnitTypeCore.LoadAndSave;
-namespace UnitTypeForm
+using Library.UnitType;
+using Library.UnitType.LoadAndSave;
+namespace Library.UnitTypeForm
 {
 	public partial class unitTypeForm : Form
 	{
@@ -293,7 +293,7 @@ namespace UnitTypeForm
 					break;
 				case EPROPERTIES_SHOWING.UNITTYPE:
 					{
-						UnitType mSelectedUnitType = m_TreeViewManager.getSelectedUnitType(true);
+						UnitType.UnitType mSelectedUnitType = m_TreeViewManager.getSelectedUnitType(true);
 						if (filteredPropertyGrid.SelectedObject != mSelectedUnitType)
 						{
 							filteredPropertyGrid.SelectedObject = mSelectedUnitType;

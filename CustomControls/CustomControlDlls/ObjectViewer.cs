@@ -166,77 +166,77 @@ namespace CustomControls
 			{ 
 				return; 
 			}
-			Type mType = m_ObjectsList[0].GetType();
-			MemberInfo[] mMembers = mType.GetMembers();
+			    Type mType = m_ObjectsList[0].GetType();
+			    MemberInfo[] mMembers = mType.GetMembers();
 			
-			Type mStringType = Type.GetType("System.String");			
-			foreach ( MemberInfo mMember in mMembers)
-			{
-				MemberTypes mMemberTypeInfo = mMember.MemberType;
-				if (mMemberTypeInfo != MemberTypes.Property)
-				{
-					continue;
-				}
-				PropertyInfo mProperty = (System.Reflection.PropertyInfo)mMember;
-				Type mMemberType = mProperty.PropertyType;	
+			    Type mStringType = Type.GetType("System.String");			
+			    foreach ( MemberInfo mMember in mMembers)
+			    {
+				    MemberTypes mMemberTypeInfo = mMember.MemberType;
+				    if (mMemberTypeInfo != MemberTypes.Property)
+				    {
+					    continue;
+				    }
+				    PropertyInfo mProperty = (System.Reflection.PropertyInfo)mMember;
+				    Type mMemberType = mProperty.PropertyType;	
 				
-				if( mMemberType.IsPrimitive ||
-					mMemberType.IsPublic == false ||
-					mMemberType.IsVisible == false ||
-					mMemberType == mStringType)
-				{
-					continue;
-				}
+				    if( mMemberType.IsPrimitive ||
+					    mMemberType.IsPublic == false ||
+					    mMemberType.IsVisible == false ||
+					    mMemberType == mStringType)
+				    {
+					    continue;
+				    }
 
 				
 
-				if(mMemberType.IsClass)
-				{
-					string strNameToDisplay = mMember.Name;
-					object[] attribute = mMember.GetCustomAttributes(typeof(DisplayNameAttribute), true);
-					if( attribute != null &&
-						attribute.Length != 0)
-					{
-						DisplayNameAttribute mDisplayAttribute = attribute.Cast<DisplayNameAttribute>().Single();
-						if (mDisplayAttribute != null)
-						{
-							strNameToDisplay = mDisplayAttribute.DisplayName;
-						}
-					}
-					if( strNameToDisplay == "")
-					{
-						strNameToDisplay = "";
-					}
+				    if(mMemberType.IsClass)
+				    {
+					    string strNameToDisplay = mMember.Name;
+					    object[] attribute = mMember.GetCustomAttributes(typeof(DisplayNameAttribute), true);
+					    if( attribute != null &&
+						    attribute.Length != 0)
+					    {
+						    DisplayNameAttribute mDisplayAttribute = attribute.Cast<DisplayNameAttribute>().Single();
+						    if (mDisplayAttribute != null)
+						    {
+							    strNameToDisplay = mDisplayAttribute.DisplayName;
+						    }
+					    }
+					    if( strNameToDisplay == "")
+					    {
+						    strNameToDisplay = "";
+					    }
 	  
 					
-					if ( mMemberType.GetInterface(nameof(IEnumerable)) != null )
-					{
-						if (mMemberType.Name.StartsWith("List") &&
-							mMemberType.GenericTypeArguments != null &&
-							mMemberType.GenericTypeArguments.Count() == 1)
-						{
-							//this is a collection or an array of some sort.
-							ArrayViewerData mArrayData = new ArrayViewerData();
-							mArrayData.type = mMemberType;
-							mArrayData.name = strNameToDisplay;
-							mArrayData.memberInfo = mMember;
-							mArrayData.objectType = mMemberType.GenericTypeArguments[0];
-							m_SubArrays.Add(mArrayData);
-						}
-					}
-					else
-					{
-						//handle class data
-						ClassObjectViewerData mNewObjectView = new ClassObjectViewerData();
-						mNewObjectView.type = mMemberType;
-						mNewObjectView.memberInfo = mMember;
-						mNewObjectView.name = strNameToDisplay;
-						mNewObjectView.isRootObject = false;
-						m_SubObjects.Add(mNewObjectView);
+					    if ( mMemberType.GetInterface(nameof(IEnumerable)) != null )
+					    {
+						    if (mMemberType.Name.StartsWith("List") &&
+							    mMemberType.GenericTypeArguments != null &&
+							    mMemberType.GenericTypeArguments.Count() == 1)
+						    {
+							    //this is a collection or an array of some sort.
+							    ArrayViewerData mArrayData = new ArrayViewerData();
+							    mArrayData.type = mMemberType;
+							    mArrayData.name = strNameToDisplay;
+							    mArrayData.memberInfo = mMember;
+							    mArrayData.objectType = mMemberType.GenericTypeArguments[0];
+							    m_SubArrays.Add(mArrayData);
+						    }
+					    }
+					    else
+					    {
+						    //handle class data
+						    ClassObjectViewerData mNewObjectView = new ClassObjectViewerData();
+						    mNewObjectView.type = mMemberType;
+						    mNewObjectView.memberInfo = mMember;
+						    mNewObjectView.name = strNameToDisplay;
+						    mNewObjectView.isRootObject = false;
+						    m_SubObjects.Add(mNewObjectView);
 
-					}
-				}
-			}
+					    }
+				    }
+			    }
 			
 		}
 

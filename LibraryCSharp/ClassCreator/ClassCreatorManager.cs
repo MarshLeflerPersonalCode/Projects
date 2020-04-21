@@ -37,7 +37,9 @@ namespace Library.ClassCreator
 		private Dictionary<ClassStructure, string> m_ClassesAsCode = new Dictionary<ClassStructure, string>();
         private Dictionary<string, ClassStructure> m_ClassStructuresByName = new Dictionary<string, ClassStructure>();
         private Dictionary<EnumList, string> m_EnumsAsCode = new Dictionary<EnumList, string>();
-		public ClassCreatorManager()
+        private Dictionary<string, string> m_TypeConverters = new Dictionary<string, string>();
+        private string m_strTypeConverters = "";
+        public ClassCreatorManager()
 		{
 			m_strInitialContentsOfMasterFile = _createInitialFile();
 			variableDefinitionHandler = new VariableDefinitionHandler("VariableDefinitions.json");
@@ -111,10 +113,33 @@ namespace Library.ClassCreator
 				m_bDoneCompiling = true;
 			}
 		}
+
+        private void _assignTypeConverters()
+        {
+            foreach (ClassStructure mClass in m_ClassParser.getProjectWrapper().classStructures.Values)
+            {
+                if (mClass.isSerialized)
+                {
+                    foreach( ClassVariable mVariable in mClass.variables)
+                    {
+                        if( mVariable.variableProperties.ContainsKey("LIST"))
+                        {
+                            string strListName = mVariable.variableProperties["LIST"].ToUpper();
+                            if( m_TypeConverters.ContainsKey(strListName))
+                            {
+                                mVariable.typeConverter = m_TypeConverters[strListName];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
 		private void _processClassesAndCompile()
-		{ 
-			
-			foreach (EnumList mEnum in m_ClassParser.getProjectWrapper().enums.Values)
+		{
+            m_strTypeConverters = TypeConverterWriter.createTypeConverters(m_TypeConverters, ".\\Databases\\", ".\\Lists\\", m_ClassParser.getProjectWrapper());
+            _assignTypeConverters();
+            foreach (EnumList mEnum in m_ClassParser.getProjectWrapper().enums.Values)
 			{
 				string strEnum = EnumWriter.writeEnum(mEnum, m_ClassParser.getProjectWrapper());
 				m_EnumsAsCode[mEnum] = strEnum;
@@ -178,6 +203,7 @@ namespace Library.ClassCreator
 			{
 				if(strLine.Contains("<CLASSES>"))
 				{
+                    m_StringWriter.WriteLine(m_strTypeConverters);
 					foreach (KeyValuePair<EnumList, string > mData in m_EnumsAsCode)
 					{
 						m_StringWriter.WriteLine(strCommentLine);						
@@ -334,6 +360,8 @@ using System.Windows.Forms.Design;
 using Library.ClassParser;
 using Library.ClassCreator;
 using Library.IO;
+using Library.Database;
+using Library.UnitType;
 using Library;
 namespace " + m_strNamespace + @"
 {

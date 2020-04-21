@@ -14,6 +14,210 @@ namespace Library
 {
     public class DataGroupConvert
     {
+
+        public static DataGroup serializeIntoDataGroup(Object mObject, LogFile mLogFile)
+        {
+
+            DataGroup mDataGroup = new DataGroup();
+            serializeIntoDataGroup(mDataGroup, mObject, mLogFile);
+            return mDataGroup;
+
+        }
+        public static string serializeObjectIntoString(Object mObject, LogFile mLogFile)
+        {
+
+            DataGroup mDataGroup = new DataGroup();
+            serializeIntoDataGroup(mDataGroup, mObject, mLogFile);
+            return mDataGroup.getDataGroupAsString();
+
+        }
+        public static void serializeIntoDataGroup(DataGroup mDataGroup, Object mObject, LogFile mLogFile)
+        {
+
+            try
+            {
+                if (mObject == null)
+                {
+                    log(mLogFile, "ERROR - Unable to serialize object into Data Group. Object was null.");
+                    return;
+                }
+                if (mDataGroup == null)
+                {
+                    log(mLogFile, "ERROR - Data Group was null.");
+                    return;
+                }
+                Type mType = mObject.GetType();
+                /*if (mType.IsSerializable == false)
+                {
+                    log(mLogFile, "ERROR - Object type: " + mType.Name + " is not serializable.");
+                    return;
+                }*/
+                if (mDataGroup.dataGroupName == "")
+                {
+                    mDataGroup.dataGroupName = mType.Name;
+                }
+
+                mDataGroup.setProperty("CSHARP", mType.AssemblyQualifiedName);
+                MemberInfo[] mMembers = mType.GetMembers();
+
+                Type mStringType = Type.GetType("System.String");
+                foreach (MemberInfo mMember in mMembers)
+                {
+                    MemberTypes mMemberTypeInfo = mMember.MemberType;
+                    if (mMemberTypeInfo == MemberTypes.Property)
+                    {
+                        _serializeProperty(mDataGroup, mObject, mMember, mMember as PropertyInfo, mLogFile);
+                        continue;
+                    }
+                    else if (mMemberTypeInfo == MemberTypes.Field)
+                    {
+                        _serializeField(mDataGroup, mObject, mMember, mMember as FieldInfo, mLogFile);
+                        continue;
+                    }
+                    else if (mMemberTypeInfo == MemberTypes.Method)
+                    {
+                        continue;
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+                log(mLogFile, "ERROR - Unable to serialize object into Data Group. Exception was: " + e.Message);
+            }
+
+        }
+        public static object deserializeObjectFromFile(string strPathToFile, Type mType, LogFile mLogFile)
+        {
+            try
+            {
+                if (strPathToFile == null ||
+                    strPathToFile == "")
+                {
+                    log(mLogFile, "ERROR - file path was empty. Unable to deserialize.");
+                    return null;
+                }
+                if (File.Exists(strPathToFile))
+                {
+                    return deserializeObjectFromString(File.ReadAllText(strPathToFile), mType, mLogFile);
+                }
+                log(mLogFile, "ERROR - unable to deserialize because file doesn't exist at: " + strPathToFile);
+                return null;
+            }
+            catch (Exception e)
+            {
+                log(mLogFile, "ERROR - unable to deserialize object from string. Exception was: " + e.Message);
+            }
+            return null;
+        }
+        public static object deserializeObjectFromString(string strDataGroup, Type mType, LogFile mLogFile)
+        {
+            try
+            {
+                if (strDataGroup == null ||
+                    strDataGroup == "")
+                {
+                    log(mLogFile, "ERROR - string was empty. Unable to deserialize.");
+                    return null;
+                }
+                if (mType == null)
+                {
+                    log(mLogFile, "ERROR - type was null. Unable to deserialize.");
+                    return null;
+                }
+                string strError = "";
+                DataGroup mDataGroup = DataGroup.createFromString(strDataGroup, ref strError);
+                if( strError != "")
+                {
+                    log(mLogFile, "ERROR - unable to deserialize object from string. " + Environment.NewLine + strError);
+                    return null;
+                }
+                return deserializeObjectFromDataGroup(mDataGroup, mType, mLogFile);
+            }
+            catch(Exception e)
+            {
+                log(mLogFile, "ERROR - unable to deserialize object from string. Exception was: " + e.Message);
+            }
+            return null;
+        }
+
+        public static object deserializeObjectFromDataGroup(DataGroup mDataGroup, Type mType, LogFile mLogFile)
+        {
+
+            try
+            {
+                if (mDataGroup == null)
+                {
+                    log(mLogFile, "ERROR - datagroup was null");
+                    return null;
+                }
+                if (mType == null)
+                {
+                    log(mLogFile, "ERROR - type was null");
+                    return null;
+                }
+
+                object mObject = Activator.CreateInstance(mType);
+                if (DeserializeObjectFromDataGroup(mObject, mDataGroup, mLogFile))
+                {
+                    return mObject;
+                }
+            }
+            catch (Exception e)
+            {
+                log(mLogFile, "ERROR - there was an error deserializing data group. Exception was: " + e.Message);
+            }
+            return null;
+        }
+
+        public static bool DeserializeObjectFromDataGroup(Object mObject, DataGroup mDataGroup, LogFile mLogFile)
+        {
+            if (mDataGroup == null)
+            {
+                log(mLogFile, "ERROR - datagroup was null");
+                return false;
+            }
+            if (mObject == null)
+            {
+                log(mLogFile, "ERROR - object was null");
+                return false;
+            }
+            try
+            {
+                Type mType = mObject.GetType();
+                MemberInfo[] mMembers = mType.GetMembers();
+
+                Type mStringType = Type.GetType("System.String");
+                foreach (MemberInfo mMember in mMembers)
+                {
+                    MemberTypes mMemberTypeInfo = mMember.MemberType;
+                    if (mMemberTypeInfo == MemberTypes.Property)
+                    {
+                        _deserializeProperty(mDataGroup, mObject, mMember, mMember as PropertyInfo, mLogFile);
+                        continue;
+                    }
+                    else if (mMemberTypeInfo == MemberTypes.Field)
+                    {
+                        _deserializeField(mDataGroup, mObject, mMember, mMember as FieldInfo, mLogFile);
+                        continue;
+                    }
+                    else if (mMemberTypeInfo == MemberTypes.Method)
+                    {
+                        continue;
+                    }
+                }
+                return true;
+            }
+            catch (Exception e)
+            {
+                log(mLogFile, "ERROR - there was an error deserializing data group into object type: " + mObject.GetType().Name + " Exception was: " + e.Message);
+            }
+            return false;
+        }
+
+
+
+
         private static Type _getTypeForDataGroup(DataGroup mDataGroup)
         {
 
@@ -255,7 +459,7 @@ namespace Library
             //at this point it's got to be an object we need to serialize.
             //which means a new group
             DataGroup mArrayGroup = mParentDataGroup.getOrCreateDataGroup(strPropertyName);
-            serialize(mArrayGroup, mObject, mLogFile);
+            serializeIntoDataGroup(mArrayGroup, mObject, mLogFile);
 
         }
 
@@ -297,144 +501,9 @@ namespace Library
             object mFieldValue = mFieldInfo.GetValue(mObject);
             _serializeObjectAsDataProperty(mParentDataGroup, mFieldValue, strFieldName, mLogFile);
         }
-        public static DataGroup serialize(Object mObject, LogFile mLogFile)
-        {
+        
 
-            DataGroup mDataGroup = new DataGroup();
-            serialize(mDataGroup, mObject, mLogFile);
-            return mDataGroup;
-
-        }
-        public static void serialize(DataGroup mDataGroup, Object mObject, LogFile mLogFile)
-        {
-
-            try
-            {
-                if (mObject == null)
-                {
-                    log(mLogFile, "ERROR - Unable to serialize object into Data Group. Object was null.");
-                    return;
-                }
-                if (mDataGroup == null )
-                {
-                    log(mLogFile, "ERROR - Data Group was null.");
-                    return;
-                }
-                Type mType = mObject.GetType();
-                if (mType.IsSerializable == false)
-                {
-                    log(mLogFile, "ERROR - Object type: " + mType.Name + " is not serializable.");
-                    return;
-                }
-                if(mDataGroup.dataGroupName == "" )
-                {
-                    mDataGroup.dataGroupName = mType.Name;
-                }
-
-                mDataGroup.setProperty("CSHARP", mType.AssemblyQualifiedName);
-                MemberInfo[] mMembers = mType.GetMembers();
-
-                Type mStringType = Type.GetType("System.String");
-                foreach (MemberInfo mMember in mMembers)
-                {
-                    MemberTypes mMemberTypeInfo = mMember.MemberType;
-                    if (mMemberTypeInfo == MemberTypes.Property)
-                    {
-                        _serializeProperty(mDataGroup, mObject, mMember, mMember as PropertyInfo, mLogFile);
-                        continue;
-                    }
-                    else if (mMemberTypeInfo == MemberTypes.Field)
-                    {
-                        _serializeField(mDataGroup, mObject, mMember, mMember as FieldInfo, mLogFile);
-                        continue;
-                    }
-                    else if (mMemberTypeInfo == MemberTypes.Method)
-                    {
-                        continue;
-                    }
-                }
-
-            }
-            catch (Exception e)
-            {
-                log(mLogFile, "ERROR - Unable to serialize object into Data Group. Exception was: " + e.Message);
-            }
-
-        }
-
-        public static object DeserializeObject(DataGroup mDataGroup, Type mType, LogFile mLogFile)
-        {
-
-            try
-            {
-                if( mDataGroup == null)
-                {
-                    log(mLogFile, "ERROR - datagroup was null");
-                    return null;
-                }
-                if (mType == null)
-                {
-                    log(mLogFile, "ERROR - type was null");
-                    return null;
-                }
-
-                object mObject = Activator.CreateInstance(mType);
-                if (DeserializeObject(mObject, mDataGroup, mLogFile))
-                {
-                    return mObject;
-                }
-            }
-            catch(Exception e)
-            {
-                log(mLogFile, "ERROR - there was an error deserializing data group. Exception was: " + e.Message );
-            }
-            return null;
-        }
-
-        public static bool DeserializeObject(Object mObject, DataGroup mDataGroup, LogFile mLogFile)
-        {
-            if (mDataGroup == null)
-            {
-                log(mLogFile, "ERROR - datagroup was null");
-                return false;
-            }
-            if (mObject == null)
-            {
-                log(mLogFile, "ERROR - object was null");
-                return false;
-            }
-            try
-            {
-                Type mType = mObject.GetType();
-                MemberInfo[] mMembers = mType.GetMembers();
-
-                Type mStringType = Type.GetType("System.String");
-                foreach (MemberInfo mMember in mMembers)
-                {
-                    MemberTypes mMemberTypeInfo = mMember.MemberType;
-                    if (mMemberTypeInfo == MemberTypes.Property)
-                    {
-                        _deserializeProperty(mDataGroup, mObject, mMember, mMember as PropertyInfo, mLogFile);
-                        continue;
-                    }
-                    else if (mMemberTypeInfo == MemberTypes.Field)
-                    {
-                        _deserializeField(mDataGroup, mObject, mMember, mMember as FieldInfo, mLogFile);
-                        continue;
-                    }
-                    else if (mMemberTypeInfo == MemberTypes.Method)
-                    {
-                        continue;
-                    }
-                }
-                return true;
-            }
-            catch (Exception e)
-            {
-                log(mLogFile, "ERROR - there was an error deserializing data group into object type: " + mObject.GetType().Name + " Exception was: " + e.Message);
-            }
-            return false;
-        }
+        
         private static void _deserializeProperty(DataGroup mParentDataGroup, Object mObject, MemberInfo mMember, PropertyInfo mProperty, LogFile mLogFile)
         {
             Type mPropertyType = mProperty.GetType();
@@ -631,7 +700,7 @@ namespace Library
             try
             {
                 object mNewObject = Activator.CreateInstance(mTypeOfProperty);
-                DeserializeObject(mNewObject, mDataGroupProperty, mLogFile);
+                DeserializeObjectFromDataGroup(mNewObject, mDataGroupProperty, mLogFile);
                 return mNewObject;
             }
             catch(Exception e)
