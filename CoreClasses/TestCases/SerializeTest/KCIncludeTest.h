@@ -1,6 +1,7 @@
 //copyright Marsh Lefler 2000-...
 #pragma once
 #include "Systems/DataGroup/KCDataGroup.h"
+#include "Database/KCDBEntry.h"
 #include "KCIncludeTest.serialize.inc"
 
 
@@ -24,7 +25,7 @@ public:
 };
 
  
-class KCIncludeTest
+class KCIncludeTest : public FKCDBEntry
 {
 public:
 	KCSERIALIZE_CODE();
@@ -88,4 +89,11 @@ protected:
 	ETEST				m_eEnumTest = ETEST::COUNT;
 	UPROPERTY(DisplayName="Child Serialized Objects")
 	KCTArray<KCSerializeChild *>	m_Array;
+	//The stat which will be used in the graph. Most times it's the rank.
+	UPROPERTY(Category = "TESTING", DisplayName = "Unit Type Test", Meta = (UnitTypeCategory = "Items", UnitTypeFilter = "New4"))
+	KCString							m_strUnitType = "";
+	UPROPERTY(Category = "TESTING", DisplayName = "Folder Path", Meta = (FolderPath = "Content"))
+	KCString							m_strFolderTest = "";
+	UPROPERTY(Category = "TESTING", DisplayName = "File", Meta = (FilePath = "Content", FileFilter = "*.dat"))
+	KCString							m_strFileTest = "";
 };

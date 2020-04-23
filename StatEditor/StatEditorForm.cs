@@ -116,7 +116,10 @@ namespace StatEditor
 				case ELOAD_STATE.done:
 				{
                     _createDatabaseTabs();
-                    
+
+
+
+
 
                     //object mObject = m_Core.classCreatorManager.createNewClass("KCIncludeTest");// FKCStatDefinition");// new ClassTestingObjectViewer();
                     //statObjectViewer.setObjectViewing(mObject);
@@ -125,6 +128,7 @@ namespace StatEditor
                     this.Activate();
                     this.TopMost = false;
                     updateTimer.Enabled = true;
+
                 }
 				break;
 			}
@@ -217,10 +221,9 @@ namespace StatEditor
 
                 }
             }
-            if(bEverythingSavedOkay == false )
-            {
-                _setDirty(true);
-            }
+            _setDirty(!bEverythingSavedOkay);
+
+            
             return bEverythingSavedOkay;
         }
 

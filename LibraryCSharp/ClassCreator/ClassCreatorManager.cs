@@ -9,6 +9,7 @@ using System.Reflection;
 using Library.ClassParser;
 using Library.IO;
 using Library.ClassCreator.Writers;
+using System.ComponentModel;
 using System.Threading;
 using System.Windows.Forms;
 namespace Library.ClassCreator
@@ -39,13 +40,22 @@ namespace Library.ClassCreator
         private Dictionary<EnumList, string> m_EnumsAsCode = new Dictionary<EnumList, string>();
         private Dictionary<string, string> m_TypeConverters = new Dictionary<string, string>();
         private string m_strTypeConverters = "";
+        private string m_strDatabaseFolder = ".\\Databases\\";
+        private string m_strListsFolder = ".\\Lists\\";
+        private List<ClassCreatorContentFolders> m_ContentFolders = new List<ClassCreatorContentFolders>();
         public ClassCreatorManager()
 		{
-			m_strInitialContentsOfMasterFile = _createInitialFile();
+
+            m_strInitialContentsOfMasterFile = _createInitialFile();
 			variableDefinitionHandler = new VariableDefinitionHandler("VariableDefinitions.json");
 
 		}
-
+        public void setDirectories(string strDatabaseFolder, string strListFolder, List<ClassCreatorContentFolders> mContentFolders)
+        {
+            m_strDatabaseFolder = strDatabaseFolder;
+            m_strListsFolder = strListFolder;
+            m_ContentFolders = mContentFolders;
+        }
         public void showVariableDefinitionEditor(Form mParent)
         {
             VariableDefinitionEditor mEditor = new VariableDefinitionEditor(this);
@@ -129,6 +139,10 @@ namespace Library.ClassCreator
                             {
                                 mVariable.typeConverter = m_TypeConverters[strListName];
                             }
+                            else
+                            {
+                                log("ERROR - type converter: " + strListName + " was specified but wasn't found in the dynamic mastercode.cs file.");
+                            }
                         }
                     }
                 }
@@ -137,7 +151,7 @@ namespace Library.ClassCreator
 
 		private void _processClassesAndCompile()
 		{
-            m_strTypeConverters = TypeConverterWriter.createTypeConverters(m_TypeConverters, ".\\Databases\\", ".\\Lists\\", m_ClassParser.getProjectWrapper());
+            m_strTypeConverters = TypeConverterWriter.createTypeConverters(m_TypeConverters, m_ContentFolders, m_strDatabaseFolder, m_strListsFolder, m_ClassParser.getProjectWrapper());
             _assignTypeConverters();
             foreach (EnumList mEnum in m_ClassParser.getProjectWrapper().enums.Values)
 			{
@@ -203,6 +217,7 @@ namespace Library.ClassCreator
 			{
 				if(strLine.Contains("<CLASSES>"))
 				{
+                    m_StringWriter.WriteLine(_getHelperFunctions());
                     m_StringWriter.WriteLine(m_strTypeConverters);
 					foreach (KeyValuePair<EnumList, string > mData in m_EnumsAsCode)
 					{
@@ -370,5 +385,53 @@ namespace " + m_strNamespace + @"
 ";
 		}
 
-	}//end of class
+        private string _getHelperFunctions()
+        {
+            return @"
+        public class HelperFunctions
+        {
+            static public string makeRelativePath(string strStartingDirectory, string strAbsolutePath)
+		    {
+			    try
+			    {
+				    string strFolderRelativeTo = strStartingDirectory;//AppDomain.CurrentDomain.BaseDirectory;
+				    string strFullFilePath = strAbsolutePath;
+				    Uri pathUri = new Uri(strFullFilePath);
+				    // Folders must end in a slash
+				    if (!strFolderRelativeTo.EndsWith(Path.DirectorySeparatorChar.ToString()))
+				    {
+					    strFolderRelativeTo += Path.DirectorySeparatorChar;
+				    }
+				    Uri folderUri = new Uri(strFolderRelativeTo);
+				    return Uri.UnescapeDataString(folderUri.MakeRelativeUri(pathUri).ToString().Replace('/', Path.DirectorySeparatorChar));
+			    }
+			    catch
+			    {
+
+			    }
+			    return strAbsolutePath;
+		    }
+        } //end helper functions
+";
+        }
+
+
+
+
+    }//end of class
+
+    public class ClassCreatorContentFolders
+    {
+        public ClassCreatorContentFolders()
+        {
+            codeName = "";
+            path = "";
+        }
+        [DisplayName("Name"), Description("This is the name you will use in code to bring up the file load dialog. FilePath=\"Content\" or FolderPath=\"Content\" for example")]
+        public string codeName { get; set; }
+        [DisplayName("Path"), Description("This is the relative path to the folder you want(or full)")]
+        public string path { get; set; }
+
+    }//end of class
+
 }//end of namespace

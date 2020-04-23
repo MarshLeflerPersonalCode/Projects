@@ -88,9 +88,6 @@ namespace CommandLineSerializer
 		public bool save(string strDirectory)
 		{
 			string strFullPath = Path.Combine(strDirectory, configFile);
-			DataGroup mDataGroup = DataGroupConvert.serialize(this, serializerController.getLogFile());            
-            mDataGroup.saveToFile(Path.Combine(strDirectory, "test.txt"));
-            SerializerConfigFile mConfig = DataGroupConvert.DeserializeObject(mDataGroup, GetType(), serializerController.getLogFile()) as SerializerConfigFile;
             string strErrorMessage = "";
             try
             {

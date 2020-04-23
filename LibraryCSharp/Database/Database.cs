@@ -388,7 +388,7 @@ namespace Library.Database
                 m_Instances.Remove(mNewEntry);
                 m_InstancesByGuid.Remove(getEntryGuid(mNewEntry));
                 m_InstancesByName.Remove(strEntryname);
-                m_InstancesByFileName.Remove(strEntryFileName);
+                m_InstancesByFileName.Remove(strEntryFileName);                
                 string strPathToDatabaseFolder = Path.Combine(m_DatabaseManager.getDatabaseDirectory(), databaseName.Replace(" ", "_") + "\\");
                 File.Delete(Path.Combine(strPathToDatabaseFolder, strEntryFileName));
             }

@@ -7,6 +7,9 @@
 
 namespace KCStringUtils
 {
+	//replaces all the char cLookFor with cReplaceWith. 
+	void				replace(std::string &strString, char cLookFor, char cReplaceWith);
+
 	//converts a string to upper
 	FORCEINLINE std::string & toUpper( std::string &strToUpper){ transform(strToUpper.begin(), strToUpper.end(), strToUpper.begin(), ::toupper);  return strToUpper;}
 	//converts a string to upper making a new string
@@ -16,11 +19,14 @@ namespace KCStringUtils
 	//converts a string to lower making a new string
 	FORCEINLINE std::string toLowerNewString(std::string strToLower) { transform(strToLower.begin(), strToLower.end(), strToLower.begin(), ::tolower);  return strToLower; }
 
+	//converts a wide to a char
+	std::wstring		toWide(const std::string &strString);
+
 	//converts a WChar to a String. 
-	KCString			converWideToUtf8(const WCHAR *pStringToConvert);
-	FORCEINLINE KCString toNarrowUtf8(const WCHAR *pStringToConvert){ return converWideToUtf8(pStringToConvert); }
+	KCString			convertWideToUtf8(const WCHAR *pStringToConvert);
+	FORCEINLINE KCString toNarrowUtf8(const WCHAR *pStringToConvert){ return convertWideToUtf8(pStringToConvert); }
 	//converts a wstring to a String. 
-	KCString			converWideToUtf8(const std::wstring &strStringToConvert);
+	KCString			convertWideStringToUtf8(const std::wstring &strStringToConvert);
 
 	//returns if it's a number. Supports 1.0f as well.
 	bool				isNumber(const std::string &strStringToTest);

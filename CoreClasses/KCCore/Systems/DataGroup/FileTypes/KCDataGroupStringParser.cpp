@@ -84,16 +84,24 @@ bool _parseDataGroupProperty(KCDataGroup &mDataGroupParent, std::string &strProp
 	size_t iTagEnd = strPropertyLine.find_first_of('>');
 	KCEnsureAlwaysMsgReturnVal((iTagBegin >= 0 && iTagEnd >= 0), ("Open or Close Property Tag(s) not found(<...>) in string " + strPropertyLine).c_str(), false);
 	std::string strType = strPropertyLine.substr(iTagBegin + 1, iTagEnd - iTagBegin - 1);
+	EDATATYPES eType = DATATYPES_UTILS::getDataTypeByDataTypeName(KCStringUtils::toUpper(strType));
+	KCEnsureAlwaysMsgReturnVal((eType != EDATATYPES::COUNT), ("Unknown Type " + strType + " found in string " + strPropertyLine).c_str(), false);
 	size_t iPropertyStart = iTagEnd - iTagBegin + 1;
 	KCEnsureAlwaysMsgReturnVal((iPropertyStart < strPropertyLine.length()), ("Incorrectly formatted property line:" + strPropertyLine).c_str(), false);
 	std::string strNameAndValue = strPropertyLine.substr(iPropertyStart, strPropertyLine.length() - iPropertyStart);
 	size_t iPropertySplit = strNameAndValue.find_first_of(':');
 	KCEnsureAlwaysMsgReturnVal((iPropertySplit > 0), ("Incorrectly formatted property line:" + strNameAndValue).c_str(), false);
 	std::string strName = strNameAndValue.substr(0, iPropertySplit);
+	KCEnsureAlwaysMsgReturnVal(strName.size() > 0, ("Incorrectly formatted property line:" + strNameAndValue).c_str(), false);
 	std::string strValue = strNameAndValue.substr(iPropertySplit + 1, strNameAndValue.length() - iPropertySplit - 1);
-	KCEnsureAlwaysMsgReturnVal((strName.size() > 0 &&  strValue.size() > 0), ("Incorrectly formatted property line:" + strNameAndValue).c_str(), false);
-	EDATATYPES eType = DATATYPES_UTILS::getDataTypeByDataTypeName(KCStringUtils::toUpper(strType));
-	KCEnsureAlwaysMsgReturnVal((eType != EDATATYPES::COUNT), ("Unknown Type " + strType + " found in string " + strPropertyLine).c_str(), false);
+	if (strValue.size() == 0)
+	{
+		if (eType != EDATATYPES::STRING)
+		{
+			strValue = "0";
+		}
+	}
+	
 	KCDataProperty &mProperty = mDataGroupParent.getOrCreateProperty(strName);	
 	bool bSetOkay = mProperty.setValueByString(strValue, eType);
 	KCEnsureAlwaysMsgReturnVal(bSetOkay, ("Was unable to set property " + strName + " with value " + strValue + ". Complete string is:" + strPropertyLine).c_str(), false);

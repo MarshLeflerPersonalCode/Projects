@@ -4,7 +4,7 @@
 #include "Database/KCDBEntry.h"
 #include "KCStatDefinition.serialize.inc"
 namespace STATS
-{
+{ 
 
 	class FKCStatDefinition : public FKCDBEntry
 	{
@@ -38,9 +38,7 @@ namespace STATS
 		//The stat which will be used in the graph. Most times it's the rank.
 		UPROPERTY(Category = "GRAPH", DisplayName = "Graph Stat", Meta = (List = "Stats"))
 		KCString							m_strGraphStat = "Rank";
-		//The stat which will be used in the graph. Most times it's the rank.
-		UPROPERTY(Category = "GRAPH", DisplayName = "Unit Type Test", Meta = (UnitTypeCategory = "Items", UnitTypeFilter="New4"))
-		KCString							m_strUnitType = "";
+
 	};
 
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace Library
 {
@@ -51,6 +52,7 @@ namespace Library
 		private long m_iValue = 0;
 		private double m_fValue = 0;
 		private string m_strValue = "";
+        private static Mutex m_Initializer = new Mutex();
 
 		public DataProperty() { _initialize(); }
 		public DataProperty(string strName)
@@ -70,13 +72,22 @@ namespace Library
 
 		private static void _initialize()
 		{
-			if(g_NamesToTypes.Count == 0)
+            
+
+            if (g_NamesToTypes.Count == 0)
 			{
-				for(int iIndexOfType = 0; iIndexOfType < (int)EDATAGROUP_VARIABLE_TYPES.COUNT; iIndexOfType++)
+                m_Initializer.WaitOne();
+                if (g_NamesToTypes.Count != 0)
+                {
+                    m_Initializer.ReleaseMutex();
+                    return;
+                }
+                for (int iIndexOfType = 0; iIndexOfType < (int)EDATAGROUP_VARIABLE_TYPES.COUNT; iIndexOfType++)
 				{
 					EDATAGROUP_VARIABLE_TYPES eType = (EDATAGROUP_VARIABLE_TYPES)iIndexOfType;
 					g_NamesToTypes[getPropertyTypeName(eType)] = eType;
 				}
+                m_Initializer.ReleaseMutex();
 			}
 		}
 

@@ -83,6 +83,10 @@ namespace Library.ClassParser
 			ClassParserConfig mFilesNeedingUpdate = m_Config.getNewerFiles(mOldClassParserConfig);
 			foreach (FileStamp mFile in mFilesNeedingUpdate.files)
 			{
+                if( mFile.file.Contains("EnumsByName"))
+                {
+                    continue;
+                }
 				m_FilesToUpdate.Add(mFile.file);
 				m_ProjectWrapper.removeAllInsideFile(mFile.file);
 			}
@@ -156,6 +160,7 @@ namespace Library.ClassParser
 				log("Processed " + m_ClassStructuresProcessing.Count.ToString() + " classes/struts. Took " + m_StopWatch.Elapsed.TotalSeconds.ToString() + " seconds.");
 				m_StopWatch.Stop();
 				m_bProcessed = true;
+                int iEnumUniqueID = 0;
 				foreach (ProcessClassToStructureThreaded mProcesser in m_ClassStructuresProcessing)
 				{
 					foreach (ClassStructure mStructure in mProcesser.classStructures)
@@ -163,9 +168,12 @@ namespace Library.ClassParser
 						m_ProjectWrapper.addClassStructure(mStructure);
 
 					}
+
 					foreach (EnumList mEnumList in mProcesser.enumLists)
-					{											
-						m_ProjectWrapper.addEnumList(mEnumList);
+					{
+                        mEnumList.uniqueID = iEnumUniqueID;
+                        iEnumUniqueID++;
+                        m_ProjectWrapper.addEnumList(mEnumList);
 
 					}
 					foreach (KeyValuePair<string,string> mDefine in mProcesser.defines)

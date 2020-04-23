@@ -10,6 +10,9 @@
 //
 //
 /////////////////////////////////////////////////////////
+
+class KCDataGroup;
+
 namespace STATS
 {
 
@@ -22,9 +25,17 @@ namespace STATS
 		//returns the singleton of this class
 		static KCStatManager *		getSingleton();
 
+		//loads individual stats from a directory. Returns the count reloaded
+		int32						reloadStatsFromDirectory(KCString strLooseFilesFolder);
+
+		//stat files can hold multiple stats
+		bool						reloadStatFile(KCString strStatFile);
 
 
 	private:
+		bool						_createStat(KCDataGroup *pDataGroup);
+		
+		
 		//NOTE - maybe in the future better to make this a map
 		
 	};

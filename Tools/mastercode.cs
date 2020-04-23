@@ -19,6 +19,32 @@ using Library;
 namespace Dynamic
 {
 
+        public class HelperFunctions
+        {
+            static public string makeRelativePath(string strStartingDirectory, string strAbsolutePath)
+		    {
+			    try
+			    {
+				    string strFolderRelativeTo = strStartingDirectory;//AppDomain.CurrentDomain.BaseDirectory;
+				    string strFullFilePath = strAbsolutePath;
+				    Uri pathUri = new Uri(strFullFilePath);
+				    // Folders must end in a slash
+				    if (!strFolderRelativeTo.EndsWith(Path.DirectorySeparatorChar.ToString()))
+				    {
+					    strFolderRelativeTo += Path.DirectorySeparatorChar;
+				    }
+				    Uri folderUri = new Uri(strFolderRelativeTo);
+				    return Uri.UnescapeDataString(folderUri.MakeRelativeUri(pathUri).ToString().Replace('/', Path.DirectorySeparatorChar));
+			    }
+			    catch
+			    {
+
+			    }
+			    return strAbsolutePath;
+		    }
+        } //end helper functions
+
+
     public class ListTypeConverter_GRAPHS : StringConverter
     {
        StandardValuesCollection m_ReturnStandardCollection = null;
@@ -50,6 +76,16 @@ namespace Dynamic
        }
     }
 
+    public class ListTypeConverter_TESTING : StringConverter
+    {
+       public override bool GetStandardValuesSupported(ITypeDescriptorContext context){ return true; }
+       public override bool GetStandardValuesExclusive(ITypeDescriptorContext context){ return true; }
+       public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+       {
+           return new StandardValuesCollection(DatabaseManager.getDatabaseManager().getDatabase("Testing").getListOfNames());
+       }
+    }
+
 
 
     public class UnitTypeConverter_ITEMS_NEW4 : StringConverter
@@ -63,111 +99,113 @@ namespace Dynamic
     }
 
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////EUNITTYPES_ITEMS//////////////////////////////////
-    public enum EUNITTYPES_ITEMS
+    public class PathSelectConverter___CONTENT_ : UITypeEditor
     {
-         ANY,
-         NEW,
-         NEW1,
-         NEW2,
-         NEW3,
-         NEW4,
-         NEW5,
-         NEW6,
-         NEW7,
-         NEW8,
-    };
+       public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context){ if ( context == null || context.Instance == null ){return base.GetEditStyle(context);} return UITypeEditorEditStyle.Modal;}
+       public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
 
-    public class _TypeConverter_EUNITTYPES_ITEMS : StringConverter
-    {
-       StandardValuesCollection m_ReturnStandardCollection = null;
-       public override bool GetStandardValuesSupported(ITypeDescriptorContext context){ return true; }
-       public override bool GetStandardValuesExclusive(ITypeDescriptorContext context){ return true; }
-       public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
        {
-           if(m_ReturnStandardCollection == null )
-           {
-                List<String> mEnumList = new List<String>();
-                mEnumList.Add("ANY");
-                mEnumList.Add("NEW");
-                mEnumList.Add("NEW1");
-                mEnumList.Add("NEW2");
-                mEnumList.Add("NEW3");
-                mEnumList.Add("NEW4");
-                mEnumList.Add("NEW5");
-                mEnumList.Add("NEW6");
-                mEnumList.Add("NEW7");
-                mEnumList.Add("NEW8");
-                m_ReturnStandardCollection = new StandardValuesCollection(mEnumList);
-           }
-           return m_ReturnStandardCollection;
+                IWindowsFormsEditorService editorService;
+
+                if ( context == null || context.Instance == null || provider == null )
+                {
+                   return value;
+                }
+                
+                try
+                {
+                   // get the editor service, just like in windows forms
+                   editorService = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
+                   System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+                   folderBrowserDialog1.Description = "Select the directory that you want to use as the default.";                    
+                   folderBrowserDialog1.ShowNewFolderButton = true;
+                   string strPath = (string)value;
+                   string strInitialPath = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), ".\\Content\\"));
+                   if (Directory.Exists(strPath) == false)
+                   {
+                       strPath = strInitialPath;
+                   }
+                   else
+                   {
+                       strPath = Path.Combine( Directory.GetCurrentDirectory(), strPath);
+                   }
+                   
+                   folderBrowserDialog1.SelectedPath = Path.GetFullPath(strPath); 
+                   using (folderBrowserDialog1)
+                   {
+                       DialogResult res = folderBrowserDialog1.ShowDialog();
+                       if (res == DialogResult.OK)
+                       {
+                           strPath = folderBrowserDialog1.SelectedPath;
+                           return HelperFunctions.makeRelativePath(strInitialPath, strPath);
+                       }
+                   }
+
+                   return value;
+
+               } finally
+               {
+                   editorService = null;
+               }
        }
     }
 
-//////////////////////////////////////////////////EUNITTYPES_ITEMS//////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////EDATABASE_TABLES//////////////////////////////////
-    public enum EDATABASE_TABLES
+    public class FileSelectConverter___CONTENT_ : UITypeEditor
     {
-         UNDEFINED,
-         STATS,
-         COUNT,
-    };
+       public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context){ if ( context == null || context.Instance == null ){return base.GetEditStyle(context);} return UITypeEditorEditStyle.Modal;}
+       public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
 
-    public class _TypeConverter_EDATABASE_TABLES : StringConverter
-    {
-       StandardValuesCollection m_ReturnStandardCollection = null;
-       public override bool GetStandardValuesSupported(ITypeDescriptorContext context){ return true; }
-       public override bool GetStandardValuesExclusive(ITypeDescriptorContext context){ return true; }
-       public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
        {
-           if(m_ReturnStandardCollection == null )
-           {
-                List<String> mEnumList = new List<String>();
-                mEnumList.Add("UNDEFINED");
-                mEnumList.Add("STATS");
-                mEnumList.Add("COUNT");
-                m_ReturnStandardCollection = new StandardValuesCollection(mEnumList);
-           }
-           return m_ReturnStandardCollection;
+                IWindowsFormsEditorService editorService;
+
+                if ( context == null || context.Instance == null || provider == null )
+                {
+                   return value;
+                }
+                
+                try
+                {
+                   // get the editor service, just like in windows forms
+                   editorService = (IWindowsFormsEditorService)provider.GetService(typeof(IWindowsFormsEditorService));
+
+                   OpenFileDialog dlg = new OpenFileDialog();
+                   dlg.RestoreDirectory = true;
+                   dlg.Filter = "Custom File|*.dat";
+                   dlg.CheckFileExists = true;
+                   string strFullPath = (string)value;
+                   if (!File.Exists(strFullPath))
+                   {
+                       dlg.FileName = null;
+                       dlg.InitialDirectory = Path.Combine(Directory.GetCurrentDirectory(),".\\Content\\");
+                   }
+                   else
+                   {
+                       dlg.FileName = Path.GetFileName(strFullPath);
+                       dlg.InitialDirectory = Path.Combine(Directory.GetCurrentDirectory(), strFullPath.Substring(0, strFullPath.Length - dlg.FileName.Length));
+                   }
+                   string strInitialDirectoryNotCleaned = dlg.InitialDirectory;
+                   dlg.InitialDirectory = Path.GetFullPath(dlg.InitialDirectory);
+                   
+
+                   using (dlg)
+                   {
+                       DialogResult res = dlg.ShowDialog();
+                       if (res == DialogResult.OK)
+                       {
+                           return HelperFunctions.makeRelativePath( dlg.InitialDirectory, dlg.FileName);
+                       }
+                   }
+                   return HelperFunctions.makeRelativePath( dlg.InitialDirectory, (string)value);
+
+               } finally
+               {
+                   editorService = null;
+               }
        }
     }
 
-//////////////////////////////////////////////////EDATABASE_TABLES//////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////ETARRAY_GROW_BY_TYPES/////////////////////////////
-    public enum ETARRAY_GROW_BY_TYPES
-    {
-         DOUBLE,
-         PREDEFINED,
-    };
-
-    public class _TypeConverter_ETARRAY_GROW_BY_TYPES : StringConverter
-    {
-       StandardValuesCollection m_ReturnStandardCollection = null;
-       public override bool GetStandardValuesSupported(ITypeDescriptorContext context){ return true; }
-       public override bool GetStandardValuesExclusive(ITypeDescriptorContext context){ return true; }
-       public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
-       {
-           if(m_ReturnStandardCollection == null )
-           {
-                List<String> mEnumList = new List<String>();
-                mEnumList.Add("DOUBLE");
-                mEnumList.Add("PREDEFINED");
-                m_ReturnStandardCollection = new StandardValuesCollection(mEnumList);
-           }
-           return m_ReturnStandardCollection;
-       }
-    }
-
-//////////////////////////////////////////////////ETARRAY_GROW_BY_TYPES/////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////ETEST/////////////////////////////////////////////
@@ -311,6 +349,170 @@ namespace Dynamic
     }
 
 //////////////////////////////////////////////////EDATATYPES////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////EDATABASE_TABLES//////////////////////////////////
+    public enum EDATABASE_TABLES
+    {
+         UNDEFINED,
+         STATS,
+         COUNT,
+    };
+
+    public class _TypeConverter_EDATABASE_TABLES : StringConverter
+    {
+       StandardValuesCollection m_ReturnStandardCollection = null;
+       public override bool GetStandardValuesSupported(ITypeDescriptorContext context){ return true; }
+       public override bool GetStandardValuesExclusive(ITypeDescriptorContext context){ return true; }
+       public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+       {
+           if(m_ReturnStandardCollection == null )
+           {
+                List<String> mEnumList = new List<String>();
+                mEnumList.Add("UNDEFINED");
+                mEnumList.Add("STATS");
+                mEnumList.Add("COUNT");
+                m_ReturnStandardCollection = new StandardValuesCollection(mEnumList);
+           }
+           return m_ReturnStandardCollection;
+       }
+    }
+
+//////////////////////////////////////////////////EDATABASE_TABLES//////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////EUNITTYPES_ITEMS//////////////////////////////////
+    public enum EUNITTYPES_ITEMS
+    {
+         ANY,
+         NEW,
+         NEW1,
+         NEW2,
+         NEW3,
+         NEW4,
+         NEW5,
+         NEW6,
+         NEW7,
+         NEW8,
+    };
+
+    public class _TypeConverter_EUNITTYPES_ITEMS : StringConverter
+    {
+       StandardValuesCollection m_ReturnStandardCollection = null;
+       public override bool GetStandardValuesSupported(ITypeDescriptorContext context){ return true; }
+       public override bool GetStandardValuesExclusive(ITypeDescriptorContext context){ return true; }
+       public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+       {
+           if(m_ReturnStandardCollection == null )
+           {
+                List<String> mEnumList = new List<String>();
+                mEnumList.Add("ANY");
+                mEnumList.Add("NEW");
+                mEnumList.Add("NEW1");
+                mEnumList.Add("NEW2");
+                mEnumList.Add("NEW3");
+                mEnumList.Add("NEW4");
+                mEnumList.Add("NEW5");
+                mEnumList.Add("NEW6");
+                mEnumList.Add("NEW7");
+                mEnumList.Add("NEW8");
+                m_ReturnStandardCollection = new StandardValuesCollection(mEnumList);
+           }
+           return m_ReturnStandardCollection;
+       }
+    }
+
+//////////////////////////////////////////////////EUNITTYPES_ITEMS//////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////ETARRAY_GROW_BY_TYPES/////////////////////////////
+    public enum ETARRAY_GROW_BY_TYPES
+    {
+         DOUBLE,
+         PREDEFINED,
+    };
+
+    public class _TypeConverter_ETARRAY_GROW_BY_TYPES : StringConverter
+    {
+       StandardValuesCollection m_ReturnStandardCollection = null;
+       public override bool GetStandardValuesSupported(ITypeDescriptorContext context){ return true; }
+       public override bool GetStandardValuesExclusive(ITypeDescriptorContext context){ return true; }
+       public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+       {
+           if(m_ReturnStandardCollection == null )
+           {
+                List<String> mEnumList = new List<String>();
+                mEnumList.Add("DOUBLE");
+                mEnumList.Add("PREDEFINED");
+                m_ReturnStandardCollection = new StandardValuesCollection(mEnumList);
+           }
+           return m_ReturnStandardCollection;
+       }
+    }
+
+//////////////////////////////////////////////////ETARRAY_GROW_BY_TYPES/////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////FKCDBEntry////////////////////////////////////////
+
+    public class FKCDBEntry: ClassInstance
+    {
+        
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\KCCore\Database\KCDBEntry.h
+        //Class Name:FKCDBEntry
+        //Variable Name:m_DatabaseGuid
+        //Variable Type:KCDatabaseGuid
+        //Variable Value:UNINITIALIZED_DATABASE_GUID
+        //Variable Line Number:39
+        //Variable Properties: CATEGORY = DATABASE, DISPLAYNAME = Database Guid, READONLY = 
+        private int _m_DatabaseGuid = 0;
+        [DisplayName("Database Guid"), Category("DATABASE"), ReadOnly(true), Description("the database guid. Must be unique")]
+        public int m_DatabaseGuid
+        {
+            get{ return _m_DatabaseGuid; }
+            set{ _m_DatabaseGuid = value; _notifyOfPropertyChanged("m_DatabaseGuid");}
+        }
+                
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\KCCore\Database\KCDBEntry.h
+        //Class Name:FKCDBEntry
+        //Variable Name:m_strName
+        //Variable Type:KCName
+        //Variable Value:
+        //Variable Line Number:44
+        //Variable Properties: CATEGORY = DATABASE, DISPLAYNAME = Name, READONLY = 
+        private string _m_strName = "";
+        [DisplayName("Name"), Category("DATABASE"), ReadOnly(true), Description("the name of the entry. Must be unique")]
+        public string m_strName
+        {
+            get{ return _m_strName; }
+            set{ _m_strName = value; _notifyOfPropertyChanged("m_strName");}
+        }
+                
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\KCCore\Database\KCDBEntry.h
+        //Class Name:FKCDBEntry
+        //Variable Name:m_strFileName
+        //Variable Type:KCString
+        //Variable Value:
+        //Variable Line Number:47
+        //Variable Properties: CATEGORY = DATABASE, DISPLAYNAME = Name, READONLY = 
+        private string _m_strFileName = "";
+        [DisplayName("Name"), Category("DATABASE"), ReadOnly(true), Description("The filename of this entry")]
+        public string m_strFileName
+        {
+            get{ return _m_strFileName; }
+            set{ _m_strFileName = value; _notifyOfPropertyChanged("m_strFileName");}
+        }
+        
+    } //end of FKCDBEntry
+
+//////////////////////////////////////////////////FKCDBEntry////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -496,23 +698,6 @@ namespace Dynamic
             get{ return _m_strGraphStat; }
             set{ _m_strGraphStat = value; _notifyOfPropertyChanged("m_strGraphStat");}
         }
-                
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        //Class File:..\CoreClasses\KCCore\Systems\Stats\Private\KCStatDefinition.h
-        //Class Name:FKCStatDefinition
-        //Variable Name:m_strUnitType
-        //Variable Type:KCString
-        //Variable Value:""
-        //Variable Line Number:41
-        //Variable Properties: CATEGORY = GRAPH, DISPLAYNAME = Unit Type Test, UNITTYPECATEGORY = Items, UNITTYPEFILTER = New4, LIST = ITEMS_NEW4
-        private string _m_strUnitType = "";
-        [DisplayName("Unit Type Test"), Category("GRAPH"), Description("The stat which will be used in the graph. Most times it's the rank.")]
-        [TypeConverter(typeof(UnitTypeConverter_ITEMS_NEW4))]
-        public string m_strUnitType
-        {
-            get{ return _m_strUnitType; }
-            set{ _m_strUnitType = value; _notifyOfPropertyChanged("m_strUnitType");}
-        }
         
     } //end of FKCStatDefinition
 
@@ -531,7 +716,7 @@ namespace Dynamic
         //Variable Name:m_strTest
         //Variable Type:KCString
         //Variable Value:
-        //Variable Line Number:14
+        //Variable Line Number:15
         private string _m_strTest = "";
         public string m_strTest
         {
@@ -548,117 +733,6 @@ namespace Dynamic
 //////////////////////////////////////////////////KCIncludeTest/////////////////////////////////////
 
     public class KCIncludeTest: ClassInstance
-    {
-        
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        //Class File:..\CoreClasses\TestCases\SerializeTest\KCIncludeTest.h
-        //Class Name:KCIncludeTest
-        //Variable Name:m_fX
-        //Variable Type:float
-        //Variable Value:0
-        //Variable Line Number:69
-        private float _m_fX = 0;
-        public float m_fX
-        {
-            get{ return _m_fX; }
-            set{ _m_fX = value; _notifyOfPropertyChanged("m_fX");}
-        }
-                
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        //Class File:..\CoreClasses\TestCases\SerializeTest\KCIncludeTest.h
-        //Class Name:KCIncludeTest
-        //Variable Name:m_fY
-        //Variable Type:float
-        //Variable Value:0
-        //Variable Line Number:71
-        private float _m_fY = 0;
-        public float m_fY
-        {
-            get{ return _m_fY; }
-            set{ _m_fY = value; _notifyOfPropertyChanged("m_fY");}
-        }
-                
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        //Class File:..\CoreClasses\TestCases\SerializeTest\KCIncludeTest.h
-        //Class Name:KCIncludeTest
-        //Variable Name:m_fZ
-        //Variable Type:float
-        //Variable Value:0
-        //Variable Line Number:73
-        private float _m_fZ = 0;
-        public float m_fZ
-        {
-            get{ return _m_fZ; }
-            set{ _m_fZ = value; _notifyOfPropertyChanged("m_fZ");}
-        }
-                
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        //Class File:..\CoreClasses\TestCases\SerializeTest\KCIncludeTest.h
-        //Class Name:KCIncludeTest
-        //Variable Name:m_SerializeChild
-        //Variable Type:KCSerializeChild
-        //Variable Value:
-        //Variable Line Number:75
-        private KCSerializeChild _m_SerializeChild = new KCSerializeChild();
-        public KCSerializeChild m_SerializeChild
-        {
-            get{ return _m_SerializeChild; }
-            set{ _m_SerializeChild = value; _notifyOfPropertyChanged("m_SerializeChild"); }
-        }
-                
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        //Class File:..\CoreClasses\TestCases\SerializeTest\KCIncludeTest.h
-        //Class Name:KCIncludeTest
-        //Variable Name:m_pSerializeChildTest
-        //Variable Type:KCSerializeChild
-        //Variable Value:nullptr
-        //Variable Line Number:77
-        private KCSerializeChild _m_pSerializeChildTest = new KCSerializeChild();
-        public KCSerializeChild m_pSerializeChildTest
-        {
-            get{ return _m_pSerializeChildTest; }
-            set{ _m_pSerializeChildTest = value; _notifyOfPropertyChanged("m_pSerializeChildTest"); }
-        }
-                
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        //Class File:..\CoreClasses\TestCases\SerializeTest\KCIncludeTest.h
-        //Class Name:KCIncludeTest
-        //Variable Name:m_eEnumTest
-        //Variable Type:ETEST
-        //Variable Value:ETEST::COUNT
-        //Variable Line Number:79
-        private ETEST _m_eEnumTest = ETEST.COUNT;
-        public ETEST m_eEnumTest
-        {
-            get{ return _m_eEnumTest; }
-            set{ _m_eEnumTest = value; _notifyOfPropertyChanged("m_eEnumTest");}
-        }
-                
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        //Class File:..\CoreClasses\TestCases\SerializeTest\KCIncludeTest.h
-        //Class Name:KCIncludeTest
-        //Variable Name:m_Array
-        //Variable Type:KCTArray<KCSerializeChild *>
-        //Variable Value:
-        //Variable Line Number:81
-        //Variable Properties: DISPLAYNAME = Child Serialized Objects
-        private List<KCSerializeChild> _m_Array = new List<KCSerializeChild>();
-        [DisplayName("Child Serialized Objects")]
-        public List<KCSerializeChild> m_Array
-        {
-            get{ return _m_Array; }
-            set{ _m_Array = value; _notifyOfPropertyChanged("m_Array"); }
-        }
-        
-    } //end of KCIncludeTest
-
-//////////////////////////////////////////////////KCIncludeTest/////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////FKCDBEntry////////////////////////////////////////
-
-    public class FKCDBEntry: ClassInstance
     {
         
         ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -708,10 +782,161 @@ namespace Dynamic
             get{ return _m_strFileName; }
             set{ _m_strFileName = value; _notifyOfPropertyChanged("m_strFileName");}
         }
+                
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\TestCases\SerializeTest\KCIncludeTest.h
+        //Class Name:KCIncludeTest
+        //Variable Name:m_fX
+        //Variable Type:float
+        //Variable Value:0
+        //Variable Line Number:70
+        private float _m_fX = 0;
+        public float m_fX
+        {
+            get{ return _m_fX; }
+            set{ _m_fX = value; _notifyOfPropertyChanged("m_fX");}
+        }
+                
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\TestCases\SerializeTest\KCIncludeTest.h
+        //Class Name:KCIncludeTest
+        //Variable Name:m_fY
+        //Variable Type:float
+        //Variable Value:0
+        //Variable Line Number:72
+        private float _m_fY = 0;
+        public float m_fY
+        {
+            get{ return _m_fY; }
+            set{ _m_fY = value; _notifyOfPropertyChanged("m_fY");}
+        }
+                
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\TestCases\SerializeTest\KCIncludeTest.h
+        //Class Name:KCIncludeTest
+        //Variable Name:m_fZ
+        //Variable Type:float
+        //Variable Value:0
+        //Variable Line Number:74
+        private float _m_fZ = 0;
+        public float m_fZ
+        {
+            get{ return _m_fZ; }
+            set{ _m_fZ = value; _notifyOfPropertyChanged("m_fZ");}
+        }
+                
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\TestCases\SerializeTest\KCIncludeTest.h
+        //Class Name:KCIncludeTest
+        //Variable Name:m_SerializeChild
+        //Variable Type:KCSerializeChild
+        //Variable Value:
+        //Variable Line Number:76
+        private KCSerializeChild _m_SerializeChild = new KCSerializeChild();
+        public KCSerializeChild m_SerializeChild
+        {
+            get{ return _m_SerializeChild; }
+            set{ _m_SerializeChild = value; _notifyOfPropertyChanged("m_SerializeChild"); }
+        }
+                
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\TestCases\SerializeTest\KCIncludeTest.h
+        //Class Name:KCIncludeTest
+        //Variable Name:m_pSerializeChildTest
+        //Variable Type:KCSerializeChild
+        //Variable Value:nullptr
+        //Variable Line Number:78
+        private KCSerializeChild _m_pSerializeChildTest = new KCSerializeChild();
+        public KCSerializeChild m_pSerializeChildTest
+        {
+            get{ return _m_pSerializeChildTest; }
+            set{ _m_pSerializeChildTest = value; _notifyOfPropertyChanged("m_pSerializeChildTest"); }
+        }
+                
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\TestCases\SerializeTest\KCIncludeTest.h
+        //Class Name:KCIncludeTest
+        //Variable Name:m_eEnumTest
+        //Variable Type:ETEST
+        //Variable Value:ETEST::COUNT
+        //Variable Line Number:80
+        private ETEST _m_eEnumTest = ETEST.COUNT;
+        public ETEST m_eEnumTest
+        {
+            get{ return _m_eEnumTest; }
+            set{ _m_eEnumTest = value; _notifyOfPropertyChanged("m_eEnumTest");}
+        }
+                
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\TestCases\SerializeTest\KCIncludeTest.h
+        //Class Name:KCIncludeTest
+        //Variable Name:m_Array
+        //Variable Type:KCTArray<KCSerializeChild *>
+        //Variable Value:
+        //Variable Line Number:82
+        //Variable Properties: DISPLAYNAME = Child Serialized Objects
+        private List<KCSerializeChild> _m_Array = new List<KCSerializeChild>();
+        [DisplayName("Child Serialized Objects")]
+        public List<KCSerializeChild> m_Array
+        {
+            get{ return _m_Array; }
+            set{ _m_Array = value; _notifyOfPropertyChanged("m_Array"); }
+        }
+                
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\TestCases\SerializeTest\KCIncludeTest.h
+        //Class Name:KCIncludeTest
+        //Variable Name:m_strUnitType
+        //Variable Type:KCString
+        //Variable Value:""
+        //Variable Line Number:85
+        //Variable Properties: CATEGORY = TESTING, DISPLAYNAME = Unit Type Test, UNITTYPECATEGORY = Items, UNITTYPEFILTER = New4, LIST = ITEMS_NEW4
+        private string _m_strUnitType = "";
+        [DisplayName("Unit Type Test"), Category("TESTING"), Description("The stat which will be used in the graph. Most times it's the rank.")]
+        [TypeConverter(typeof(UnitTypeConverter_ITEMS_NEW4))]
+        public string m_strUnitType
+        {
+            get{ return _m_strUnitType; }
+            set{ _m_strUnitType = value; _notifyOfPropertyChanged("m_strUnitType");}
+        }
+                
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\TestCases\SerializeTest\KCIncludeTest.h
+        //Class Name:KCIncludeTest
+        //Variable Name:m_strFolderTest
+        //Variable Type:KCString
+        //Variable Value:""
+        //Variable Line Number:87
+        //Variable Properties: CATEGORY = TESTING, DISPLAYNAME = Folder Path, FOLDERPATH = Content, LIST = PathSelectConverter___CONTENT_
+        private string _m_strFolderTest = "";
+        [DisplayName("Folder Path"), Category("TESTING")]
+        [Editor(typeof(PathSelectConverter___CONTENT_),typeof(UITypeEditor))]
+        public string m_strFolderTest
+        {
+            get{ return _m_strFolderTest; }
+            set{ _m_strFolderTest = value; _notifyOfPropertyChanged("m_strFolderTest");}
+        }
+                
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\TestCases\SerializeTest\KCIncludeTest.h
+        //Class Name:KCIncludeTest
+        //Variable Name:m_strFileTest
+        //Variable Type:KCString
+        //Variable Value:""
+        //Variable Line Number:89
+        //Variable Properties: CATEGORY = TESTING, DISPLAYNAME = File, FILEPATH = Content, FILEFILTER = *.dat, LIST = FileSelectConverter___CONTENT_
+        private string _m_strFileTest = "";
+        [DisplayName("File"), Category("TESTING")]
+        [Editor(typeof(FileSelectConverter___CONTENT_),typeof(UITypeEditor))]
+        public string m_strFileTest
+        {
+            get{ return _m_strFileTest; }
+            set{ _m_strFileTest = value; _notifyOfPropertyChanged("m_strFileTest");}
+        }
         
-    } //end of FKCDBEntry
+    } //end of KCIncludeTest
 
-//////////////////////////////////////////////////FKCDBEntry////////////////////////////////////////
+//////////////////////////////////////////////////KCIncludeTest/////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 } //end of namespace

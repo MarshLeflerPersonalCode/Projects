@@ -1,5 +1,8 @@
 //copyright Marsh Lefler 2000-...
 #include "KCFileUtilities.h"
+#include "windows.h"
+#include <direct.h>
+
 
 bool KCFileUtilities::loadFile(const TCHAR *strFile, KCTArray<uint8> &mArray)
 {
@@ -80,4 +83,115 @@ bool KCFileUtilities::saveToFile(const TCHAR* strFile, const char *pArray, size_
 #endif
 	KCEnsureAlways(false);
 	return false;
+}
+
+int32 KCFileUtilities::getFilesInDirectory(const TCHAR* strPath, const TCHAR* strSearchPattern, KCTArray<std::wstring> &mListOfFiles, bool bRecusive /*= true*/)
+{
+	int32 iCount(mListOfFiles.Num());
+	bool bDone = false;
+	bool bAddedApplicationDirectory = false;
+	std::wstring strRootPath = strPath;
+	std::wstring strPathAndSearchPattern = std::wstring(strPath) + std::wstring(strSearchPattern);
+	_WIN32_FIND_DATAW mFileData;
+	HANDLE mFileHandle = FindFirstFileW(strPathAndSearchPattern.c_str(), &mFileData);	
+	if (mFileHandle == INVALID_HANDLE_VALUE)
+	{
+		strPathAndSearchPattern = getApplicationDirectoryWide() + strPathAndSearchPattern;
+		strRootPath = getApplicationDirectoryWide() + strRootPath;
+		bAddedApplicationDirectory = true;
+		mFileHandle = FindFirstFileW(strPathAndSearchPattern.c_str(), &mFileData);
+	}
+	
+	while (!bDone && mFileHandle != INVALID_HANDLE_VALUE )
+	{
+
+		if (mFileData.cFileName == null ||
+			mFileData.cFileName[0] == '.' ||
+			mFileData.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN)
+		{
+			bDone = !FindNextFileW(mFileHandle, &mFileData);
+			continue;
+		}		
+		
+		if (!(mFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
+		{
+			mListOfFiles.add(strRootPath + std::wstring(mFileData.cFileName));
+
+		}
+		
+
+		bDone = !FindNextFileW(mFileHandle, &mFileData);
+	}
+
+	if (bRecusive )
+	{
+		bAddedApplicationDirectory = false;
+		bDone = false;
+		strPathAndSearchPattern = std::wstring(strPath) + std::wstring(strSearchPattern);
+		strRootPath = strPath;
+		mFileHandle = FindFirstFileW((strRootPath + L"*.").c_str(), &mFileData);
+		if (mFileHandle == INVALID_HANDLE_VALUE)
+		{
+			bAddedApplicationDirectory = true;
+			strPathAndSearchPattern = getApplicationDirectoryWide() + strPathAndSearchPattern;
+			strRootPath = getApplicationDirectoryWide() + strRootPath;
+		}
+
+		while (!bDone && mFileHandle != INVALID_HANDLE_VALUE)
+		{
+
+			if (mFileData.cFileName == null ||
+				mFileData.cFileName[0] == '.' ||
+				mFileData.dwFileAttributes & FILE_ATTRIBUTE_HIDDEN)
+			{
+				bDone = !FindNextFileW(mFileHandle, &mFileData);
+				continue;
+			}
+
+			if (mFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
+			{
+				std::wstring strNewPath = ((bAddedApplicationDirectory) ? getApplicationDirectoryWide() : L"") + std::wstring(strPath) + std::wstring(mFileData.cFileName) + L"\\";
+				getFilesInDirectory(strNewPath.c_str(), strSearchPattern, mListOfFiles, true);
+			}
+
+			bDone = !FindNextFileW(mFileHandle, &mFileData);
+		}
+	}
+
+	FindClose(mFileHandle);
+	return mListOfFiles.Num() - iCount;
+}
+
+const KCString & KCFileUtilities::getApplicationDirectory()
+{
+	static KCString g_strApplicationPath;
+	if (g_strApplicationPath.length() != 0)
+	{
+		return g_strApplicationPath;
+	}
+
+//in the future we can redefine this for unix or whatever
+#define GetCurrentDir _getcwd
+
+	char cCurrentPath[FILENAME_MAX];
+	if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath)))
+	{
+		return g_strApplicationPath;
+	}
+	
+	cCurrentPath[sizeof(cCurrentPath) - 1] = '\0'; /* not really required */
+	g_strApplicationPath = cCurrentPath;
+	g_strApplicationPath = g_strApplicationPath + "\\";
+	return g_strApplicationPath;
+}
+
+const std::wstring & KCFileUtilities::getApplicationDirectoryWide()
+{
+	static std::wstring g_strApplicationPath;
+	if (g_strApplicationPath.length() != 0)
+	{
+		return g_strApplicationPath;
+	}
+	g_strApplicationPath = KCStringUtils::toWide(getApplicationDirectory());
+	return g_strApplicationPath;
 }

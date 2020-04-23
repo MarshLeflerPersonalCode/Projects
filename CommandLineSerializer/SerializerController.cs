@@ -73,6 +73,7 @@ namespace CommandLineSerializer
 			}
 			_waitForHeadersToWriteHeaders();
 			_waitForHeadersToProcess();
+            _writeEnumFile();
 			_saveConfigFile();
 			m_LogFile.flushLog();
 			_showTimeExecuting();
@@ -534,5 +535,128 @@ namespace CommandLineSerializer
 		{
 			return m_ClassParserManager.getProjectWrapper();
 		}
-	}
-}
+
+        public void _writeEnumFile()
+        {
+            int iCountOfFilesParsed = (m_ClassParserManager != null) ? m_ClassParserManager.filesNeedingUpdate.Count : 0;
+            if( iCountOfFilesParsed == 0 )
+            {
+                return; //nothing changed.
+            }
+            string strPathToIntermediateDir = commandLineArguments.getCommandValueAsString("-IntermediateDir");
+            string strEnumHeaderFile = Path.Combine(strPathToIntermediateDir, "EnumsByName.h");
+            string strEnumCPPFile = Path.Combine(strPathToIntermediateDir, "EnumsByName.cpp");
+            StringWriter mHeaderWriter = new StringWriter();
+            mHeaderWriter.WriteLine("#pragma once" + Environment.NewLine + Environment.NewLine);
+            mHeaderWriter.WriteLine("#include \"KCDefines.h\"" + Environment.NewLine + Environment.NewLine);
+            mHeaderWriter.WriteLine("class _SERIALIZER_");
+            mHeaderWriter.WriteLine("{");
+            mHeaderWriter.WriteLine("public:");
+            mHeaderWriter.WriteLine("static int32 _getEnumValueByName(int32 iEnumID, const KCString &strEnumItemName)");
+            mHeaderWriter.WriteLine("{");
+            mHeaderWriter.WriteLine("     static std::unordered_map<int32, std::unordered_map<KCString, int32>> m_EnumLookUpByIDAndName;");
+            mHeaderWriter.WriteLine("     if(m_EnumLookUpByIDAndName.size() > 0 )");
+            mHeaderWriter.WriteLine("     {");
+            mHeaderWriter.WriteLine("          return m_EnumLookUpByIDAndName[iEnumID][strEnumItemName];");
+            mHeaderWriter.WriteLine("     }");
+            foreach (EnumList mEnumList in m_ClassParserManager.getProjectWrapper().enums.Values)
+            {
+                mHeaderWriter.WriteLine("     {");
+                mHeaderWriter.WriteLine("          m_EnumLookUpByIDAndName[" + mEnumList.uniqueID + "] = std::unordered_map<KCString, int32>();");
+                mHeaderWriter.WriteLine("          std::unordered_map<KCString, int32> &mNameToValue = m_EnumLookUpByIDAndName[" + mEnumList.uniqueID + "];");
+                mHeaderWriter.Write("          ");
+                int iIndex = 0;
+                foreach (EnumItem mItem in mEnumList.enumItems)
+                {
+                    mHeaderWriter.Write("mNameToValue[\"" + mItem.name + "\"] = " + iIndex.ToString() + ";");
+                    iIndex++;
+                }
+                mHeaderWriter.WriteLine("");
+                mHeaderWriter.WriteLine("     }");
+
+            }
+            mHeaderWriter.WriteLine("     return m_EnumLookUpByIDAndName[iEnumID][strEnumItemName];");
+            mHeaderWriter.WriteLine("}");
+
+
+
+            mHeaderWriter.WriteLine("static const KCString & _getEnumItemNameByValue(int32 iEnumID, int32 iValue)");
+            mHeaderWriter.WriteLine("{");
+            mHeaderWriter.WriteLine("     static std::unordered_map<int32, std::unordered_map<int32, KCString>> m_EnumLookUpByIDAndValue;");
+            mHeaderWriter.WriteLine("     if(m_EnumLookUpByIDAndValue.size() > 0 )");
+            mHeaderWriter.WriteLine("     {");
+            mHeaderWriter.WriteLine("          return m_EnumLookUpByIDAndValue[iEnumID][iValue];");
+            mHeaderWriter.WriteLine("     }");
+            foreach (EnumList mEnumList in m_ClassParserManager.getProjectWrapper().enums.Values)
+            {
+                mHeaderWriter.WriteLine("     {");
+                mHeaderWriter.WriteLine("          m_EnumLookUpByIDAndValue[" + mEnumList.uniqueID + "] = std::unordered_map<int32,KCString>();");
+                mHeaderWriter.WriteLine("          std::unordered_map<int, KCString> &mValueToName = m_EnumLookUpByIDAndValue[" + mEnumList.uniqueID + "];");
+                mHeaderWriter.Write("          ");
+                int iIndex = 0;
+                foreach (EnumItem mItem in mEnumList.enumItems)
+                {
+                    mHeaderWriter.Write("mValueToName[" + iIndex.ToString() + "] = \"" + mItem.name + "\";");
+                    iIndex++;
+                }
+                mHeaderWriter.WriteLine("");
+                mHeaderWriter.WriteLine("     }");
+
+            }
+            mHeaderWriter.WriteLine("     return m_EnumLookUpByIDAndValue[iEnumID][iValue];");
+            mHeaderWriter.WriteLine("}");
+
+
+
+            mHeaderWriter.WriteLine("static const KCTArray<KCString> & _getEnumItemNamesByEnumName(const KCString &strEnumName)");
+            mHeaderWriter.WriteLine("{");
+            mHeaderWriter.WriteLine("    static std::unordered_map<KCString, KCTArray<KCString>> m_EnumLookUpByName;");
+            mHeaderWriter.WriteLine("     if(m_EnumLookUpByName.size() > 0 )");
+            mHeaderWriter.WriteLine("     {");
+            mHeaderWriter.WriteLine("          return m_EnumLookUpByName[strEnumName];");
+            mHeaderWriter.WriteLine("     }");
+            foreach (EnumList mEnumList in m_ClassParserManager.getProjectWrapper().enums.Values)
+            {
+                mHeaderWriter.WriteLine("     {");
+                mHeaderWriter.WriteLine("          m_EnumLookUpByName[\"" + mEnumList.enumName + "\"] = KCTArray<KCString>(" + mEnumList.enumItems.Count + ");");
+                mHeaderWriter.WriteLine("          KCTArray<KCString> &mArray1 = m_EnumLookUpByName[\"" + mEnumList.enumName + "\"];");
+                mHeaderWriter.Write("          ");
+                int iIndex = 0;
+                foreach (EnumItem mItem in mEnumList.enumItems)
+                {
+                    mHeaderWriter.Write("mArray1.Add(\"" + mItem.name + "\");");
+                    iIndex++;
+                }
+                mHeaderWriter.WriteLine("");
+                mHeaderWriter.WriteLine("     }");
+
+            }
+            mHeaderWriter.WriteLine("     return m_EnumLookUpByName[strEnumName];");
+            mHeaderWriter.WriteLine("}");           
+            mHeaderWriter.WriteLine("}; //end _SERIALIZER_");
+            string strFile = mHeaderWriter.ToString();
+            try
+            {
+
+
+                
+                string strOldFile = File.ReadAllText(strEnumHeaderFile);
+                if( strFile == strOldFile)
+                {
+                    log("EnumsByName.h - didn't change. Not resaving.");
+                    return;
+                }
+            }
+            catch
+            {
+
+            }
+            File.WriteAllText(strEnumHeaderFile, mHeaderWriter.ToString());
+            log("resaving EnumsByName.h.");
+
+
+
+        }
+
+    } //end class
+}//end namespace

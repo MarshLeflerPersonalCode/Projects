@@ -54,7 +54,7 @@ namespace CommandLineSerializer.codeWriters
 				return false;
 			}
 
-			mHeaderFile.addLine(strDataGroupName + ".setProperty(\"" + mVariable.variableName + "\", (uint16)" + mVariable.variableName + ");");			
+			mHeaderFile.addLine(strDataGroupName + ".setProperty(\"" + mVariable.variableName + "\", _SERIALIZER_::_getEnumItemNameByValue(" + mEnum.uniqueID.ToString() + ",(int32)" + mVariable.variableName + "));");			
 			return true;
 		}
 		public override bool attemptDataGroupReadCode(HeaderFile mHeaderFile, ClassVariable mVariable, string strDataGroupName)
@@ -64,7 +64,7 @@ namespace CommandLineSerializer.codeWriters
 			{
 				return false;
 			}
-			mHeaderFile.addLine(mVariable.variableName + " = (" + mEnum.enumName + ")" + strDataGroupName  + ".getProperty(\"" + mVariable.variableName + "\", (uint16)" + mVariable.variableName + ");");
+			mHeaderFile.addLine(mVariable.variableName + " = (" + mEnum.enumName + ")_SERIALIZER_::_getEnumValueByName(" + mEnum.uniqueID.ToString() + "," + strDataGroupName  + ".getProperty(\"" + mVariable.variableName + "\", _SERIALIZER_::_getEnumItemNamesByEnumName(\"" + mEnum.enumName + "\")[(int32)" + mVariable.variableName + "]));");
 			return true; 
 		}
 

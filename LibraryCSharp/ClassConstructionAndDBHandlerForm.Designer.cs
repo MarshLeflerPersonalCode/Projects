@@ -59,7 +59,7 @@
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
             this.saveToolStripMenuItem.Text = "&Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -71,6 +71,7 @@
             this.propertyGridSettings.Size = new System.Drawing.Size(800, 384);
             this.propertyGridSettings.TabIndex = 1;
             this.propertyGridSettings.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGridSettings_PropertyValueChanged);
+            this.propertyGridSettings.SelectedObjectsChanged += new System.EventHandler(this.propertyGridSettings_SelectedObjectsChanged);
             // 
             // panel1
             // 

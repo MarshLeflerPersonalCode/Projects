@@ -65,6 +65,16 @@ KCDataGroup * KCDataGroup::getChildGroup(const KCName &strName)
 	return &mData->second;
 }
 
+const KCDataGroup * KCDataGroup::getChildGroup(const KCName &strName) const
+{
+	auto mData = m_ChildGroups.find(strName);
+	if (mData == m_ChildGroups.end())
+	{
+		return nullptr;
+	}
+	return &mData->second;
+}
+
 KCString KCDataGroup::getStringRepresentingDataGroup()
 {
 	return KCDataGroupStringWriter::writeDataGroupToString(*this);
@@ -72,6 +82,6 @@ KCString KCDataGroup::getStringRepresentingDataGroup()
 
 void KCDataGroup::setProperty(const KCName &strName, const WCHAR *strValue)
 {	
-	getOrCreateProperty(strName) << KCStringUtils::converWideToUtf8(strValue);
+	getOrCreateProperty(strName) << KCStringUtils::convertWideToUtf8(strValue);
 }
 

@@ -163,8 +163,9 @@ namespace CommandLineSerializer
 			bool bSerializedHeader = false;
 			string strClassOrStructName = "";
 			//need to find a way to make this settable from external
-			addLine("#include \"Systems/DataGroup/KCDataGroup.h\"", false);	
-			for (int iLineIndex = 0; iLineIndex < mLines.Length; iLineIndex++)
+			addLine("#include \"Systems/DataGroup/KCDataGroup.h\"", false);
+            addLine("#include \"EnumsByName.h\"", false);
+            for (int iLineIndex = 0; iLineIndex < mLines.Length; iLineIndex++)
 			{
 				string strLine = mLines[iLineIndex];
 				if (bSerializedHeader == false)
@@ -323,7 +324,7 @@ namespace CommandLineSerializer
 		private void _writeDataGroupReadCode(ClassStructure mClass)
 		{
 
-			addLine("bool deserialize(KCDataGroup &mDataGroup)");
+			addLine("bool deserialize(const KCDataGroup &mDataGroup)");
 			addLine("{");
 			_addInheritance(mClass, "deserialize(mDataGroup);");
 			foreach (ClassVariable mVariable in mClass.variables)

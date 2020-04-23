@@ -109,28 +109,28 @@ namespace StatEditor
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.toolsToolStripMenuItem.Text = "&Editor";
             this.toolsToolStripMenuItem.Click += new System.EventHandler(this.toolsToolStripMenuItem_Click);
             // 
             // databasesToolStripMenuItem
             // 
             this.databasesToolStripMenuItem.Name = "databasesToolStripMenuItem";
-            this.databasesToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.databasesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.databasesToolStripMenuItem.Text = "&Databases";
             this.databasesToolStripMenuItem.Click += new System.EventHandler(this.databasesToolStripMenuItem_Click);
             // 
             // variableTypesToolStripMenuItem
             // 
             this.variableTypesToolStripMenuItem.Name = "variableTypesToolStripMenuItem";
-            this.variableTypesToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.variableTypesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.variableTypesToolStripMenuItem.Text = "&Variable Types";
             this.variableTypesToolStripMenuItem.Click += new System.EventHandler(this.variableTypesToolStripMenuItem_Click);
             // 
             // unitTypeConfigToolStripMenuItem
             // 
             this.unitTypeConfigToolStripMenuItem.Name = "unitTypeConfigToolStripMenuItem";
-            this.unitTypeConfigToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
+            this.unitTypeConfigToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.unitTypeConfigToolStripMenuItem.Text = "&Unit Type Config";
             this.unitTypeConfigToolStripMenuItem.Click += new System.EventHandler(this.unitTypeConfigToolStripMenuItem_Click);
             // 

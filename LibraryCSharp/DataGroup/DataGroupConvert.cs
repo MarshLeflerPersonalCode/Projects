@@ -57,7 +57,7 @@ namespace Library
                     mDataGroup.dataGroupName = mType.Name;
                 }
 
-                mDataGroup.setProperty("CSHARP", mType.AssemblyQualifiedName);
+                //mDataGroup.setProperty("CSHARP", mType.AssemblyQualifiedName);
                 MemberInfo[] mMembers = mType.GetMembers();
 
                 Type mStringType = Type.GetType("System.String");
@@ -221,20 +221,25 @@ namespace Library
         private static Type _getTypeForDataGroup(DataGroup mDataGroup)
         {
 
+            /*
             string strValue = mDataGroup.getProperty("CSHARP", "");
             if( strValue != "")
             {
                 return Type.GetType(strValue);
             }
             return null;
+            */
+            return null;
         }
         private static Type _getTypeForChildDataGroup(DataGroup mDataGroup, string strChildName)
         {
+            /*
             DataGroup mChild = mDataGroup.getChildDataGroup(strChildName);
             if( mChild != null)
             {
                 return _getTypeForDataGroup(mChild);
             }
+            */
             return null;
         }
         private static Type _getListType(IList myList)
@@ -281,7 +286,7 @@ namespace Library
 
             DataGroup mArrayGroup = mParentDataGroup.getOrCreateDataGroup(strPropertyName);
             mArrayGroup.setProperty("COUNT", (ushort)mArray.Length);
-            mArrayGroup.setProperty("CSHARP", mObject.GetType().AssemblyQualifiedName);
+            //mArrayGroup.setProperty("CSHARP", mObject.GetType().AssemblyQualifiedName);
             Type mElementType = mArray.GetType().GetElementType();
 
             if (mElementType != null)
@@ -299,7 +304,7 @@ namespace Library
                     if(mChild != null)
                     {
                         //in case the object in the array has some kind of hierarchy
-                        mArrayGroup.setProperty("CSHARP", mObjectInArray.GetType().AssemblyQualifiedName);
+                        //mArrayGroup.setProperty("CSHARP", mObjectInArray.GetType().AssemblyQualifiedName);
                     }
                 }
                 iCount++;
@@ -317,11 +322,11 @@ namespace Library
 
             DataGroup mArrayGroup = mParentDataGroup.getOrCreateDataGroup(strPropertyName);
             mArrayGroup.setProperty("COUNT", (ushort)mList.Count);
-            mArrayGroup.setProperty("CSHARP", mObject.GetType().AssemblyQualifiedName);
+            //mArrayGroup.setProperty("CSHARP", mObject.GetType().AssemblyQualifiedName);
             Type mElementType = _getListType(mList);// mList.GetType().GetGenericTypeDefinition();
             if (mElementType != null)
             {
-                mArrayGroup.setProperty("CSHARP", mElementType.AssemblyQualifiedName);
+                //mArrayGroup.setProperty("CSHARP", mElementType.AssemblyQualifiedName);
             }
             int iCount = 0;
             foreach (object mObjectInArray in mList)
@@ -334,7 +339,7 @@ namespace Library
                     if (mChild != null)
                     {
                         //in case the object in the array has some kind of hierarchy
-                        mArrayGroup.setProperty("CSHARP", mObjectInArray.GetType().AssemblyQualifiedName);
+                        //mArrayGroup.setProperty("CSHARP", mObjectInArray.GetType().AssemblyQualifiedName);
                     }
                 }
                 iCount++;
@@ -368,7 +373,7 @@ namespace Library
                     //mDictionaryGroup.setProperty("CSHARP_KEY", mKeyType.AssemblyQualifiedName);
                     //mDictionaryGroup.setProperty("CSHARP_VALUE", mValueType.GetType().AssemblyQualifiedName);
                 }
-                mDictionaryGroup.setProperty("CSHARP", mObject.GetType().AssemblyQualifiedName);
+                //mDictionaryGroup.setProperty("CSHARP", mObject.GetType().AssemblyQualifiedName);
                 int iIndex = 0;
                 foreach (object mDictKey in mDictKeys)
                 {
@@ -560,8 +565,8 @@ namespace Library
                     Type mElementType = mTypeOfProperty.GetElementType();
                     IList mArray = Activator.CreateInstance(mTypeOfProperty, new object[] { iCount }) as IList;
                     for (int iIndex = 0; iIndex < iCount; iIndex++)
-                    {                     
-                        Type mChildType = _getTypeForChildDataGroup(mParentDataGroup, iIndex.ToString());                       
+                    {
+                        Type mChildType = null;// _getTypeForChildDataGroup(mParentDataGroup, iIndex.ToString());                       
                         object mObject = _deserializeObjectFromDataGroup(mParentDataGroup, (mChildType != null)?mChildType: mElementType, iIndex.ToString(), mLogFile);
                         mArray[iIndex] = mObject;
                     }
@@ -592,10 +597,11 @@ namespace Library
                 int iCount = mParentDataGroup.getProperty("COUNT", 0);
                 IList mArray = Activator.CreateInstance(mTypeOfProperty) as IList;
                 Type mTypeOf = _getListType(mArray);
+                
                 for (int iIndex = 0; iIndex < iCount; iIndex++)
-                {                    
+                {
                     Type mChildType = _getTypeForChildDataGroup(mParentDataGroup, iIndex.ToString());
-                    
+                    mChildType = null;
                     object mObject = _deserializeObjectFromDataGroup(mParentDataGroup, (mChildType != null) ? mChildType : mTypeOf, iIndex.ToString(), mLogFile);
                     mArray.Add( mObject );
                 }

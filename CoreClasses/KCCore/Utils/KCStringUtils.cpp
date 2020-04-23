@@ -6,13 +6,33 @@
 #include <sstream>
 
 
-KCString KCStringUtils::converWideToUtf8(const WCHAR *pStringToConvert)
+void KCStringUtils::replace(std::string &strString, char cLookFor, char cReplaceWith)
 {
+	for (size_t iIndex = 0; iIndex < strString.size(); iIndex++)
+	{
+		if (strString.c_str()[iIndex] == cLookFor)
+		{
+			strString.replace(iIndex, 1, 1, cReplaceWith);
+		}
+	}
+	
+}
+
+std::wstring KCStringUtils::toWide(const std::string &strString)
+{
+	std::wstring_convert<std::codecvt_utf8_utf16<WCHAR>> mConverter;
+	return mConverter.from_bytes(strString);
+	
+}
+
+KCString KCStringUtils::convertWideToUtf8(const WCHAR *pStringToConvert)
+{
+
 	if (pStringToConvert == nullptr)
 	{
 		return "";
 	}
-	return converWideToUtf8(std::wstring(pStringToConvert));
+	return convertWideStringToUtf8(std::wstring(pStringToConvert));
 	
 }
 
@@ -42,7 +62,7 @@ bool KCStringUtils::isNumber(const std::string &strStringToTest)
 }
 
 
-KCString KCStringUtils::converWideToUtf8(const std::wstring &strStringToConvert)
+KCString KCStringUtils::convertWideStringToUtf8(const std::wstring &strStringToConvert)
 {
 	//setup converter
 	using convert_type = std::codecvt_utf8<WCHAR>;		
@@ -116,7 +136,7 @@ bool KCStringUtils::getTagName(std::string &strOutputString, const std::string &
 
 std::string KCStringUtils::getAsString(const WCHAR *pStringToConvert)
 {
-	return converWideToUtf8(pStringToConvert);	
+	return convertWideToUtf8(pStringToConvert);	
 }
 
 std::string KCStringUtils::getAsString(bool bValue)

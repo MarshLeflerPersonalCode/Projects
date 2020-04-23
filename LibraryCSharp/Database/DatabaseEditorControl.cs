@@ -15,6 +15,7 @@ namespace Library.Database
 {
     public partial class DatabaseEditorControl : UserControl
     {
+       
         private Database m_ActiveDatabase = null;
         private Dictionary<ClassInstance, ListViewItem> m_ObjectsToListViewItem = new Dictionary<ClassInstance, ListViewItem>();
         private ContextMenu m_StatListViewContextMenu = new ContextMenu();
@@ -22,6 +23,7 @@ namespace Library.Database
         public DatabaseEditorControl()
         {
             InitializeComponent();
+            this.statObjectViewer.SelectedObjectsHaveChangedProperties += new CustomControls.ObjectViewer.SelectedObjectsHaveChangedPropertiesHandler(this.statObjectViewer_SelectedObjectsHaveChangedProperties);
             isDirty = false;
         }
 
@@ -299,6 +301,12 @@ namespace Library.Database
 
         private void statObjectViewer_PropertyValueChanged(object m, EventArgs e)
         {
+            
+        }
+
+        private void statObjectViewer_SelectedObjectsHaveChangedProperties(List<object> mObjects)
+        {
+            //TODO
             m_StatListView.SuspendLayout();
             foreach (ListViewItem mItem in m_StatListView.SelectedItems)
             {
@@ -307,6 +315,7 @@ namespace Library.Database
                 ClassInstance mInstance = m_ActiveDatabase.getEntryByGuid(iGuid);
                 if (mInstance != null)
                 {
+                    mInstance.m_bIsDirty = true;
                     _updateListItemByInstance(mInstance);
 
 
@@ -499,6 +508,7 @@ namespace Library.Database
                     return false;
                 }
             }
+            isDirty = false;
             return true;
         }
 

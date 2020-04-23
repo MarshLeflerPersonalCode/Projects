@@ -152,7 +152,7 @@ bool KCDataGroupBinaryReader::parseDataGroupFromFile(const WCHAR *strPathAndFile
 	KCTArray<uint8> mMemoryArray;
 	KCEnsureAlwaysMsgReturnVal(KCFileUtilities::loadFile(strPathAndFile, mMemoryArray), "Unable to load file", false);
 	FKCDataGroupBinaryData mData;
-	mData.m_strFile = KCStringUtils::converWideToUtf8(strPathAndFile);
+	mData.m_strFile = KCStringUtils::convertWideToUtf8(strPathAndFile);
 	mData.m_pParent = &mDataGroup;
 	mData.m_Reader.configureByTArray(mMemoryArray);
 	if (_loadHeader(mData) == false)

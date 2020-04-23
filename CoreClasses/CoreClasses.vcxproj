@@ -126,7 +126,7 @@
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>D:\Personal\Projects\CommandLineSerializer\bin\Debug\CommandLineSerializer.exe -debug -SourceDir 'D:\Personal\Projects\CoreClasses\' -IntermediateDir 'D:\Personal\Projects\CoreClasses\Intermediate\'</Command>
+      <Command>D:\Personal\Projects\Tools\CommandLineSerializer.exe -debug -SourceDir 'D:\Personal\Projects\CoreClasses\' -IntermediateDir 'D:\Personal\Projects\CoreClasses\Intermediate\'</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -168,7 +168,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>D:\Personal\Projects\CommandLineSerializer\bin\Debug\CommandLineSerializer.exe -debug -SourceDir 'D:\Personal\Projects\CoreClasses\' -IntermediateDir 'D:\Personal\Projects\CoreClasses\Intermediate\'</Command>
+      <Command>D:\Personal\Projects\Tools\CommandLineSerializer.exe -debug -SourceDir 'D:\Personal\Projects\CoreClasses\' -IntermediateDir 'D:\Personal\Projects\CoreClasses\Intermediate\'</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -182,6 +182,7 @@
     <ClCompile Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupStringParser.cpp" />
     <ClCompile Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupStringWriter.cpp" />
     <ClCompile Include="KCCore\Systems\DataGroup\KCDataGroup.cpp" />
+    <ClCompile Include="KCCore\Systems\DataGroup\KCDataGroupManager.cpp" />
     <ClCompile Include="KCCore\Systems\DataGroup\Private\KCDataProperty.cpp" />
     <ClCompile Include="KCCore\Systems\Stats\KCStatManager.cpp" />
     <ClCompile Include="KCCore\Systems\UnitTypes\KCDefinedUnitTypes.cpp" />
@@ -208,6 +209,7 @@
     <ClInclude Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupStringParser.h" />
     <ClInclude Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupStringWriter.h" />
     <ClInclude Include="KCCore\Systems\DataGroup\KCDataGroup.h" />
+    <ClInclude Include="KCCore\Systems\DataGroup\KCDataGroupManager.h" />
     <ClInclude Include="KCCore\Systems\DataGroup\Private\KCDataGroupEnumsAndStructs.h" />
     <ClInclude Include="KCCore\Systems\DataGroup\Private\KCDataProperty.h" />
     <ClInclude Include="KCCore\Systems\Stats\KCStatManager.h" />

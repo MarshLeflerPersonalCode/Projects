@@ -29,8 +29,9 @@ namespace Library.ClassParser
 			comment = "";
 			enumItems = new List<EnumItem>();
 			type = "";
+            uniqueID = -1;
 		}
-
+        public int uniqueID { get; set; }
 		public string enumName { get; set; }
 		public string type { get; set; }
 		public string comment { get; set; }

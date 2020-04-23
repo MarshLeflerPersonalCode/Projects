@@ -58,8 +58,11 @@ namespace CustomControls
 					return false;
 				}
 			}
-			m_ObjectsList.Add(obj);
-			m_bObjectListDirty = true;
+            if (m_ObjectsList.Contains(obj) == false)
+            {
+                m_ObjectsList.Add(obj);
+                m_bObjectListDirty = true;
+            }
 			return true;
 		}
 		//sets all the objects wanting to see
@@ -82,7 +85,10 @@ namespace CustomControls
 			if( m_bObjectListDirty )
 			{
 				_updatePropertyGrid();
-			}
+                m_bRefreshArrayItems = true;
+                
+
+            }
 			if(txtBoxFilterPropertyGrid.Text != objectFilteredPropertyGrid.FilterString)
 			{
 				objectFilteredPropertyGrid.FilterString = txtBoxFilterPropertyGrid.Text;
@@ -242,10 +248,12 @@ namespace CustomControls
 
 		private void _updateObjectsList()
 		{
-			if (m_ObjectsList.Count > 0)
+            objectListView.Items.Clear();
+
+            if (m_ObjectsList.Count > 0)
 			{
 				Type mType = m_ObjectsList[0].GetType();
-				ListViewItem mNewItem = new ListViewItem("*");
+                ListViewItem mNewItem = new ListViewItem("*");                
 				mNewItem.SubItems.Add(mType.Name);
 				mNewItem.SubItems.Add("Root Object");
 				mNewItem.Font = new Font(mNewItem.Font, FontStyle.Bold);
@@ -254,7 +262,17 @@ namespace CustomControls
 
 			foreach (ClassObjectViewerData mData in m_SubObjects)
 			{
-				ListViewItem mNewItem = new ListViewItem("*");
+                bool bFound = false;
+                foreach (ListViewItem mCurrentItem in objectListView.Items)
+                {
+                    if (mCurrentItem.SubItems[1].Text == mData.name)
+                    {
+                        bFound = true;
+                        break;
+                    }
+                }
+                if (bFound) { continue; }
+                ListViewItem mNewItem = new ListViewItem("*");
 				mNewItem.SubItems.Add(mData.name);
 				mNewItem.SubItems.Add("Object");
 				if(mData.isRootObject)
@@ -265,22 +283,57 @@ namespace CustomControls
 				}
 				objectListView.Items.Add(mNewItem);
 			}
-			foreach (ArrayViewerData mData in m_SubArrays)
-			{
-				ListViewItem mNewItem = new ListViewItem("0");
-				mNewItem.SubItems.Add(mData.name);
-				if (mData.objectType != null)
-				{
-					mNewItem.SubItems.Add(mData.objectType.Name);
-				}
-				else
-				{
-					mNewItem.SubItems.Add("unknown");
-				}
-				objectListView.Items.Add(mNewItem);
-			}
-		}
+            _updateArrayCountOnObjectList();
 
+        }
+
+        private void _updateArrayCountOnObjectList()
+        {
+            foreach (ArrayViewerData mData in m_SubArrays)
+            {
+                ListViewItem mListItemToUpdate = null;
+                
+                foreach (ListViewItem mCurrentItem in objectListView.Items)
+                {
+                    if (mCurrentItem.SubItems[1].Text == mData.name)
+                    {
+                        mListItemToUpdate = mCurrentItem;
+                        break;
+                    }
+                }
+                
+                if( mListItemToUpdate == null )
+                {
+                    mListItemToUpdate = new ListViewItem("");
+                    mListItemToUpdate.SubItems.Add(mData.name);
+                    if (mData.objectType != null)
+                    {
+                        mListItemToUpdate.SubItems.Add(mData.objectType.Name);
+                    }
+                    else
+                    {
+                        mListItemToUpdate.SubItems.Add("unknown");
+                    }
+
+                    objectListView.Items.Add(mListItemToUpdate);
+                }
+
+                PropertyInfo mPropertyInfo = (PropertyInfo)mData.memberInfo;
+
+                int iMaxCount = 0;
+                foreach (object mObj in m_ObjectsList)
+                {
+                    IList mItemList = mPropertyInfo.GetValue(mObj, null) as IList;
+                    if (mItemList != null &&
+                        mItemList.Count > iMaxCount)
+                    {
+                        iMaxCount = mItemList.Count;
+                    }
+                }
+                mListItemToUpdate.SubItems[0].Text = iMaxCount.ToString();
+                
+            }
+        }
 
 
 		private void objectListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
@@ -398,7 +451,7 @@ namespace CustomControls
                 int iIndex = 0;
 				foreach( object mObjectInArray in mArray)
 				{
-					if( iIndex <= m_ArrayList.Count)
+					while( iIndex >=  m_ArrayList.Count)
 					{
 						m_ArrayList.Add(new List<object>());
 					}
@@ -502,8 +555,11 @@ namespace CustomControls
 
 				}
 			}
-			m_bRefreshArrayItems = true;
-		}
+            SelectedObjectsHaveChangedProperties(m_ObjectsList);
+            m_bRefreshArrayItems = true;
+            _updateArrayCountOnObjectList();
+
+        }
 
 		private void arrayListView_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
 		{
@@ -593,7 +649,7 @@ namespace CustomControls
             }
 
 
-
+            SelectedObjectsHaveChangedProperties(m_ObjectsList);
             m_bRefreshArrayItems = true;
             _updateArrayListView();
 
@@ -638,7 +694,7 @@ namespace CustomControls
             }
 
 
-
+            SelectedObjectsHaveChangedProperties(m_ObjectsList);
             m_bRefreshArrayItems = true;
             _updateArrayListView();
 
@@ -649,6 +705,7 @@ namespace CustomControls
             arrayListView.Items[m_iArrayReplaceIndex2].Focused = true;
             arrayListView.Items[m_iArrayReplaceIndex2].Selected = true;
             
+
         }
         public void _deleteArrayObjects<T>(List<T> mList)
         {
@@ -693,9 +750,11 @@ namespace CustomControls
 
                 }
 
-
+                SelectedObjectsHaveChangedProperties(m_ObjectsList);
                 m_bRefreshArrayItems = true;
+                
                 _updateArrayListView();
+                _updateArrayCountOnObjectList();
             }
         }
 
@@ -705,13 +764,19 @@ namespace CustomControls
         public event PropertyValueChangedHandler PropertyValueChanged;
         public delegate void PropertyValueChangedHandler(Object m, EventArgs e);
 
+        public event SelectedObjectsHaveChangedPropertiesHandler SelectedObjectsHaveChangedProperties;
+        public delegate void SelectedObjectsHaveChangedPropertiesHandler(List<object> mObjects);
+
         private void objectFilteredPropertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
             if(PropertyValueChanged != null)
             {
                 PropertyValueChanged(s, e);
+                SelectedObjectsHaveChangedProperties(m_ObjectsList);
             }
         }
+
+
 
 
         ///////////////////////////////////////////////////////////////////////////////

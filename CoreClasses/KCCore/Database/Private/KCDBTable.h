@@ -2,6 +2,8 @@
 #pragma once
 #include "Database/Private/KCDBInclude.h"
 #include "utils/Containers/KCName.h"
+#include "Systems/DataGroup/KCDataGroupManager.h"
+#include "Systems/Stats/Private/KCStatDefinition.h"
 
 ///////////////////////////////////////////////////////////////////////////
 //The database manager holds all the tables for storing the games data.
@@ -11,9 +13,18 @@ template<class T>
 class KCDBTable
 {
 public:
-	KCDBTable(DATABASE::EDATABASE_TABLES eTable)
+	KCDBTable(DATABASE::EDATABASE_TABLES eTable, const KCString &strDatabaseFolder)
 	{
 		m_eDatatable = eTable;
+		KCTArray<const KCDataGroup*> mDataGroups(200);
+		KCDataGroupManager::getSingleton()->getDataGroupsInDirectory(strDatabaseFolder, mDataGroups);
+		for (uint32 iIndex = 0; iIndex < mDataGroups.Num(); iIndex++)
+		{
+			T *pEntryObject = KC_NEW T();
+			FKCDBEntry *pEntry = (FKCDBEntry *)pEntryObject;
+			pEntryObject->deserialize(*mDataGroups[iIndex]);
+			_addEntry(pEntry);
+		}
 	}
 	~KCDBTable()
 	{
@@ -56,6 +67,15 @@ protected:
 		return m_Entries[iIndex];
 	}
 
+	void							_addEntry(FKCDBEntry *pEntry)
+	{
+		KCEnsureAlwaysMsgReturn(pEntry, "Entry must not be null");
+		m_EntriesByGuid[pEntry->m_DatabaseGuid] = m_Entries.Num();
+		m_EntriesByGuid[pEntry->m_strName] = m_Entries.Num();
+		m_Entries.Add((T *)pEntry);
+		
+	}
+
 	//deletes all the entries and cleans up the table
 	void							_clean()
 	{
@@ -65,7 +85,7 @@ protected:
 	}
 	DATABASE::EDATABASE_TABLES		m_eDatatable = DATABASE::EDATABASE_TABLES::UNDEFINED;
 	KCTArray< T * >					m_Entries;
-	std::unordered_map<KCDatabaseGuid, int32, KCNameHasher>		m_EntriesByGuid;
+	std::unordered_map<KCDatabaseGuid, int32>					m_EntriesByGuid;
 	std::unordered_map<KCName, int32, KCNameHasher>				m_EntriesByName;
 };
 

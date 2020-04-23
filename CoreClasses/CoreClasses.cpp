@@ -5,7 +5,10 @@
 #include "KCCore/KCDefines.h"
 #include "KCCore/Systems/UnitTypes/KCUnitTypeManager.h"
 #include "KCCore/Systems/UnitTypes/KCDefinedUnitTypes.h"
+#include "KCCore/Systems/Stats/KCStatManager.h"
 #include "KCCore/Utils/Containers/KCName.h"
+#include "KCCore/Systems/DataGroup/KCDataGroupManager.h"
+#include "KCCore/Database/KCDatabaseManager.h"
 #include "TestCases/KCDataGroupTestCase.h"
 #include "KCCore/Systems/DataGroup/FileTypes/KCDataGroupSimpleXMLWriter.h"
 #include "KCCore/Systems/DataGroup/FileTypes/KCDataGroupSimpleXMLReader.h"
@@ -14,7 +17,11 @@
 #include <chrono>
 #include "Systems/Stats/Private/KCStatDefinition.h"
 
+
 #define GetCurrentDir _getcwd
+
+
+
 
 static void funTest()
 {
@@ -26,19 +33,28 @@ static void funTest()
 
 int main()
 {
+
 	char cCurrentPath[FILENAME_MAX];
 	if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath)))
 	{
 		return errno;
-	}
-
+	}	
 	cCurrentPath[sizeof(cCurrentPath) - 1] = '\0'; /* not really required */
 
 	printf("The current working directory is %s\n", cCurrentPath);
 
+	KCDataGroupManager mDataGroupManager;
+	mDataGroupManager.loadLooseFiles(L"Content\\");
+
+	KCDatabaseManager mDatabaseManager;
+	mDatabaseManager.reload();
+
+	STATS::KCStatManager mStatManager;
+	mStatManager.reloadStatsFromDirectory(".\\Databases\\Stats\\");
+
 
 	UNITTYPE::KCUnitTypeManager mManager;
-	if (mManager.parseUnitTypeFile(L"..\\..\\UE4Projects\\CoreTest\\Content\\RawData\\unittypes.bin"))
+	if (mManager.parseUnitTypeFile(L"..\\UE4Projects\\CoreTest\\Content\\RawData\\unittypes.bin"))
 	{
 		bool bIsA = mManager.getCategoryByIndex(0)->IsA(1, CORE_UNITTYPE_ITEMS::ANY);
 		if (bIsA && mManager.IsA("ITEMS", "NEW7", "NEW7"))

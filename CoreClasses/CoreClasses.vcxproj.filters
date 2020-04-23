@@ -118,6 +118,9 @@
     <ClCompile Include="KCCore\Database\KCDatabaseManager.cpp">
       <Filter>KCCore\Database</Filter>
     </ClCompile>
+    <ClCompile Include="KCCore\Systems\DataGroup\KCDataGroupManager.cpp">
+      <Filter>KCCore\Systems\DataGroup</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KCCore\KCDefines.h">
@@ -236,6 +239,9 @@
     </ClInclude>
     <ClInclude Include="KCCore\Database\Private\KCDBTable.h">
       <Filter>KCCore\Database\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Systems\DataGroup\KCDataGroupManager.h">
+      <Filter>KCCore\Systems\DataGroup</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -26,6 +26,8 @@ public:
 	bool								addChildGroup(KCDataGroup &mGroup);
 	//grabs a child by name. Returns null if not found
 	KCDataGroup *						getChildGroup(const KCName &strName);
+	//grabs a child by name. Returns null if not found
+	const KCDataGroup *					getChildGroup(const KCName &strName) const;
 	//returns if the child group exists
 	bool								childGroupExists(const KCName &strName){ return (getChildGroup(strName))?true:false; }
 	//attempts to add or get a property by name
@@ -41,6 +43,16 @@ public:
 	}
 	//attempts to get a property by name, if not found return null
 	DEBUG_FORCEINLINE KCDataProperty *	getProperty(const KCName &strName)
+	{
+		auto mData = m_Properties.find(strName);
+		if (mData == m_Properties.end())
+		{
+			return nullptr;
+		}
+		return &mData->second;
+	}
+	//attempts to get a property by name, if not found return null
+	DEBUG_FORCEINLINE const KCDataProperty *	getProperty(const KCName &strName) const
 	{
 		auto mData = m_Properties.find(strName);
 		if (mData == m_Properties.end())
@@ -115,19 +127,19 @@ public:
 	DEBUG_FORCEINLINE float				getPropertyByRef(const KCName &strName, float &fValue) { getOrCreateProperty(strName) >> fValue; return fValue; }
 	DEBUG_FORCEINLINE KCName &			getPropertyByRef(const KCName &strName, KCName &strValue) { getOrCreateProperty(strName) >> strValue; return strValue; }
 	DEBUG_FORCEINLINE KCString &		getPropertyByRef(const KCName &strName, KCString &strValue) { getOrCreateProperty(strName) >> strValue; return strValue; }
-	DEBUG_FORCEINLINE bool				getProperty(const KCName &strName, bool bValue) { KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> bValue; } return bValue; }
-	DEBUG_FORCEINLINE char				getProperty(const KCName &strName, char cValue) { KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> cValue; } return cValue; }
-	DEBUG_FORCEINLINE int8				getProperty(const KCName &strName, int8 iValue) { KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> iValue; } return iValue; }
-	DEBUG_FORCEINLINE uint8				getProperty(const KCName &strName, uint8 iValue) { KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> iValue; } return iValue; }
-	DEBUG_FORCEINLINE int16				getProperty(const KCName &strName, int16 iValue) { KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> iValue; } return iValue; }
-	DEBUG_FORCEINLINE uint16			getProperty(const KCName &strName, uint16 iValue) { KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> iValue; } return iValue; }
-	DEBUG_FORCEINLINE int32				getProperty(const KCName &strName, int32 iValue) { KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> iValue; } return iValue; }
-	DEBUG_FORCEINLINE uint32			getProperty(const KCName &strName, uint32 iValue) { KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> iValue; } return iValue; }
-	DEBUG_FORCEINLINE int64				getProperty(const KCName &strName, int64 iValue) { KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> iValue; } return iValue; }
-	DEBUG_FORCEINLINE uint64			getProperty(const KCName &strName, uint64 iValue) { KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> iValue; } return iValue; }
-	DEBUG_FORCEINLINE float				getProperty(const KCName &strName, float fValue) { KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> fValue; } return fValue; }
-	DEBUG_FORCEINLINE KCName 			getProperty(const KCName &strName, KCName strValue) { KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> strValue; } return strValue; }
-	DEBUG_FORCEINLINE KCString			getProperty(const KCName &strName, KCString strValue) { KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> strValue; } return strValue; }
+	DEBUG_FORCEINLINE bool				getProperty(const KCName &strName, bool bValue) const { const KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> bValue; } return bValue; }
+	DEBUG_FORCEINLINE char				getProperty(const KCName &strName, char cValue) const { const KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> cValue; } return cValue; }
+	DEBUG_FORCEINLINE int8				getProperty(const KCName &strName, int8 iValue) const { const KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> iValue; } return iValue; }
+	DEBUG_FORCEINLINE uint8				getProperty(const KCName &strName, uint8 iValue) const { const KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> iValue; } return iValue; }
+	DEBUG_FORCEINLINE int16				getProperty(const KCName &strName, int16 iValue) const { const KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> iValue; } return iValue; }
+	DEBUG_FORCEINLINE uint16			getProperty(const KCName &strName, uint16 iValue) const { const KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> iValue; } return iValue; }
+	DEBUG_FORCEINLINE int32				getProperty(const KCName &strName, int32 iValue) const { const KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> iValue; } return iValue; }
+	DEBUG_FORCEINLINE uint32			getProperty(const KCName &strName, uint32 iValue) const { const KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> iValue; } return iValue; }
+	DEBUG_FORCEINLINE int64				getProperty(const KCName &strName, int64 iValue) const { const KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> iValue; } return iValue; }
+	DEBUG_FORCEINLINE uint64			getProperty(const KCName &strName, uint64 iValue)  const { const KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> iValue; } return iValue; }
+	DEBUG_FORCEINLINE float				getProperty(const KCName &strName, float fValue) const { const KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> fValue; } return fValue; }
+	DEBUG_FORCEINLINE KCName 			getProperty(const KCName &strName, KCName strValue) const { const KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> strValue; } return strValue; }
+	DEBUG_FORCEINLINE KCString			getProperty(const KCName &strName, KCString strValue) const { const KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> strValue; } return strValue; }
 
 private:
 	KCName														m_strGroupName;

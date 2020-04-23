@@ -14,11 +14,13 @@ namespace Library
     {
         ClassConstructionAndDBHandlerConfig m_Config = null;
         private bool m_bDirty = false;
+        private string m_strOriginalConfig = "";
         public ClassConstructionAndDBHandlerForm(ClassConstructionAndDBHandlerConfig mConfig)
         {
             InitializeComponent();
             m_Config = mConfig;
             propertyGridSettings.SelectedObject = m_Config;
+            m_strOriginalConfig = m_Config.getConfigAsJsonString();
         }
 
         private void setDirty(bool bDirty)
@@ -42,7 +44,8 @@ namespace Library
 
         private void ClassConstructionAndDBHandlerForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if( m_bDirty)
+            if( m_bDirty ||
+                m_strOriginalConfig != m_Config.getConfigAsJsonString())
             {
                 DialogResult mResult = MessageBox.Show("Do you want to save changes?", "Save?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                 if( mResult == DialogResult.Cancel)
@@ -70,6 +73,11 @@ namespace Library
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             _save();
+        }
+
+        private void propertyGridSettings_SelectedObjectsChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

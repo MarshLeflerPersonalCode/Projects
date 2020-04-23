@@ -1,5 +1,12 @@
 {
   "sourcePath": "..\\CoreClasses\\",
-  "databaseFolder": ".\\Databases\\",
-  "estimatedLoadTime": 0.6935903
+  "databaseFolder": ".\\Content\\Databases\\",
+  "listsFolder": ".\\Lists\\",
+  "contentFolders": [
+    {
+      "codeName": "Content",
+      "path": ".\\Content\\"
+    }
+  ],
+  "estimatedLoadTime": 0.5141705
 }

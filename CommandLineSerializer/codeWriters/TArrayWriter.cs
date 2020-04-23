@@ -202,9 +202,11 @@ namespace CommandLineSerializer.codeWriters
 					mHeaderFile.addLine(strType + " " + strTmpVar + " = nullptr;");
 				}
 				string strNewDataGroupName = "_mDataGroup" + mVariable.variableName;
-				mHeaderFile.addLine("KCDataGroup &" + strNewDataGroupName + " = " + strDataGroupName + ".getOrCreateChildGroup(\"" + mVariable.variableName + "\" + std::to_string(" + strLoopVar + "));");
-
-				foreach (CodeWriter mWriter in mHeaderFile.getCodeWriters())
+				mHeaderFile.addLine("const KCDataGroup *p" + strNewDataGroupName + " = " + strDataGroupName + ".getChildGroup(\"" + mVariable.variableName + "\" + std::to_string(" + strLoopVar + "));");
+                mHeaderFile.addLine("if(p" + strNewDataGroupName + " != nullptr)");
+                mHeaderFile.addLine("{");
+                mHeaderFile.addLine("const KCDataGroup &" + strNewDataGroupName + " = *p" + strNewDataGroupName + ";");
+                foreach (CodeWriter mWriter in mHeaderFile.getCodeWriters())
 				{
 					if (mWriter.attemptDataGroupReadCode(mHeaderFile, mNewVariable, strNewDataGroupName))
 					{
@@ -217,8 +219,9 @@ namespace CommandLineSerializer.codeWriters
 					//we need to add it back in.
 					mHeaderFile.addLine(mVariable.variableName + ".Add(" + strTmpVar + ");");
 				}
-				mHeaderFile.addLine("if(" + strNewDataGroupName + ".isEmpty()){ " + strDataGroupName + ".removeChildGroup(" + strNewDataGroupName + ");}");
-				mHeaderFile.addLine("}");
+				//mHeaderFile.addLine("if(" + strNewDataGroupName + ".isEmpty()){ " + strDataGroupName + ".removeChildGroup(" + strNewDataGroupName + ");}");
+                mHeaderFile.addLine("}");   //end check for pointer
+                mHeaderFile.addLine("}");
 			}
 			//mHeaderFile.addLine(mVariable.variableName + " = mDataGroup.getProperty(\"" + mVariable.variableName + "\", " + mVariable.variableName + ");");
 			return true;

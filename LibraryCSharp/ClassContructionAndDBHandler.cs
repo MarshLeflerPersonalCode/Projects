@@ -100,6 +100,7 @@ namespace Library
                 {
                     _loadConfig();
                     _findClasses();
+                    m_ClassCreatorManager.setDirectories(m_Config.databaseFolder, m_Config.listsFolder, m_Config.contentFolders);
                     m_ClassParser.compareToCachedData("");
                     m_ClassParser.buildClassStructures();
                     m_eLoadState = ELOAD_STATE.WaitForClassStructuresToBeBuilt;
@@ -203,12 +204,18 @@ namespace Library
         {
             sourcePath = "..\\CoreClasses\\";
             databaseFolder = ".\\Databases\\";
+            listsFolder = ".\\Lists\\";
+            contentFolders = new List<ClassCreatorContentFolders>();
             estimatedLoadTime = 1.0f;
         }
         [DisplayName("Source Path"), Description("The relative path to the source folder")]
         public string sourcePath { get; set; }
         [DisplayName("DB Folder"), Description("The folder in which all the databases will create unique folders to store their entries.")]
         public string databaseFolder { get; set; }
+        [DisplayName("Lists Folder"), Description("The folder holding all the lists that can populate dropdown boxes. The lists should be single line entries, the name of the file is what you use in the properties macro.")]
+        public string listsFolder { get; set; }
+        [DisplayName("Content Folders"), Description("Folders you want to be able to access from a property in c++. Key is lookup name and second is path.")]
+        public List<ClassCreatorContentFolders> contentFolders { get; set; }
         [Browsable(false)]
         public float estimatedLoadTime { get; set; }
 
@@ -221,8 +228,7 @@ namespace Library
             return create("ToolsConfig.json");
         }
         public static ClassConstructionAndDBHandlerConfig create(string strPath)
-        {
-            
+        {            
             Type mType = Type.GetType("Library.ClassConstructionAndDBHandlerConfig");                        
             try
             {
@@ -252,7 +258,7 @@ namespace Library
         {
             try
             {
-                string strValue = JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
+                string strValue = getConfigAsJsonString();
                 File.WriteAllText(strPath, strValue);
                 if (File.Exists(strPath) == false)
                 {
@@ -264,6 +270,18 @@ namespace Library
             {               
             }
             return false;
+        }
+
+        public string getConfigAsJsonString()
+        {
+            try
+            {
+                return JsonConvert.SerializeObject(this, Newtonsoft.Json.Formatting.Indented);
+            }
+            catch
+            {
+            }
+            return "";
         }
     }//end config file
 }//end namespace

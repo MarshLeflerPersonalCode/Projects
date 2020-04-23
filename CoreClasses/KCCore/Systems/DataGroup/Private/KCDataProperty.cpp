@@ -36,7 +36,7 @@ void KCDataProperty::operator<<(const KCString &strValue)
 	m_eType = EDATATYPES::STRING;
 }
 
- KCString KCDataProperty::getAsString()
+ KCString KCDataProperty::getAsString() const
 {
 	switch (m_eType)
 	{
@@ -68,7 +68,7 @@ void KCDataProperty::operator<<(const KCString &strValue)
 	}	
 }
 
-int64 KCDataProperty::getAsInt64()
+int64 KCDataProperty::getAsInt64() const
 {
 	switch (m_eType)
 	{
@@ -106,7 +106,7 @@ int64 KCDataProperty::getAsInt64()
 	}
 }
 
-int32 KCDataProperty::getAsInt32()
+int32 KCDataProperty::getAsInt32() const
 {
 	switch (m_eType)
 	{
@@ -137,7 +137,7 @@ int32 KCDataProperty::getAsInt32()
 	}
 }
 
-bool KCDataProperty::getAsBool()
+bool KCDataProperty::getAsBool() const
 {
 	switch (m_eType)
 	{
@@ -148,7 +148,7 @@ bool KCDataProperty::getAsBool()
 	}
 }
 
-int8 KCDataProperty::getAsInt8()
+int8 KCDataProperty::getAsInt8() const
 {
 	switch (m_eType)
 	{
@@ -179,7 +179,7 @@ int8 KCDataProperty::getAsInt8()
 	}
 }
 
-uint8 KCDataProperty::getAsUInt8()
+uint8 KCDataProperty::getAsUInt8() const
 {
 	switch (m_eType)
 	{
@@ -210,7 +210,7 @@ uint8 KCDataProperty::getAsUInt8()
 	}
 }
 
-int16 KCDataProperty::getAsInt16()
+int16 KCDataProperty::getAsInt16() const
 {
 	switch (m_eType)
 	{
@@ -241,7 +241,7 @@ int16 KCDataProperty::getAsInt16()
 	}
 }
 
-uint16 KCDataProperty::getAsUInt16()
+uint16 KCDataProperty::getAsUInt16() const
 {
 	switch (m_eType)
 	{
@@ -272,7 +272,7 @@ uint16 KCDataProperty::getAsUInt16()
 	}
 }
 
-float KCDataProperty::getAsFloat()
+float KCDataProperty::getAsFloat() const
 {
 	switch (m_eType)
 	{
