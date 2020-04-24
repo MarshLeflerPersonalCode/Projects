@@ -126,7 +126,7 @@
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>D:\Personal\Projects\Tools\CommandLineSerializer.exe -debug -SourceDir 'D:\Personal\Projects\CoreClasses\' -IntermediateDir 'D:\Personal\Projects\CoreClasses\Intermediate\'</Command>
+      <Command>D:\Personal\Projects\Tools\CommandLineSerializer.exe -debug -SourceDir 'D:\Personal\Projects\CoreClasses\' -IntermediateDir 'D:\Personal\Projects\CoreClasses\Intermediate\' -TypeDefs 'KCDatabaseGuid=int32,StatID=int16'</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -168,7 +168,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>D:\Personal\Projects\Tools\CommandLineSerializer.exe -debug -SourceDir 'D:\Personal\Projects\CoreClasses\' -IntermediateDir 'D:\Personal\Projects\CoreClasses\Intermediate\'</Command>
+      <Command>D:\Personal\Projects\Tools\CommandLineSerializer.exe -debug -SourceDir 'D:\Personal\Projects\CoreClasses\' -IntermediateDir 'D:\Personal\Projects\CoreClasses\Intermediate\' -TypeDefs 'KCDatabaseGuid=int32,StatID=int16'</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -185,6 +185,7 @@
     <ClCompile Include="KCCore\Systems\DataGroup\KCDataGroupManager.cpp" />
     <ClCompile Include="KCCore\Systems\DataGroup\Private\KCDataProperty.cpp" />
     <ClCompile Include="KCCore\Systems\Stats\KCStatManager.cpp" />
+    <ClCompile Include="KCCore\Systems\Stats\KCStats.cpp" />
     <ClCompile Include="KCCore\Systems\UnitTypes\KCDefinedUnitTypes.cpp" />
     <ClCompile Include="KCCore\Systems\UnitTypes\KCUnitTypeManager.cpp" />
     <ClCompile Include="KCCore\Systems\UnitTypes\Private\KCUnitTypeCategory.cpp" />
@@ -213,6 +214,7 @@
     <ClInclude Include="KCCore\Systems\DataGroup\Private\KCDataGroupEnumsAndStructs.h" />
     <ClInclude Include="KCCore\Systems\DataGroup\Private\KCDataProperty.h" />
     <ClInclude Include="KCCore\Systems\Stats\KCStatManager.h" />
+    <ClInclude Include="KCCore\Systems\Stats\KCStats.h" />
     <ClInclude Include="KCCore\Systems\Stats\Private\KCStatDefinition.h" />
     <ClInclude Include="KCCore\Systems\Stats\Private\KCStatInclude.h" />
     <ClInclude Include="KCCore\Systems\UnitTypes\KCDefinedUnitTypes.h" />

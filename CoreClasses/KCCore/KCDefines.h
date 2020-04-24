@@ -5,7 +5,7 @@
 #include "Utils/TypeDefinitions/KCPrimitiveTypesDefinition.h"
 
 #ifdef USING_UE4
-#include "CoreMinimal.h"
+
 
 #else
 ///////////////////////////////////////////////////////////////////////////

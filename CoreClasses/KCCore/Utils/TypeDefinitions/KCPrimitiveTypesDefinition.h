@@ -52,6 +52,10 @@ typedef std::string KCString;
 //#define KCString std::string
 static const KCString EMPTY_KCSTRING = "";
 
+
+//define stat ID
+typedef int16	KCStatID;
+
 typedef union _UNIONDATA8BIT_
 {
 	bool            m_bValue;

@@ -8,6 +8,6 @@
 
 void CORE_UNITTYPE::defineUnitTypes(class UNITTYPE::KCUnitTypeManager *pManager)
 {
-	CORE_UNITTYPE_ITEMS::ANY = pManager->getUnitTypeID("ITEMS", "ANY");
+	UNITTYPE_ITEMS::ANY = pManager->getUnitTypeID("ITEMS", "ANY");
 }
 

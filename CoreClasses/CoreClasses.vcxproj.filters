@@ -121,6 +121,9 @@
     <ClCompile Include="KCCore\Systems\DataGroup\KCDataGroupManager.cpp">
       <Filter>KCCore\Systems\DataGroup</Filter>
     </ClCompile>
+    <ClCompile Include="KCCore\Systems\Stats\KCStats.cpp">
+      <Filter>KCCore\Systems\Stats</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="KCCore\KCDefines.h">
@@ -242,6 +245,9 @@
     </ClInclude>
     <ClInclude Include="KCCore\Systems\DataGroup\KCDataGroupManager.h">
       <Filter>KCCore\Systems\DataGroup</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Systems\Stats\KCStats.h">
+      <Filter>KCCore\Systems\Stats</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

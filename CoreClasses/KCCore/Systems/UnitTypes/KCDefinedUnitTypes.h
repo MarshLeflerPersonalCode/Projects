@@ -13,7 +13,7 @@
 /////////////////////////////////////////////////////////
 
 
-namespace CORE_UNITTYPE_ITEMS
+namespace UNITTYPE_ITEMS
 {
 	static uint32 ANY;
 };

@@ -50,13 +50,13 @@ int main()
 	mDatabaseManager.reload();
 
 	STATS::KCStatManager mStatManager;
-	mStatManager.reloadStatsFromDirectory(".\\Databases\\Stats\\");
+	mStatManager.initialize(&mDatabaseManager);
 
 
 	UNITTYPE::KCUnitTypeManager mManager;
 	if (mManager.parseUnitTypeFile(L"..\\UE4Projects\\CoreTest\\Content\\RawData\\unittypes.bin"))
 	{
-		bool bIsA = mManager.getCategoryByIndex(0)->IsA(1, CORE_UNITTYPE_ITEMS::ANY);
+		bool bIsA = mManager.getCategoryByIndex(0)->IsA(1, UNITTYPE_ITEMS::ANY);
 		if (bIsA && mManager.IsA("ITEMS", "NEW7", "NEW7"))
 		{
 			std::cout << "True\n";

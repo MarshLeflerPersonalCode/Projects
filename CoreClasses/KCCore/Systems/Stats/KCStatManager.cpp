@@ -1,4 +1,7 @@
 #include "KCStatManager.h"
+#include "Database/KCDatabaseManager.h"
+#include "Database/Private/KCDBTable.h"
+#include "KCStats.h"
 
 static STATS::KCStatManager *g_pStatManager(nullptr);
 
@@ -18,6 +21,12 @@ STATS::KCStatManager::~KCStatManager()
 }
 
 
+void STATS::KCStatManager::_clean()
+{
+	m_StatsByName.clear();
+	m_StatsByID.Empty();
+}
+
 
 STATS::KCStatManager * STATS::KCStatManager::getSingleton()
 {
@@ -28,27 +37,32 @@ STATS::KCStatManager * STATS::KCStatManager::getSingleton()
 	return g_pStatManager;
 }
 
-int32 STATS::KCStatManager::reloadStatsFromDirectory(KCString strLooseFilesFolder)
+bool STATS::KCStatManager::initialize(KCDatabaseManager *pDatabaseManager)
 {
-	int32 iCountCreated(0);
-	/*
-	KCTArray<KCString> mFiles(100);
-	KCFileUtilities::getFilesInDirectory(KCStringUtils::toWide( strLooseFilesFolder ).c_str(), L"*.dat", mFiles, false);
-	for (uint32 iIndex = 0; iIndex < mFiles.Num(); iIndex++)
+	_clean();
+	KCEnsureAlwaysReturnVal(pDatabaseManager, false);
+	const KCDBTable<STATS::FKCStatDefinition> *pStatTable = (const KCDBTable<STATS::FKCStatDefinition> *)pDatabaseManager->getTable(DATABASE::EDATABASE_TABLES::STATS);
+	KCEnsureAlwaysReturnVal(pStatTable, false);
+	m_StatsByID.Reserve(pStatTable->getCountOfEntries());
+	for (uint32 iStatIndex = 0; iStatIndex < pStatTable->getCountOfEntries(); iStatIndex++)
 	{
-		if (reloadStatFile(mFiles[iIndex]))
-		{
-			iCountCreated++;
-		}
-	}*/
-	return iCountCreated;
-	
+		const FKCStatDefinition *pStat = pStatTable->getEntryByIndex(iStatIndex);
+		KCEnsureAlwaysContinue(pStat);
+		m_StatsByName[pStat->m_strName] = (KCStatID)iStatIndex;
+		m_StatsByID.Add(pStat->m_strName);
+	}
+	STATS::defineStats(this);
+	return (m_StatsByID.Num() > 0)?true:false;
 }
 
-
-bool STATS::KCStatManager::reloadStatFile(KCString strStatFile)
+const STATS::FKCStatDefinition * STATS::KCStatManager::getStatDefinitionByID(KCStatID iID) const
 {
-
-	return true;
+	
+	KCEnsureAlwaysReturnVal((uint32)iID < m_StatsByID.Num(), nullptr);
+	return KCDatabaseManager::getStatDefinitionByName(m_StatsByID[iID]);
 }
 
+const STATS::FKCStatDefinition * STATS::KCStatManager::getStatDefinitionByName(KCName strName) const
+{
+	return KCDatabaseManager::getStatDefinitionByName(strName);
+}

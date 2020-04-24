@@ -6,7 +6,7 @@
 namespace STATS
 { 
 
-	class FKCStatDefinition : public FKCDBEntry
+	struct FKCStatDefinition : public FKCDBEntry
 	{
 	public:
 		KCSERIALIZE_CODE();

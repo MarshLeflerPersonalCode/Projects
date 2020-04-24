@@ -82,6 +82,37 @@
     }\
 }
 #endif
+#ifdef NDEBUG
+#define _KCASSERT_CONTINUE_(bAlwaysShow, mCondition, strMessage)\
+{\
+    static bool bAssertOccured = false;\
+    if((bAlwaysShow == true || bAssertOccured == false) && !(mCondition))\
+    {\
+      bAssertOccured = true;\
+      continue;\
+    }\
+}
+#else
+#define _KCASSERT_CONTINUE_(bAlwaysShow, mCondition, strMessage)\
+{\
+    static bool bAssertOccured = false;\
+    if((bAlwaysShow == true || bAssertOccured == false) && !(mCondition))\
+    {\
+      bAssertOccured = true;\
+      std::cerr << "Assertion failed: (" << #mCondition << "), "\
+      << "function " << __FUNCTION__\
+      << ", file " << __FILE__\
+      << ", line " << __LINE__ << "."\
+      << std::endl;\
+      if(strMessage != "")\
+      {\
+          std::cerr << strMessage << std::endl;\
+      }\
+      KCASSERT_BREAK;\
+      continue;\
+    }\
+}
+#endif
 
 #ifdef NDEBUG
 #define _KCASSERT_RETURNVAL_(bAlwaysShow, mCondition, strMessage, mReturnValue)\
@@ -141,15 +172,19 @@
 ///////////////////////ENSURES///////////////////////
 #define KCEnsureAlways(condition )										_KCASSERT_(true, condition, "")
 #define KCEnsureAlwaysReturn(condition )								_KCASSERT_RETURN_(true, condition, "");
+#define KCEnsureAlwaysContinue(condition )								_KCASSERT_CONTINUE_(true, condition, "");
 #define KCEnsureAlwaysReturnVal(condition, returnValue )				_KCASSERT_RETURNVAL_(true, condition, "", returnValue)
 #define KCEnsureOnce(condition )										_KCASSERT_(false, condition, "")
 #define KCEnsureOnceReturn(condition )									_KCASSERT_RETURN_(false, condition, "")
+#define KCEnsureOnceContinue(condition )								_KCASSERT_CONTINUE_(false, condition, "")
 #define KCEnsureOnceReturnVal(condition, returnValue )					_KCASSERT_RETURNVAL_(false, condition, "", returnValue)
 #define KCEnsureAlwaysMsg(condition, message )							_KCASSERT_(true, condition, message)
 #define KCEnsureAlwaysMsgReturn(condition, message )					_KCASSERT_RETURN_(true, condition, message)
+#define KCEnsureAlwaysMsgContinue(condition, message )					_KCASSERT_CONTINUE_(true, condition, message)
 #define KCEnsureAlwaysMsgReturnVal(condition, message, returnValue )	_KCASSERT_RETURNVAL_(true, condition, message, returnValue)
 #define KCEnsuceOnceMsg(condition, message )							_KCASSERT_(false, condition, message)
 #define KCEnsuceOnceMsgReturn(condition, message )						_KCASSERT_RETURN_(false, condition, message)
+#define KCEnsuceOnceMsgContinue(condition, message )					_KCASSERT_CONTINUE_(false, condition, message)
 #define KCEnsuceOnceMsgReturnVal(condition, message, returnValue )		_KCASSERT_RETURNVAL_(false, condition, message, returnValue)
 ///////////////////////CRIT///////////////////////
 #define KCCrit(condition )												_KCCRIT_(condition, "")

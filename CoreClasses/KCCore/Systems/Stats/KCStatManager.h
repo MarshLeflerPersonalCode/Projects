@@ -1,6 +1,6 @@
 //copyright Marsh Lefler 2000-...
 #pragma once
-#include "Private/KCStatInclude.h"
+#include "Systems/Stats/Private/KCStatInclude.h"
 ///////////////////////////////////////////////////////////
 //HOW TO USE
 //
@@ -11,7 +11,7 @@
 //
 /////////////////////////////////////////////////////////
 
-class KCDataGroup;
+class KCDatabaseManager;
 
 namespace STATS
 {
@@ -25,19 +25,28 @@ namespace STATS
 		//returns the singleton of this class
 		static KCStatManager *		getSingleton();
 
-		//loads individual stats from a directory. Returns the count reloaded
-		int32						reloadStatsFromDirectory(KCString strLooseFilesFolder);
+		//initializes the stat manager. NOTE the database manager must be initialized first
+		bool						initialize(KCDatabaseManager *pDatabaseManager);
 
-		//stat files can hold multiple stats
-		bool						reloadStatFile(KCString strStatFile);
+		//returns the stat index
+		FORCEINLINE KCStatID		getStatID(const KCName &strName) const
+		{
+			std::unordered_map<KCName, KCStatID, KCNameHasher>::const_iterator iter = m_StatsByName.find(strName);
+			KCEnsureAlwaysReturnVal(iter != m_StatsByName.end(), (KCStatID)0xFFFF);
+			return iter->second;
+		}
 
+		
+		
+		//returns the stat definition by ID
+		const struct FKCStatDefinition *	getStatDefinitionByID(KCStatID iID) const;
+		//returns the stat definition by name
+		const struct FKCStatDefinition *	getStatDefinitionByName(KCName strName) const;
 
 	private:
-		bool						_createStat(KCDataGroup *pDataGroup);
-		
-		
-		//NOTE - maybe in the future better to make this a map
-		
+		void						_clean();
+		std::unordered_map<KCName, KCStatID, KCNameHasher>		m_StatsByName;
+		KCTArray<KCName>										m_StatsByID;
 	};
 
 

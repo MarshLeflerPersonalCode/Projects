@@ -43,7 +43,7 @@ public:
 		auto mEntry = m_EntriesByGuid.find(iGuid);
 		if (mEntry != m_EntriesByGuid.end())
 		{
-			return _getEntryByIndex(mEntry.second);
+			return getEntryByIndex(mEntry->second);
 		}
 		return nullptr;
 	}
@@ -51,21 +51,23 @@ public:
 	//returns the entry
 	const T *						getEntry(KCName strName) const
 	{
-		auto mEntry = m_EntriesByName.find(iGuid);
+		auto mEntry = m_EntriesByName.find(strName);
 		if (mEntry != m_EntriesByName.end())
 		{
-			return _getEntryByIndex(mEntry.second);
+			return getEntryByIndex(mEntry->second);
 		}
 		return nullptr;
 	}
-
-protected:
-	//returns the entry by ID
-	FORCEINLINE T	*				_getEntryByIndex(int32 iIndex)
+	//returns the count of entries
+	uint32							getCountOfEntries() const { return m_Entries.Num(); }
+	//returns the entry by index
+	FORCEINLINE const T	*			getEntryByIndex(uint32 iIndex) const
 	{
-		KCEnsureAlwaysReturnVal( iIndex >= 0 && iIndex < m_Entries.Num(), nullptr);
+		KCEnsureAlwaysReturnVal(iIndex >= 0 && iIndex < m_Entries.Num(), nullptr);
 		return m_Entries[iIndex];
 	}
+
+protected:
 
 	void							_addEntry(FKCDBEntry *pEntry)
 	{
@@ -85,8 +87,8 @@ protected:
 	}
 	DATABASE::EDATABASE_TABLES		m_eDatatable = DATABASE::EDATABASE_TABLES::UNDEFINED;
 	KCTArray< T * >					m_Entries;
-	std::unordered_map<KCDatabaseGuid, int32>					m_EntriesByGuid;
-	std::unordered_map<KCName, int32, KCNameHasher>				m_EntriesByName;
+	std::unordered_map<KCDatabaseGuid, uint32>					m_EntriesByGuid;
+	std::unordered_map<KCName, uint32, KCNameHasher>				m_EntriesByName;
 };
 
 

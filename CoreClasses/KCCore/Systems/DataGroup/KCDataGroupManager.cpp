@@ -59,7 +59,7 @@ int32 KCDataGroupManager::loadLooseFiles(const WCHAR *pPath)
 		}
 		m_DataGroups[KCStringUtils::toUpper(strPath)] = pDataGroup;
 	}
-	return m_DataGroups.size();
+	return (int32)m_DataGroups.size();
 }
 
 bool KCDataGroupManager::createMasterFile(const WCHAR *pPathToLooseFiles, const WCHAR *pPathToMasterFile)
