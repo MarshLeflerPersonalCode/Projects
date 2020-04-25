@@ -22,7 +22,7 @@
 637233389000173206|..\CoreClasses\KCCore\Systems\Stats\KCStatsDefined.h
 637233974997883879|..\CoreClasses\KCCore\Systems\Stats\MathFunctions\IKCStatMathFunction.h
 637233974954274821|..\CoreClasses\KCCore\Systems\Stats\MathFunctions\KCStatMathFunctions.h
-637234059753433122|..\CoreClasses\KCCore\Systems\Stats\Private\KCStatDefinition.h
+637234154239734236|..\CoreClasses\KCCore\Systems\Stats\Private\KCStatDefinition.h
 637233085392465107|..\CoreClasses\KCCore\Systems\Stats\Private\KCStatInclude.h
 637233393403144250|..\CoreClasses\KCCore\Systems\UnitTypes\KCDefinedUnitTypes.h
 637233112760755354|..\CoreClasses\KCCore\Systems\UnitTypes\KCUnitTypeManager.h

@@ -82,6 +82,24 @@ int32 STATS::KCStats::getCalculatedValueAsInt32(KCStatID iStat)
 	return iCurrentValue;
 }
 
+void STATS::KCStats::_dirtyStat(KCStatID iStat)
+{
+	const FKCStatDefinition *pStatDefinition = (*m_pStatDefintions)[iStat];
+	if (pStatDefinition->m_bDirtyAllStats)
+	{
+		m_StatsCalculated.Reset();
+		return;
+	}
+	m_StatsCalculated[iStat] = false;
+
+	for (uint32 iIndexOfStatsToDirty = 0; iIndexOfStatsToDirty < pStatDefinition->m_StatsReferencing.Num(); iIndexOfStatsToDirty++)
+	{
+		KCStatID mStatIDToDirty = m_pStatManager->getStatID(pStatDefinition->m_StatsReferencing[iIndexOfStatsToDirty]);
+		KCEnsureAlwaysContinue(isValidStatID(mStatIDToDirty));
+		m_StatsCalculated[mStatIDToDirty] = false;
+	}
+}
+
 void STATS::KCStats::_clean()
 {
 	m_Stats.Empty();

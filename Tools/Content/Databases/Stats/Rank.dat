@@ -15,6 +15,7 @@
           <UINT16>COUNT:0
      [/m_MathFunctions]
      [m_StatsReferencing]
-          <UINT16>COUNT:0
+          <UINT16>COUNT:1
+          <STRING>0:HP Min
      [/m_StatsReferencing]
 [/FKCStatDefinition]

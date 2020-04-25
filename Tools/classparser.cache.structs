@@ -388,11 +388,11 @@
           "variableName": "m_MathFunctions",
           "variableType": "KCTArray<IKCStatMathFunction>",
           "variableValue": "",
-          "displayName": "Functions",
+          "displayName": "Math Functions",
           "category": "MISC",
           "variableProperties": {
             "CATEGORY": "MISC",
-            "DISPLAYNAME": "Functions"
+            "DISPLAYNAME": "Math Functions"
           },
           "variableComment": "//functions that will do math on the stat. The functions get ran in order 0-to end.",
           "isStatic": false,
@@ -406,7 +406,7 @@
           "isPointer": false,
           "isUE4Variable": true,
           "variableName": "m_StatsReferencing",
-          "variableType": "KCTArray<int32>",
+          "variableType": "KCTArray<KCName>",
           "variableValue": "",
           "displayName": "Stat Refs",
           "category": "MISC",

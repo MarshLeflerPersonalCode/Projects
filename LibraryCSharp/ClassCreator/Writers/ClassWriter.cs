@@ -367,6 +367,7 @@ namespace Library.ClassCreator.Writers
             VariableDefinitionHandler mVariableTypes = mManager.variableDefinitionHandler;
             string strTempVariableTypeName = mVariable.variableType.Substring(iIndexLessThan, iIndexGreaterThan - iIndexLessThan).Trim();
             strTempVariableTypeName = strTempVariableTypeName.Replace("*", "").Trim();
+            bool bVariableTypeFound = false;
             foreach (VariableDefinition mVariableDef in mVariableTypes.getVariableDefinitions())
             {
                 if (strTempVariableTypeName != mVariableDef.variableName)
@@ -383,6 +384,7 @@ namespace Library.ClassCreator.Writers
                 if (mVariableDef.isPrimitiveType)
                 {
                     strVariableType = EVARIABLE_CSHARP_TYPES_NAMES.g_Names[(int)mVariableDef.eCSharpVariable];
+
                 }
                 else if (mVariableDef.eCSharpVariable == EVARIABLE_CSHARP_TYPES.CLASS)
                 {
@@ -398,17 +400,21 @@ namespace Library.ClassCreator.Writers
                     mManager.log("ERROR - List variable: " + mVariable.variableType + " appears to have a list inside it. This should be possible but I don't want to handle it right now - Marsh out.");
                     return "ERROR - CHECK LOG" + Environment.NewLine;
                 }
-
+                bVariableTypeFound = true;
+                break;
             }
-            if (mProjectWrapper.enums.ContainsKey(strTempVariableTypeName.ToUpper()))
+            if (bVariableTypeFound == false)
             {
-                //it's an enum.
-                strVariableType = strTempVariableTypeName;
-            }
-            if (mProjectWrapper.classStructures.ContainsKey(strTempVariableTypeName.ToUpper()))
-            {
-                //it's a class structure.
-                strVariableType = strTempVariableTypeName;
+                if (mProjectWrapper.enums.ContainsKey(strTempVariableTypeName.ToUpper()))
+                {
+                    //it's an enum.
+                    strVariableType = strTempVariableTypeName;
+                }
+                if (mProjectWrapper.classStructures.ContainsKey(strTempVariableTypeName.ToUpper()))
+                {
+                    //it's a class structure.
+                    strVariableType = strTempVariableTypeName;
+                }
             }
 
 

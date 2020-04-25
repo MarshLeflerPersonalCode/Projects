@@ -714,9 +714,9 @@ namespace Dynamic
         //Variable Type:KCTArray<IKCStatMathFunction>
         //Variable Value:
         //Variable Line Number:42
-        //Variable Properties: CATEGORY = MISC, DISPLAYNAME = Functions
+        //Variable Properties: CATEGORY = MISC, DISPLAYNAME = Math Functions
         private List<IKCStatMathFunction> _m_MathFunctions = new List<IKCStatMathFunction>();
-        [DisplayName("Functions"), Category("MISC"), Description("functions that will do math on the stat. The functions get ran in order 0-to end.")]
+        [DisplayName("Math Functions"), Category("MISC"), Description("functions that will do math on the stat. The functions get ran in order 0-to end.")]
         public List<IKCStatMathFunction> m_MathFunctions
         {
             get{ return _m_MathFunctions; }
@@ -727,13 +727,13 @@ namespace Dynamic
         //Class File:..\CoreClasses\KCCore\Systems\Stats\Private\KCStatDefinition.h
         //Class Name:FKCStatDefinition
         //Variable Name:m_StatsReferencing
-        //Variable Type:KCTArray<int32>
+        //Variable Type:KCTArray<KCName>
         //Variable Value:
         //Variable Line Number:45
         //Variable Properties: CATEGORY = MISC, DISPLAYNAME = Stat Refs, HIDDEN = 
-        private List<int> _m_StatsReferencing = new List<int>();
+        private List<string> _m_StatsReferencing = new List<string>();
         [DisplayName("Stat Refs"), Category("MISC"), Browsable(false), Description("Stats need to know what other stats are referencing them. This is the array of stat ids")]
-        public List<int> m_StatsReferencing
+        public List<string> m_StatsReferencing
         {
             get{ return _m_StatsReferencing; }
             set{ _m_StatsReferencing = value; _notifyOfPropertyChanged("m_StatsReferencing"); }

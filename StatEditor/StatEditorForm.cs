@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -265,11 +266,52 @@ namespace StatEditor
         }
         public void notifyOfPreSave(Database mDatabase)
         {
-
+            //stats need to know what stats they need to modify
+            if(mDatabase.databaseName=="Stats")
+            {
+                _hookupStats(mDatabase);
+            }
         }
         public void notifyOfPostSave(Database mDatabase)
         {
 
+        }
+
+        private void _hookupStats(Database mDatabase)
+        {
+            //stats need to know what stats they need to modify
+            foreach( ClassInstance mInstance in mDatabase.getEntries())
+            {
+                if( mInstance.m_bIsDirty)
+                {
+                    string strStatName = mDatabase.getEntryName(mInstance);
+                    IList mFunctions = mInstance.getPropertyValueList("m_MathFunctions");                                        
+                    if(mFunctions == null )
+                    {
+                        continue;
+                    }
+                    foreach (object mObject in mFunctions)
+                    {
+                        ClassInstance mFunction = mObject as ClassInstance;
+                        string strStat = mFunction.getPropertyValueString("m_strStat", "");
+                        if(strStat != "")
+                        {
+                            ClassInstance mInstanceToPossiblyDirt = mDatabase.getEntryByName(strStat);
+                            if( mInstanceToPossiblyDirt == null )
+                            {
+                                log("ERROR - stat " + strStatName + " has a math function(" + mFunction.GetType().Name + ") that is pointing to a stat that doesn't exist - " + strStat);
+                                continue;
+                            }
+                            List<string> mStringRef = mInstanceToPossiblyDirt.getPropertyValueList("m_StatsReferencing") as List<string>;
+                            if(mStringRef.Contains(strStatName) == false )
+                            {
+                                mStringRef.Add(strStatName);
+                                mInstanceToPossiblyDirt.m_bIsDirty = true;
+                            }
+                        }
+                    }
+                }
+            }
         }
 
 

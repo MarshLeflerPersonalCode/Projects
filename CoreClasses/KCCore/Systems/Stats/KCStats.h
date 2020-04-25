@@ -104,21 +104,7 @@ namespace STATS
 			_dirtyStat(iStat);
 		}
 	private:
-		FORCEINLINE void					_dirtyStat(KCStatID iStat)
-		{
-			const FKCStatDefinition *pStatDefinition = (*m_pStatDefintions)[iStat];
-			if (pStatDefinition->m_bDirtyAllStats)
-			{
-				m_StatsCalculated.Reset();
-				return;
-			}
-			m_StatsCalculated[iStat] = false;
-			
-			for (uint32 iIndexOfStatsToDirty = 0; iIndexOfStatsToDirty < pStatDefinition->m_StatsReferencing.Num(); iIndexOfStatsToDirty++)
-			{
-				m_StatsCalculated[pStatDefinition->m_StatsReferencing[iIndexOfStatsToDirty]] = false;
-			}
-		}
+		void								_dirtyStat(KCStatID iStat);
 		
 
 		//////////////////////////////////////Not sure I should make this private or not//////////////////////////////////////

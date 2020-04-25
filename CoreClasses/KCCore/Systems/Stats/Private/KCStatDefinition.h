@@ -40,11 +40,11 @@ namespace STATS
 		UPROPERTY(Category = "GRAPH", DisplayName = "Graph Stat", Meta = (List = "Stats"))
 		KCString							m_strGraphStat = "Rank";
 		//functions that will do math on the stat. The functions get ran in order 0-to end.
-		UPROPERTY(Category = "MISC", DisplayName = "Functions")
+		UPROPERTY(Category = "MISC", DisplayName = "Math Functions")
 		KCTArray<IKCStatMathFunction>		m_MathFunctions;
 		//Stats need to know what other stats are referencing them. This is the array of stat ids
 		UPROPERTY(Category = "MISC", DisplayName = "Stat Refs", Meta = (Hidden))
-		KCTArray<int32>						m_StatsReferencing;
+		KCTArray<KCName>					m_StatsReferencing;
 		//When this stat changes all the stats will need to be recalculate
 		UPROPERTY(Category = "MISC", DisplayName = "Dirty All Stats" )
 		bool								m_bDirtyAllStats = false;

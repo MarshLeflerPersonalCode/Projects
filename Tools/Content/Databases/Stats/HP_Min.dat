@@ -12,7 +12,11 @@
      <STRING>m_strName:HP Min
      <STRING>m_strFileName:HP_Min.dat
      [m_MathFunctions]
-          <UINT16>COUNT:0
+          <UINT16>COUNT:1
+          [0]
+               <STRING>m_strStat:RANK
+               <FLOAT>m_fDenominator:100
+          [/0]
      [/m_MathFunctions]
      [m_StatsReferencing]
           <UINT16>COUNT:0

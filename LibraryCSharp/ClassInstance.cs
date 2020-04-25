@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -47,13 +48,14 @@ namespace Library
 			}
 		}
 
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		/////////////////////////////////////////////////////////////////
-		//start get property by ref
-		/////////////////////////////////////////////////////////////////
-		#region GetPropertyByRef
-		public bool getPropertyValue(string strProperty, ref string strValue)
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////////////////////////////////////////
+        //start get property by ref
+        /////////////////////////////////////////////////////////////////
+        #region GetPropertyByRef
+       
+        public bool getPropertyValue(string strProperty, ref string strValue)
 		{
 			
 			PropertyInfo mProperty = GetType().GetProperty(strProperty);
@@ -206,16 +208,39 @@ namespace Library
 			}
 			return false;
 		}
-		#endregion
-		/////////////////////////////////////////////////////////////////
-		//End get property by ref
-		/////////////////////////////////////////////////////////////////
-		#region GetProperty
-		/////////////////////////////////////////////////////////////////
-		//start get property
-		/////////////////////////////////////////////////////////////////
+        #endregion
+        /////////////////////////////////////////////////////////////////
+        //End get property by ref
+        /////////////////////////////////////////////////////////////////
+        #region GetProperty
+        /////////////////////////////////////////////////////////////////
+        //start get property
+        /////////////////////////////////////////////////////////////////
+        
 
-		public string getPropertyValueString(string strProperty, string strDefaultValue)
+        public bool hasProperty(string strProperty)
+        {
+            return (GetType().GetProperty(strProperty) != null) ? true : false;
+        }
+        public IList getPropertyValueList(string strProperty)
+        {
+
+            PropertyInfo mProperty = GetType().GetProperty(strProperty);
+            if (mProperty != null)
+            {
+                try
+                {
+                    return mProperty.GetValue(this) as IList;
+                }
+                catch (Exception e)
+                {
+                    log("ERROR - attempting to get property " + strProperty + " from object type " + GetType().Name + ". Error was: " + e.Message);
+                    return null;
+                }
+            }
+            return null;
+        }
+        public string getPropertyValueString(string strProperty, string strDefaultValue)
 		{
 			getPropertyValue(strProperty, ref strDefaultValue);
 			return strDefaultValue;
