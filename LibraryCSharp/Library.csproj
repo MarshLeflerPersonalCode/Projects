@@ -95,6 +95,12 @@
     <Compile Include="DataGroup\DataGroup.cs" />
     <Compile Include="DataGroup\DataGroupConvert.cs" />
     <Compile Include="DataGroup\DataProperty.cs" />
+    <Compile Include="Helpers\ClassSelection\ClassSelection.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Helpers\ClassSelection\ClassSelection.Designer.cs">
+      <DependentUpon>ClassSelection.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\InputBox\InputBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -161,6 +167,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Database\DatabaseEditorControl.resx">
       <DependentUpon>DatabaseEditorControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Helpers\ClassSelection\ClassSelection.resx">
+      <DependentUpon>ClassSelection.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Helpers\InputBox\InputBox.resx">
       <DependentUpon>InputBox.cs</DependentUpon>

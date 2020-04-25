@@ -61,7 +61,7 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.statObjectViewer);
             this.splitContainer1.Size = new System.Drawing.Size(806, 620);
-            this.splitContainer1.SplitterDistance = 252;
+            this.splitContainer1.SplitterDistance = 251;
             this.splitContainer1.SplitterWidth = 8;
             this.splitContainer1.TabIndex = 1;
             // 
@@ -77,7 +77,7 @@
             this.m_StatListView.Location = new System.Drawing.Point(0, 50);
             this.m_StatListView.MultiSelect = false;
             this.m_StatListView.Name = "m_StatListView";
-            this.m_StatListView.Size = new System.Drawing.Size(250, 568);
+            this.m_StatListView.Size = new System.Drawing.Size(249, 568);
             this.m_StatListView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.m_StatListView.TabIndex = 1;
             this.m_StatListView.UseCompatibleStateImageBehavior = false;
@@ -108,7 +108,7 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(10);
-            this.panel1.Size = new System.Drawing.Size(250, 50);
+            this.panel1.Size = new System.Drawing.Size(249, 50);
             this.panel1.TabIndex = 0;
             // 
             // txtBoxFilterListView
@@ -116,7 +116,7 @@
             this.txtBoxFilterListView.Dock = System.Windows.Forms.DockStyle.Top;
             this.txtBoxFilterListView.Location = new System.Drawing.Point(10, 23);
             this.txtBoxFilterListView.Name = "txtBoxFilterListView";
-            this.txtBoxFilterListView.Size = new System.Drawing.Size(228, 20);
+            this.txtBoxFilterListView.Size = new System.Drawing.Size(227, 20);
             this.txtBoxFilterListView.TabIndex = 7;
             this.txtBoxFilterListView.TextChanged += new System.EventHandler(this.txtBoxFilterListView_TextChanged);
             // 
@@ -126,7 +126,7 @@
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(10, 10);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(228, 13);
+            this.label3.Size = new System.Drawing.Size(227, 13);
             this.label3.TabIndex = 6;
             this.label3.Text = "Filter";
             // 
@@ -135,9 +135,10 @@
             this.statObjectViewer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.statObjectViewer.Location = new System.Drawing.Point(0, 0);
             this.statObjectViewer.Name = "statObjectViewer";
-            this.statObjectViewer.Size = new System.Drawing.Size(544, 618);
+            this.statObjectViewer.Size = new System.Drawing.Size(545, 618);
             this.statObjectViewer.TabIndex = 0;
             this.statObjectViewer.PropertyValueChanged += new CustomControls.ObjectViewer.PropertyValueChangedHandler(this.statObjectViewer_PropertyValueChanged);
+            
             // 
             // timerForFilter
             // 

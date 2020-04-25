@@ -14,12 +14,15 @@
 #include "Utils/KCAsserts.h"
 #include "Utils/Containers/KCName.h"
 #include "Utils/Containers/KCTArray.h"
+#include "Utils/Containers/KCBitArray.h"
 #include "Utils/Containers/KCStringTable.h"
 #include "Utils/IO/KCMemoryReader.h"
 #include "Utils/IO/KCMemoryWriter.h"
 #include "Utils/IO/KCFileUtilities.h"
 #include "Utils/KCStringUtils.h"
 #include "Utils/TypeDefinitions/KCDataTypes.h"
+#include "Systems/Stats/KCStatsDefined.h"
+#include "Systems/UnitTypes/KCDefinedUnitTypes.h"
 
 
 

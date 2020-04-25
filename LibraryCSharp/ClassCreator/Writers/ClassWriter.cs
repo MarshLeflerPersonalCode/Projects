@@ -17,7 +17,8 @@ namespace Library.ClassCreator.Writers
             }
 
             string strClass = Environment.NewLine;
-            strClass = strClass + "    public class " + mClass.name + ": ClassInstance" + Environment.NewLine;
+            string strClassExtending = _getCLassInheritingFrom(mClass, mProjectWrapper);
+            strClass = strClass + "    public class " + mClass.name + ": " + strClassExtending + Environment.NewLine;
 
 
             strClass = strClass + "    {" + Environment.NewLine;            
@@ -26,6 +27,20 @@ namespace Library.ClassCreator.Writers
 
             return strClass;
         }
+
+        private static string _getCLassInheritingFrom(ClassStructure mClass, ProjectWrapper mProjectWrapper)
+        {
+            foreach( string strClass in mClass.classStructuresInheritingFrom)
+            {
+                if( mProjectWrapper.getClassStructByName(strClass) != null )
+                {
+                    return strClass;
+                }
+            }
+
+            return "ClassInstance";
+        }
+
         private static string _writeHierarchy(ClassCreatorManager mManager, ClassStructure mClass, ProjectWrapper mProjectWrapper)
         {
             string strHierarchyVariables = "";
@@ -44,7 +59,7 @@ namespace Library.ClassCreator.Writers
         private static string _writeVariables(ClassCreatorManager mManager, ClassStructure mClass, ProjectWrapper mProjectWrapper)
         {
             string strClass = "";
-            strClass = strClass + _writeHierarchy(mManager, mClass, mProjectWrapper);
+            //strClass = strClass + _writeHierarchy(mManager, mClass, mProjectWrapper);
             foreach (ClassVariable mVariable in mClass.variables)
             {
                 if (mVariable.isPrivateVariable == false &&
@@ -167,10 +182,14 @@ namespace Library.ClassCreator.Writers
                             bFound = true;
                             strValue = mProjectWrapper.defines[strValue];
                         }
-                        if (bFound == false)
+                        /*if (bFound == false)
                         {
-                            strValue = strValue.Replace("f", ""); //fixes issue with defining 0.0f
-                        }
+                            if(strValue.EndsWith("f"))
+                            {
+                                strValue = strValue.Replace("f", ""); //fixes issue with defining 0.0f
+                            }
+                            
+                        }*/
                     }
 
                     strClass = strClass + "private " + EVARIABLE_CSHARP_TYPES_NAMES.g_Names[(int)mVariableDefinition.eCSharpVariable] + " _" + mClassVariable.variableName + " = " + ((strValue.Length != 0) ? strValue : "0") + ";" + Environment.NewLine;
@@ -244,6 +263,19 @@ namespace Library.ClassCreator.Writers
             {
                 strDetails = strDetails + "ReadOnly(true), ";
             }
+            if (mClassVariable.variableProperties.ContainsKey("HIDDEN"))
+            {
+                strDetails = strDetails + "Browsable(false), ";
+            }
+            else if (mClassVariable.variableProperties.ContainsKey("BROWSABLE"))
+            {
+                string strValue = mClassVariable.variableProperties["BROWSABLE"];
+                if( strValue.ToUpper().Contains("FALSE"))
+                {
+                    strDetails = strDetails + "Browsable(false), ";
+                }
+            }
+
             string strDescription = "";
             if (mClassVariable.variableProperties.ContainsKey("TOOLTIP"))
             {

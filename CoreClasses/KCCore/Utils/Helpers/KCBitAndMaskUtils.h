@@ -8,14 +8,14 @@
 //creates a mask in 64 bits
 #define MASK_CREATE_64BIT( iBit ) ( (int64)(1LL << ((int64)iBit)) )
 //removes a bit from a mask
-#define MASK_REMOVE_BIT_32BIT( iMaskResult, iBit )( iMaskResult = iMaskResult & ~CREATE_32BIT_MASK( iBit ) )
-#define MASK_REMOVE_BIT_64BIT( iMaskResult, iBit )( iMaskResult = iMaskResult & ~CREATE_64BIT_MASK( iBit ) )
+#define MASK_REMOVE_BIT_32BIT( iMaskResult, iBit )( iMaskResult = iMaskResult & ~MASK_CREATE_32BIT( iBit ) )
+#define MASK_REMOVE_BIT_64BIT( iMaskResult, iBit )( iMaskResult = iMaskResult & ~MASK_CREATE_64BIT( iBit ) )
 //sets a bit on a mask
-#define MASK_SET_BIT_32BIT( iMaskResult, iBit )( iMaskResult = iMaskResult | CREATE_32BIT_MASK( iBit ) )
-#define MASK_SET_BIT_64BIT( iMaskResult, iBit )( iMaskResult = iMaskResult | CREATE_64BIT_MASK( iBit ) )
+#define MASK_SET_BIT_32BIT( iMaskResult, iBit )( iMaskResult = iMaskResult | MASK_CREATE_32BIT( iBit ) )
+#define MASK_SET_BIT_64BIT( iMaskResult, iBit )( iMaskResult = iMaskResult | MASK_CREATE_64BIT( iBit ) )
 //tests a specific bit in a 32bit mask or a 64 bit mask
-#define MASK_TEST_BIT_32BIT( iMask, iBit )( ( iMask & CREATE_32BIT_MASK( iBit ) )?true:false )
-#define MASK_TEST_BIT_64BIT( iMask, iBit )( ( iMask & CREATE_64BIT_MASK( iBit ) )?true:false )
+#define MASK_TEST_BIT_32BIT( iMask, iBit )( ( iMask & MASK_CREATE_32BIT( iBit ) )?true:false )
+#define MASK_TEST_BIT_64BIT( iMask, iBit )( ( iMask & MASK_CREATE_64BIT( iBit ) )?true:false )
 
 //////////////////////////////////////////////////////////////////
 //////////////////////MASK MANIPULATIONS//////////////////////////

@@ -141,6 +141,10 @@ namespace CustomControls
                 {
                     foreach (object mObj in value)
                     {
+                        if( mObj == null )
+                        {
+                            continue;
+                        }
                         m_ObjectsSelected.Add(mObj);
                         ObjectWrapper mWrapper = new ObjectWrapper(mObj);
                         m_ObjectWrappers.Add(mWrapper);
@@ -154,6 +158,10 @@ namespace CustomControls
 
 		public void addObject(object mObj)
 		{
+            if( mObj == null)
+            {
+                return;
+            }
             if( m_ObjectsSelected.Contains(mObj))
             {
                 return;
@@ -172,6 +180,10 @@ namespace CustomControls
 		{
             foreach (object mObj in mObjects)
             {
+                if(mObj == null)
+                {
+                    continue;
+                }
                 if (m_ObjectsSelected.Contains(mObj))
                 {
                     continue;

@@ -147,6 +147,49 @@
           "bitLookupArray": [
             511
           ]
+        },
+        {
+          "unitTypeName": "NEW8",
+          "description": null,
+          "immediateChildren": [
+            "NEW7"
+          ],
+          "fullHierarchyOfChildren": [
+            "NEW7",
+            "NEW6",
+            "NEW5",
+            "NEW4",
+            "NEW3",
+            "NEW2",
+            "NEW1",
+            "NEW",
+            "ANY"
+          ],
+          "bitLookupArray": [
+            1023
+          ]
+        }
+      ]
+    },
+    {
+      "categoryName": "STAT_TYPES",
+      "enumHeaderDirectory": "",
+      "enumHeaderFile": "",
+      "enumName": "",
+      "unitTypes": [
+        {
+          "unitTypeName": "CHARACTER",
+          "description": null,
+          "immediateChildren": [],
+          "fullHierarchyOfChildren": [],
+          "bitLookupArray": []
+        },
+        {
+          "unitTypeName": "ITEM",
+          "description": null,
+          "immediateChildren": [],
+          "fullHierarchyOfChildren": [],
+          "bitLookupArray": []
         }
       ]
     }

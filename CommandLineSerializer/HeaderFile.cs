@@ -234,7 +234,7 @@ namespace CommandLineSerializer
 				}
 			}
 			int iPadSizeLeft = (100 - strClassName.Length) / 2;
-			string strComment = strClassName.PadLeft(iPadSizeLeft, '/');
+			string strComment = strClassName.PadLeft(strClassName.Length + iPadSizeLeft, '/');
 			strComment = strComment.PadRight(strComment.Length + iPadSizeLeft, '/');
 			string strLineComment = "".PadRight(strComment.Length, '/');
 			addLine(strLineComment, false);

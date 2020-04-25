@@ -61,7 +61,7 @@ bool UNITTYPE::KCUnitTypeManager::parseUnitTypeFile(const TCHAR *strPath)
 	}
 	//define the unit types predefined.
 
-	CORE_UNITTYPE::defineUnitTypes(this);
+	UNITTYPE::defineUnitTypes(this);
 
 	//note this 
 	return true;

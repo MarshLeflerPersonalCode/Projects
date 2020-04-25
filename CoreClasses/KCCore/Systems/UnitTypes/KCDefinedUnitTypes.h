@@ -1,7 +1,7 @@
 //copyright Marsh Lefler 2000-...
 #pragma once
 #include "KCDefines.h"
-#include "KCUnitTypeManager.h"
+
 ///////////////////////////////////////////////////////////
 //HOW TO USE
 //
@@ -13,18 +13,19 @@
 /////////////////////////////////////////////////////////
 
 
+
 namespace UNITTYPE_ITEMS
 {
-	static uint32 ANY;
+	static KCUnitType ANY;
 };
 
 
-namespace CORE_UNITTYPE
+namespace UNITTYPE
 {
 	////////////////////////////////////////////////
 	//gets called from unit type manager
 	////////////////////////////////////////////////
-	void					defineUnitTypes(class UNITTYPE::KCUnitTypeManager *pManager);
+	void					defineUnitTypes(class KCUnitTypeManager *pManager);
 	////////////////////////////////////////////////
 	//gets called from unit type manager
 	////////////////////////////////////////////////

@@ -18,8 +18,28 @@ namespace Library.ClassParser
 		{
 		}
 
+        public List<ClassStructure> getClassesInheritingFromClass(string strClass)
+        {
+            ClassStructure mStructure = getClassStructByName(strClass);
+            if( mStructure == null)
+            {
+                return null;
+            }
 
-		public ClassStructure getClassStructByName(string strName)
+            List<ClassStructure> mList = new List<ClassStructure>();
+            mList.Add(mStructure);
+            foreach(ClassStructure classStructure in m_ClassStructures.Values)
+            {
+                if( classStructure.classStructuresInheritingFrom.Contains(strClass))
+                {
+                    mList.Add(classStructure);
+                }
+            }
+            return mList;
+        }
+
+
+        public ClassStructure getClassStructByName(string strName)
 		{
 			if(m_ClassStructures.ContainsKey(strName.ToUpper()))
 			{

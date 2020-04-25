@@ -54,7 +54,8 @@ static const KCString EMPTY_KCSTRING = "";
 
 
 //define stat ID
-typedef int16	KCStatID;
+typedef uint16	KCStatID;
+typedef uint32	KCUnitType;
 
 typedef union _UNIONDATA8BIT_
 {

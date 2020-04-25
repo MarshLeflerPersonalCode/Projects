@@ -1,6 +1,6 @@
 #pragma once
 #include "KCDefines.h"
-#include "KCUnitType.h"
+#include "KCUnitTypeDef.h"
 
 
 namespace UNITTYPE
@@ -16,7 +16,7 @@ namespace UNITTYPE
 		const KCString &					getCategoryName() const { return m_strName; }
 
 		//returns the unit type ID
-		DEBUG_FORCEINLINE uint32			getUnitTypeIDByName(const KCString &strString) const
+		DEBUG_FORCEINLINE KCUnitType		getUnitTypeIDByName(const KCString &strString) const
 		{
 			 auto mPair = m_MapLookUp.find(strString);
 			 if (mPair != m_MapLookUp.end())
@@ -26,7 +26,7 @@ namespace UNITTYPE
 			 return INVALID;
 		}
 		//returns the unit type ID
-		DEBUG_FORCEINLINE const KCString &	getUnitTypeNameByID(uint32 iID) const
+		DEBUG_FORCEINLINE const KCString &	getUnitTypeNameByID(KCUnitType iID) const
 		{
 			if (iID < m_iNumberOfUnitTypes)
 			{
@@ -36,7 +36,7 @@ namespace UNITTYPE
 		}
 
 		//does a check between two different unit types in this category
-		DEBUG_FORCEINLINE bool				IsA(uint32 iObjectsIsA, uint32 iSubChild) const
+		DEBUG_FORCEINLINE bool				IsA(KCUnitType iObjectsIsA, KCUnitType iSubChild) const
 		{
 			if (iObjectsIsA < m_iNumberOfUnitTypes &&
 				iSubChild < m_iNumberOfUnitTypes)
@@ -46,12 +46,12 @@ namespace UNITTYPE
 			return false;
 		}
 		//does a check between two different unit types in this category
-		DEBUG_FORCEINLINE bool				IsA(uint32 iObjectsIsA, const std::string &strSubChild) const
+		DEBUG_FORCEINLINE bool				IsA(KCUnitType iObjectsIsA, const std::string &strSubChild) const
 		{
 			return IsA(iObjectsIsA, getUnitTypeIDByName(strSubChild));
 		}
 		//does a check between two different unit types in this category
-		DEBUG_FORCEINLINE bool				IsA(const std::string &strObjectsIsA, uint32 iSubChild) const
+		DEBUG_FORCEINLINE bool				IsA(const std::string &strObjectsIsA, KCUnitType iSubChild) const
 		{
 			return IsA(getUnitTypeIDByName(strObjectsIsA), iSubChild);
 		}
@@ -65,11 +65,11 @@ namespace UNITTYPE
 		bool								_parse(KCByteReader &mByteReader);
 
 	private:
-		uint32						m_iNumberOfUnitTypes = 0;
-		uint32						m_iNumberOfBitLookIndexs = 0;
-		KCUnitType					*m_UnitTypes = nullptr;
-		std::map<KCString, uint32 >	m_MapLookUp;
-		KCString					m_strName;
+		uint32							m_iNumberOfUnitTypes = 0;
+		uint32							m_iNumberOfBitLookIndexs = 0;
+		KCUnitTypeDef					*m_UnitTypes = nullptr;
+		std::map<KCString, KCUnitType >	m_MapLookUp;
+		KCString						m_strName;
 
 	};
 

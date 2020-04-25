@@ -1,7 +1,4 @@
 [FKCStatDefinition]
-     <INT32>m_DatabaseGuid:134230123
-     <STRING>m_strName:Rank
-     <STRING>m_strFileName:Rank.dat
      <STRING>m_eStatType:INT32
      <STRING>m_strDefaultValue:0
      <STRING>m_strMinValue:0
@@ -10,4 +7,14 @@
      <BOOL>m_bApplicableToItems:True
      <STRING>m_strGraph:Melee
      <STRING>m_strGraphStat:Rank
+     <BOOL>m_bDirtyAllStats:True
+     <INT32>m_DatabaseGuid:134230123
+     <STRING>m_strName:Rank
+     <STRING>m_strFileName:Rank.dat
+     [m_MathFunctions]
+          <UINT16>COUNT:0
+     [/m_MathFunctions]
+     [m_StatsReferencing]
+          <UINT16>COUNT:0
+     [/m_StatsReferencing]
 [/FKCStatDefinition]

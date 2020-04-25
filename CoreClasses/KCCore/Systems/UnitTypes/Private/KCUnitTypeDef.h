@@ -1,10 +1,10 @@
 #pragma once
 #include "KCIncludes.h"
 
-struct KCUnitType
+struct KCUnitTypeDef
 {
 public:
-	~KCUnitType()
+	~KCUnitTypeDef()
 	{
 		DELETE_ARRAY_SAFELY(m_BitLookUpArray);
 	}

@@ -521,7 +521,10 @@ namespace Library
             try
             {
                 object mValueToSet = _deserializeObjectFromDataGroup(mParentDataGroup, mProperty.PropertyType, strPropertyName, mLogFile);
-                mProperty.SetValue(mObject, mValueToSet);
+                if (mValueToSet != null)
+                {
+                    mProperty.SetValue(mObject, mValueToSet);
+                }
             }
             catch(Exception e)
             {
@@ -545,7 +548,10 @@ namespace Library
             {
                 
                 object mValueToSet = _deserializeObjectFromDataGroup(mParentDataGroup, mFieldInfo.FieldType, strFieldName, mLogFile);
-                mFieldInfo.SetValue(mObject, mValueToSet);
+                if (mValueToSet != null)
+                {
+                    mFieldInfo.SetValue(mObject, mValueToSet);
+                }
             }
             catch (Exception e)
             {

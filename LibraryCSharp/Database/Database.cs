@@ -43,7 +43,7 @@ namespace Library.Database
             
 
         }
-
+        public DatabaseManager getDatabaseManager() { return m_DatabaseManager; }
         public ICollection getListOfNames() { return m_InstancesByName.Keys; }
         public bool isLoaded { get; set; }
 

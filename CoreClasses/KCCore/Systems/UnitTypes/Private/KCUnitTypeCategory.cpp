@@ -30,7 +30,7 @@ bool UNITTYPE::KCUnitTypeCategory::_parse(KCByteReader &mByteReader)
 	mByteReader << iNumberOfBitLookIndexes;
 	m_iNumberOfUnitTypes = (uint32)iNumberOfUnitTypes;
 	m_iNumberOfBitLookIndexs = (uint32)iNumberOfBitLookIndexes;
-	m_UnitTypes = new KCUnitType[m_iNumberOfUnitTypes];
+	m_UnitTypes = new KCUnitTypeDef[m_iNumberOfUnitTypes];
 
 	for (uint32 iUnitTypeIndex = 0; iUnitTypeIndex < m_iNumberOfUnitTypes; iUnitTypeIndex++)
 	{

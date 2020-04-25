@@ -70,7 +70,18 @@ int main()
 	funTest();
 	funTest();
 	//KCEnsureOnce(false);
+
+	KCBitArray mBitArray;
+	for (int32 iIndex = 0; iIndex < 32; iIndex++)
+	{
+		mBitArray.setBit(iIndex, true);
+	}
 	
+	bool bIsSet1 = mBitArray.get(5);
+	bool bIsSet2 = mBitArray.getBit(5);
+	bool bIsSet3 = mBitArray[5];
+	mBitArray[5] = false;
+	bool bIsSet4 = mBitArray[5];
 	testDataGroupSavingAndLoad(L".\\content\\DataGroupTestCast.dat");
 	
 	KCDataGroup mDataGroup;

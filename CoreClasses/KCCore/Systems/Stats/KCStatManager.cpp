@@ -1,7 +1,7 @@
 #include "KCStatManager.h"
 #include "Database/KCDatabaseManager.h"
 #include "Database/Private/KCDBTable.h"
-#include "KCStats.h"
+#include "Systems/Stats/KCStatsDefined.h"
 
 static STATS::KCStatManager *g_pStatManager(nullptr);
 
@@ -16,8 +16,7 @@ STATS::KCStatManager::KCStatManager()
 
 STATS::KCStatManager::~KCStatManager()
 {
-	
-	
+	_clean();
 }
 
 
@@ -25,6 +24,9 @@ void STATS::KCStatManager::_clean()
 {
 	m_StatsByName.clear();
 	m_StatsByID.Empty();
+	m_CharacterStatsByID.Empty();
+	m_ItemsStatsByID.Empty();
+	m_DefaultValues.Empty();
 }
 
 
@@ -46,10 +48,18 @@ bool STATS::KCStatManager::initialize(KCDatabaseManager *pDatabaseManager)
 	m_StatsByID.Reserve(pStatTable->getCountOfEntries());
 	for (uint32 iStatIndex = 0; iStatIndex < pStatTable->getCountOfEntries(); iStatIndex++)
 	{
-		const FKCStatDefinition *pStat = pStatTable->getEntryByIndex(iStatIndex);
+		const STATS::FKCStatDefinition *pStat = pStatTable->getEntryByIndex(iStatIndex);
 		KCEnsureAlwaysContinue(pStat);
 		m_StatsByName[pStat->m_strName] = (KCStatID)iStatIndex;
-		m_StatsByID.Add(pStat->m_strName);
+		m_StatsByID.Add(pStat->m_strName);		
+		if (pStat->m_bApplicableToCharacters)
+		{
+			m_CharacterStatsByID.setBit(iStatIndex, true);
+		}
+		if (pStat->m_bApplicableToItems)
+		{
+			m_ItemsStatsByID.setBit(iStatIndex, true);
+		}
 	}
 	STATS::defineStats(this);
 	return (m_StatsByID.Num() > 0)?true:false;
@@ -65,4 +75,13 @@ const STATS::FKCStatDefinition * STATS::KCStatManager::getStatDefinitionByID(KCS
 const STATS::FKCStatDefinition * STATS::KCStatManager::getStatDefinitionByName(KCName strName) const
 {
 	return KCDatabaseManager::getStatDefinitionByName(strName);
+}
+
+const KCTArray<STATS::FKCStatDefinition * > * STATS::KCStatManager::getStatDefinitions() const
+{
+	KCEnsureAlwaysReturnVal(KCDatabaseManager::getSingleton(), nullptr);
+	const KCDBTable<STATS::FKCStatDefinition> *pStatTable = (const KCDBTable<STATS::FKCStatDefinition> *)KCDatabaseManager::getSingleton()->getTable(DATABASE::EDATABASE_TABLES::STATS);
+	KCEnsureAlwaysReturnVal(pStatTable, nullptr);
+	return &pStatTable->getEntries();
+
 }

@@ -10,12 +10,14 @@ using System.Windows.Forms;
 using Library.IO;
 using Library.ClassCreator;
 using System.Reflection;
+using Library.ClassParser;
+using Library.Helpers.ClassSelection;
 
 namespace Library.Database
 {
     public partial class DatabaseEditorControl : UserControl
     {
-       
+        private int m_iLastSelected = -1;
         private Database m_ActiveDatabase = null;
         private Dictionary<ClassInstance, ListViewItem> m_ObjectsToListViewItem = new Dictionary<ClassInstance, ListViewItem>();
         private ContextMenu m_StatListViewContextMenu = new ContextMenu();
@@ -24,6 +26,7 @@ namespace Library.Database
         {
             InitializeComponent();
             this.statObjectViewer.SelectedObjectsHaveChangedProperties += new CustomControls.ObjectViewer.SelectedObjectsHaveChangedPropertiesHandler(this.statObjectViewer_SelectedObjectsHaveChangedProperties);
+            this.statObjectViewer.RequestTypeOverride += new CustomControls.ObjectViewer.RequestTypeOverrideHandler(this.statObjectViewer_RequestTypeOverride);
             isDirty = false;
         }
 
@@ -235,13 +238,21 @@ namespace Library.Database
 
         private void m_StatListView_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (m_StatListView.SelectedIndices.Count == 1 &&
+                m_iLastSelected == m_StatListView.SelectedIndices[0])
+            {
+                
+                return;
+            }
             if (m_StatListView.SelectedIndices.Count == 0)
             {
                 statObjectViewer.setObjectViewing(null);
                 return;
             }
+            
             if (m_StatListView.SelectedIndices.Count == 1)
             {
+                m_iLastSelected = m_StatListView.SelectedIndices[0];
                 ClassInstance mInstance = m_ActiveDatabase.getEntryByName(m_StatListView.SelectedItems[0].Text);
                 statObjectViewer.setObjectViewing(mInstance);
             }
@@ -510,6 +521,40 @@ namespace Library.Database
             }
             isDirty = false;
             return true;
+        }
+
+
+        public Type statObjectViewer_RequestTypeOverride(Type mTypeCreating)
+        {
+            foreach(ClassCreatorManager mClassCreatorManager in m_ActiveDatabase.getDatabaseManager().classCreators)
+            {
+                ClassParserManager mParser = mClassCreatorManager.getClassParser();
+                if( mParser != null &&
+                    mParser.getProjectWrapper() != null)
+                {
+                    ProjectWrapper mWrapper = mParser.getProjectWrapper();
+                    List<ClassStructure> mList = mWrapper.getClassesInheritingFromClass(mTypeCreating.Name);
+                    if( mList != null &&
+                        mList.Count > 1)
+                    {
+                        List<string> mClasses = new List<string>();
+                        List<string> mHelpText = new List<string>();
+                        foreach(ClassStructure mClass in mList)
+                        {
+                            mClasses.Add(mClass.name);
+                            mHelpText.Add(mClass.comment);
+                        }
+                        ClassSelection mClassSelection = new ClassSelection();
+                        mClassSelection.configure(mClasses, mHelpText);
+                        if(mClassSelection.ShowDialog(this) == DialogResult.Cancel)
+                        {
+                            return null;
+                        }
+                        return mClassCreatorManager.getClassType(mClassSelection.getSelectedClass());
+                    }
+                }
+            }
+            return mTypeCreating;
         }
 
     } //end of class

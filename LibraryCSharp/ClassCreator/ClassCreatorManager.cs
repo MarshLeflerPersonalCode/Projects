@@ -50,6 +50,8 @@ namespace Library.ClassCreator
 			variableDefinitionHandler = new VariableDefinitionHandler("VariableDefinitions.json");
 
 		}
+
+        public ClassParserManager getClassParser() { return m_ClassParser; }
         public void setDirectories(string strDatabaseFolder, string strListFolder, List<ClassCreatorContentFolders> mContentFolders)
         {
             m_strDatabaseFolder = strDatabaseFolder;

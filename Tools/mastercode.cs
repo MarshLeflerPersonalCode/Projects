@@ -208,17 +208,14 @@ namespace Dynamic
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////ETEST/////////////////////////////////////////////
-    public enum ETEST
+//////////////////////////////////////////////////ESTAT_HANDLER_TYPE////////////////////////////////
+    public enum ESTAT_HANDLER_TYPE
     {
-         ONE,
-         TWO,
-         THREE,
-         FOUR,
-         COUNT,
+         CHARACTER,
+         ITEM,
     };
 
-    public class _TypeConverter_ETEST : StringConverter
+    public class _TypeConverter_ESTAT_HANDLER_TYPE : StringConverter
     {
        StandardValuesCollection m_ReturnStandardCollection = null;
        public override bool GetStandardValuesSupported(ITypeDescriptorContext context){ return true; }
@@ -228,18 +225,71 @@ namespace Dynamic
            if(m_ReturnStandardCollection == null )
            {
                 List<String> mEnumList = new List<String>();
-                mEnumList.Add("ONE");
-                mEnumList.Add("TWO");
-                mEnumList.Add("THREE");
-                mEnumList.Add("FOUR");
-                mEnumList.Add("COUNT");
+                mEnumList.Add("CHARACTER");
+                mEnumList.Add("ITEM");
                 m_ReturnStandardCollection = new StandardValuesCollection(mEnumList);
            }
            return m_ReturnStandardCollection;
        }
     }
 
-//////////////////////////////////////////////////ETEST/////////////////////////////////////////////
+//////////////////////////////////////////////////ESTAT_HANDLER_TYPE////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////ESTAT_HANDLER_FLAGS///////////////////////////////
+    public enum ESTAT_HANDLER_FLAGS
+    {
+         DISABLED,
+    };
+
+    public class _TypeConverter_ESTAT_HANDLER_FLAGS : StringConverter
+    {
+       StandardValuesCollection m_ReturnStandardCollection = null;
+       public override bool GetStandardValuesSupported(ITypeDescriptorContext context){ return true; }
+       public override bool GetStandardValuesExclusive(ITypeDescriptorContext context){ return true; }
+       public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+       {
+           if(m_ReturnStandardCollection == null )
+           {
+                List<String> mEnumList = new List<String>();
+                mEnumList.Add("DISABLED");
+                m_ReturnStandardCollection = new StandardValuesCollection(mEnumList);
+           }
+           return m_ReturnStandardCollection;
+       }
+    }
+
+//////////////////////////////////////////////////ESTAT_HANDLER_FLAGS///////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////ETARRAY_GROW_BY_TYPES/////////////////////////////
+    public enum ETARRAY_GROW_BY_TYPES
+    {
+         DOUBLE,
+         PREDEFINED,
+    };
+
+    public class _TypeConverter_ETARRAY_GROW_BY_TYPES : StringConverter
+    {
+       StandardValuesCollection m_ReturnStandardCollection = null;
+       public override bool GetStandardValuesSupported(ITypeDescriptorContext context){ return true; }
+       public override bool GetStandardValuesExclusive(ITypeDescriptorContext context){ return true; }
+       public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+       {
+           if(m_ReturnStandardCollection == null )
+           {
+                List<String> mEnumList = new List<String>();
+                mEnumList.Add("DOUBLE");
+                mEnumList.Add("PREDEFINED");
+                m_ReturnStandardCollection = new StandardValuesCollection(mEnumList);
+           }
+           return m_ReturnStandardCollection;
+       }
+    }
+
+//////////////////////////////////////////////////ETARRAY_GROW_BY_TYPES/////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -301,25 +351,17 @@ namespace Dynamic
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////EDATATYPES////////////////////////////////////////
-    public enum EDATATYPES
+//////////////////////////////////////////////////ETEST/////////////////////////////////////////////
+    public enum ETEST
     {
-         BOOL,
-         CHAR,
-         INT8,
-         UINT8,
-         INT16,
-         UINT16,
-         INT32,
-         UINT32,
-         INT64,
-         UINT64,
-         FLOAT,
-         STRING,
+         ONE,
+         TWO,
+         THREE,
+         FOUR,
          COUNT,
     };
 
-    public class _TypeConverter_EDATATYPES : StringConverter
+    public class _TypeConverter_ETEST : StringConverter
     {
        StandardValuesCollection m_ReturnStandardCollection = null;
        public override bool GetStandardValuesSupported(ITypeDescriptorContext context){ return true; }
@@ -329,18 +371,10 @@ namespace Dynamic
            if(m_ReturnStandardCollection == null )
            {
                 List<String> mEnumList = new List<String>();
-                mEnumList.Add("BOOL");
-                mEnumList.Add("CHAR");
-                mEnumList.Add("INT8");
-                mEnumList.Add("UINT8");
-                mEnumList.Add("INT16");
-                mEnumList.Add("UINT16");
-                mEnumList.Add("INT32");
-                mEnumList.Add("UINT32");
-                mEnumList.Add("INT64");
-                mEnumList.Add("UINT64");
-                mEnumList.Add("FLOAT");
-                mEnumList.Add("STRING");
+                mEnumList.Add("ONE");
+                mEnumList.Add("TWO");
+                mEnumList.Add("THREE");
+                mEnumList.Add("FOUR");
                 mEnumList.Add("COUNT");
                 m_ReturnStandardCollection = new StandardValuesCollection(mEnumList);
            }
@@ -348,7 +382,7 @@ namespace Dynamic
        }
     }
 
-//////////////////////////////////////////////////EDATATYPES////////////////////////////////////////
+//////////////////////////////////////////////////ETEST/////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -428,14 +462,25 @@ namespace Dynamic
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////ETARRAY_GROW_BY_TYPES/////////////////////////////
-    public enum ETARRAY_GROW_BY_TYPES
+//////////////////////////////////////////////////EDATATYPES////////////////////////////////////////
+    public enum EDATATYPES
     {
-         DOUBLE,
-         PREDEFINED,
+         BOOL,
+         CHAR,
+         INT8,
+         UINT8,
+         INT16,
+         UINT16,
+         INT32,
+         UINT32,
+         INT64,
+         UINT64,
+         FLOAT,
+         STRING,
+         COUNT,
     };
 
-    public class _TypeConverter_ETARRAY_GROW_BY_TYPES : StringConverter
+    public class _TypeConverter_EDATATYPES : StringConverter
     {
        StandardValuesCollection m_ReturnStandardCollection = null;
        public override bool GetStandardValuesSupported(ITypeDescriptorContext context){ return true; }
@@ -445,15 +490,26 @@ namespace Dynamic
            if(m_ReturnStandardCollection == null )
            {
                 List<String> mEnumList = new List<String>();
-                mEnumList.Add("DOUBLE");
-                mEnumList.Add("PREDEFINED");
+                mEnumList.Add("BOOL");
+                mEnumList.Add("CHAR");
+                mEnumList.Add("INT8");
+                mEnumList.Add("UINT8");
+                mEnumList.Add("INT16");
+                mEnumList.Add("UINT16");
+                mEnumList.Add("INT32");
+                mEnumList.Add("UINT32");
+                mEnumList.Add("INT64");
+                mEnumList.Add("UINT64");
+                mEnumList.Add("FLOAT");
+                mEnumList.Add("STRING");
+                mEnumList.Add("COUNT");
                 m_ReturnStandardCollection = new StandardValuesCollection(mEnumList);
            }
            return m_ReturnStandardCollection;
        }
     }
 
-//////////////////////////////////////////////////ETARRAY_GROW_BY_TYPES/////////////////////////////
+//////////////////////////////////////////////////EDATATYPES////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -518,64 +574,16 @@ namespace Dynamic
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////FKCStatDefinition/////////////////////////////////
 
-    public class FKCStatDefinition: ClassInstance
+    public class FKCStatDefinition: FKCDBEntry
     {
         
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        //Class File:..\CoreClasses\KCCore\Database\KCDBEntry.h
-        //Class Name:FKCDBEntry
-        //Variable Name:m_DatabaseGuid
-        //Variable Type:KCDatabaseGuid
-        //Variable Value:UNINITIALIZED_DATABASE_GUID
-        //Variable Line Number:39
-        //Variable Properties: CATEGORY = DATABASE, DISPLAYNAME = Database Guid, READONLY = 
-        private int _m_DatabaseGuid = 0;
-        [DisplayName("Database Guid"), Category("DATABASE"), ReadOnly(true), Description("the database guid. Must be unique")]
-        public int m_DatabaseGuid
-        {
-            get{ return _m_DatabaseGuid; }
-            set{ _m_DatabaseGuid = value; _notifyOfPropertyChanged("m_DatabaseGuid");}
-        }
-                
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        //Class File:..\CoreClasses\KCCore\Database\KCDBEntry.h
-        //Class Name:FKCDBEntry
-        //Variable Name:m_strName
-        //Variable Type:KCName
-        //Variable Value:
-        //Variable Line Number:44
-        //Variable Properties: CATEGORY = DATABASE, DISPLAYNAME = Name, READONLY = 
-        private string _m_strName = "";
-        [DisplayName("Name"), Category("DATABASE"), ReadOnly(true), Description("the name of the entry. Must be unique")]
-        public string m_strName
-        {
-            get{ return _m_strName; }
-            set{ _m_strName = value; _notifyOfPropertyChanged("m_strName");}
-        }
-                
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        //Class File:..\CoreClasses\KCCore\Database\KCDBEntry.h
-        //Class Name:FKCDBEntry
-        //Variable Name:m_strFileName
-        //Variable Type:KCString
-        //Variable Value:
-        //Variable Line Number:47
-        //Variable Properties: CATEGORY = DATABASE, DISPLAYNAME = Name, READONLY = 
-        private string _m_strFileName = "";
-        [DisplayName("Name"), Category("DATABASE"), ReadOnly(true), Description("The filename of this entry")]
-        public string m_strFileName
-        {
-            get{ return _m_strFileName; }
-            set{ _m_strFileName = value; _notifyOfPropertyChanged("m_strFileName");}
-        }
-                
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         //Class File:..\CoreClasses\KCCore\Systems\Stats\Private\KCStatDefinition.h
         //Class Name:FKCStatDefinition
         //Variable Name:m_eStatType
         //Variable Type:ESTAT_PRIMITIVE_TYPES
         //Variable Value:ESTAT_PRIMITIVE_TYPES::INT32
-        //Variable Line Number:17
+        //Variable Line Number:18
         //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Type
         private ESTAT_PRIMITIVE_TYPES _m_eStatType = ESTAT_PRIMITIVE_TYPES.INT32;
         [DisplayName("Type"), Category("GENERAL"), Description("The stat type dictates how it will be used in game.")]
@@ -591,7 +599,7 @@ namespace Dynamic
         //Variable Name:m_strDefaultValue
         //Variable Type:KCString
         //Variable Value:"0"
-        //Variable Line Number:20
+        //Variable Line Number:21
         //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Default Value
         private string _m_strDefaultValue = "0";
         [DisplayName("Default Value"), Category("GENERAL"), Description("The default value of the stat.")]
@@ -607,7 +615,7 @@ namespace Dynamic
         //Variable Name:m_strMinValue
         //Variable Type:KCString
         //Variable Value:"0"
-        //Variable Line Number:23
+        //Variable Line Number:24
         //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Min Value
         private string _m_strMinValue = "0";
         [DisplayName("Min Value"), Category("GENERAL"), Description("The min value of the stat.")]
@@ -623,7 +631,7 @@ namespace Dynamic
         //Variable Name:m_strMaxValue
         //Variable Type:KCString
         //Variable Value:"0"
-        //Variable Line Number:26
+        //Variable Line Number:27
         //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Max Value
         private string _m_strMaxValue = "0";
         [DisplayName("Max Value"), Category("GENERAL"), Description("The max value of the stat.")]
@@ -639,7 +647,7 @@ namespace Dynamic
         //Variable Name:m_bApplicableToCharacters
         //Variable Type:bool
         //Variable Value:true
-        //Variable Line Number:29
+        //Variable Line Number:30
         //Variable Properties: CATEGORY = APPLICABLE, DISPLAYNAME = Characters
         private bool _m_bApplicableToCharacters = true;
         [DisplayName("Characters"), Category("APPLICABLE"), Description("Will this stat exist on characters?")]
@@ -655,7 +663,7 @@ namespace Dynamic
         //Variable Name:m_bApplicableToItems
         //Variable Type:bool
         //Variable Value:true
-        //Variable Line Number:32
+        //Variable Line Number:33
         //Variable Properties: CATEGORY = APPLICABLE, DISPLAYNAME = Items
         private bool _m_bApplicableToItems = true;
         [DisplayName("Items"), Category("APPLICABLE"), Description("Will this stat exist on items?")]
@@ -671,7 +679,7 @@ namespace Dynamic
         //Variable Name:m_strGraph
         //Variable Type:KCString
         //Variable Value:""
-        //Variable Line Number:35
+        //Variable Line Number:36
         //Variable Properties: CATEGORY = GRAPH, DISPLAYNAME = Graph Name, LIST = Graphs
         private string _m_strGraph = "";
         [DisplayName("Graph Name"), Category("GRAPH"), Description("the graph that will be used to generate the final value. The graph stat should be a float")]
@@ -688,7 +696,7 @@ namespace Dynamic
         //Variable Name:m_strGraphStat
         //Variable Type:KCString
         //Variable Value:"Rank"
-        //Variable Line Number:38
+        //Variable Line Number:39
         //Variable Properties: CATEGORY = GRAPH, DISPLAYNAME = Graph Stat, LIST = Stats
         private string _m_strGraphStat = "Rank";
         [DisplayName("Graph Stat"), Category("GRAPH"), Description("The stat which will be used in the graph. Most times it's the rank.")]
@@ -697,6 +705,54 @@ namespace Dynamic
         {
             get{ return _m_strGraphStat; }
             set{ _m_strGraphStat = value; _notifyOfPropertyChanged("m_strGraphStat");}
+        }
+                
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\KCCore\Systems\Stats\Private\KCStatDefinition.h
+        //Class Name:FKCStatDefinition
+        //Variable Name:m_MathFunctions
+        //Variable Type:KCTArray<IKCStatMathFunction>
+        //Variable Value:
+        //Variable Line Number:42
+        //Variable Properties: CATEGORY = MISC, DISPLAYNAME = Functions
+        private List<IKCStatMathFunction> _m_MathFunctions = new List<IKCStatMathFunction>();
+        [DisplayName("Functions"), Category("MISC"), Description("functions that will do math on the stat. The functions get ran in order 0-to end.")]
+        public List<IKCStatMathFunction> m_MathFunctions
+        {
+            get{ return _m_MathFunctions; }
+            set{ _m_MathFunctions = value; _notifyOfPropertyChanged("m_MathFunctions"); }
+        }
+                
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\KCCore\Systems\Stats\Private\KCStatDefinition.h
+        //Class Name:FKCStatDefinition
+        //Variable Name:m_StatsReferencing
+        //Variable Type:KCTArray<int32>
+        //Variable Value:
+        //Variable Line Number:45
+        //Variable Properties: CATEGORY = MISC, DISPLAYNAME = Stat Refs, HIDDEN = 
+        private List<int> _m_StatsReferencing = new List<int>();
+        [DisplayName("Stat Refs"), Category("MISC"), Browsable(false), Description("Stats need to know what other stats are referencing them. This is the array of stat ids")]
+        public List<int> m_StatsReferencing
+        {
+            get{ return _m_StatsReferencing; }
+            set{ _m_StatsReferencing = value; _notifyOfPropertyChanged("m_StatsReferencing"); }
+        }
+                
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\KCCore\Systems\Stats\Private\KCStatDefinition.h
+        //Class Name:FKCStatDefinition
+        //Variable Name:m_bDirtyAllStats
+        //Variable Type:bool
+        //Variable Value:false
+        //Variable Line Number:48
+        //Variable Properties: CATEGORY = MISC, DISPLAYNAME = Dirty All Stats
+        private bool _m_bDirtyAllStats = false;
+        [DisplayName("Dirty All Stats"), Category("MISC"), Description("When this stat changes all the stats will need to be recalculate")]
+        public bool m_bDirtyAllStats
+        {
+            get{ return _m_bDirtyAllStats; }
+            set{ _m_bDirtyAllStats = value; _notifyOfPropertyChanged("m_bDirtyAllStats");}
         }
         
     } //end of FKCStatDefinition
@@ -732,57 +788,9 @@ namespace Dynamic
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////KCIncludeTest/////////////////////////////////////
 
-    public class KCIncludeTest: ClassInstance
+    public class KCIncludeTest: FKCDBEntry
     {
         
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        //Class File:..\CoreClasses\KCCore\Database\KCDBEntry.h
-        //Class Name:FKCDBEntry
-        //Variable Name:m_DatabaseGuid
-        //Variable Type:KCDatabaseGuid
-        //Variable Value:UNINITIALIZED_DATABASE_GUID
-        //Variable Line Number:39
-        //Variable Properties: CATEGORY = DATABASE, DISPLAYNAME = Database Guid, READONLY = 
-        private int _m_DatabaseGuid = 0;
-        [DisplayName("Database Guid"), Category("DATABASE"), ReadOnly(true), Description("the database guid. Must be unique")]
-        public int m_DatabaseGuid
-        {
-            get{ return _m_DatabaseGuid; }
-            set{ _m_DatabaseGuid = value; _notifyOfPropertyChanged("m_DatabaseGuid");}
-        }
-                
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        //Class File:..\CoreClasses\KCCore\Database\KCDBEntry.h
-        //Class Name:FKCDBEntry
-        //Variable Name:m_strName
-        //Variable Type:KCName
-        //Variable Value:
-        //Variable Line Number:44
-        //Variable Properties: CATEGORY = DATABASE, DISPLAYNAME = Name, READONLY = 
-        private string _m_strName = "";
-        [DisplayName("Name"), Category("DATABASE"), ReadOnly(true), Description("the name of the entry. Must be unique")]
-        public string m_strName
-        {
-            get{ return _m_strName; }
-            set{ _m_strName = value; _notifyOfPropertyChanged("m_strName");}
-        }
-                
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        //Class File:..\CoreClasses\KCCore\Database\KCDBEntry.h
-        //Class Name:FKCDBEntry
-        //Variable Name:m_strFileName
-        //Variable Type:KCString
-        //Variable Value:
-        //Variable Line Number:47
-        //Variable Properties: CATEGORY = DATABASE, DISPLAYNAME = Name, READONLY = 
-        private string _m_strFileName = "";
-        [DisplayName("Name"), Category("DATABASE"), ReadOnly(true), Description("The filename of this entry")]
-        public string m_strFileName
-        {
-            get{ return _m_strFileName; }
-            set{ _m_strFileName = value; _notifyOfPropertyChanged("m_strFileName");}
-        }
-                
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         //Class File:..\CoreClasses\TestCases\SerializeTest\KCIncludeTest.h
         //Class Name:KCIncludeTest
@@ -937,6 +945,217 @@ namespace Dynamic
     } //end of KCIncludeTest
 
 //////////////////////////////////////////////////KCIncludeTest/////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////IKCStatMathFunction///////////////////////////////
+
+    public class IKCStatMathFunction: ClassInstance
+    {
+
+    } //end of IKCStatMathFunction
+
+//////////////////////////////////////////////////IKCStatMathFunction///////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////KCStatMathFunctionAdd/////////////////////////////
+
+    public class KCStatMathFunctionAdd: IKCStatMathFunction
+    {
+        
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\KCCore\Systems\Stats\MathFunctions\KCStatMathFunctions.h
+        //Class Name:KCStatMathFunctionAdd
+        //Variable Name:m_strStat
+        //Variable Type:KCName
+        //Variable Value:
+        //Variable Line Number:30
+        //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Stat, LIST = Stats
+        private string _m_strStat = "";
+        [DisplayName("Stat"), Category("GENERAL"), Description("the stat that will be added onto the current stat")]
+        [TypeConverter(typeof(ListTypeConverter_STATS))]
+        public string m_strStat
+        {
+            get{ return _m_strStat; }
+            set{ _m_strStat = value; _notifyOfPropertyChanged("m_strStat");}
+        }
+        
+    } //end of KCStatMathFunctionAdd
+
+//////////////////////////////////////////////////KCStatMathFunctionAdd/////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////KCStatMathFunctionSubtract////////////////////////
+
+    public class KCStatMathFunctionSubtract: IKCStatMathFunction
+    {
+        
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\KCCore\Systems\Stats\MathFunctions\KCStatMathFunctions.h
+        //Class Name:KCStatMathFunctionSubtract
+        //Variable Name:m_strStat
+        //Variable Type:KCName
+        //Variable Value:
+        //Variable Line Number:48
+        //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Stat, LIST = Stats
+        private string _m_strStat = "";
+        [DisplayName("Stat"), Category("GENERAL"), Description("the stat that will be added onto the current stat")]
+        [TypeConverter(typeof(ListTypeConverter_STATS))]
+        public string m_strStat
+        {
+            get{ return _m_strStat; }
+            set{ _m_strStat = value; _notifyOfPropertyChanged("m_strStat");}
+        }
+        
+    } //end of KCStatMathFunctionSubtract
+
+//////////////////////////////////////////////////KCStatMathFunctionSubtract////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////KCStatMathFunctionDivide//////////////////////////
+
+    public class KCStatMathFunctionDivide: IKCStatMathFunction
+    {
+        
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\KCCore\Systems\Stats\MathFunctions\KCStatMathFunctions.h
+        //Class Name:KCStatMathFunctionDivide
+        //Variable Name:m_strStat
+        //Variable Type:KCName
+        //Variable Value:
+        //Variable Line Number:66
+        //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Stat, LIST = Stats
+        private string _m_strStat = "";
+        [DisplayName("Stat"), Category("GENERAL"), Description("the stat that will be added onto the current stat")]
+        [TypeConverter(typeof(ListTypeConverter_STATS))]
+        public string m_strStat
+        {
+            get{ return _m_strStat; }
+            set{ _m_strStat = value; _notifyOfPropertyChanged("m_strStat");}
+        }
+        
+    } //end of KCStatMathFunctionDivide
+
+//////////////////////////////////////////////////KCStatMathFunctionDivide//////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////KCStatMathFunctionMultiply////////////////////////
+
+    public class KCStatMathFunctionMultiply: IKCStatMathFunction
+    {
+        
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\KCCore\Systems\Stats\MathFunctions\KCStatMathFunctions.h
+        //Class Name:KCStatMathFunctionMultiply
+        //Variable Name:m_strStat
+        //Variable Type:KCName
+        //Variable Value:
+        //Variable Line Number:84
+        //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Stat, LIST = Stats
+        private string _m_strStat = "";
+        [DisplayName("Stat"), Category("GENERAL"), Description("the stat that will be added onto the current stat")]
+        [TypeConverter(typeof(ListTypeConverter_STATS))]
+        public string m_strStat
+        {
+            get{ return _m_strStat; }
+            set{ _m_strStat = value; _notifyOfPropertyChanged("m_strStat");}
+        }
+        
+    } //end of KCStatMathFunctionMultiply
+
+//////////////////////////////////////////////////KCStatMathFunctionMultiply////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////KCStatMathFunctionDivideAndMultiply///////////////
+
+    public class KCStatMathFunctionDivideAndMultiply: IKCStatMathFunction
+    {
+        
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\KCCore\Systems\Stats\MathFunctions\KCStatMathFunctions.h
+        //Class Name:KCStatMathFunctionDivideAndMultiply
+        //Variable Name:m_strStat
+        //Variable Type:KCName
+        //Variable Value:
+        //Variable Line Number:103
+        //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Stat, LIST = Stats
+        private string _m_strStat = "";
+        [DisplayName("Stat"), Category("GENERAL"), Description("the stat that will be added onto the current stat")]
+        [TypeConverter(typeof(ListTypeConverter_STATS))]
+        public string m_strStat
+        {
+            get{ return _m_strStat; }
+            set{ _m_strStat = value; _notifyOfPropertyChanged("m_strStat");}
+        }
+                
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\KCCore\Systems\Stats\MathFunctions\KCStatMathFunctions.h
+        //Class Name:KCStatMathFunctionDivideAndMultiply
+        //Variable Name:m_fDenominator
+        //Variable Type:float
+        //Variable Value:100.0f
+        //Variable Line Number:106
+        //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Denominator
+        private float _m_fDenominator = 100.0f;
+        [DisplayName("Denominator"), Category("GENERAL"), Description("the denominator")]
+        public float m_fDenominator
+        {
+            get{ return _m_fDenominator; }
+            set{ _m_fDenominator = value; _notifyOfPropertyChanged("m_fDenominator");}
+        }
+        
+    } //end of KCStatMathFunctionDivideAndMultiply
+
+//////////////////////////////////////////////////KCStatMathFunctionDivideAndMultiply///////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////KCStatMathFunctionDivideAddAndMultiply////////////
+
+    public class KCStatMathFunctionDivideAddAndMultiply: IKCStatMathFunction
+    {
+        
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\KCCore\Systems\Stats\MathFunctions\KCStatMathFunctions.h
+        //Class Name:KCStatMathFunctionDivideAddAndMultiply
+        //Variable Name:m_strStat
+        //Variable Type:KCName
+        //Variable Value:
+        //Variable Line Number:150
+        //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Stat, LIST = Stats
+        private string _m_strStat = "";
+        [DisplayName("Stat"), Category("GENERAL"), Description("the stat that will be added onto the current stat")]
+        [TypeConverter(typeof(ListTypeConverter_STATS))]
+        public string m_strStat
+        {
+            get{ return _m_strStat; }
+            set{ _m_strStat = value; _notifyOfPropertyChanged("m_strStat");}
+        }
+                
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\KCCore\Systems\Stats\MathFunctions\KCStatMathFunctions.h
+        //Class Name:KCStatMathFunctionDivideAddAndMultiply
+        //Variable Name:m_fDenominator
+        //Variable Type:float
+        //Variable Value:100.0f
+        //Variable Line Number:153
+        //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Denominator
+        private float _m_fDenominator = 100.0f;
+        [DisplayName("Denominator"), Category("GENERAL"), Description("the denominator")]
+        public float m_fDenominator
+        {
+            get{ return _m_fDenominator; }
+            set{ _m_fDenominator = value; _notifyOfPropertyChanged("m_fDenominator");}
+        }
+        
+    } //end of KCStatMathFunctionDivideAddAndMultiply
+
+//////////////////////////////////////////////////KCStatMathFunctionDivideAddAndMultiply////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 } //end of namespace

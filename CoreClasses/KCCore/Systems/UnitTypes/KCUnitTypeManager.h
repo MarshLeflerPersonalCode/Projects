@@ -68,7 +68,7 @@ namespace UNITTYPE
 		bool							parseUnitTypeFile(const TCHAR *strPath);
 
 		//returns the id of the unit type. Returns INVALID if not defined.
-		uint32							getUnitTypeID(const KCString &strCategoryName, const KCString &strUnitTypeName)
+		KCUnitType						getUnitTypeID(const KCString &strCategoryName, const KCString &strUnitTypeName)
 		{
 			const KCUnitTypeCategory *pCategory = getCategoryByName(strCategoryName);
 			if (pCategory)
@@ -78,12 +78,12 @@ namespace UNITTYPE
 			return INVALID;
 		}
 		//does a check between two different unit types in the category passed in
-		FORCEINLINE bool				IsA(const KCUnitTypeCategory &mCategory, uint32 iObjectsIsA, uint32 iSubChild) const
+		FORCEINLINE bool				IsA(const KCUnitTypeCategory &mCategory, KCUnitType iObjectsIsA, KCUnitType iSubChild) const
 		{
 			return mCategory.IsA(iObjectsIsA, iSubChild);
 		}
 		//does a check between two different unit types in the category passed in
-		FORCEINLINE bool				IsA(const KCString &strCategoryName, uint32 iObjectsIsA, uint32 iSubChild) const
+		FORCEINLINE bool				IsA(const KCString &strCategoryName, KCUnitType iObjectsIsA, KCUnitType iSubChild) const
 		{
 			const KCUnitTypeCategory *pCategory = getCategoryByName(strCategoryName);
 			if (pCategory)
@@ -94,12 +94,12 @@ namespace UNITTYPE
 		}
 
 		//does a check between two different unit types in this category
-		FORCEINLINE bool				IsA(const KCUnitTypeCategory &mCategory, uint32 iObjectsIsA, const std::string &strSubChild) const
+		FORCEINLINE bool				IsA(const KCUnitTypeCategory &mCategory, KCUnitType iObjectsIsA, const std::string &strSubChild) const
 		{
 			return mCategory.IsA(iObjectsIsA, strSubChild);
 		}
 		//does a check between two different unit types in this category
-		FORCEINLINE bool				IsA(const KCString &strCategoryName, uint32 iObjectsIsA, const std::string &strSubChild) const
+		FORCEINLINE bool				IsA(const KCString &strCategoryName, KCUnitType iObjectsIsA, const std::string &strSubChild) const
 		{
 			const KCUnitTypeCategory *pCategory = getCategoryByName(strCategoryName);
 			if (pCategory)
@@ -109,12 +109,12 @@ namespace UNITTYPE
 			return false;
 		}
 		//does a check between two different unit types in this category
-		FORCEINLINE bool				IsA(const KCUnitTypeCategory &mCategory, const std::string &strObjectsIsA, uint32 iSubChild) const
+		FORCEINLINE bool				IsA(const KCUnitTypeCategory &mCategory, const std::string &strObjectsIsA, KCUnitType iSubChild) const
 		{
 			return mCategory.IsA(strObjectsIsA, iSubChild);
 		}
 		//does a check between two different unit types in this category
-		FORCEINLINE bool				IsA(const KCString &strCategoryName, const std::string &strObjectsIsA, uint32 iSubChild) const
+		FORCEINLINE bool				IsA(const KCString &strCategoryName, const std::string &strObjectsIsA, KCUnitType iSubChild) const
 		{
 			const KCUnitTypeCategory *pCategory = getCategoryByName(strCategoryName);
 			if (pCategory)

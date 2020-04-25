@@ -172,77 +172,84 @@ namespace CustomControls
 			{ 
 				return; 
 			}
-			    Type mType = m_ObjectsList[0].GetType();
-			    MemberInfo[] mMembers = mType.GetMembers();
+			Type mType = m_ObjectsList[0].GetType();
+			MemberInfo[] mMembers = mType.GetMembers();
 			
-			    Type mStringType = Type.GetType("System.String");			
-			    foreach ( MemberInfo mMember in mMembers)
-			    {
-				    MemberTypes mMemberTypeInfo = mMember.MemberType;
-				    if (mMemberTypeInfo != MemberTypes.Property)
-				    {
-					    continue;
-				    }
-				    PropertyInfo mProperty = (System.Reflection.PropertyInfo)mMember;
-				    Type mMemberType = mProperty.PropertyType;	
-				
-				    if( mMemberType.IsPrimitive ||
-					    mMemberType.IsPublic == false ||
-					    mMemberType.IsVisible == false ||
-					    mMemberType == mStringType)
-				    {
-					    continue;
-				    }
+			Type mStringType = Type.GetType("System.String");			
+			foreach ( MemberInfo mMember in mMembers)
+			{
+				MemberTypes mMemberTypeInfo = mMember.MemberType;
+				if (mMemberTypeInfo != MemberTypes.Property)
+				{
+					continue;
+				}
+                BrowsableAttribute mBrowsable = mMember.GetCustomAttribute(typeof(BrowsableAttribute)) as BrowsableAttribute;
+                if(mBrowsable != null &&
+                    mBrowsable.Browsable == false)
+                {
+                    continue;
+                }
+                PropertyInfo mProperty = (System.Reflection.PropertyInfo)mMember;
+				Type mMemberType = mProperty.PropertyType;
+                
+
+				if( mMemberType.IsPrimitive ||
+					mMemberType.IsPublic == false ||
+					mMemberType.IsVisible == false ||
+					mMemberType == mStringType)
+				{
+					continue;
+				}
 
 				
 
-				    if(mMemberType.IsClass)
-				    {
-					    string strNameToDisplay = mMember.Name;
-					    object[] attribute = mMember.GetCustomAttributes(typeof(DisplayNameAttribute), true);
-					    if( attribute != null &&
-						    attribute.Length != 0)
-					    {
-						    DisplayNameAttribute mDisplayAttribute = attribute.Cast<DisplayNameAttribute>().Single();
-						    if (mDisplayAttribute != null)
-						    {
-							    strNameToDisplay = mDisplayAttribute.DisplayName;
-						    }
-					    }
-					    if( strNameToDisplay == "")
-					    {
-						    strNameToDisplay = "";
-					    }
+				if(mMemberType.IsClass)
+				{
+					string strNameToDisplay = mMember.Name;
+					object[] attribute = mMember.GetCustomAttributes(typeof(DisplayNameAttribute), true);
+					if( attribute != null &&
+						attribute.Length != 0)
+					{
+						DisplayNameAttribute mDisplayAttribute = attribute.Cast<DisplayNameAttribute>().Single();
+						if (mDisplayAttribute != null)
+						{
+							strNameToDisplay = mDisplayAttribute.DisplayName;
+						}
+					}
+					if( strNameToDisplay == "")
+					{
+						strNameToDisplay = "";
+					}
 	  
 					
-					    if ( mMemberType.GetInterface(nameof(IEnumerable)) != null )
-					    {
-						    if (mMemberType.Name.StartsWith("List") &&
-							    mMemberType.GenericTypeArguments != null &&
-							    mMemberType.GenericTypeArguments.Count() == 1)
-						    {
-							    //this is a collection or an array of some sort.
-							    ArrayViewerData mArrayData = new ArrayViewerData();
-							    mArrayData.type = mMemberType;
-							    mArrayData.name = strNameToDisplay;
-							    mArrayData.memberInfo = mMember;
-							    mArrayData.objectType = mMemberType.GenericTypeArguments[0];
-							    m_SubArrays.Add(mArrayData);
-						    }
-					    }
-					    else
-					    {
-						    //handle class data
-						    ClassObjectViewerData mNewObjectView = new ClassObjectViewerData();
-						    mNewObjectView.type = mMemberType;
-						    mNewObjectView.memberInfo = mMember;
-						    mNewObjectView.name = strNameToDisplay;
-						    mNewObjectView.isRootObject = false;
-						    m_SubObjects.Add(mNewObjectView);
+					if ( mMemberType.GetInterface(nameof(IEnumerable)) != null )
+					{
+						if (mMemberType.Name.StartsWith("List") &&
+							mMemberType.GenericTypeArguments != null &&
+							mMemberType.GenericTypeArguments.Count() == 1)
+						{
+							//this is a collection or an array of some sort.
+							ArrayViewerData mArrayData = new ArrayViewerData();
+							mArrayData.type = mMemberType;
+							mArrayData.name = strNameToDisplay;
+							mArrayData.memberInfo = mMember;
+							mArrayData.objectType = mMemberType.GenericTypeArguments[0];
+							m_SubArrays.Add(mArrayData);
+						}
+					}
+					else
+					{
+						//handle class data
+						ClassObjectViewerData mNewObjectView = new ClassObjectViewerData();
+						mNewObjectView.type = mMemberType;
+						mNewObjectView.memberInfo = mMember;
+						mNewObjectView.name = strNameToDisplay;
+						mNewObjectView.isRootObject = false;
+						m_SubObjects.Add(mNewObjectView);
 
-					    }
-				    }
-			    }
+					}
+				}
+			}
 			
 		}
 
@@ -446,18 +453,20 @@ namespace CustomControls
 			PropertyInfo mPropertyInfo = getSelectedArrayPropertyInfo();
 			foreach (object mObjectModifying in m_ObjectsList)
 			{
-				IEnumerable mArray = (IEnumerable)mPropertyInfo.GetValue(mObjectModifying);                
-
-                int iIndex = 0;
-				foreach( object mObjectInArray in mArray)
-				{
-					while( iIndex >=  m_ArrayList.Count)
-					{
-						m_ArrayList.Add(new List<object>());
-					}
-					m_ArrayList[iIndex].Add(mObjectInArray);
-					iIndex++;
-				}				
+				IList mArray = mPropertyInfo.GetValue(mObjectModifying) as IList;
+                if (mArray != null)
+                {
+                    int iIndex = 0;
+                    foreach (object mObjectInArray in mArray)
+                    {
+                        while (iIndex >= m_ArrayList.Count)
+                        {
+                            m_ArrayList.Add(new List<object>());
+                        }
+                        m_ArrayList[iIndex].Add(mObjectInArray);
+                        iIndex++;
+                    }
+                }
 			}
 			btnUpArrayItem.Enabled = (m_ArrayList.Count >= 1) ? true : false;
 			btnDownArrayItem.Enabled = (m_ArrayList.Count >= 1) ? true : false;
@@ -473,7 +482,28 @@ namespace CustomControls
 			foreach (List<object> mObjectArray in m_ArrayList)
 			{
 				ListViewItem mNewItem = new ListViewItem(iIndexOf.ToString());
-				mNewItem.SubItems.Add(subObjectType.Name);
+                string strType = "";
+                foreach(object mObj in mObjectArray)
+                {
+                    if(mObj == null )
+                    {
+                        continue;
+                    }
+                    if(strType == "" ||
+                       strType.Contains(mObj.GetType().Name) == false)
+                    {
+                        strType = strType + mObj.GetType().Name + ", ";
+                    }
+                }
+                if( strType != "" )
+                {
+                    strType = strType.Substring(0, strType.Length - 2);
+                }
+                else
+                {
+                    strType = subObjectType.Name;
+                }
+				mNewItem.SubItems.Add(strType);
 				mNewItem.SubItems.Add(mObjectArray.Count.ToString());
 				arrayListView.Items.Add(mNewItem);
 				iIndexOf++;
@@ -532,6 +562,10 @@ namespace CustomControls
 			foreach (object mObjectModifying in m_ObjectsList)
 			{
 				IList mList = mPropertyInfo.GetValue(mObjectModifying) as IList;				
+                if(mList == null)
+                {
+                    continue;
+                }
 				Type typeOfObject = mList.GetType().GetGenericArguments().Single();
 				if(typeOfObject == typeof(System.String) )
 				{
@@ -547,11 +581,16 @@ namespace CustomControls
 				}
 				else
 				{
-					object mNewObject = Activator.CreateInstance(typeOfObject);
-					if (mNewObject != null)
-					{
-						mList.Add(mNewObject);
-					}
+
+                    typeOfObject = RequestTypeOverride(typeOfObject);
+                    if (typeOfObject != null)
+                    {
+                        object mNewObject = Activator.CreateInstance(typeOfObject);
+                        if (mNewObject != null)
+                        {
+                            mList.Add(mNewObject);
+                        }
+                    }
 
 				}
 			}
@@ -632,6 +671,10 @@ namespace CustomControls
             m_iArrayReplaceIndex2 = arrayListView.SelectedIndices[0] - 1;
 
             IEnumerable mEnumerable = (IEnumerable)mPropertyInfo.GetValue(m_ObjectsList[0]);
+            if(mEnumerable == null)
+            {
+                return;
+            }
             Type mArrayType = mEnumerable.GetType();
             Type mDataType = mArrayType.GetGenericArguments()[0];
             Type mClassType = GetType(); // The class DoSomething is in
@@ -677,6 +720,10 @@ namespace CustomControls
             m_iArrayReplaceIndex2 = arrayListView.SelectedIndices[0] + 1;
             
             IEnumerable mEnumerable = (IEnumerable)mPropertyInfo.GetValue(m_ObjectsList[0]);
+            if(mEnumerable == null)
+            {
+                return;
+            }
             Type mArrayType = mEnumerable.GetType();
             Type mDataType = mArrayType.GetGenericArguments()[0];
             Type mClassType = GetType(); // The class DoSomething is in
@@ -734,6 +781,10 @@ namespace CustomControls
                 }
 
                 IEnumerable mEnumerable = (IEnumerable)mPropertyInfo.GetValue(m_ObjectsList[0]);
+                if(mEnumerable == null)
+                {
+                    return;
+                }
                 Type mArrayType = mEnumerable.GetType();
                 Type mDataType = mArrayType.GetGenericArguments()[0];
                 Type mClassType = GetType(); // The class DoSomething is in
@@ -767,6 +818,10 @@ namespace CustomControls
         public event SelectedObjectsHaveChangedPropertiesHandler SelectedObjectsHaveChangedProperties;
         public delegate void SelectedObjectsHaveChangedPropertiesHandler(List<object> mObjects);
 
+        //gets called when a new item is added to an array. The object it returns is the object it will create.
+        public event RequestTypeOverrideHandler RequestTypeOverride;
+        public delegate Type RequestTypeOverrideHandler(Type mTypeCreating);
+
         private void objectFilteredPropertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
             if(PropertyValueChanged != null)
@@ -786,6 +841,7 @@ namespace CustomControls
 
 
     }   //end class
+
     public class ClassObjectViewerData
 	{
 		public string name { get; set; }

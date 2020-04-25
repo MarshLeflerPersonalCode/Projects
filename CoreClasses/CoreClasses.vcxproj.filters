@@ -61,6 +61,9 @@
     <Filter Include="KCCore\Utils\Helpers">
       <UniqueIdentifier>{e43925e9-6d79-4e1a-adb4-2cae16bad593}</UniqueIdentifier>
     </Filter>
+    <Filter Include="KCCore\Systems\Stats\MathFunctions">
+      <UniqueIdentifier>{84d64714-b050-4c33-b48d-76026736f62d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="CoreClasses.cpp" />
@@ -122,6 +125,9 @@
       <Filter>KCCore\Systems\DataGroup</Filter>
     </ClCompile>
     <ClCompile Include="KCCore\Systems\Stats\KCStats.cpp">
+      <Filter>KCCore\Systems\Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="KCCore\Systems\Stats\KCStatsDefined.cpp">
       <Filter>KCCore\Systems\Stats</Filter>
     </ClCompile>
   </ItemGroup>
@@ -192,9 +198,6 @@
     <ClInclude Include="KCCore\Systems\UnitTypes\Private\KCUnitTypeCategory.h">
       <Filter>KCCore\Systems\UnitTypes\Private</Filter>
     </ClInclude>
-    <ClInclude Include="KCCore\Systems\UnitTypes\Private\KCUnitType.h">
-      <Filter>KCCore\Systems\UnitTypes\Private</Filter>
-    </ClInclude>
     <ClInclude Include="KCCore\Systems\UnitTypes\UnitTypes\KCUnitTypesItems.h">
       <Filter>KCCore\Systems\UnitTypes\UnitTypes</Filter>
     </ClInclude>
@@ -248,6 +251,21 @@
     </ClInclude>
     <ClInclude Include="KCCore\Systems\Stats\KCStats.h">
       <Filter>KCCore\Systems\Stats</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Systems\UnitTypes\Private\KCUnitTypeDef.h">
+      <Filter>KCCore\Systems\UnitTypes\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Utils\Containers\KCBitArray.h">
+      <Filter>KCCore\Utils\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Systems\Stats\KCStatsDefined.h">
+      <Filter>KCCore\Systems\Stats</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Systems\Stats\MathFunctions\IKCStatMathFunction.h">
+      <Filter>KCCore\Systems\Stats\MathFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Systems\Stats\MathFunctions\KCStatMathFunctions.h">
+      <Filter>KCCore\Systems\Stats\MathFunctions</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

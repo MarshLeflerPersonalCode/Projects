@@ -99,7 +99,7 @@ namespace CommandLineSerializer
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-MaxThreads", "-MT" }, "Max threads allowed to process headers. Uses Max - 1", Environment.ProcessorCount - 1));
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-Clean", "-c" }, "Cleans all the configs for a full recompile and then exits."));
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-Verbose", "-V" }, "Writes all the details to the log."));
-			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-TypeDefs", "-TD" }, "Type Definitions need to be passed in as a string,  wiith each value specifying if its a number or string. e.g. 'KCString=string, KCName=string, KCGuid=number'", ""));
+			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-TypeDefs", "-TD" }, "Type Definitions need to be passed in as a string,  with each value specifying if its a number or string. e.g. 'KCString=string, KCName=string, KCGuid=number'", ""));
 			commandLineArguments.addCommandLineOption(new CommandLineOption(new string[] { "-LoadTypeDef", "-LTD" }, "Specifies a specific file to load for all the type defs. Each line should define a new type with an equal specifying if it's a number or string: e.g. KCString=string, KCGuid=number", ""));
 			commandLineArguments.parseArguments(args);
 			if (commandLineArguments.getCommandValueAsString("-LogFile") == "")

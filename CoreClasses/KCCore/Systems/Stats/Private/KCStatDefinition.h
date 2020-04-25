@@ -2,6 +2,7 @@
 #pragma once
 #include "KCStatInclude.h"
 #include "Database/KCDBEntry.h"
+#include "Systems/Stats/MathFunctions/IKCStatMathFunction.h"
 #include "KCStatDefinition.serialize.inc"
 namespace STATS
 { 
@@ -38,7 +39,15 @@ namespace STATS
 		//The stat which will be used in the graph. Most times it's the rank.
 		UPROPERTY(Category = "GRAPH", DisplayName = "Graph Stat", Meta = (List = "Stats"))
 		KCString							m_strGraphStat = "Rank";
-
+		//functions that will do math on the stat. The functions get ran in order 0-to end.
+		UPROPERTY(Category = "MISC", DisplayName = "Functions")
+		KCTArray<IKCStatMathFunction>		m_MathFunctions;
+		//Stats need to know what other stats are referencing them. This is the array of stat ids
+		UPROPERTY(Category = "MISC", DisplayName = "Stat Refs", Meta = (Hidden))
+		KCTArray<int32>						m_StatsReferencing;
+		//When this stat changes all the stats will need to be recalculate
+		UPROPERTY(Category = "MISC", DisplayName = "Dirty All Stats" )
+		bool								m_bDirtyAllStats = false;
 	};
 
 
