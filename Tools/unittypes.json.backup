@@ -17,7 +17,7 @@
           ]
         },
         {
-          "unitTypeName": "NEW",
+          "unitTypeName": "GUN",
           "description": null,
           "immediateChildren": [
             "ANY"
@@ -30,13 +30,13 @@
           ]
         },
         {
-          "unitTypeName": "NEW1",
+          "unitTypeName": "GUN_SPECIAL",
           "description": null,
           "immediateChildren": [
-            "NEW"
+            "GUN"
           ],
           "fullHierarchyOfChildren": [
-            "NEW",
+            "GUN",
             "ANY"
           ],
           "bitLookupArray": [
@@ -44,152 +44,31 @@
           ]
         },
         {
-          "unitTypeName": "NEW2",
+          "unitTypeName": "MELEE",
           "description": null,
           "immediateChildren": [
-            "NEW1"
+            "ANY"
           ],
           "fullHierarchyOfChildren": [
-            "NEW1",
-            "NEW",
             "ANY"
           ],
           "bitLookupArray": [
-            15
+            9
           ]
         },
         {
-          "unitTypeName": "NEW3",
+          "unitTypeName": "SWORD",
           "description": null,
           "immediateChildren": [
-            "NEW2"
+            "MELEE"
           ],
           "fullHierarchyOfChildren": [
-            "NEW2",
-            "NEW1",
-            "NEW",
+            "MELEE",
             "ANY"
           ],
           "bitLookupArray": [
-            31
+            25
           ]
-        },
-        {
-          "unitTypeName": "NEW4",
-          "description": null,
-          "immediateChildren": [
-            "NEW3"
-          ],
-          "fullHierarchyOfChildren": [
-            "NEW3",
-            "NEW2",
-            "NEW1",
-            "NEW",
-            "ANY"
-          ],
-          "bitLookupArray": [
-            63
-          ]
-        },
-        {
-          "unitTypeName": "NEW5",
-          "description": null,
-          "immediateChildren": [
-            "NEW4"
-          ],
-          "fullHierarchyOfChildren": [
-            "NEW4",
-            "NEW3",
-            "NEW2",
-            "NEW1",
-            "NEW",
-            "ANY"
-          ],
-          "bitLookupArray": [
-            127
-          ]
-        },
-        {
-          "unitTypeName": "NEW6",
-          "description": null,
-          "immediateChildren": [
-            "NEW5"
-          ],
-          "fullHierarchyOfChildren": [
-            "NEW5",
-            "NEW4",
-            "NEW3",
-            "NEW2",
-            "NEW1",
-            "NEW",
-            "ANY"
-          ],
-          "bitLookupArray": [
-            255
-          ]
-        },
-        {
-          "unitTypeName": "NEW7",
-          "description": null,
-          "immediateChildren": [
-            "NEW6"
-          ],
-          "fullHierarchyOfChildren": [
-            "NEW6",
-            "NEW5",
-            "NEW4",
-            "NEW3",
-            "NEW2",
-            "NEW1",
-            "NEW",
-            "ANY"
-          ],
-          "bitLookupArray": [
-            511
-          ]
-        },
-        {
-          "unitTypeName": "NEW8",
-          "description": null,
-          "immediateChildren": [
-            "NEW7"
-          ],
-          "fullHierarchyOfChildren": [
-            "NEW7",
-            "NEW6",
-            "NEW5",
-            "NEW4",
-            "NEW3",
-            "NEW2",
-            "NEW1",
-            "NEW",
-            "ANY"
-          ],
-          "bitLookupArray": [
-            1023
-          ]
-        }
-      ]
-    },
-    {
-      "categoryName": "STAT_TYPES",
-      "enumHeaderDirectory": "",
-      "enumHeaderFile": "",
-      "enumName": "",
-      "unitTypes": [
-        {
-          "unitTypeName": "CHARACTER",
-          "description": null,
-          "immediateChildren": [],
-          "fullHierarchyOfChildren": [],
-          "bitLookupArray": []
-        },
-        {
-          "unitTypeName": "ITEM",
-          "description": null,
-          "immediateChildren": [],
-          "fullHierarchyOfChildren": [],
-          "bitLookupArray": []
         }
       ]
     }

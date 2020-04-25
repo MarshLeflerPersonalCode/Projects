@@ -1,6 +1,6 @@
 [FKCStatDefinition]
      <STRING>m_eStatType:INT32
-     <STRING>m_strDefaultValue:0
+     <STRING>m_strDefaultValue:1
      <STRING>m_strMinValue:0
      <STRING>m_strMaxValue:1000
      <BOOL>m_bApplicableToCharacters:True

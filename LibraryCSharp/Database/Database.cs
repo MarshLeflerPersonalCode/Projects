@@ -13,8 +13,14 @@ using System.Runtime.Serialization;
 
 namespace Library.Database
 {
-    
-	public enum EERROR_ADDING
+    public interface IDatabaseCallbacks
+    {
+        void notifyOfNewEntry(Database mDatabase, ClassInstance mNewEntry);
+        void notifyOfPreSave(Database mDatabase);
+        void notifyOfPostSave(Database mDatabase);
+        
+    }
+    public enum EERROR_ADDING
 	{
 		NO_ERRORS,
 		OBJECT_WAS_NULL,
@@ -40,9 +46,12 @@ namespace Library.Database
 		{
             m_DatabaseManager = mDatabaseManager;
             isLoaded = false;
-            
+            databaseCallbacks = new List<IDatabaseCallbacks>();
 
         }
+
+        public List<IDatabaseCallbacks> databaseCallbacks { get; set; }
+
         public DatabaseManager getDatabaseManager() { return m_DatabaseManager; }
         public ICollection getListOfNames() { return m_InstancesByName.Keys; }
         public bool isLoaded { get; set; }
@@ -370,7 +379,10 @@ namespace Library.Database
             m_InstancesByGuid[getEntryGuid(mNewEntry)] = mNewEntry;
             m_InstancesByName[getEntryName(mNewEntry).ToUpper()] = mNewEntry;
             m_InstancesByFileName[getEntryFileName(mNewEntry).ToUpper()] = mNewEntry;
-            
+            foreach(IDatabaseCallbacks mCallback in databaseCallbacks)
+            {
+                mCallback.notifyOfNewEntry(this, mNewEntry);
+            }
             return EERROR_ADDING.NO_ERRORS;
 		}
 
@@ -434,9 +446,13 @@ namespace Library.Database
         {
             string strPathToDatabaseFolder = Path.Combine(m_DatabaseManager.getDatabaseDirectory(), databaseName.Replace(" ", "_") + "\\");
             string strDatabaseFile = "database.json";
-
-            if( m_DatabaseConfig.saveDatabaseConfigToJson(this, Path.Combine(strPathToDatabaseFolder, strDatabaseFile)))
+            foreach (IDatabaseCallbacks mCallback in databaseCallbacks)
             {
+                mCallback.notifyOfPreSave(this);
+            }
+            if ( m_DatabaseConfig.saveDatabaseConfigToJson(this, Path.Combine(strPathToDatabaseFolder, strDatabaseFile)))
+            {
+
                 foreach( ClassInstance mInstance in m_Instances)
                 {
                     if( mInstance.m_bIsDirty ||
@@ -470,7 +486,11 @@ namespace Library.Database
                     }
                 }
             }
-                return true;
+            foreach (IDatabaseCallbacks mCallback in databaseCallbacks)
+            {
+                mCallback.notifyOfPostSave(this);
+            }
+            return true;
         }
 
 

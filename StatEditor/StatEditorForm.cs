@@ -23,7 +23,7 @@ namespace StatEditor
 {
 
 
-	public partial class StatEditorForm : Form
+	public partial class StatEditorForm : Form, IDatabaseCallbacks
 	{
 		
         enum ELOAD_STATE
@@ -116,7 +116,7 @@ namespace StatEditor
 				case ELOAD_STATE.done:
 				{
                     _createDatabaseTabs();
-
+                    m_Core.databaseManager.getDatabase("Stats").databaseCallbacks.Add(this);
 
 
 
@@ -258,5 +258,20 @@ namespace StatEditor
                 }
             }
         }
+
+        public void notifyOfNewEntry(Database mDatabase, ClassInstance mNewEntry)
+        {
+
+        }
+        public void notifyOfPreSave(Database mDatabase)
+        {
+
+        }
+        public void notifyOfPostSave(Database mDatabase)
+        {
+
+        }
+
+
     }//end class
 } //end namespace
