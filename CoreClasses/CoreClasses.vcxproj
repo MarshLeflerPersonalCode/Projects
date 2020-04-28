@@ -174,6 +174,8 @@
   <ItemGroup>
     <ClCompile Include="CoreClasses.cpp" />
     <ClCompile Include="KCCore\Database\KCDatabaseManager.cpp" />
+    <ClCompile Include="KCCore\KCCoreData.cpp" />
+    <ClCompile Include="KCCore\KCCoreObject.cpp" />
     <ClCompile Include="KCCore\KCDefines.cpp" />
     <ClCompile Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupBinaryReader.cpp" />
     <ClCompile Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupBinaryWriter.cpp" />
@@ -184,9 +186,10 @@
     <ClCompile Include="KCCore\Systems\DataGroup\KCDataGroup.cpp" />
     <ClCompile Include="KCCore\Systems\DataGroup\KCDataGroupManager.cpp" />
     <ClCompile Include="KCCore\Systems\DataGroup\Private\KCDataProperty.cpp" />
+    <ClCompile Include="KCCore\Systems\Stats\KCStatHandler.cpp" />
     <ClCompile Include="KCCore\Systems\Stats\KCStatManager.cpp" />
-    <ClCompile Include="KCCore\Systems\Stats\KCStats.cpp" />
     <ClCompile Include="KCCore\Systems\Stats\KCStatsDefined.cpp" />
+    <ClCompile Include="KCCore\Systems\Stats\Private\KCStats.cpp" />
     <ClCompile Include="KCCore\Systems\UnitTypes\KCDefinedUnitTypes.cpp" />
     <ClCompile Include="KCCore\Systems\UnitTypes\KCUnitTypeManager.cpp" />
     <ClCompile Include="KCCore\Systems\UnitTypes\Private\KCUnitTypeCategory.cpp" />
@@ -201,6 +204,8 @@
     <ClInclude Include="KCCore\Database\Private\KCDBDefinition.h" />
     <ClInclude Include="KCCore\Database\Private\KCDBInclude.h" />
     <ClInclude Include="KCCore\Database\Private\KCDBTable.h" />
+    <ClInclude Include="KCCore\KCCoreData.h" />
+    <ClInclude Include="KCCore\KCCoreObject.h" />
     <ClInclude Include="KCCore\KCDefines.h" />
     <ClInclude Include="KCCore\KCIncludes.h" />
     <ClInclude Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupBinaryReader.h" />
@@ -214,18 +219,19 @@
     <ClInclude Include="KCCore\Systems\DataGroup\KCDataGroupManager.h" />
     <ClInclude Include="KCCore\Systems\DataGroup\Private\KCDataGroupEnumsAndStructs.h" />
     <ClInclude Include="KCCore\Systems\DataGroup\Private\KCDataProperty.h" />
+    <ClInclude Include="KCCore\Systems\Stats\KCStatHandler.h" />
     <ClInclude Include="KCCore\Systems\Stats\KCStatManager.h" />
-    <ClInclude Include="KCCore\Systems\Stats\KCStats.h" />
     <ClInclude Include="KCCore\Systems\Stats\KCStatsDefined.h" />
     <ClInclude Include="KCCore\Systems\Stats\MathFunctions\IKCStatMathFunction.h" />
     <ClInclude Include="KCCore\Systems\Stats\MathFunctions\KCStatMathFunctions.h" />
+    <ClInclude Include="KCCore\Systems\Stats\Private\IKCStatModifier.h" />
     <ClInclude Include="KCCore\Systems\Stats\Private\KCStatDefinition.h" />
     <ClInclude Include="KCCore\Systems\Stats\Private\KCStatInclude.h" />
+    <ClInclude Include="KCCore\Systems\Stats\Private\KCStats.h" />
     <ClInclude Include="KCCore\Systems\UnitTypes\KCDefinedUnitTypes.h" />
     <ClInclude Include="KCCore\Systems\UnitTypes\KCUnitTypeManager.h" />
     <ClInclude Include="KCCore\Systems\UnitTypes\Private\KCUnitTypeDef.h" />
     <ClInclude Include="KCCore\Systems\UnitTypes\Private\KCUnitTypeCategory.h" />
-    <ClInclude Include="KCCore\Systems\UnitTypes\UnitTypes\KCUnitTypesItems.h" />
     <ClInclude Include="KCCore\Utils\Containers\KCBitArray.h" />
     <ClInclude Include="KCCore\Utils\Containers\KCName.h" />
     <ClInclude Include="KCCore\Utils\Containers\KCStringTable.h" />

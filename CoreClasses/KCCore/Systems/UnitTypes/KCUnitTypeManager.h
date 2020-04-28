@@ -1,8 +1,8 @@
 //copyright Marsh Lefler 2000-...
 #pragma once
 #include "KCIncludes.h"
-#include "Systems/UnitTypes/UnitTypes/KCUnitTypesItems.h"
 #include "Systems/UnitTypes/Private/KCUnitTypeCategory.h"
+
 ///////////////////////////////////////////////////////////
 //HOW TO USE
 //
@@ -16,136 +16,136 @@
 //			advantages of this format is that it doesn't require a new build for adding unit types or inheritances.
 //
 /////////////////////////////////////////////////////////
-namespace UNITTYPE
+
+class KCCORE_API KCUnitTypeManager : public KCCoreObject
 {
+public:
+	KCUnitTypeManager();
+	~KCUnitTypeManager();
 
-	class KCCORE_API KCUnitTypeManager
+	//returns the singleton of this class
+	static KCUnitTypeManager *		getSingleton();
+
+	//returns the category Index by name
+	uint32							getCategoryIndexByName(const KCString &strCategoryName) const
 	{
-	public:
-		KCUnitTypeManager();
-		~KCUnitTypeManager();
-
-		//returns the singleton of this class
-		static KCUnitTypeManager *		getSingleton();
-
-		//returns the category Index by name
-		uint32							getCategoryIndexByName(const KCString &strCategoryName) const
+		for (uint32 iCategoryIndex = 0; iCategoryIndex < m_Categories.getCount(); iCategoryIndex++)
 		{
-			for (uint32 iCategoryIndex = 0; iCategoryIndex < m_Categories.getCount(); iCategoryIndex++)
+			if (m_Categories[iCategoryIndex]->getCategoryName() == strCategoryName)
 			{
-				if (m_Categories[iCategoryIndex].getCategoryName() == strCategoryName)
-				{
-					return iCategoryIndex;
-				}
+				return iCategoryIndex;
 			}
-			return INVALID;
 		}
+		return INVALID;
+	}
 
-		//returns the category Index by name
-		const KCUnitTypeCategory *		getCategoryByName(const KCString &strCategoryName) const
+	//returns the category Index by name
+	const KCUnitTypeCategory *		getCategoryByName(const KCString &strCategoryName) const
+	{
+		for (uint32 iCategoryIndex = 0; iCategoryIndex < m_Categories.getCount(); iCategoryIndex++)
 		{
-			for (uint32 iCategoryIndex = 0; iCategoryIndex < m_Categories.getCount(); iCategoryIndex++)
+			if (m_Categories[iCategoryIndex]->getCategoryName() == strCategoryName)
 			{
-				if (m_Categories[iCategoryIndex].getCategoryName() == strCategoryName)
-				{
-					return &m_Categories[iCategoryIndex];
-				}
+				return m_Categories[iCategoryIndex];
 			}
+		}
+		return nullptr;
+	}
+
+	//returns the category Index by name
+	const KCUnitTypeCategory *		getCategoryByIndex(uint32 iIndex) const
+	{
+		if (iIndex >= m_Categories.getCount())
+		{
 			return nullptr;
 		}
-
-		//returns the category Index by name
-		const KCUnitTypeCategory *		getCategoryByIndex(uint32 iIndex) const
-		{
-			if (iIndex >= m_Categories.getCount())
-			{
-				return nullptr;
-			}
-			return &m_Categories[iIndex];
-		}
+		return m_Categories[iIndex];
+	}
 		
-		//parses the bytes of the unit type file
-		bool							parseUnitTypeFile(const TCHAR *strPath);
+	//parses the bytes of the unit type file
+	bool							configureUnitTypeByConfigFile(const TCHAR *strPath);
 
-		//returns the id of the unit type. Returns INVALID if not defined.
-		KCUnitType						getUnitTypeID(const KCString &strCategoryName, const KCString &strUnitTypeName)
-		{
-			const KCUnitTypeCategory *pCategory = getCategoryByName(strCategoryName);
-			if (pCategory)
-			{
-				return pCategory->getUnitTypeIDByName(strUnitTypeName);
-			}
-			return INVALID;
-		}
-		//does a check between two different unit types in the category passed in
-		FORCEINLINE bool				IsA(const KCUnitTypeCategory &mCategory, KCUnitType iObjectsIsA, KCUnitType iSubChild) const
-		{
-			return mCategory.IsA(iObjectsIsA, iSubChild);
-		}
-		//does a check between two different unit types in the category passed in
-		FORCEINLINE bool				IsA(const KCString &strCategoryName, KCUnitType iObjectsIsA, KCUnitType iSubChild) const
-		{
-			const KCUnitTypeCategory *pCategory = getCategoryByName(strCategoryName);
-			if (pCategory)
-			{
-				return pCategory->IsA(iObjectsIsA, iSubChild);
-			}
-			return false;
-		}
+	//returns the id of the unit type. Returns INVALID if not defined.
+	KCUnitType						getUnitTypeID(const KCString &strCategoryName, const KCString &strUnitTypeName)
+	{
+		return getUnitTypeID( getCategoryByName(strCategoryName), strUnitTypeName);
+	}
+	//returns the id of the unit type. Returns INVALID if not defined.
+	KCUnitType						getUnitTypeID(const KCUnitTypeCategory *pCategory, const KCString &strUnitTypeName)
+	{
+		KCEnsureAlwaysReturnVal(pCategory, INVALID);
+		return pCategory->getUnitTypeIDByName(strUnitTypeName);
+	}
 
-		//does a check between two different unit types in this category
-		FORCEINLINE bool				IsA(const KCUnitTypeCategory &mCategory, KCUnitType iObjectsIsA, const std::string &strSubChild) const
+	//does a check between two different unit types in the category passed in
+	FORCEINLINE bool				IsA(const KCUnitTypeCategory &mCategory, KCUnitType iObjectsIsA, KCUnitType iSubChild) const
+	{
+		return mCategory.IsA(iObjectsIsA, iSubChild);
+	}
+	//does a check between two different unit types in the category passed in
+	FORCEINLINE bool				IsA(const KCString &strCategoryName, KCUnitType iObjectsIsA, KCUnitType iSubChild) const
+	{
+		const KCUnitTypeCategory *pCategory = getCategoryByName(strCategoryName);
+		if (pCategory)
 		{
-			return mCategory.IsA(iObjectsIsA, strSubChild);
+			return pCategory->IsA(iObjectsIsA, iSubChild);
 		}
-		//does a check between two different unit types in this category
-		FORCEINLINE bool				IsA(const KCString &strCategoryName, KCUnitType iObjectsIsA, const std::string &strSubChild) const
-		{
-			const KCUnitTypeCategory *pCategory = getCategoryByName(strCategoryName);
-			if (pCategory)
-			{
-				return pCategory->IsA(iObjectsIsA, strSubChild);
-			}
-			return false;
-		}
-		//does a check between two different unit types in this category
-		FORCEINLINE bool				IsA(const KCUnitTypeCategory &mCategory, const std::string &strObjectsIsA, KCUnitType iSubChild) const
-		{
-			return mCategory.IsA(strObjectsIsA, iSubChild);
-		}
-		//does a check between two different unit types in this category
-		FORCEINLINE bool				IsA(const KCString &strCategoryName, const std::string &strObjectsIsA, KCUnitType iSubChild) const
-		{
-			const KCUnitTypeCategory *pCategory = getCategoryByName(strCategoryName);
-			if (pCategory)
-			{
-				return pCategory->IsA(strObjectsIsA, iSubChild);
-			}
-			return false;
-		}
+		return false;
+	}
 
-		//does a check between two different unit types in this category
-		FORCEINLINE bool				IsA(const KCUnitTypeCategory &mCategory, const std::string &strObjectsIsA, const std::string &strSubChild) const
+	//does a check between two different unit types in this category
+	FORCEINLINE bool				IsA(const KCUnitTypeCategory &mCategory, KCUnitType iObjectsIsA, const std::string &strSubChild) const
+	{
+		return mCategory.IsA(iObjectsIsA, strSubChild);
+	}
+	//does a check between two different unit types in this category
+	FORCEINLINE bool				IsA(const KCString &strCategoryName, KCUnitType iObjectsIsA, const std::string &strSubChild) const
+	{
+		const KCUnitTypeCategory *pCategory = getCategoryByName(strCategoryName);
+		if (pCategory)
 		{
-			return mCategory.IsA(strObjectsIsA, strSubChild);
+			return pCategory->IsA(iObjectsIsA, strSubChild);
 		}
-		//does a check between two different unit types in this category
-		FORCEINLINE bool				IsA(const KCString &strCategoryName, const std::string &strObjectsIsA, const std::string &strSubChild) const
+		return false;
+	}
+	//does a check between two different unit types in this category
+	FORCEINLINE bool				IsA(const KCUnitTypeCategory &mCategory, const std::string &strObjectsIsA, KCUnitType iSubChild) const
+	{
+		return mCategory.IsA(strObjectsIsA, iSubChild);
+	}
+	//does a check between two different unit types in this category
+	FORCEINLINE bool				IsA(const KCString &strCategoryName, const std::string &strObjectsIsA, KCUnitType iSubChild) const
+	{
+		const KCUnitTypeCategory *pCategory = getCategoryByName(strCategoryName);
+		if (pCategory)
 		{
-			const KCUnitTypeCategory *pCategory = getCategoryByName(strCategoryName);
-			if (pCategory)
-			{
-				return pCategory->IsA(strObjectsIsA, strSubChild);
-			}
-			return false;
+			return pCategory->IsA(strObjectsIsA, iSubChild);
 		}
+		return false;
+	}
 
-
-	private:
-		//NOTE - maybe in the future better to make this a map
-		KCTArray<KCUnitTypeCategory>	m_Categories;
-	};
+	//does a check between two different unit types in this category
+	FORCEINLINE bool				IsA(const KCUnitTypeCategory &mCategory, const std::string &strObjectsIsA, const std::string &strSubChild) const
+	{
+		return mCategory.IsA(strObjectsIsA, strSubChild);
+	}
+	//does a check between two different unit types in this category
+	FORCEINLINE bool				IsA(const KCString &strCategoryName, const std::string &strObjectsIsA, const std::string &strSubChild) const
+	{
+		const KCUnitTypeCategory *pCategory = getCategoryByName(strCategoryName);
+		if (pCategory)
+		{
+			return pCategory->IsA(strObjectsIsA, strSubChild);
+		}
+		return false;
+	}
 
 
-}; //end namespace UNITTYPE
+private:
+	void							_clean();
+	//NOTE - maybe in the future better to make this a map
+	KCTArray<KCUnitTypeCategory *>	m_Categories;
+};
+
+
 

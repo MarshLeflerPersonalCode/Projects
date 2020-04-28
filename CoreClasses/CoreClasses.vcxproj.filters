@@ -124,11 +124,20 @@
     <ClCompile Include="KCCore\Systems\DataGroup\KCDataGroupManager.cpp">
       <Filter>KCCore\Systems\DataGroup</Filter>
     </ClCompile>
-    <ClCompile Include="KCCore\Systems\Stats\KCStats.cpp">
-      <Filter>KCCore\Systems\Stats</Filter>
-    </ClCompile>
     <ClCompile Include="KCCore\Systems\Stats\KCStatsDefined.cpp">
       <Filter>KCCore\Systems\Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="KCCore\Systems\Stats\KCStatHandler.cpp">
+      <Filter>KCCore\Systems\Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="KCCore\Systems\Stats\Private\KCStats.cpp">
+      <Filter>KCCore\Systems\Stats\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="KCCore\KCCoreData.cpp">
+      <Filter>KCCore</Filter>
+    </ClCompile>
+    <ClCompile Include="KCCore\KCCoreObject.cpp">
+      <Filter>KCCore</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -198,9 +207,6 @@
     <ClInclude Include="KCCore\Systems\UnitTypes\Private\KCUnitTypeCategory.h">
       <Filter>KCCore\Systems\UnitTypes\Private</Filter>
     </ClInclude>
-    <ClInclude Include="KCCore\Systems\UnitTypes\UnitTypes\KCUnitTypesItems.h">
-      <Filter>KCCore\Systems\UnitTypes\UnitTypes</Filter>
-    </ClInclude>
     <ClInclude Include="KCCore\Utils\Containers\KCName.h">
       <Filter>KCCore\Utils\Containers</Filter>
     </ClInclude>
@@ -249,9 +255,6 @@
     <ClInclude Include="KCCore\Systems\DataGroup\KCDataGroupManager.h">
       <Filter>KCCore\Systems\DataGroup</Filter>
     </ClInclude>
-    <ClInclude Include="KCCore\Systems\Stats\KCStats.h">
-      <Filter>KCCore\Systems\Stats</Filter>
-    </ClInclude>
     <ClInclude Include="KCCore\Systems\UnitTypes\Private\KCUnitTypeDef.h">
       <Filter>KCCore\Systems\UnitTypes\Private</Filter>
     </ClInclude>
@@ -266,6 +269,21 @@
     </ClInclude>
     <ClInclude Include="KCCore\Systems\Stats\MathFunctions\KCStatMathFunctions.h">
       <Filter>KCCore\Systems\Stats\MathFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Systems\Stats\KCStatHandler.h">
+      <Filter>KCCore\Systems\Stats</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Systems\Stats\Private\KCStats.h">
+      <Filter>KCCore\Systems\Stats\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\KCCoreData.h">
+      <Filter>KCCore</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\KCCoreObject.h">
+      <Filter>KCCore</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Systems\Stats\Private\IKCStatModifier.h">
+      <Filter>KCCore\Systems\Stats\Private</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

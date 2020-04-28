@@ -12,24 +12,29 @@
 //around this.
 /////////////////////////////////////////////////////////
 
+class KCUnitTypeManager;
+class KCUnitTypeCategory;
 
 
-namespace UNITTYPE_ITEMS
+class UNITTYPES
 {
-	static KCUnitType ANY;
+public:
+
+	static KCUnitType	ANY;
+	static KCUnitType	CHARACTER;
+	static KCUnitType	ITEM;
+	static KCUnitType	WEAPON;
+	static KCUnitType	ARMOR;
+	static bool			IsA(KCUnitType iItemType, KCUnitType iItemIsA);
 };
 
 
-namespace UNITTYPE
-{
-	////////////////////////////////////////////////
-	//gets called from unit type manager
-	////////////////////////////////////////////////
-	void					defineUnitTypes(class KCUnitTypeManager *pManager);
-	////////////////////////////////////////////////
-	//gets called from unit type manager
-	////////////////////////////////////////////////
+////////////////////////////////////////////////
+//gets called from unit type manager
+////////////////////////////////////////////////
+void					_defineUnitTypes(KCUnitTypeManager *pManager);
+////////////////////////////////////////////////
+//gets called from unit type manager
+////////////////////////////////////////////////
 
-
-}; //end namespace UNITTYPE
 

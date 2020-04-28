@@ -2,40 +2,26 @@
 #include "KCDefinedUnitTypes.h"
 
 
-
-
-
-
-static UNITTYPE::KCUnitTypeManager *g_pStatManager(nullptr);
-
-UNITTYPE::KCUnitTypeManager::KCUnitTypeManager()
+KCUnitTypeManager::KCUnitTypeManager()
 {
-	if (g_pStatManager == nullptr)
-	{
-		g_pStatManager = this;
-	}
 	m_Categories.setGrowBy(5);
 }
 
-UNITTYPE::KCUnitTypeManager::~KCUnitTypeManager()
+KCUnitTypeManager::~KCUnitTypeManager()
 {
+	_clean();
 	
+}
+
+
+void KCUnitTypeManager::_clean()
+{
 	m_Categories.clean();
 }
 
-
-
-UNITTYPE::KCUnitTypeManager * UNITTYPE::KCUnitTypeManager::getSingleton()
+bool KCUnitTypeManager::configureUnitTypeByConfigFile(const TCHAR *strPath)
 {
-	if (g_pStatManager == nullptr)
-	{
-		KC_NEW KCUnitTypeManager();
-	}
-	return g_pStatManager;
-}
-
-bool UNITTYPE::KCUnitTypeManager::parseUnitTypeFile(const TCHAR *strPath)
-{
+	_clean();
 	KCTArray<uint8> mFileBytes;
 	if (KCFileUtilities::loadFile(strPath, mFileBytes) == false ||
 		mFileBytes.getCount() == 0 )
@@ -56,12 +42,12 @@ bool UNITTYPE::KCUnitTypeManager::parseUnitTypeFile(const TCHAR *strPath)
 	KCTArray<int> mArrayOfBitLookUps;
 	for (int32 iCategoryIndex = 0; iCategoryIndex < iNumberOfCategories; iCategoryIndex++)
 	{
-		m_Categories.add(KCUnitTypeCategory());
-		m_Categories.last()._parse(mByteReader);
+		m_Categories.add(KC_NEW KCUnitTypeCategory(getCoreData()));
+		m_Categories.last()->_parse(mByteReader);
 	}
 	//define the unit types predefined.
 
-	UNITTYPE::defineUnitTypes(this);
+	_defineUnitTypes(this);
 
 	//note this 
 	return true;

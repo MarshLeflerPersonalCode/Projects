@@ -19,6 +19,11 @@ public:
 			setGrowBy(iGrowBy);
 		}
 	}
+	KCTArray(const KCTArray &mArray)
+	{
+		*this = mArray;
+	}
+
 	~KCTArray() { clean(); }
 
 	//deletes all the contents by calling DELETE_SAFELY
@@ -115,8 +120,21 @@ public:
 	FORCEINLINE void			clean() { DELETE_ARRAY_SAFELY(m_Memory); m_iMemorySize = 0; m_iCountOfItems = 0; }
 	//removes all the memory and resets the count - NOTE this will not delete the objects in it. - UE4 support
 	FORCEINLINE void			Empty(){ clean(); }
+	FORCEINLINE KCTArray&		operator=( const KCTArray &mValues)
+	{
+		clean();
+		Reserve(mValues.m_iMemorySize);
+		m_eGrowType = mValues.m_eGrowType;
+		m_iGrowBy = mValues.m_iGrowBy;
+		for (uint32 iCount = 0; iCount < mValues.m_iCountOfItems; iCount++)
+		{
+			add(mValues[iCount]);
+		}
+		return *this;
+	}
+	
 	//returns the item at the index
-	FORCEINLINE T&			operator[](uint32 iIndex)
+	FORCEINLINE T&				operator[](uint32 iIndex)
 	{
 		if (iIndex >= m_iCountOfItems)
 		{
@@ -126,7 +144,18 @@ public:
 		return m_Memory[iIndex];
 	}
 	//returns the item at the index
-	FORCEINLINE const T &	operator[](uint32 iIndex) const
+	FORCEINLINE const T &		operator[](uint32 iIndex) const
+	{
+		if (iIndex >= m_iCountOfItems)
+		{
+			//we should crash here!
+			return m_Memory[0];
+		}
+		return m_Memory[iIndex];
+	}
+
+	//returns the item at the index
+	FORCEINLINE T &				get(uint32 iIndex)
 	{
 		if (iIndex >= m_iCountOfItems)
 		{
@@ -137,7 +166,7 @@ public:
 	}
 
 	//returns the item at the index
-	FORCEINLINE T &			get(uint32 iIndex)
+	FORCEINLINE const T &		get(uint32 iIndex) const
 	{
 		if (iIndex >= m_iCountOfItems)
 		{
@@ -147,18 +176,7 @@ public:
 		return m_Memory[iIndex];
 	}
 
-	//returns the item at the index
-	FORCEINLINE const T &	get(uint32 iIndex) const
-	{
-		if (iIndex >= m_iCountOfItems)
-		{
-			//we should crash here!
-			return m_Memory[0];
-		}
-		return m_Memory[iIndex];
-	}
-
-	FORCEINLINE bool removeLast()
+	FORCEINLINE bool			removeLast()
 	{
 		if (m_iCountOfItems > 0)
 		{
@@ -169,24 +187,51 @@ public:
 	}
 
 	//returns the last item in the list
-	FORCEINLINE T &			last()
+	FORCEINLINE T &				last()
 	{
 		
 		return m_Memory[m_iCountOfItems - 1];
 	}
 	//returns the last item in the list - ue4 helper
-	FORCEINLINE T &			Last() { return last(); }
+	FORCEINLINE T &				Last() { return last(); }
 
 
 
 	//returns the last item in the list
-	FORCEINLINE const T &	last() const
+	FORCEINLINE const T &		last() const
 	{
 
 		return m_Memory[m_iCountOfItems - 1];
 	}
 	//returns the last item in the list - ue4 helper
-	FORCEINLINE const T &	Last() const {return last(); }
+	FORCEINLINE const T &		Last() const {return last(); }
+
+	//returns if the item is found in the array
+	FORCEINLINE bool			Find(T item, uint32 &iIndexOfItem)
+	{
+		for (uint32 iIndex = 0; iIndex < m_iCountOfItems; iIndex++)
+		{
+			if (m_Memory[iIndex] == item)
+			{
+				iIndexOfItem = iIndex;
+				return true;
+			}
+		}
+		iIndexOfItem = INVALID;
+		return false;
+	}
+
+	//adds a unique item
+	FORCEINLINE uint32			AddUnique(T item)
+	{
+		uint32 iIndex = INVALID;
+		if (Find(item, iIndex))
+		{
+			return iIndex;
+		}
+		return add(item);
+	}
+
 	//Adds an object
 	FORCEINLINE uint32			add(T item)
 	{
@@ -200,8 +245,8 @@ public:
 	}
 	//adds an object - UE4 helper 
 	FORCEINLINE uint32			Add(T item){ return add(item);}
-	//removes an item, replace the last item in the index with it
-	FORCEINLINE bool			removeAndSwap(T item)
+	//removes an item, replace the last item in the index with it and returns that index. returns INVALID if not found.
+	FORCEINLINE uint32			RemoveSwap(T item)
 	{
 		for (uint32 iIndex = 0; iIndex < m_iCountOfItems; iIndex++)
 		{
@@ -209,13 +254,13 @@ public:
 			{
 				m_iCountOfItems--;
 				m_Memory[iIndex] = m_Memory[m_iCountOfItems];
-				return true;
+				return iIndex;
 			}
 		}
-		return false;
+		return INVALID;
 	}
 	//removes an item at an index, replace the last item in the index with it
-	FORCEINLINE bool			removeAtIndexAndSwap(T item, uint32 iIndex)
+	FORCEINLINE bool			RemoveAtSwap(T item, uint32 iIndex)
 	{
 		if (iIndex < m_iCountOfItems)
 		{

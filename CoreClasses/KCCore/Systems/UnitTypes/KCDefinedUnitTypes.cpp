@@ -3,11 +3,31 @@
 #include "KCUnitTypeManager.h"
 
 
+static const KCUnitTypeCategory	*g_pGameTypesCategory(nullptr);
 
+KCUnitType						UNITTYPES::ANY = INVALID;
+KCUnitType						UNITTYPES::CHARACTER = INVALID;
+KCUnitType						UNITTYPES::ITEM = INVALID;
+KCUnitType						UNITTYPES::WEAPON = INVALID;
+KCUnitType						UNITTYPES::ARMOR = INVALID;
 
-
-void UNITTYPE::defineUnitTypes(UNITTYPE::KCUnitTypeManager *pManager)
+void _defineUnitTypes(KCUnitTypeManager *pManager)
 {
-	UNITTYPE_ITEMS::ANY = pManager->getUnitTypeID("ITEMS", "ANY");
+	g_pGameTypesCategory = pManager->getCategoryByName("GAME_TYPES");
+	KCEnsureAlwaysReturn(g_pGameTypesCategory);
+	UNITTYPES::ANY = pManager->getUnitTypeID(g_pGameTypesCategory, "ANY");
+	UNITTYPES::ITEM = pManager->getUnitTypeID(g_pGameTypesCategory, "ITEM");
+	UNITTYPES::CHARACTER = pManager->getUnitTypeID(g_pGameTypesCategory, "CHARACTER");
+	UNITTYPES::WEAPON = pManager->getUnitTypeID(g_pGameTypesCategory, "WEAPON");
+	UNITTYPES::ARMOR = pManager->getUnitTypeID(g_pGameTypesCategory, "ARMOR");
 }
+
+
+
+bool UNITTYPES::IsA(KCUnitType iItemType, KCUnitType iItemIsA)
+{
+	KCEnsureAlwaysReturnVal(g_pGameTypesCategory, false);
+	return g_pGameTypesCategory->IsA(iItemType, iItemIsA);
+}
+
 

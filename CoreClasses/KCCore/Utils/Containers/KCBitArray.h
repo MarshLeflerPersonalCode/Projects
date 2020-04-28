@@ -38,6 +38,10 @@ class KCBitArray
 {
 public:	
 	KCBitArray(){}
+	KCBitArray(const KCBitArray &mBitArray) 
+	{
+		*this = mBitArray;
+	}
 	~KCBitArray() { clean(); }
 
 	void						operator=(const KCBitArray &mBitArray)

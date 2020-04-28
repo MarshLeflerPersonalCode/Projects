@@ -1,11 +1,10 @@
 #include "KCDataGroupManager.h"
 #include "Systems/DataGroup/FileTypes/KCDataGroupStringParser.h"
 
-KCDataGroupManager *g_pDataGroupManager(null);
 
 KCDataGroupManager::KCDataGroupManager()
 {
-	g_pDataGroupManager = this;
+	
 }
 
 KCDataGroupManager::~KCDataGroupManager()
@@ -15,21 +14,17 @@ KCDataGroupManager::~KCDataGroupManager()
 
 void KCDataGroupManager::_clean()
 {
+
 	for (std::unordered_map<KCString, KCDataGroup *>::iterator iter = m_DataGroups.begin(); iter != m_DataGroups.end(); iter++)
 	{
 		DELETE_SAFELY(iter->second);
 	}
 }
 
-
-KCDataGroupManager * KCDataGroupManager::getSingleton()
-{
-	return g_pDataGroupManager;
-}
-
 int32 KCDataGroupManager::loadLooseFiles(const WCHAR *pPath)
 {
-	_clean();
+	
+	_clean();	
 	KCString strPathAsNarrow = KCStringUtils::toNarrowUtf8(pPath);
 	KCTArray<std::wstring> mFiles(500);
 	KCFileUtilities::getFilesInDirectory(pPath, L"*.dat", mFiles);
@@ -68,11 +63,11 @@ bool KCDataGroupManager::createMasterFile(const WCHAR *pPathToLooseFiles, const 
 	return false;
 }
 
-int32 KCDataGroupManager::getDataGroupsInDirectory(const KCString &strPath, KCTArray<const KCDataGroup *> &mDataGroups)
+int32 KCDataGroupManager::getDataGroupsInDirectory(const KCString &strPath, KCTArray<const KCDataGroup *> &mDataGroups) const
 {
 	int iCount = mDataGroups.Num();
 	KCString strPathUpper = KCStringUtils::toUpperNewString(strPath);
-	for (std::unordered_map<KCString, KCDataGroup *>::iterator iter = m_DataGroups.begin(); iter != m_DataGroups.end(); iter++)
+	for (std::unordered_map<KCString, KCDataGroup *>::const_iterator iter = m_DataGroups.begin(); iter != m_DataGroups.end(); iter++)
 	{
 		
 		if ((int32)iter->first.find(strPathUpper.c_str(), 0, strPathUpper.length()) >= 0)

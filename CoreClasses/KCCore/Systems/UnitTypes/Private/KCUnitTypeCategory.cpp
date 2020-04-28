@@ -1,16 +1,14 @@
 #include "KCUnitTypeCategory.h"
+#include "KCCoreData.h"
 
 
-
-
-UNITTYPE::KCUnitTypeCategory::KCUnitTypeCategory()
-{
-	m_strName = "UNIDENTIFIED";	
+KCUnitTypeCategory::KCUnitTypeCategory(KCCoreData *pCoreData) :
+	KCCoreObject(pCoreData)
+{	
+	m_strName = "UNIDENTIFIED";
 }
 
-
-
-UNITTYPE::KCUnitTypeCategory::~KCUnitTypeCategory()
+KCUnitTypeCategory::~KCUnitTypeCategory()
 {
 	for(uint32 iUnitTypeIndex = 0; iUnitTypeIndex < m_iNumberOfUnitTypes; iUnitTypeIndex++)
 	{ 
@@ -19,7 +17,7 @@ UNITTYPE::KCUnitTypeCategory::~KCUnitTypeCategory()
 	DELETE_ARRAY_SAFELY(m_UnitTypes);
 }
 
-bool UNITTYPE::KCUnitTypeCategory::_parse(KCByteReader &mByteReader)
+bool KCUnitTypeCategory::_parse(KCByteReader &mByteReader)
 {
 
 	

@@ -13,11 +13,11 @@ template<class T>
 class KCDBTable
 {
 public:
-	KCDBTable(DATABASE::EDATABASE_TABLES eTable, const KCString &strDatabaseFolder)
+	KCDBTable(const KCDataGroupManager *pDatagroupManager, DATABASE::EDATABASE_TABLES eTable, const KCString &strDatabaseFolder)
 	{
 		m_eDatatable = eTable;
 		KCTArray<const KCDataGroup*> mDataGroups(200);
-		KCDataGroupManager::getSingleton()->getDataGroupsInDirectory(strDatabaseFolder, mDataGroups);
+		pDatagroupManager->getDataGroupsInDirectory(strDatabaseFolder, mDataGroups);
 		for (uint32 iIndex = 0; iIndex < mDataGroups.Num(); iIndex++)
 		{
 			T *pEntryObject = KC_NEW T();
@@ -73,7 +73,7 @@ protected:
 	{
 		KCEnsureAlwaysMsgReturn(pEntry, "Entry must not be null");
 		m_EntriesByGuid[pEntry->m_DatabaseGuid] = m_Entries.Num();
-		m_EntriesByGuid[pEntry->m_strName] = m_Entries.Num();
+		m_EntriesByName[pEntry->m_strName] = m_Entries.Num();
 		m_Entries.Add((T *)pEntry);
 		
 	}
@@ -87,8 +87,8 @@ protected:
 	}
 	DATABASE::EDATABASE_TABLES		m_eDatatable = DATABASE::EDATABASE_TABLES::UNDEFINED;
 	KCTArray< T * >					m_Entries;
-	std::unordered_map<KCDatabaseGuid, uint32>					m_EntriesByGuid;
-	std::unordered_map<KCName, uint32, KCNameHasher>				m_EntriesByName;
+	std::unordered_map<KCDatabaseGuid, uint32>			m_EntriesByGuid;
+	std::unordered_map<KCName, uint32, KCNameHasher>	m_EntriesByName;
 };
 
 

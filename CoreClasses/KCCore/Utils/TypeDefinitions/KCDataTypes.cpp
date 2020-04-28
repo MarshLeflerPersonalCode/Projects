@@ -63,9 +63,9 @@ EDATATYPES DATATYPES_UTILS::getDataTypeRepresentingValue(const KCString &strValu
 	bool isFloat = std::find_if(strValue.begin(), strValue.end(), [](unsigned char c) { return c == '.'; }) != strValue.end();
 	if (isFloat)
 	{
-		std::stringstream mStreamFloat(strValue);
+		std::stringstream mStreamFloat(strValue);		
 		mStreamFloat >> mResult.m_fValue[0];
-		if (mStreamFloat.fail() == false)
+		if (mStreamFloat.fail() == true)
 		{
 			return EDATATYPES::COUNT;
 		}

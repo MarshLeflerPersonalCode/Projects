@@ -39,7 +39,7 @@ public:
 	KCIncludeTest(float x, float y, float z)
 	{
 		m_SerializeChild.m_strTest = "WORKS!";
-		std::cout << __LINE__ << std::endl;
+		//std::cout << __LINE__ << std::endl;
 		m_fX = x; m_fY = y; m_fZ = z;
 		//m_pSerializeChildTest = new KCSerializeChild();
 		//m_pSerializeChildTest->m_strTest ="Working!";

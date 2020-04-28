@@ -11,6 +11,7 @@
 #endif	//note using_ue4
 
 #include "KCDefines.h"
+#include "KCCoreObject.h"
 #include "Utils/KCAsserts.h"
 #include "Utils/Containers/KCName.h"
 #include "Utils/Containers/KCTArray.h"

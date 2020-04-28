@@ -43,7 +43,7 @@ static void				testDataGroupStringParser(const WCHAR *strPath)
 	KCDataGroup mDataGroup;
 	KCEnsureAlwaysReturn(KCDataGroupStringParser::parseDataGroupFromFile(strPath, mDataGroup));
 	KCString strOutput = mDataGroup.getStringRepresentingDataGroup();
-	std::cout << strOutput << std::endl;
+	//std::cout << strOutput << std::endl;
 	int32 iValue = mDataGroup.getProperty("TEST_INT", -1);
 	KCDataGroup *pChild1 = mDataGroup.getChildGroup("CHILD1");
 	float fChildValue = (pChild1)?pChild1->getProperty("CHILD1_TEST_FLOAT", -1.0f):-1.0f;

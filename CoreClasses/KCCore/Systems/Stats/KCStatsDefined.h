@@ -12,12 +12,15 @@
 
 
 
-namespace STATS
+class STATS
 {
+public:
 	//must be called to define the stats
-	void					defineStats(class KCStatManager *pManager);
+	
 
 	static KCStatID			RANK;				//holds the rank of all the characters and monsters
 	
 };
+
+void					_defineStats(class KCStatManager *pManager);
 

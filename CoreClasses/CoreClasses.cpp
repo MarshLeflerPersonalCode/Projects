@@ -1,35 +1,20 @@
 // CoreClasses.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
-
-#include "KCCore/KCDefines.h"
-#include "KCCore/Systems/UnitTypes/KCUnitTypeManager.h"
-#include "KCCore/Systems/UnitTypes/KCDefinedUnitTypes.h"
-#include "KCCore/Systems/Stats/KCStatManager.h"
-#include "KCCore/Utils/Containers/KCName.h"
-#include "KCCore/Systems/DataGroup/KCDataGroupManager.h"
-#include "KCCore/Database/KCDatabaseManager.h"
+#include "KCCoreData.h"
 #include "TestCases/KCDataGroupTestCase.h"
 #include "KCCore/Systems/DataGroup/FileTypes/KCDataGroupSimpleXMLWriter.h"
 #include "KCCore/Systems/DataGroup/FileTypes/KCDataGroupSimpleXMLReader.h"
 #include <direct.h>
 #include "TestCases/SerializeTest/KCIncludeTest.h"
 #include <chrono>
-#include "Systems/Stats/Private/KCStatDefinition.h"
 
+#include "Systems/Stats/KCStatHandler.h"
 
 #define GetCurrentDir _getcwd
 
 
 
-
-static void funTest()
-{
-	static int32 iCount(1);
-	//KCEnsureOnce(false);
-	std::cout << "True" << iCount << std::endl;
-	iCount++;
-}
 
 int main()
 {
@@ -42,33 +27,18 @@ int main()
 	cCurrentPath[sizeof(cCurrentPath) - 1] = '\0'; /* not really required */
 
 	printf("The current working directory is %s\n", cCurrentPath);
-
-	KCDataGroupManager mDataGroupManager;
-	mDataGroupManager.loadLooseFiles(L"Content\\");
-
-	KCDatabaseManager mDatabaseManager;
-	mDatabaseManager.reload();
-
-	STATS::KCStatManager mStatManager;
-	mStatManager.initialize(&mDatabaseManager);
-
-
-	UNITTYPE::KCUnitTypeManager mManager;
-	if (mManager.parseUnitTypeFile(L"..\\UE4Projects\\CoreTest\\Content\\RawData\\unittypes.bin"))
+	KCCoreData mCoreData;
+	mCoreData._initialize();
+	
+	if (mCoreData.getUnitTypeManager())//.configureUnitTypeByConfigFile(L"..\\UE4Projects\\CoreTest\\Content\\RawData\\unittypes.bin"))
 	{
-		bool bIsA = mManager.getCategoryByIndex(0)->IsA(1, UNITTYPE_ITEMS::ANY);
-		if (bIsA && mManager.IsA("ITEMS", "NEW7", "NEW7"))
-		{
-			std::cout << "True\n";
-		}
-		else
-		{
-			std::cout << "False\n";
-		}
+		
+		std::cout << "Weapon is an Item by static lookup: " << ((UNITTYPES::IsA(UNITTYPES::WEAPON, UNITTYPES::ITEM))? "True\n":"False\n");
+		std::cout << "Weapon is an Item by string lookup: " << ((mCoreData.getUnitTypeManager()->IsA("GAME_TYPES", "WEAPON", "ITEM")) ? "True\n" : "False\n");
+		std::cout << "Character is an Item by static lookup: " << ((UNITTYPES::IsA(UNITTYPES::CHARACTER, UNITTYPES::ITEM)) ? "True\n" : "False\n");
+		std::cout << "Character is a Item by string lookup:" << ((mCoreData.getUnitTypeManager()->IsA("GAME_TYPES", "CHARACTER", "ITEM")) ? "True\n" : "False\n");
 	}
-	funTest();
-	funTest();
-	funTest();
+
 	//KCEnsureOnce(false);
 
 	KCBitArray mBitArray;
@@ -99,14 +69,29 @@ int main()
 	
 	//KCString strData = KCDataGroupSimpleXMLWriter::writeDataGroupToString(mDataGroup);
 	
+	KCStatHandler mStatHandler1(&mCoreData, UNITTYPES::ITEM);
+	KCStatHandler mStatHandler2(&mCoreData, UNITTYPES::WEAPON);
+	KCStatHandler mStatHandler3(&mCoreData, UNITTYPES::WEAPON);
+	mStatHandler1.addChildStatModifier(&mStatHandler2);
+	mStatHandler1.addChildStatModifier(&mStatHandler3);
+	mStatHandler1.setRawValue(STATS::RANK, 1);
+	mStatHandler2.setRawValue(STATS::RANK, 3);
+	mStatHandler3.setRawValue(STATS::RANK, 13);
+	KCEnsureAlways( mStatHandler1.getStatValueFullHierarchy(STATS::RANK, 1) == 17);
+	KCEnsureAlways(mStatHandler2.getStatValueSelfOnly(STATS::RANK, 1) == 3);
+	KCEnsureAlways(mStatHandler2.getStatValueFullHierarchy(STATS::RANK, 1) == 17);
+	KCEnsureAlways(mStatHandler2.getStatValueForWeapon(STATS::RANK, 1) == 4);
+	KCEnsureAlways(mStatHandler3.getStatValueForWeapon(STATS::RANK, 1) == 14);
+
+
 	KCDataGroup mSecondGroup;
 	KCDataGroupSimpleXMLReader::parseDataGroupFromFile(L"D:\\Personal\\Projects\\CoreClasses\\x64\\Intermediate\\CommandLineSerializer.cfg", mSecondGroup);
 	std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
 	KCString strData = KCDataGroupSimpleXMLWriter::writeDataGroupToString(mSecondGroup);
 	std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> time_span = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
-	std::cout << strData << std::endl;
-	std::cout << "time to parse: " << time_span.count() << "second(s)" << std::endl;
+	//std::cout << strData << std::endl;
+	std::cout << "time to parse: " << time_span.count() << "second(s). File: D:\\Personal\\Projects\\CoreClasses\\x64\\Intermediate\\CommandLineSerializer.cfg" << std::endl;
 	KCDataGroupBinaryWriter::writeDataGroupToFile(L"D:\\Personal\\Projects\\CoreClasses\\x64\\Intermediate\\CommandLineSerializer.cfg.bin", mSecondGroup);
 	
 	bool bIsNumber1 = KCStringUtils::isNumber("-2323.0242f");
@@ -134,16 +119,16 @@ int main()
 
 
 	KCDataGroup mSerializeStat;
-	STATS::FKCStatDefinition mStatDefinition;
+	FKCStatDefinition mStatDefinition;
 	mStatDefinition.m_strName = "HELLO!";
-	mStatDefinition.m_eStatType = STATS::ESTAT_PRIMITIVE_TYPES::FLOAT;
+	mStatDefinition.m_eStatType = ESTAT_PRIMITIVE_TYPES::FLOAT;
 	mStatDefinition.m_DatabaseGuid = 324234;
 	mStatDefinition.setDatabaseTable(DATABASE::EDATABASE_TABLES::STATS);
 	mStatDefinition.serialize(mSerializeStat);
-	STATS::FKCStatDefinition mStatDefinitionDeserialized;
+	FKCStatDefinition mStatDefinitionDeserialized;
 	mStatDefinitionDeserialized.deserialize(mSerializeStat);
 	KCEnsureAlways(mStatDefinition == mStatDefinitionDeserialized);
-	std::cin.ignore();	//just ignores the next key press
+	//std::cin.ignore();	//just ignores the next key press
 	exit(0);
 
 }

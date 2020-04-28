@@ -2,10 +2,10 @@
   "version": 1,
   "categoryConfigs": [
     {
-      "categoryName": "ITEMS",
-      "enumHeaderDirectory": "..\\..\\CoreClasses\\KCCore\\UnitTypes\\Systems\\UnitTypes",
-      "enumHeaderFile": "KCUnitTypesItems.h",
-      "enumName": "EUNITTYPES_ITEMS",
+      "categoryName": "GAME_TYPES",
+      "enumHeaderDirectory": "",
+      "enumHeaderFile": "",
+      "enumName": "",
       "unitTypes": [
         {
           "unitTypeName": "ANY",
@@ -17,43 +17,50 @@
           ]
         },
         {
-          "unitTypeName": "GUN",
+          "unitTypeName": "RANGED",
           "description": null,
           "immediateChildren": [
-            "ANY"
+            "WEAPON"
           ],
           "fullHierarchyOfChildren": [
-            "ANY"
+            "WEAPON",
+            "ITEM",
+            "ACTOR"
           ],
           "bitLookupArray": [
-            3
+            354
           ]
         },
         {
-          "unitTypeName": "GUN_SPECIAL",
+          "unitTypeName": "RANGED_SPECIAL",
           "description": null,
           "immediateChildren": [
-            "GUN"
+            "GUN",
+            "RANGED"
           ],
           "fullHierarchyOfChildren": [
-            "GUN",
-            "ANY"
+            "RANGED",
+            "WEAPON",
+            "ITEM",
+            "ACTOR"
           ],
           "bitLookupArray": [
-            7
+            358
           ]
         },
         {
           "unitTypeName": "MELEE",
           "description": null,
           "immediateChildren": [
-            "ANY"
+            "WEAPON"
           ],
           "fullHierarchyOfChildren": [
-            "ANY"
+            "WEAPON",
+            "ITEM",
+            "ACTOR"
           ],
           "bitLookupArray": [
-            9
+            360
           ]
         },
         {
@@ -64,10 +71,61 @@
           ],
           "fullHierarchyOfChildren": [
             "MELEE",
-            "ANY"
+            "WEAPON",
+            "ITEM",
+            "ACTOR"
           ],
           "bitLookupArray": [
-            25
+            376
+          ]
+        },
+        {
+          "unitTypeName": "ITEM",
+          "description": null,
+          "immediateChildren": [
+            "ACTOR"
+          ],
+          "fullHierarchyOfChildren": [
+            "ACTOR"
+          ],
+          "bitLookupArray": [
+            96
+          ]
+        },
+        {
+          "unitTypeName": "ACTOR",
+          "description": null,
+          "immediateChildren": [],
+          "fullHierarchyOfChildren": [],
+          "bitLookupArray": [
+            64
+          ]
+        },
+        {
+          "unitTypeName": "CHARACTER",
+          "description": null,
+          "immediateChildren": [
+            "ACTOR"
+          ],
+          "fullHierarchyOfChildren": [
+            "ACTOR"
+          ],
+          "bitLookupArray": [
+            192
+          ]
+        },
+        {
+          "unitTypeName": "WEAPON",
+          "description": null,
+          "immediateChildren": [
+            "ITEM"
+          ],
+          "fullHierarchyOfChildren": [
+            "ITEM",
+            "ACTOR"
+          ],
+          "bitLookupArray": [
+            352
           ]
         }
       ]

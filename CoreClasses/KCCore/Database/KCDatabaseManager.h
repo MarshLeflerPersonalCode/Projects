@@ -2,6 +2,7 @@
 #pragma once
 #include "Database/KCDBEntry.h"
 #include "Database/Private/KCDBTable.h"
+
 ///////////////////////////////////////////////////////////////////////////
 //The database manager holds all the tables for storing the games data.
 //
@@ -9,13 +10,11 @@
 
 
 
-class KCDatabaseManager
+class KCDatabaseManager : public KCCoreObject
 {
 public:
 	KCDatabaseManager();
 	~KCDatabaseManager();
-
-	static KCDatabaseManager *						getSingleton();
 
 	//returns the table by the enum
 	FORCEINLINE const KCDBTable<FKCDBEntry> *		getTable(DATABASE::EDATABASE_TABLES eTable) const
@@ -32,21 +31,20 @@ public:
 
 	///////////////////////////////////////////////////////////////////////////////////////
 	//									BY NAME											 //
-	static const struct STATS::FKCStatDefinition *	getStatDefinitionByName(const KCName &strName);
+	const struct FKCStatDefinition *				getStatDefinitionByName(const KCName &strName) const;
 
 
 	//									BY NAME											 //
 	///////////////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////////////////////////////////////////////////////////
 	//									BY ID											 //
-	static const struct STATS::FKCStatDefinition *	getStatDefinitionByGuid(KCDatabaseGuid iGuid);
+	const struct FKCStatDefinition *				getStatDefinitionByGuid(KCDatabaseGuid iGuid) const;
 
 	//									BY ID											 //
 	///////////////////////////////////////////////////////////////////////////////////////
 private:
 	void											_clean();
 	//initializes the DB Manager and creates the databases
-	void											_initialize();
-
+	void											_initialize();	
 	KCDBTable<FKCDBEntry>							*m_Tables[(uint32)DATABASE::EDATABASE_TABLES::COUNT];
 };
