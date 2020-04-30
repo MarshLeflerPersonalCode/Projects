@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" >
-<ItemGroup>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
     <Filter Include="Intermediate" />
     <Filter Include="KCCore" />
     <Filter Include="KCCore\Database" />
@@ -22,10 +22,14 @@
     <Filter Include="KCCore\Utils\TypeDefinitions" />
     <Filter Include="TestCases" />
     <Filter Include="TestCases\SerializeTest" />
-</ItemGroup>
-<ItemGroup>
+    <Filter Include="KCCore\Systems\Effects">
+      <UniqueIdentifier>{d5b93b4c-04ea-4bcd-b916-9e304ee4be3a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
     <ClCompile Include="CoreClasses.cpp">
-      <Filter></Filter>
+      <Filter>
+      </Filter>
     </ClCompile>
     <ClCompile Include="KCCore\KCCoreData.cpp">
       <Filter>KCCore</Filter>
@@ -99,8 +103,11 @@
     <ClCompile Include="KCCore\Utils\TypeDefinitions\KCDataTypes.cpp">
       <Filter>KCCore\Utils\TypeDefinitions</Filter>
     </ClCompile>
-</ItemGroup>
-<ItemGroup>
+    <ClCompile Include="KCCore\Systems\Effects\KCEffectsManager.cpp">
+      <Filter>KCCore\Systems\Effects</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="Intermediate\EnumsByName.h">
       <Filter>Intermediate</Filter>
     </ClInclude>
@@ -248,6 +255,11 @@
     <ClInclude Include="TestCases\SerializeTest\KCIncludeTest.h">
       <Filter>TestCases\SerializeTest</Filter>
     </ClInclude>
-</ItemGroup>
-
+    <ClInclude Include="KCCore\Systems\Effects\KCEffectsManager.h">
+      <Filter>KCCore\Systems\Effects</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="TestCases\SerializeTest\KCIncludeTest.inc" />
+  </ItemGroup>
 </Project>

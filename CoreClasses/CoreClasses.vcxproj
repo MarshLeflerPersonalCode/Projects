@@ -171,7 +171,7 @@
       <Command>D:\Personal\Projects\Tools\CommandLineSerializer.exe -debug -SourceDir 'D:\Personal\Projects\CoreClasses\' -IntermediateDir 'D:\Personal\Projects\CoreClasses\Intermediate\' -TypeDefs 'KCDatabaseGuid=int32,StatID=int16'</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
-<ItemGroup>
+  <ItemGroup>
     <ClCompile Include="CoreClasses.cpp" />
     <ClCompile Include="KCCore\KCCoreData.cpp" />
     <ClCompile Include="KCCore\KCCoreObject.cpp" />
@@ -186,6 +186,7 @@
     <ClCompile Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupStringParser.cpp" />
     <ClCompile Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupStringWriter.cpp" />
     <ClCompile Include="KCCore\Systems\DataGroup\Private\KCDataProperty.cpp" />
+    <ClCompile Include="KCCore\Systems\Effects\KCEffectsManager.cpp" />
     <ClCompile Include="KCCore\Systems\Stats\KCStatHandler.cpp" />
     <ClCompile Include="KCCore\Systems\Stats\KCStatManager.cpp" />
     <ClCompile Include="KCCore\Systems\Stats\KCStatsDefined.cpp" />
@@ -197,8 +198,8 @@
     <ClCompile Include="KCCore\Utils\Containers\KCName.cpp" />
     <ClCompile Include="KCCore\Utils\IO\KCFileUtilities.cpp" />
     <ClCompile Include="KCCore\Utils\TypeDefinitions\KCDataTypes.cpp" />
-</ItemGroup>
-<ItemGroup>
+  </ItemGroup>
+  <ItemGroup>
     <ClInclude Include="Intermediate\EnumsByName.h" />
     <ClInclude Include="KCCore\KCCoreData.h" />
     <ClInclude Include="KCCore\KCCoreObject.h" />
@@ -220,6 +221,7 @@
     <ClInclude Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupStringWriter.h" />
     <ClInclude Include="KCCore\Systems\DataGroup\Private\KCDataGroupEnumsAndStructs.h" />
     <ClInclude Include="KCCore\Systems\DataGroup\Private\KCDataProperty.h" />
+    <ClInclude Include="KCCore\Systems\Effects\KCEffectsManager.h" />
     <ClInclude Include="KCCore\Systems\Stats\KCStatHandler.h" />
     <ClInclude Include="KCCore\Systems\Stats\KCStatManager.h" />
     <ClInclude Include="KCCore\Systems\Stats\KCStatsDefined.h" />
@@ -248,7 +250,7 @@
     <ClInclude Include="KCCore\Utils\TypeDefinitions\KCPrimitiveTypesDefinition.h" />
     <ClInclude Include="TestCases\KCDataGroupTestCase.h" />
     <ClInclude Include="TestCases\SerializeTest\KCIncludeTest.h" />
-</ItemGroup>
+  </ItemGroup>
   <ItemGroup>
     <None Include="TestCases\SerializeTest\KCIncludeTest.inc" />
   </ItemGroup>
