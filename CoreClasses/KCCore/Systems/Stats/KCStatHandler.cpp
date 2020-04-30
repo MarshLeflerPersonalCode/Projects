@@ -244,7 +244,7 @@ bool KCStatHandler::getValueCalculated(FKCStatCalculationParams &mParams, coreUn
 	}
 	/////////////////////////////////////////////////////////////////////
 	//Handle ESTAT_INHERIT_TYPES::CHILDREN		
-	for (uint32 iChildrenModifiers = 0; iChildrenModifiers < getChildStatModifiers().Num(); iChildrenModifiers++)
+	for (int32 iChildrenModifiers = 0; iChildrenModifiers < getChildStatModifiers().Num(); iChildrenModifiers++)
 	{
 		coreUnionData32Bit mChildValue(0);
 		IKCStatModifier *pMondifer = getChildStatModifiers()[iChildrenModifiers];
@@ -358,7 +358,7 @@ void KCStatHandler::_dirtyStat(KCStatID iStatID)
 			m_CalculatedStats.erase(mIter);
 		}		
 	}
-	for (uint32 iChildCount = 0; iChildCount < getChildStatModifiers().Num(); iChildCount++)
+	for (int32 iChildCount = 0; iChildCount < getChildStatModifiers().Num(); iChildCount++)
 	{
 		getChildStatModifiers()[iChildCount]->dirtyStat(iStatID);
 	}

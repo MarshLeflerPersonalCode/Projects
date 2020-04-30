@@ -10,9 +10,9 @@ struct FKCStatDefinition : public FKCDBEntry
 public:
 	KCSERIALIZE_CODE();
 
-	FKCStatDefinition() { setDatabaseTable(DATABASE::EDATABASE_TABLES::STATS);}
-	~FKCStatDefinition() {}
-
+	FKCStatDefinition() { setDatabaseTable(DATABASE::EDATABASE_TABLES::STATS_DATABASE);}
+	~FKCStatDefinition() {}	
+	
 	//The stat type dictates how it will be used in game.
 	UPROPERTY(Category = "GENERAL", DisplayName = "Variable Type")
 	ESTAT_PRIMITIVE_TYPES				m_eStatType = ESTAT_PRIMITIVE_TYPES::INT32;
@@ -45,10 +45,10 @@ public:
 	ESTAT_PRIMITIVE_TYPES				m_eGraphResultStatType = ESTAT_PRIMITIVE_TYPES::INT32;
 	//functions that will do math on the stat. The functions get ran in order 0-to end.
 	UPROPERTY(Category = "MISC", DisplayName = "Math Functions")
-	KCTArray<IKCStatMathFunction>		m_MathFunctions;
+	TArray<IKCStatMathFunction>		m_MathFunctions;
 	//Stats need to know what other stats are referencing them. This is the array of stat ids
 	UPROPERTY(Category = "MISC", DisplayName = "Stat Refs", Meta = (Hidden))
-	KCTArray<KCName>					m_StatsReferencing;
+	TArray<KCName>					m_StatsReferencing;
 	//When this stat changes all the stats will need to be recalculate
 	UPROPERTY(Category = "MISC", DisplayName = "Dirty All Stats" )
 	bool								m_bDirtyAllStats = false;

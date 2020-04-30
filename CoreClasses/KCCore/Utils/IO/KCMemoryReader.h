@@ -12,7 +12,7 @@ class KCMemoryReader
 {
 public:
 	KCMemoryReader() {}
-	KCMemoryReader(const KCTArray<MemoryType> &mArray)
+	KCMemoryReader(const TArray<MemoryType> &mArray)
 	{
 		configureByTArray(mArray);
 	}
@@ -29,10 +29,11 @@ public:
 		configureByTArray(pArray, (int32)iCount);
 	}
 
-	void configureByTArray(const KCTArray<MemoryType> &mArray)
-	{
-		m_pMemoryArray = mArray.getMemory();
-		m_iArraySize = mArray.getCount();
+	void configureByTArray(const TArray<MemoryType> &mArray)
+	{		
+
+		m_pMemoryArray = mArray.GetData();
+		m_iArraySize = mArray.Num();
 		m_iCurrentByteIndex = 0;
 	}
 
@@ -261,7 +262,7 @@ class KCCharReader : public KCMemoryReader<char>
 {
 public:
 	KCCharReader() {}
-	KCCharReader(const KCTArray<char> &mArray)
+	KCCharReader(const TArray<char> &mArray)
 	{
 		configureByTArray(mArray);
 	}
@@ -311,7 +312,7 @@ class KCByteReader : public KCMemoryReader<uint8>
 {
 public:
 	KCByteReader(){}
-	KCByteReader(const KCTArray<uint8> &mArray)
+	KCByteReader(const TArray<uint8> &mArray)
 	{
 		configureByTArray(mArray);
 	}

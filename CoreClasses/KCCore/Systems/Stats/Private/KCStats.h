@@ -119,8 +119,8 @@ private:
 	void								_clean();		
 	KCBitArray							m_StatsOwned;		
 	ESTAT_HANDLER_TYPE					m_eType = ESTAT_HANDLER_TYPE::ITEM;		
-	KCTArray<coreUnionData32Bit>		m_Stats;		
-	const KCTArray<FKCStatDefinition*>	*m_pStatDefintions = nullptr;
+	TArray<coreUnionData32Bit>		m_Stats;		
+	const TArray<FKCStatDefinition*>	*m_pStatDefintions = nullptr;
 
 };
 

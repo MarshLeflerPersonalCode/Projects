@@ -39,16 +39,16 @@ void KCDatabaseManager::_clean()
 void KCDatabaseManager::_initialize()
 {
 	KCEnsuceOnceMsgReturn(getCoreData(), "Data Group Manager must be created first");
-	m_Tables[(int32)DATABASE::EDATABASE_TABLES::STATS] = (KCDBTable<FKCDBEntry>*)( KC_NEW KCDBTable<FKCStatDefinition>(getCoreData()->getDataGroupManager(), DATABASE::EDATABASE_TABLES::STATS, "Content/Databases/Stats/"));
+	m_Tables[(int32)DATABASE::EDATABASE_TABLES::STATS_DATABASE] = (KCDBTable<FKCDBEntry>*)( KC_NEW KCDBTable<FKCStatDefinition>(getCoreData()->getDataGroupManager(), DATABASE::EDATABASE_TABLES::STATS_DATABASE, "Databases/Stats/"));
 	
 }
 
 const FKCStatDefinition * KCDatabaseManager::getStatDefinitionByName(const KCName &strName) const
 {
-	return (const FKCStatDefinition *)m_Tables[(int32)DATABASE::EDATABASE_TABLES::STATS]->getEntry(strName);
+	return (const FKCStatDefinition *)m_Tables[(int32)DATABASE::EDATABASE_TABLES::STATS_DATABASE]->getEntry(strName);
 }
 
 const FKCStatDefinition * KCDatabaseManager::getStatDefinitionByGuid(KCDatabaseGuid iGuid) const
 {
-	return (const FKCStatDefinition *)m_Tables[(int32)DATABASE::EDATABASE_TABLES::STATS]->getEntry(iGuid);
+	return (const FKCStatDefinition *)m_Tables[(int32)DATABASE::EDATABASE_TABLES::STATS_DATABASE]->getEntry(iGuid);
 }

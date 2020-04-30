@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Modules/ModuleManager.h"
-#include "CoreClasses/UnitTypes/KCUnitTypeManager.h"
+#include "CoreClasses/KCCoreData.h"
 
 /**
 * The public interface to this module.  In most cases, this interface is only public to sibling modules
@@ -34,12 +34,9 @@ public:
 	void ShutdownModule() override;
 
 	//returns the unit type manager
-	static FORCEINLINE UNITTYPE::KCUnitTypeManager * getUnitTypeManager()
-	{
-		KCCoreModule &mModule = get();
-		return &mModule.m_UnitTypeManager;
-	}
-	
+	static const KCUnitTypeManager *	getUnitTypeManager();
+	//returns the core data
+	static KCCoreData *					getCoreData();
 private:
-	UNITTYPE::KCUnitTypeManager			m_UnitTypeManager;
+	KCCoreData							m_CoreData;	
 };

@@ -22,3 +22,4 @@ Release/
 *.obj
 *.dll
 *.exe
+*.backup

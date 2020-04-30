@@ -14,7 +14,7 @@ struct FKCDBEntry
 	~FKCDBEntry() {}
 
 	//returns if the guid and name are valid
-	bool							isValid()const  { return DATABASE::isDatabaseGuidValid(m_DatabaseGuid) && m_strName.isEmpty() == false; }
+	bool							isValid() const  { return DATABASE::isDatabaseGuidValid(m_DatabaseGuid) && m_strName.isEmpty() == false; }
 
 	//returns if the entry is equal to another entry
 	bool							operator==(const FKCDBEntry &mEntry) const { return (m_strName == mEntry.m_strName && m_DatabaseGuid == mEntry.m_DatabaseGuid)?true:false; }

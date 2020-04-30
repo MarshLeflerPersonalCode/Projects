@@ -10,7 +10,7 @@
 /////////////////////Took this straight from UE4
 #ifdef USING_UE4
 #include "CoreMinimal.h"
-
+typedef wchar_t				WCHAR;
 #else
 ///////////////////////////////////////////////////////////////////////////
 /////////////////////////////////NONE UE4//////////////////////////////////
@@ -48,7 +48,9 @@ typedef WCHAR				TCHAR;
 
 
 #include <string>
+
 typedef std::string KCString;
+typedef std::wstring KCWString;
 //#define KCString std::string
 static const KCString EMPTY_KCSTRING = "";
 

@@ -26,9 +26,11 @@ int32 KCDataGroupManager::loadLooseFiles(const WCHAR *pPath)
 	
 	_clean();	
 	KCString strPathAsNarrow = KCStringUtils::toNarrowUtf8(pPath);
-	KCTArray<std::wstring> mFiles(500);
+	KCStringUtils::replace(strPathAsNarrow, '\\', '/');
+	TArray<std::wstring> mFiles;
 	KCFileUtilities::getFilesInDirectory(pPath, L"*.dat", mFiles);
-	for (uint32 iIndex = 0; iIndex < mFiles.Num(); iIndex++)
+	mFiles.Reserve(mFiles.Num());
+	for (int32 iIndex = 0; iIndex < mFiles.Num(); iIndex++)
 	{
 		KCDataGroup *pDataGroup = KC_NEW KCDataGroup();
 		if (KCDataGroupStringParser::parseDataGroupFromFile(mFiles[iIndex].c_str(), *pDataGroup) == false)
@@ -38,12 +40,12 @@ int32 KCDataGroupManager::loadLooseFiles(const WCHAR *pPath)
 		}
 
 		KCString strPath = KCStringUtils::convertWideToUtf8(mFiles[iIndex].c_str());		
+		KCStringUtils::replace(strPath, '\\', '/');
 		size_t iIndexOf = strPath.find(strPathAsNarrow);
-		if (iIndexOf > 0)
+		if (iIndexOf >= 0)
 		{
-			strPath.substr(iIndexOf, strPath.length() - iIndexOf);
+			strPath = strPath.substr(strPathAsNarrow.length() + iIndexOf, strPath.length() - (strPathAsNarrow.length() + iIndexOf));
 		}
-		KCStringUtils::replace(strPath, '\\', '/');			
 		while (strPath.c_str()[0] == '.')
 		{
 			strPath = strPath.substr(1, strPath.length() - 1);
@@ -63,7 +65,7 @@ bool KCDataGroupManager::createMasterFile(const WCHAR *pPathToLooseFiles, const 
 	return false;
 }
 
-int32 KCDataGroupManager::getDataGroupsInDirectory(const KCString &strPath, KCTArray<const KCDataGroup *> &mDataGroups) const
+int32 KCDataGroupManager::getDataGroupsInDirectory(const KCString &strPath, TArray<const KCDataGroup *> &mDataGroups) const
 {
 	int iCount = mDataGroups.Num();
 	KCString strPathUpper = KCStringUtils::toUpperNewString(strPath);
@@ -72,7 +74,7 @@ int32 KCDataGroupManager::getDataGroupsInDirectory(const KCString &strPath, KCTA
 		
 		if ((int32)iter->first.find(strPathUpper.c_str(), 0, strPathUpper.length()) >= 0)
 		{
-			mDataGroups.add(iter->second);
+			mDataGroups.Add(iter->second);
 		}
 	}
 	return mDataGroups.Num() - iCount;

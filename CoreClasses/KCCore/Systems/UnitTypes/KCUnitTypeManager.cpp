@@ -4,7 +4,7 @@
 
 KCUnitTypeManager::KCUnitTypeManager()
 {
-	m_Categories.setGrowBy(5);
+	
 }
 
 KCUnitTypeManager::~KCUnitTypeManager()
@@ -16,15 +16,15 @@ KCUnitTypeManager::~KCUnitTypeManager()
 
 void KCUnitTypeManager::_clean()
 {
-	m_Categories.clean();
+	m_Categories.Empty();
 }
 
 bool KCUnitTypeManager::configureUnitTypeByConfigFile(const TCHAR *strPath)
 {
 	_clean();
-	KCTArray<uint8> mFileBytes;
+	TArray<uint8> mFileBytes;
 	if (KCFileUtilities::loadFile(strPath, mFileBytes) == false ||
-		mFileBytes.getCount() == 0 )
+		mFileBytes.Num() == 0 )
 	{
 		return false;
 	}
@@ -38,12 +38,12 @@ bool KCUnitTypeManager::configureUnitTypeByConfigFile(const TCHAR *strPath)
 	mByteReader << iVersion;
 	mByteReader << iNumberOfCategories;
 
-	m_Categories.reserve(iNumberOfCategories);
-	KCTArray<int> mArrayOfBitLookUps;
+	m_Categories.Reserve(iNumberOfCategories);
+	TArray<int> mArrayOfBitLookUps;
 	for (int32 iCategoryIndex = 0; iCategoryIndex < iNumberOfCategories; iCategoryIndex++)
 	{
-		m_Categories.add(KC_NEW KCUnitTypeCategory(getCoreData()));
-		m_Categories.last()->_parse(mByteReader);
+		m_Categories.Add(KC_NEW KCUnitTypeCategory(getCoreData()));
+		m_Categories.Last()->_parse(mByteReader);
 	}
 	//define the unit types predefined.
 

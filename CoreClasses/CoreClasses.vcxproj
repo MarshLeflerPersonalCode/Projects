@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Target Name="OnCleanOnly" AfterTargets="Clean">
-    <Exec Command="..\CommandLineSerializer\bin\debug\CommandLineSerializer.exe -Clean -debug -SourceDir 'D:\Personal\Projects\CoreClasses\TestCases\SerializeTest' -IntermediateDir 'D:\Personal\Projects\CoreClasses\Intermediate\'" />
+    <Exec Command="..\tools\CommandLineSerializer.exe -Clean -debug -SourceDir 'D:\Personal\Projects\CoreClasses\' -IntermediateDir 'D:\Personal\Projects\CoreClasses\Intermediate\'" />
     <Message Text="Clearing Cache" Importance="High" />
   </Target>
   <ItemGroup Label="ProjectConfigurations">
@@ -171,20 +171,20 @@
       <Command>D:\Personal\Projects\Tools\CommandLineSerializer.exe -debug -SourceDir 'D:\Personal\Projects\CoreClasses\' -IntermediateDir 'D:\Personal\Projects\CoreClasses\Intermediate\' -TypeDefs 'KCDatabaseGuid=int32,StatID=int16'</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
-  <ItemGroup>
+<ItemGroup>
     <ClCompile Include="CoreClasses.cpp" />
-    <ClCompile Include="KCCore\Database\KCDatabaseManager.cpp" />
     <ClCompile Include="KCCore\KCCoreData.cpp" />
     <ClCompile Include="KCCore\KCCoreObject.cpp" />
     <ClCompile Include="KCCore\KCDefines.cpp" />
+    <ClCompile Include="KCCore\Database\KCDatabaseManager.cpp" />
+    <ClCompile Include="KCCore\Systems\DataGroup\KCDataGroup.cpp" />
+    <ClCompile Include="KCCore\Systems\DataGroup\KCDataGroupManager.cpp" />
     <ClCompile Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupBinaryReader.cpp" />
     <ClCompile Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupBinaryWriter.cpp" />
     <ClCompile Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupSimpleXMLReader.cpp" />
     <ClCompile Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupSimpleXMLWriter.cpp" />
     <ClCompile Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupStringParser.cpp" />
     <ClCompile Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupStringWriter.cpp" />
-    <ClCompile Include="KCCore\Systems\DataGroup\KCDataGroup.cpp" />
-    <ClCompile Include="KCCore\Systems\DataGroup\KCDataGroupManager.cpp" />
     <ClCompile Include="KCCore\Systems\DataGroup\Private\KCDataProperty.cpp" />
     <ClCompile Include="KCCore\Systems\Stats\KCStatHandler.cpp" />
     <ClCompile Include="KCCore\Systems\Stats\KCStatManager.cpp" />
@@ -193,21 +193,24 @@
     <ClCompile Include="KCCore\Systems\UnitTypes\KCDefinedUnitTypes.cpp" />
     <ClCompile Include="KCCore\Systems\UnitTypes\KCUnitTypeManager.cpp" />
     <ClCompile Include="KCCore\Systems\UnitTypes\Private\KCUnitTypeCategory.cpp" />
+    <ClCompile Include="KCCore\Utils\KCStringUtils.cpp" />
     <ClCompile Include="KCCore\Utils\Containers\KCName.cpp" />
     <ClCompile Include="KCCore\Utils\IO\KCFileUtilities.cpp" />
-    <ClCompile Include="KCCore\Utils\KCStringUtils.cpp" />
     <ClCompile Include="KCCore\Utils\TypeDefinitions\KCDataTypes.cpp" />
-  </ItemGroup>
-  <ItemGroup>
+</ItemGroup>
+<ItemGroup>
+    <ClInclude Include="Intermediate\EnumsByName.h" />
+    <ClInclude Include="KCCore\KCCoreData.h" />
+    <ClInclude Include="KCCore\KCCoreObject.h" />
+    <ClInclude Include="KCCore\KCDefines.h" />
+    <ClInclude Include="KCCore\KCIncludes.h" />
     <ClInclude Include="KCCore\Database\KCDatabaseManager.h" />
     <ClInclude Include="KCCore\Database\KCDBEntry.h" />
     <ClInclude Include="KCCore\Database\Private\KCDBDefinition.h" />
     <ClInclude Include="KCCore\Database\Private\KCDBInclude.h" />
     <ClInclude Include="KCCore\Database\Private\KCDBTable.h" />
-    <ClInclude Include="KCCore\KCCoreData.h" />
-    <ClInclude Include="KCCore\KCCoreObject.h" />
-    <ClInclude Include="KCCore\KCDefines.h" />
-    <ClInclude Include="KCCore\KCIncludes.h" />
+    <ClInclude Include="KCCore\Systems\DataGroup\KCDataGroup.h" />
+    <ClInclude Include="KCCore\Systems\DataGroup\KCDataGroupManager.h" />
     <ClInclude Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupBinaryReader.h" />
     <ClInclude Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupBinaryWriter.h" />
     <ClInclude Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupSimpleXMLInclude.h" />
@@ -215,8 +218,6 @@
     <ClInclude Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupSimpleXMLWriter.h" />
     <ClInclude Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupStringParser.h" />
     <ClInclude Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupStringWriter.h" />
-    <ClInclude Include="KCCore\Systems\DataGroup\KCDataGroup.h" />
-    <ClInclude Include="KCCore\Systems\DataGroup\KCDataGroupManager.h" />
     <ClInclude Include="KCCore\Systems\DataGroup\Private\KCDataGroupEnumsAndStructs.h" />
     <ClInclude Include="KCCore\Systems\DataGroup\Private\KCDataProperty.h" />
     <ClInclude Include="KCCore\Systems\Stats\KCStatHandler.h" />
@@ -230,8 +231,10 @@
     <ClInclude Include="KCCore\Systems\Stats\Private\KCStats.h" />
     <ClInclude Include="KCCore\Systems\UnitTypes\KCDefinedUnitTypes.h" />
     <ClInclude Include="KCCore\Systems\UnitTypes\KCUnitTypeManager.h" />
-    <ClInclude Include="KCCore\Systems\UnitTypes\Private\KCUnitTypeDef.h" />
     <ClInclude Include="KCCore\Systems\UnitTypes\Private\KCUnitTypeCategory.h" />
+    <ClInclude Include="KCCore\Systems\UnitTypes\Private\KCUnitTypeDef.h" />
+    <ClInclude Include="KCCore\Utils\KCAsserts.h" />
+    <ClInclude Include="KCCore\Utils\KCStringUtils.h" />
     <ClInclude Include="KCCore\Utils\Containers\KCBitArray.h" />
     <ClInclude Include="KCCore\Utils\Containers\KCName.h" />
     <ClInclude Include="KCCore\Utils\Containers\KCStringTable.h" />
@@ -240,14 +243,12 @@
     <ClInclude Include="KCCore\Utils\IO\KCFileUtilities.h" />
     <ClInclude Include="KCCore\Utils\IO\KCMemoryReader.h" />
     <ClInclude Include="KCCore\Utils\IO\KCMemoryWriter.h" />
-    <ClInclude Include="KCCore\Utils\KCAsserts.h" />
-    <ClInclude Include="KCCore\Utils\KCStringUtils.h" />
     <ClInclude Include="KCCore\Utils\Randomizers\KCSeedDefinition.h" />
     <ClInclude Include="KCCore\Utils\TypeDefinitions\KCDataTypes.h" />
     <ClInclude Include="KCCore\Utils\TypeDefinitions\KCPrimitiveTypesDefinition.h" />
     <ClInclude Include="TestCases\KCDataGroupTestCase.h" />
     <ClInclude Include="TestCases\SerializeTest\KCIncludeTest.h" />
-  </ItemGroup>
+</ItemGroup>
   <ItemGroup>
     <None Include="TestCases\SerializeTest\KCIncludeTest.inc" />
   </ItemGroup>

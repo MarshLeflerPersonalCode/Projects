@@ -1,8 +1,8 @@
 //copyright Marsh Lefler 2000-...
 #pragma once
 #include "IKCStatMathFunction.h"
-#include "Systems/Stats/KCStats.h"
-#include "KCStatMathFunction.serialize.inc"
+#include "Systems/Stats/private/KCStats.h"
+#include "KCStatMathFunctions.serialize.inc"
 
 ///////////////////////////////////////////////////////////
 //HOW TO USE
@@ -20,11 +20,11 @@ public:
 	KCSERIALIZE_CODE();
 	virtual int32 calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, int32 iValue) const
 	{			
-		return iValue + pStats->getCalculatedValueAsInt32(pStats->getStatIDByName(m_strStat));
+		return iValue + pStats->getValue(pStats->getStatIDByName(m_strStat), 0);
 	}
 	virtual float calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, float fValue) const
 	{
-		return fValue + pStats->getCalculatedValueAsFloat(pStats->getStatIDByName(m_strStat));
+		return fValue + pStats->getValue(pStats->getStatIDByName(m_strStat), 0.0f);
 	}
 	//the stat that will be added onto the current stat
 	UPROPERTY(Category = "GENERAL", DisplayName = "Stat", Meta=(List="Stats"))
@@ -38,11 +38,11 @@ public:
 	KCSERIALIZE_CODE();
 	virtual int32 calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, int32 iValue) const
 	{
-		return iValue - pStats->getCalculatedValueAsInt32(pStats->getStatIDByName(m_strStat));
+		return iValue - pStats->getValue(pStats->getStatIDByName(m_strStat), 0);
 	}
 	virtual float calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, float fValue) const
 	{
-		return fValue - pStats->getCalculatedValueAsFloat(pStats->getStatIDByName(m_strStat));
+		return fValue - pStats->getValue(pStats->getStatIDByName(m_strStat), 0.0f);
 	}
 	//the stat that will be added onto the current stat
 	UPROPERTY(Category = "GENERAL", DisplayName = "Stat", Meta = (List = "Stats"))
@@ -56,11 +56,11 @@ public:
 	KCSERIALIZE_CODE();
 	virtual int32 calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, int32 iValue) const
 	{
-		return iValue / pStats->getCalculatedValueAsInt32(pStats->getStatIDByName(m_strStat));
+		return iValue / pStats->getValue(pStats->getStatIDByName(m_strStat), 1);
 	}
 	virtual float calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, float fValue) const
 	{
-		return fValue / pStats->getCalculatedValueAsFloat(pStats->getStatIDByName(m_strStat));
+		return fValue / pStats->getValue(pStats->getStatIDByName(m_strStat), 1.0f);
 	}
 	//the stat that will be added onto the current stat
 	UPROPERTY(Category = "GENERAL", DisplayName = "Stat", Meta = (List = "Stats"))
@@ -74,11 +74,11 @@ public:
 	KCSERIALIZE_CODE();
 	virtual int32 calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, int32 iValue) const
 	{
-		return iValue * pStats->getCalculatedValueAsInt32(pStats->getStatIDByName(m_strStat));
+		return iValue * pStats->getValue(pStats->getStatIDByName(m_strStat), 1);
 	}
 	virtual float calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, float fValue) const
 	{
-		return fValue * pStats->getCalculatedValueAsFloat(pStats->getStatIDByName(m_strStat));
+		return fValue * pStats->getValue(pStats->getStatIDByName(m_strStat), 1.0f);
 	}
 	//the stat that will be added onto the current stat
 	UPROPERTY(Category = "GENERAL", DisplayName = "Stat", Meta = (List = "Stats"))
@@ -93,11 +93,11 @@ public:
 	KCSERIALIZE_CODE();
 	virtual int32 calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, int32 iValue) const
 	{
-		return (int32)((double)iValue * ((double)pStats->getCalculatedValueAsInt32(pStats->getStatIDByName(m_strStat))/ (double)m_fDenominator));
+		return (int32)((double)iValue * ((double)pStats->getValue(pStats->getStatIDByName(m_strStat), 0)/ (double)m_fDenominator));
 	}
 	virtual float calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, float fValue) const
 	{
-		return fValue * (pStats->getCalculatedValueAsFloat(pStats->getStatIDByName(m_strStat)) / m_fDenominator);
+		return fValue * (pStats->getValue(pStats->getStatIDByName(m_strStat), 0.0f) / m_fDenominator);
 	}
 	//the stat that will be added onto the current stat
 	UPROPERTY(Category = "GENERAL", DisplayName = "Stat", Meta = (List = "Stats"))
@@ -115,11 +115,11 @@ public:
 	KCSERIALIZE_CODE();
 	virtual int32 calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, int32 iValue) const
 	{
-		return (int32)((double)iValue * ((double)m_fValue + ((double)pStats->getCalculatedValueAsInt32(pStats->getStatIDByName(m_strStat)) / (double)m_fDenominator)));
+		return (int32)((double)iValue * ((double)m_fValue + ((double)pStats->getValue(pStats->getStatIDByName(m_strStat), 0) / (double)m_fDenominator)));
 	}
 	virtual float calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, float fValue) const
 	{
-		return fValue * (m_fValue + (pStats->getCalculatedValueAsFloat(pStats->getStatIDByName(m_strStat)) / m_fDenominator));
+		return fValue * (m_fValue + (pStats->getValue(pStats->getStatIDByName(m_strStat), 0.0f) / m_fDenominator));
 	}
 	//the stat that will be added onto the current stat
 	UPROPERTY(Category = "GENERAL", DisplayName = "Stat", Meta = (List = "Stats"))
@@ -134,17 +134,17 @@ public:
 
 //this math function divides the stat by the denominator, multiplies it by the current stat and adds that back onto the stat
 //Current = Current + ( Current * ( Stat/Denominator ))
-class KCStatMathFunctionDivideAddAndMultiply : public IKCStatMathFunction
+class KCStatMathFunctionDivideMultiplyByStatAddAndStat : public IKCStatMathFunction
 {
 public:
 	KCSERIALIZE_CODE();
 	virtual int32 calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, int32 iValue) const
 	{
-		return iValue + (int32)((double)iValue * ((double)pStats->getCalculatedValueAsInt32(pStats->getStatIDByName(m_strStat)) / (double)m_fDenominator));
+		return iValue + (int32)((double)iValue * ((double)pStats->getValue(pStats->getStatIDByName(m_strStat), 0) / (double)m_fDenominator));
 	}
 	virtual float calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, float fValue) const
 	{
-		return fValue + (fValue * (pStats->getCalculatedValueAsInt32(pStats->getStatIDByName(m_strStat)) / m_fDenominator));
+		return fValue + (fValue * (pStats->getValue(pStats->getStatIDByName(m_strStat), 0.0f) / m_fDenominator));
 	}
 	//the stat that will be added onto the current stat
 	UPROPERTY(Category = "GENERAL", DisplayName = "Stat", Meta = (List = "Stats"))

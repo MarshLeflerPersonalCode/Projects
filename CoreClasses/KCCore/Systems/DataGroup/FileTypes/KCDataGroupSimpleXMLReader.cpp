@@ -184,12 +184,12 @@ bool parseXMLTagAndChildren(KCXMLParserData &mData, KCDataGroup &mDataGroup, std
 			{				
 				return false;
 			}
-			size_t iIndexOfNextTag = mData.m_CharReader.findIndexOfNextMemoryValue('<', false);
-			if (iIndexOfNextTag == INVALID)
+			size_t iIndexOfTag = mData.m_CharReader.findIndexOfNextMemoryValue('<', false);
+			if (iIndexOfTag == INVALID)
 			{
 				return true;
 			}
-			if (mData.m_CharReader.memoryValueAtLocation(iIndexOfNextTag + 1) == '/')
+			if (mData.m_CharReader.memoryValueAtLocation(iIndexOfTag + 1) == '/')
 			{
 				//we are at the end of the tag. We need to return
 				mData.m_CharReader.findIndexOfNextMemoryValue('>', true);
@@ -208,13 +208,13 @@ bool parseXMLTagAndChildren(KCXMLParserData &mData, KCDataGroup &mDataGroup, std
 
 bool KCDataGroupSimpleXMLReader::parseDataGroupFromFile(const WCHAR *strPathAndFile, KCDataGroup &mDataGroup)
 {
-	KCTArray<uint8> mArray;
+	TArray<uint8> mArray;
 	KCEnsureAlwaysMsgReturnVal(KCFileUtilities::loadFile(strPathAndFile, mArray), "Unable to load file", false);
-	KCString strStringStream((const char*)mArray.getMemory());
+	KCString strStringStream((const char*)mArray.GetData());
 	KCXMLParserData mData;
 	mData.m_pOriginalDataGroup = &mDataGroup;
 	mData.m_strFileName = KCStringUtils::toNarrowUtf8(strPathAndFile);
-	KCString strCleaned = KCString((const char *)mArray.getMemory(), mArray.getCount());
+	KCString strCleaned = KCString((const char *)mArray.GetData(), mArray.Num());
 	strCleaned.erase(std::remove(strCleaned.begin(), strCleaned.end(), '\n'), strCleaned.end());
 	strCleaned.erase(std::remove(strCleaned.begin(), strCleaned.end(), '\r'), strCleaned.end());
 	strCleaned.erase(std::remove(strCleaned.begin(), strCleaned.end(), '\t'), strCleaned.end());
@@ -222,7 +222,7 @@ bool KCDataGroupSimpleXMLReader::parseDataGroupFromFile(const WCHAR *strPathAndF
 	std::map<KCString, int32> mTagNames;
 	parseXMLTagAndChildren(mData, mDataGroup, mTagNames);
 	mDataGroup.setProperty("_FILE_", strPathAndFile);
-	
+
 	return true;
 }
 

@@ -1,11 +1,11 @@
 //copyright Marsh Lefler 2000-...
 #pragma once
-#include "KCCore/Systems/DataGroup/KCDataGroup.h"
-#include "KCCore/Systems/DataGroup/FileTypes/KCDataGroupStringWriter.h"
-#include "KCCore/Systems/DataGroup/FileTypes/KCDataGroupStringParser.h"
-#include "KCCore/Systems/DataGroup/FileTypes/KCDataGroupBinaryWriter.h"
-#include "KCCore/Systems/DataGroup/FileTypes/KCDataGroupBinaryReader.h"
-#include "KCCore/KCIncludes.h"
+#include "Systems/DataGroup/KCDataGroup.h"
+#include "Systems/DataGroup/FileTypes/KCDataGroupStringWriter.h"
+#include "Systems/DataGroup/FileTypes/KCDataGroupStringParser.h"
+#include "Systems/DataGroup/FileTypes/KCDataGroupBinaryWriter.h"
+#include "Systems/DataGroup/FileTypes/KCDataGroupBinaryReader.h"
+#include "KCIncludes.h"
 
 
 

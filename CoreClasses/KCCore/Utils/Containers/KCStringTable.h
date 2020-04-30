@@ -1,5 +1,6 @@
 //copyright Marsh Lefler 2000-...
 //string look up by either id or string - thread safe!
+#pragma once
 #include "KCDefines.h"
 #include <algorithm>
 

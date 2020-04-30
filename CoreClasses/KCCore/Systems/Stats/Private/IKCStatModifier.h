@@ -51,7 +51,7 @@ public:
 	//returns the stat modifier owner
 	FORCEINLINE IKCStatModifier *		getStatModifierOwner() { return m_pStatModifierOwner; }
 	//returns the child stat modifiers
-	FORCEINLINE KCTArray<IKCStatModifier * > &	getChildStatModifiers() { return m_ChildStatModifiers; }
+	FORCEINLINE TArray<IKCStatModifier * > &	getChildStatModifiers() { return m_ChildStatModifiers; }
 
 protected:
 	//cleans up the stat modifier - removing it from it's parent and removing it's children
@@ -71,6 +71,6 @@ protected:
 	virtual void						setStatModifierOwner(IKCStatModifier *pOwner) { m_pStatModifierOwner = pOwner; }
 private:
 	IKCStatModifier						*m_pStatModifierOwner = nullptr;
-	KCTArray< IKCStatModifier * >		m_ChildStatModifiers;
+	TArray< IKCStatModifier * >		m_ChildStatModifiers;
 };
 

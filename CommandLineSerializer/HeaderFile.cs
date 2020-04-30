@@ -360,7 +360,11 @@ namespace CommandLineSerializer
 			if (strVariableType.Contains("<"))
 			{
 				strVariableType = strVariableType.Substring(0, strVariableType.IndexOf("<"));
-			}
+                if (strVariableType.Contains("TArray")) //HACK!
+                {
+                    return true;
+                }
+            }
 			ClassStructure mClassStruct = m_Controller.getProjectWrapper().getClassStructByName(strVariableType);
 			if (mClassStruct != null)
 			{

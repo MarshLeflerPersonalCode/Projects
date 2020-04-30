@@ -12,7 +12,7 @@
 
 
 
-class STATS
+class KCCORE_API KCSTATS
 {
 public:
 	//must be called to define the stats

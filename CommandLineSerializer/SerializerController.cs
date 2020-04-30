@@ -231,7 +231,7 @@ namespace CommandLineSerializer
 			if( m_StopWatch != null)
 			{
 				int iCountOfFilesParsed = (m_ClassParserManager != null) ? m_ClassParserManager.filesNeedingUpdate.Count : 0;
-				string strTimeExecuting = "Executing Command Line Serializer on " + iCountOfFilesParsed.ToString() + " header files, on " + getThreadsToUse().ToString() + " threads took :" + m_StopWatch.Elapsed.TotalSeconds.ToString() + " seconds.";
+				string strTimeExecuting = "Executing Command Line Serializer. Found " + m_ClassParserManager.getNumberOfFilesParsed().ToString() + " files to parse, " + iCountOfFilesParsed.ToString() + " changes/headers parsed. " + getThreadsToUse().ToString() + " threads took :" + m_StopWatch.Elapsed.TotalSeconds.ToString() + " seconds.";
 				if (m_LogFile != null &&
 					m_LogFile.logOnlyErrors == false)
 				{
@@ -548,7 +548,7 @@ namespace CommandLineSerializer
             string strEnumCPPFile = Path.Combine(strPathToIntermediateDir, "EnumsByName.cpp");
             StringWriter mHeaderWriter = new StringWriter();
             mHeaderWriter.WriteLine("#pragma once" + Environment.NewLine + Environment.NewLine);
-            mHeaderWriter.WriteLine("#include \"KCDefines.h\"" + Environment.NewLine + Environment.NewLine);
+            mHeaderWriter.WriteLine("#include \"KCIncludes.h\"" + Environment.NewLine + Environment.NewLine);
             mHeaderWriter.WriteLine("class _SERIALIZER_");
             mHeaderWriter.WriteLine("{");
             mHeaderWriter.WriteLine("public:");
@@ -608,9 +608,9 @@ namespace CommandLineSerializer
 
 
 
-            mHeaderWriter.WriteLine("static const KCTArray<KCString> & _getEnumItemNamesByEnumName(const KCString &strEnumName)");
+            mHeaderWriter.WriteLine("static const TArray<KCString> & _getEnumItemNamesByEnumName(const KCString &strEnumName)");
             mHeaderWriter.WriteLine("{");
-            mHeaderWriter.WriteLine("    static std::unordered_map<KCString, KCTArray<KCString>> m_EnumLookUpByName;");
+            mHeaderWriter.WriteLine("    static std::unordered_map<KCString, TArray<KCString>> m_EnumLookUpByName;");
             mHeaderWriter.WriteLine("     if(m_EnumLookUpByName.size() > 0 )");
             mHeaderWriter.WriteLine("     {");
             mHeaderWriter.WriteLine("          return m_EnumLookUpByName[strEnumName];");
@@ -618,8 +618,9 @@ namespace CommandLineSerializer
             foreach (EnumList mEnumList in m_ClassParserManager.getProjectWrapper().enums.Values)
             {
                 mHeaderWriter.WriteLine("     {");
-                mHeaderWriter.WriteLine("          m_EnumLookUpByName[\"" + mEnumList.enumName + "\"] = KCTArray<KCString>(" + mEnumList.enumItems.Count + ");");
-                mHeaderWriter.WriteLine("          KCTArray<KCString> &mArray1 = m_EnumLookUpByName[\"" + mEnumList.enumName + "\"];");
+                mHeaderWriter.WriteLine("          m_EnumLookUpByName[\"" + mEnumList.enumName + "\"] = TArray<KCString>();");                
+                mHeaderWriter.WriteLine("          TArray<KCString> &mArray1 = m_EnumLookUpByName[\"" + mEnumList.enumName + "\"];");
+                mHeaderWriter.WriteLine("          mArray1.Reserve(" + mEnumList.enumItems.Count + ");");
                 mHeaderWriter.Write("          ");
                 int iIndex = 0;
                 foreach (EnumItem mItem in mEnumList.enumItems)

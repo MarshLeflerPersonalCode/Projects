@@ -57,6 +57,7 @@ void _cleanString(std::string &strString)
 	_removeFromBack(strString, " ");
 	_removeFromFront(strString, " ");
 	_removeFromFront(strString, "\t");
+	_removeFromBack(strString, "\r");
 	_removeComments(strString);
 }
 
@@ -145,9 +146,9 @@ bool _parseDataGroup(KCDataGroup &mDataGroupParent, std::stringstream &mStringSt
 
 bool KCDataGroupStringParser::parseDataGroupFromFile(const WCHAR *strPathAndFile, KCDataGroup &mDataGroup)
 {
-	KCTArray<uint8> mArray;
+	TArray<uint8> mArray;
 	KCEnsureAlwaysMsgReturnVal(KCFileUtilities::loadFile(strPathAndFile, mArray), "Unable to load file", false);
-	std::stringstream   mStringStream((const char*)mArray.getMemory());
+	std::stringstream   mStringStream((const char*)mArray.GetData());
 	std::string strString;
 	while (std::getline(mStringStream, strString, '\n'))
 	{

@@ -21,7 +21,7 @@ public:
 	~KCCoreData();
 	
 	//initializes the core data
-	void								_initialize();
+	void								_initialize(const KCWString &mContentPath);
 	//returns the data group manager
 	KCDataGroupManager *				getDataGroupManager() { return &m_DataGroupManager; }
 	const KCDataGroupManager *			getDataGroupManager() const { return &m_DataGroupManager; }
@@ -31,11 +31,14 @@ public:
 	const KCStatManager *				getStatManager() const { return &m_StatManager; }
 	//returns the stat manager	
 	const KCUnitTypeManager *			getUnitTypeManager() const { return &m_UnitTypeManager; }
-
+	//returns the content path
+	const KCWString &					getContentPath() const { return m_strContentPath; }
 private:
 	KCDataGroupManager					m_DataGroupManager;
 	KCDatabaseManager					m_DatabaseManager;
 	KCStatManager						m_StatManager;
 	KCUnitTypeManager					m_UnitTypeManager;
+	KCWString							m_strContentPath;
+	
 };
 

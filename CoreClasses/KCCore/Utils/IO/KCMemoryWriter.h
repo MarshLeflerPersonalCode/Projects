@@ -13,15 +13,15 @@ class KCMemoryWriter
 public:
 	KCMemoryWriter(uint32 iGrowBy = 1000)
 	{
-		m_MemoryArray.setGrowBy(iGrowBy);				
+		m_MemoryArray.Reserve(iGrowBy);				
 		m_iCurrentByteIndex = 0;
 	}
 	FORCEINLINE uint32			tell() { return m_iCurrentByteIndex; }
 	FORCEINLINE bool			seekBeginning() { m_iCurrentByteIndex = 0; }
-	FORCEINLINE bool			seekEnd() { m_iCurrentByteIndex = m_MemoryArray.getCount(); }
+	FORCEINLINE bool			seekEnd() { m_iCurrentByteIndex = m_MemoryArray.Num(); }
 	FORCEINLINE bool			seek(uint32 iLocation)
 	{
-		if (iLocation >= 0 && iLocation < m_MemoryArray.getCount())
+		if (iLocation >= 0 && iLocation < m_MemoryArray.Num())
 		{
 			m_iCurrentByteIndex = iLocation;
 			return true;
@@ -34,11 +34,11 @@ public:
 	}
 
 	//returns the memory
-	const MemoryType *			getMemory() const { return m_MemoryArray.getMemory(); }
+	const MemoryType *			getMemory() const { return m_MemoryArray.GetData(); }
 	//returns the memory size
-	size_t						getMemorySize() { return m_MemoryArray.getMemorySize(); }
+	size_t						getMemorySize() { return m_MemoryArray.GetAllocatedSize(); }
 	//returns the memory size
-	uint32						getArrayCount(){ return m_MemoryArray.getCount(); }
+	uint32						getArrayCount(){ return m_MemoryArray.Num(); }
 
 
 	FORCEINLINE bool			writeValue(const void *pValue, size_t iSize)
@@ -51,9 +51,9 @@ public:
 		{
 			uint8 iValue = pByteArray[iArrayIndex];
 			iArrayIndex++;
-			if (iIndex >= m_MemoryArray.getCount())
+			if (iIndex >= (uint32)m_MemoryArray.Num())
 			{
-				m_MemoryArray.add(iValue);
+				m_MemoryArray.Add(iValue);
 			}
 			else
 			{
@@ -218,7 +218,7 @@ private:
 		writeValue(&g_cEndLine, sizeof(char));
 		return true;
 	}
-	KCTArray<MemoryType>	m_MemoryArray;
+	TArray<MemoryType>	m_MemoryArray;
 	uint32					m_iCurrentByteIndex = 0;
 
 };

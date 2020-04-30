@@ -1,83 +1,49 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ItemGroup>
-    <Filter Include="KCCore">
-      <UniqueIdentifier>{cde37509-470a-4c57-9657-ed2c7041e49b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="KCCore\Utils">
-      <UniqueIdentifier>{24bde16d-a036-4d02-ae3d-be773ab6ed18}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="TestCases">
-      <UniqueIdentifier>{30588aac-bcaf-4269-9250-fc69cc5ed5f0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="TestCases\serializeTest">
-      <UniqueIdentifier>{b53d2183-32d2-4c4e-8076-0b108324295c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="KCCore\Utils\Randomizers">
-      <UniqueIdentifier>{cbce1fc8-7c29-4e18-ab85-970546c2a3fb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="KCCore\Systems">
-      <UniqueIdentifier>{f8d2d341-5729-4078-9d32-37e2410d7f0d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="KCCore\Systems\DataGroup">
-      <UniqueIdentifier>{13320a7f-f179-4ee9-91f4-42490dce9794}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="KCCore\Systems\Stats">
-      <UniqueIdentifier>{59bf2163-5d2c-47d8-b090-bfa88bd6be8a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="KCCore\Systems\UnitTypes">
-      <UniqueIdentifier>{ab70d1ba-c005-4841-a3e7-20901289579c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="KCCore\Systems\DataGroup\FileTypes">
-      <UniqueIdentifier>{c28582c8-4278-4e3f-a356-4fa4c854de3d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="KCCore\Systems\DataGroup\Private">
-      <UniqueIdentifier>{205a3a25-0f42-47fc-a8d8-337d87461c2b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="KCCore\Systems\UnitTypes\Private">
-      <UniqueIdentifier>{80918fe4-5832-414d-9607-62dd7dc289e6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="KCCore\Systems\UnitTypes\UnitTypes">
-      <UniqueIdentifier>{05452781-a7ed-484c-b404-0cafd9d6c459}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="KCCore\Systems\Stats\Private">
-      <UniqueIdentifier>{b45ebb28-9de2-41c7-b8cd-bf531479ab0f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="KCCore\Utils\Containers">
-      <UniqueIdentifier>{d6d1c580-2d24-4414-a16b-b99647cec85f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="KCCore\Utils\IO">
-      <UniqueIdentifier>{fc46b3b2-2b2f-4412-9313-57ca25805ec0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="KCCore\Database">
-      <UniqueIdentifier>{ab224903-9e6b-41ab-b1cc-778cc1f5b1e1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="KCCore\Utils\TypeDefinitions">
-      <UniqueIdentifier>{f82ed2a4-743b-4924-af8a-2f68a25d3a21}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="KCCore\Database\Private">
-      <UniqueIdentifier>{3a2d4750-507a-4306-8005-5f9cadbf0b99}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="KCCore\Utils\Helpers">
-      <UniqueIdentifier>{e43925e9-6d79-4e1a-adb4-2cae16bad593}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="KCCore\Systems\Stats\MathFunctions">
-      <UniqueIdentifier>{84d64714-b050-4c33-b48d-76026736f62d}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="CoreClasses.cpp" />
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" >
+<ItemGroup>
+    <Filter Include="Intermediate" />
+    <Filter Include="KCCore" />
+    <Filter Include="KCCore\Database" />
+    <Filter Include="KCCore\Database\Private" />
+    <Filter Include="KCCore\Systems" />
+    <Filter Include="KCCore\Systems\DataGroup" />
+    <Filter Include="KCCore\Systems\DataGroup\FileTypes" />
+    <Filter Include="KCCore\Systems\DataGroup\Private" />
+    <Filter Include="KCCore\Systems\Stats" />
+    <Filter Include="KCCore\Systems\Stats\MathFunctions" />
+    <Filter Include="KCCore\Systems\Stats\Private" />
+    <Filter Include="KCCore\Systems\UnitTypes" />
+    <Filter Include="KCCore\Systems\UnitTypes\Private" />
+    <Filter Include="KCCore\Utils" />
+    <Filter Include="KCCore\Utils\Containers" />
+    <Filter Include="KCCore\Utils\Helpers" />
+    <Filter Include="KCCore\Utils\IO" />
+    <Filter Include="KCCore\Utils\Randomizers" />
+    <Filter Include="KCCore\Utils\TypeDefinitions" />
+    <Filter Include="TestCases" />
+    <Filter Include="TestCases\SerializeTest" />
+</ItemGroup>
+<ItemGroup>
+    <ClCompile Include="CoreClasses.cpp">
+      <Filter></Filter>
+    </ClCompile>
+    <ClCompile Include="KCCore\KCCoreData.cpp">
+      <Filter>KCCore</Filter>
+    </ClCompile>
+    <ClCompile Include="KCCore\KCCoreObject.cpp">
+      <Filter>KCCore</Filter>
+    </ClCompile>
     <ClCompile Include="KCCore\KCDefines.cpp">
       <Filter>KCCore</Filter>
     </ClCompile>
-    <ClCompile Include="KCCore\Utils\KCStringUtils.cpp">
-      <Filter>KCCore\Utils</Filter>
+    <ClCompile Include="KCCore\Database\KCDatabaseManager.cpp">
+      <Filter>KCCore\Database</Filter>
     </ClCompile>
     <ClCompile Include="KCCore\Systems\DataGroup\KCDataGroup.cpp">
       <Filter>KCCore\Systems\DataGroup</Filter>
     </ClCompile>
-    <ClCompile Include="KCCore\Systems\DataGroup\Private\KCDataProperty.cpp">
-      <Filter>KCCore\Systems\DataGroup\Private</Filter>
+    <ClCompile Include="KCCore\Systems\DataGroup\KCDataGroupManager.cpp">
+      <Filter>KCCore\Systems\DataGroup</Filter>
     </ClCompile>
     <ClCompile Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupBinaryReader.cpp">
       <Filter>KCCore\Systems\DataGroup\FileTypes</Filter>
@@ -97,8 +63,20 @@
     <ClCompile Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupStringWriter.cpp">
       <Filter>KCCore\Systems\DataGroup\FileTypes</Filter>
     </ClCompile>
+    <ClCompile Include="KCCore\Systems\DataGroup\Private\KCDataProperty.cpp">
+      <Filter>KCCore\Systems\DataGroup\Private</Filter>
+    </ClCompile>
+    <ClCompile Include="KCCore\Systems\Stats\KCStatHandler.cpp">
+      <Filter>KCCore\Systems\Stats</Filter>
+    </ClCompile>
     <ClCompile Include="KCCore\Systems\Stats\KCStatManager.cpp">
       <Filter>KCCore\Systems\Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="KCCore\Systems\Stats\KCStatsDefined.cpp">
+      <Filter>KCCore\Systems\Stats</Filter>
+    </ClCompile>
+    <ClCompile Include="KCCore\Systems\Stats\Private\KCStats.cpp">
+      <Filter>KCCore\Systems\Stats\Private</Filter>
     </ClCompile>
     <ClCompile Include="KCCore\Systems\UnitTypes\KCDefinedUnitTypes.cpp">
       <Filter>KCCore\Systems\UnitTypes</Filter>
@@ -109,6 +87,9 @@
     <ClCompile Include="KCCore\Systems\UnitTypes\Private\KCUnitTypeCategory.cpp">
       <Filter>KCCore\Systems\UnitTypes\Private</Filter>
     </ClCompile>
+    <ClCompile Include="KCCore\Utils\KCStringUtils.cpp">
+      <Filter>KCCore\Utils</Filter>
+    </ClCompile>
     <ClCompile Include="KCCore\Utils\Containers\KCName.cpp">
       <Filter>KCCore\Utils\Containers</Filter>
     </ClCompile>
@@ -118,55 +99,43 @@
     <ClCompile Include="KCCore\Utils\TypeDefinitions\KCDataTypes.cpp">
       <Filter>KCCore\Utils\TypeDefinitions</Filter>
     </ClCompile>
-    <ClCompile Include="KCCore\Database\KCDatabaseManager.cpp">
-      <Filter>KCCore\Database</Filter>
-    </ClCompile>
-    <ClCompile Include="KCCore\Systems\DataGroup\KCDataGroupManager.cpp">
-      <Filter>KCCore\Systems\DataGroup</Filter>
-    </ClCompile>
-    <ClCompile Include="KCCore\Systems\Stats\KCStatsDefined.cpp">
-      <Filter>KCCore\Systems\Stats</Filter>
-    </ClCompile>
-    <ClCompile Include="KCCore\Systems\Stats\KCStatHandler.cpp">
-      <Filter>KCCore\Systems\Stats</Filter>
-    </ClCompile>
-    <ClCompile Include="KCCore\Systems\Stats\Private\KCStats.cpp">
-      <Filter>KCCore\Systems\Stats\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="KCCore\KCCoreData.cpp">
+</ItemGroup>
+<ItemGroup>
+    <ClInclude Include="Intermediate\EnumsByName.h">
+      <Filter>Intermediate</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\KCCoreData.h">
       <Filter>KCCore</Filter>
-    </ClCompile>
-    <ClCompile Include="KCCore\KCCoreObject.cpp">
+    </ClInclude>
+    <ClInclude Include="KCCore\KCCoreObject.h">
       <Filter>KCCore</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
+    </ClInclude>
     <ClInclude Include="KCCore\KCDefines.h">
       <Filter>KCCore</Filter>
     </ClInclude>
     <ClInclude Include="KCCore\KCIncludes.h">
       <Filter>KCCore</Filter>
     </ClInclude>
-    <ClInclude Include="KCCore\Utils\KCAsserts.h">
-      <Filter>KCCore\Utils</Filter>
+    <ClInclude Include="KCCore\Database\KCDatabaseManager.h">
+      <Filter>KCCore\Database</Filter>
     </ClInclude>
-    <ClInclude Include="TestCases\KCDataGroupTestCase.h">
-      <Filter>TestCases</Filter>
+    <ClInclude Include="KCCore\Database\KCDBEntry.h">
+      <Filter>KCCore\Database</Filter>
     </ClInclude>
-    <ClInclude Include="KCCore\Utils\KCStringUtils.h">
-      <Filter>KCCore\Utils</Filter>
+    <ClInclude Include="KCCore\Database\Private\KCDBDefinition.h">
+      <Filter>KCCore\Database\Private</Filter>
     </ClInclude>
-    <ClInclude Include="TestCases\SerializeTest\KCIncludeTest.h">
-      <Filter>TestCases\serializeTest</Filter>
+    <ClInclude Include="KCCore\Database\Private\KCDBInclude.h">
+      <Filter>KCCore\Database\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Database\Private\KCDBTable.h">
+      <Filter>KCCore\Database\Private</Filter>
     </ClInclude>
     <ClInclude Include="KCCore\Systems\DataGroup\KCDataGroup.h">
       <Filter>KCCore\Systems\DataGroup</Filter>
     </ClInclude>
-    <ClInclude Include="KCCore\Systems\DataGroup\Private\KCDataGroupEnumsAndStructs.h">
-      <Filter>KCCore\Systems\DataGroup\Private</Filter>
-    </ClInclude>
-    <ClInclude Include="KCCore\Systems\DataGroup\Private\KCDataProperty.h">
-      <Filter>KCCore\Systems\DataGroup\Private</Filter>
+    <ClInclude Include="KCCore\Systems\DataGroup\KCDataGroupManager.h">
+      <Filter>KCCore\Systems\DataGroup</Filter>
     </ClInclude>
     <ClInclude Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupBinaryReader.h">
       <Filter>KCCore\Systems\DataGroup\FileTypes</Filter>
@@ -189,13 +158,37 @@
     <ClInclude Include="KCCore\Systems\DataGroup\FileTypes\KCDataGroupStringWriter.h">
       <Filter>KCCore\Systems\DataGroup\FileTypes</Filter>
     </ClInclude>
+    <ClInclude Include="KCCore\Systems\DataGroup\Private\KCDataGroupEnumsAndStructs.h">
+      <Filter>KCCore\Systems\DataGroup\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Systems\DataGroup\Private\KCDataProperty.h">
+      <Filter>KCCore\Systems\DataGroup\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Systems\Stats\KCStatHandler.h">
+      <Filter>KCCore\Systems\Stats</Filter>
+    </ClInclude>
     <ClInclude Include="KCCore\Systems\Stats\KCStatManager.h">
       <Filter>KCCore\Systems\Stats</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Systems\Stats\KCStatsDefined.h">
+      <Filter>KCCore\Systems\Stats</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Systems\Stats\MathFunctions\IKCStatMathFunction.h">
+      <Filter>KCCore\Systems\Stats\MathFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Systems\Stats\MathFunctions\KCStatMathFunctions.h">
+      <Filter>KCCore\Systems\Stats\MathFunctions</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Systems\Stats\Private\IKCStatModifier.h">
+      <Filter>KCCore\Systems\Stats\Private</Filter>
     </ClInclude>
     <ClInclude Include="KCCore\Systems\Stats\Private\KCStatDefinition.h">
       <Filter>KCCore\Systems\Stats\Private</Filter>
     </ClInclude>
     <ClInclude Include="KCCore\Systems\Stats\Private\KCStatInclude.h">
+      <Filter>KCCore\Systems\Stats\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Systems\Stats\Private\KCStats.h">
       <Filter>KCCore\Systems\Stats\Private</Filter>
     </ClInclude>
     <ClInclude Include="KCCore\Systems\UnitTypes\KCDefinedUnitTypes.h">
@@ -207,6 +200,18 @@
     <ClInclude Include="KCCore\Systems\UnitTypes\Private\KCUnitTypeCategory.h">
       <Filter>KCCore\Systems\UnitTypes\Private</Filter>
     </ClInclude>
+    <ClInclude Include="KCCore\Systems\UnitTypes\Private\KCUnitTypeDef.h">
+      <Filter>KCCore\Systems\UnitTypes\Private</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Utils\KCAsserts.h">
+      <Filter>KCCore\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Utils\KCStringUtils.h">
+      <Filter>KCCore\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Utils\Containers\KCBitArray.h">
+      <Filter>KCCore\Utils\Containers</Filter>
+    </ClInclude>
     <ClInclude Include="KCCore\Utils\Containers\KCName.h">
       <Filter>KCCore\Utils\Containers</Filter>
     </ClInclude>
@@ -215,6 +220,9 @@
     </ClInclude>
     <ClInclude Include="KCCore\Utils\Containers\KCTArray.h">
       <Filter>KCCore\Utils\Containers</Filter>
+    </ClInclude>
+    <ClInclude Include="KCCore\Utils\Helpers\KCBitAndMaskUtils.h">
+      <Filter>KCCore\Utils\Helpers</Filter>
     </ClInclude>
     <ClInclude Include="KCCore\Utils\IO\KCFileUtilities.h">
       <Filter>KCCore\Utils\IO</Filter>
@@ -225,70 +233,21 @@
     <ClInclude Include="KCCore\Utils\IO\KCMemoryWriter.h">
       <Filter>KCCore\Utils\IO</Filter>
     </ClInclude>
+    <ClInclude Include="KCCore\Utils\Randomizers\KCSeedDefinition.h">
+      <Filter>KCCore\Utils\Randomizers</Filter>
+    </ClInclude>
     <ClInclude Include="KCCore\Utils\TypeDefinitions\KCDataTypes.h">
       <Filter>KCCore\Utils\TypeDefinitions</Filter>
     </ClInclude>
     <ClInclude Include="KCCore\Utils\TypeDefinitions\KCPrimitiveTypesDefinition.h">
       <Filter>KCCore\Utils\TypeDefinitions</Filter>
     </ClInclude>
-    <ClInclude Include="KCCore\Utils\Randomizers\KCSeedDefinition.h">
-      <Filter>KCCore\Utils\Randomizers</Filter>
+    <ClInclude Include="TestCases\KCDataGroupTestCase.h">
+      <Filter>TestCases</Filter>
     </ClInclude>
-    <ClInclude Include="KCCore\Database\Private\KCDBDefinition.h">
-      <Filter>KCCore\Database\Private</Filter>
+    <ClInclude Include="TestCases\SerializeTest\KCIncludeTest.h">
+      <Filter>TestCases\SerializeTest</Filter>
     </ClInclude>
-    <ClInclude Include="KCCore\Database\Private\KCDBInclude.h">
-      <Filter>KCCore\Database\Private</Filter>
-    </ClInclude>
-    <ClInclude Include="KCCore\Database\KCDBEntry.h">
-      <Filter>KCCore\Database</Filter>
-    </ClInclude>
-    <ClInclude Include="KCCore\Utils\Helpers\KCBitAndMaskUtils.h">
-      <Filter>KCCore\Utils\Helpers</Filter>
-    </ClInclude>
-    <ClInclude Include="KCCore\Database\KCDatabaseManager.h">
-      <Filter>KCCore\Database</Filter>
-    </ClInclude>
-    <ClInclude Include="KCCore\Database\Private\KCDBTable.h">
-      <Filter>KCCore\Database\Private</Filter>
-    </ClInclude>
-    <ClInclude Include="KCCore\Systems\DataGroup\KCDataGroupManager.h">
-      <Filter>KCCore\Systems\DataGroup</Filter>
-    </ClInclude>
-    <ClInclude Include="KCCore\Systems\UnitTypes\Private\KCUnitTypeDef.h">
-      <Filter>KCCore\Systems\UnitTypes\Private</Filter>
-    </ClInclude>
-    <ClInclude Include="KCCore\Utils\Containers\KCBitArray.h">
-      <Filter>KCCore\Utils\Containers</Filter>
-    </ClInclude>
-    <ClInclude Include="KCCore\Systems\Stats\KCStatsDefined.h">
-      <Filter>KCCore\Systems\Stats</Filter>
-    </ClInclude>
-    <ClInclude Include="KCCore\Systems\Stats\MathFunctions\IKCStatMathFunction.h">
-      <Filter>KCCore\Systems\Stats\MathFunctions</Filter>
-    </ClInclude>
-    <ClInclude Include="KCCore\Systems\Stats\MathFunctions\KCStatMathFunctions.h">
-      <Filter>KCCore\Systems\Stats\MathFunctions</Filter>
-    </ClInclude>
-    <ClInclude Include="KCCore\Systems\Stats\KCStatHandler.h">
-      <Filter>KCCore\Systems\Stats</Filter>
-    </ClInclude>
-    <ClInclude Include="KCCore\Systems\Stats\Private\KCStats.h">
-      <Filter>KCCore\Systems\Stats\Private</Filter>
-    </ClInclude>
-    <ClInclude Include="KCCore\KCCoreData.h">
-      <Filter>KCCore</Filter>
-    </ClInclude>
-    <ClInclude Include="KCCore\KCCoreObject.h">
-      <Filter>KCCore</Filter>
-    </ClInclude>
-    <ClInclude Include="KCCore\Systems\Stats\Private\IKCStatModifier.h">
-      <Filter>KCCore\Systems\Stats\Private</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="TestCases\SerializeTest\KCIncludeTest.inc">
-      <Filter>TestCases\serializeTest</Filter>
-    </None>
-  </ItemGroup>
+</ItemGroup>
+
 </Project>

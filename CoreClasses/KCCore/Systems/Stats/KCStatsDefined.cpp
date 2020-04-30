@@ -1,10 +1,11 @@
+#include "KCStatsDefined.h"
 #include "Systems/Stats/KCStatManager.h"
 
 
-KCStatID			STATS::RANK = INVALID;
+KCStatID			KCSTATS::RANK = INVALID;
 
 void _defineStats(KCStatManager *pManager)
 {
 	KCEnsureAlwaysReturn(pManager);
-	STATS::RANK = pManager->getStatID("Rank");
+	KCSTATS::RANK = pManager->getStatID("Rank");
 }

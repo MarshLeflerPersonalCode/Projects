@@ -11,7 +11,7 @@ void FCoreTest::StartupModule()
 {
 
 	KCCoreModule &mModule = KCCoreModule::get();
-	UNITTYPE::KCUnitTypeManager *pManager = UNITTYPE::KCUnitTypeManager::getSingleton();// mModule.getUnitTypeManager();
+	//UNITTYPE::KCUnitTypeManager *pManager = UNITTYPE::KCUnitTypeManager::getSingleton();// mModule.getUnitTypeManager();
 }
 
 void FCoreTest::ShutdownModule()

@@ -55,6 +55,8 @@ namespace Library.ClassParser
 			return m_Config.addFile(strHeaderFile);
 		}
 
+        public int getNumberOfFilesParsed() { return m_Config.files.Count; }
+
 		public ProjectWrapper getProjectWrapper() { return m_ProjectWrapper; }
 
 		

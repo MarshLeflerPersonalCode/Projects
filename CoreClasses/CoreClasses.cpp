@@ -28,7 +28,7 @@ int main()
 
 	printf("The current working directory is %s\n", cCurrentPath);
 	KCCoreData mCoreData;
-	mCoreData._initialize();
+	mCoreData._initialize(L"\\Content\\");
 	
 	if (mCoreData.getUnitTypeManager())//.configureUnitTypeByConfigFile(L"..\\UE4Projects\\CoreTest\\Content\\RawData\\unittypes.bin"))
 	{
@@ -74,14 +74,14 @@ int main()
 	KCStatHandler mStatHandler3(&mCoreData, UNITTYPES::WEAPON);
 	mStatHandler1.addChildStatModifier(&mStatHandler2);
 	mStatHandler1.addChildStatModifier(&mStatHandler3);
-	mStatHandler1.setRawValue(STATS::RANK, 1);
-	mStatHandler2.setRawValue(STATS::RANK, 3);
-	mStatHandler3.setRawValue(STATS::RANK, 13);
-	KCEnsureAlways( mStatHandler1.getStatValueFullHierarchy(STATS::RANK, 1) == 17);
-	KCEnsureAlways(mStatHandler2.getStatValueSelfOnly(STATS::RANK, 1) == 3);
-	KCEnsureAlways(mStatHandler2.getStatValueFullHierarchy(STATS::RANK, 1) == 17);
-	KCEnsureAlways(mStatHandler2.getStatValueForWeapon(STATS::RANK, 1) == 4);
-	KCEnsureAlways(mStatHandler3.getStatValueForWeapon(STATS::RANK, 1) == 14);
+	mStatHandler1.setRawValue(KCSTATS::RANK, 1);
+	mStatHandler2.setRawValue(KCSTATS::RANK, 3);
+	mStatHandler3.setRawValue(KCSTATS::RANK, 13);
+	KCEnsureAlways( mStatHandler1.getStatValueFullHierarchy(KCSTATS::RANK, 1) == 17);
+	KCEnsureAlways(mStatHandler2.getStatValueSelfOnly(KCSTATS::RANK, 1) == 3);
+	KCEnsureAlways(mStatHandler2.getStatValueFullHierarchy(KCSTATS::RANK, 1) == 17);
+	KCEnsureAlways(mStatHandler2.getStatValueForWeapon(KCSTATS::RANK, 1) == 4);
+	KCEnsureAlways(mStatHandler3.getStatValueForWeapon(KCSTATS::RANK, 1) == 14);
 
 
 	KCDataGroup mSecondGroup;
@@ -123,7 +123,7 @@ int main()
 	mStatDefinition.m_strName = "HELLO!";
 	mStatDefinition.m_eStatType = ESTAT_PRIMITIVE_TYPES::FLOAT;
 	mStatDefinition.m_DatabaseGuid = 324234;
-	mStatDefinition.setDatabaseTable(DATABASE::EDATABASE_TABLES::STATS);
+	mStatDefinition.setDatabaseTable(DATABASE::EDATABASE_TABLES::STATS_DATABASE);
 	mStatDefinition.serialize(mSerializeStat);
 	FKCStatDefinition mStatDefinitionDeserialized;
 	mStatDefinitionDeserialized.deserialize(mSerializeStat);

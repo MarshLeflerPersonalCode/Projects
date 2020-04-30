@@ -7,11 +7,16 @@ enum class ETARRAY_GROW_BY_TYPES
 	DOUBLE,				//doubles everytime it reaches max
 	PREDEFINED			//predefined grow by value
 };
+#ifdef USING_UE4
+
+
+
+#else
 
 template<class T>
 class KCTArray
 {
-public:	
+public:
 	KCTArray(uint32 iGrowBy = 0)
 	{
 		if (iGrowBy > 0)
@@ -33,37 +38,21 @@ public:
 		{
 			DELETE_SAFELY(m_Memory[iIndex]);
 		}
-		clean();		
-		
+		clean();
+
 	}
 
-#if USING_UE4
-	//copies a UE4 array into our TArray. If bResetMemory is true, it'll do a clean first. If it's false, it'll append the memory copy
-	bool						copyMemoryUE4(TArray<T> &mArray, bool bResetMemory = true)
+
+	//assuming a memory copy - reserves the space needed and returns the memory. If bResetMemory is true, it'll do a clean first. If it's false, it'll append the memory copy
+	T *							_attemptMemoryCopy(uint32 iIntendedMemorySize, bool bResetMemory = true)
 	{
 		if (bResetMemory)
 		{
 			clean();
 		}
 		uint32 iCurrentMemoryLocation = m_iCountOfItems;	//this will always be zero if bResetMemory is true. Else we'll use it to pass that memory location out so it can be append
-		reserve(m_iCountOfItems + mArray.Num());
-		//UE4 function to copy the memory
-		ConstructItems<T>(m_Memory, mArray.GetData(), mArray.Num());
-		m_iCountOfItems += mArray.Num();
-		return true;
-	}
-#endif
-
-	//assuming a memory copy - reserves the space needed and returns the memory. If bResetMemory is true, it'll do a clean first. If it's false, it'll append the memory copy
-	T *							_attemptMemoryCopy(uint32 iIntendedMemorySize, bool bResetMemory = true) 
-	{ 
-		if (bResetMemory)
-		{
-			clean();
-		}
-		uint32 iCurrentMemoryLocation = m_iCountOfItems;	//this will always be zero if bResetMemory is true. Else we'll use it to pass that memory location out so it can be append
 		reserve(m_iCountOfItems + iIntendedMemorySize);
-		m_iCountOfItems += iIntendedMemorySize; 
+		m_iCountOfItems += iIntendedMemorySize;
 		return &m_Memory[iCurrentMemoryLocation];
 	}
 	//assuming a memory copy - reserves the space needed, and copys the memory. If bResetMemory is true, it'll do a clean first. If it's false, it'll append the memory copy
@@ -79,7 +68,7 @@ public:
 			return true;
 		}
 		return false;
-		
+
 	}
 	//strings have 0 at the end and length() or size() doesn't include it. So this is to help fix bugs when we copy strings
 	bool						_attemptCopyString(const KCString &strString, bool bResetMemory = true)
@@ -102,15 +91,14 @@ public:
 	//returns the grow by value
 	uint32						getGrowBy() const { return m_iGrowBy; }
 	//returns the memory
-	const T *					getMemory() const { return m_Memory; }
+	const T *					GetData() const { return m_Memory; }
 	//returns the memory
 	uint32						getMemoryCount() const { return m_iMemorySize; }
 	//returns the amount of memory being taken up - does a sizeof(T) * getMemoryCount()
-	size_t						getMemorySize() const { return sizeof(T) * (size_t)getMemoryCount(); }
-	//returns the count
-	FORCEINLINE uint32			getCount() const { return m_iCountOfItems; }
+	size_t						GetAllocatedSize() const { return sizeof(T) * (size_t)m_iMemorySize; }
+
 	//help support UE4
-	FORCEINLINE uint32			Num() const { return m_iCountOfItems;}
+	FORCEINLINE int32			Num() const { return m_iCountOfItems; }
 
 	//resets the contents but doesn't clear the memory
 	FORCEINLINE void			reset() { m_iCountOfItems = 0; }
@@ -119,8 +107,8 @@ public:
 	//removes all the memory and resets the count - NOTE this will not delete the objects in it.
 	FORCEINLINE void			clean() { DELETE_ARRAY_SAFELY(m_Memory); m_iMemorySize = 0; m_iCountOfItems = 0; }
 	//removes all the memory and resets the count - NOTE this will not delete the objects in it. - UE4 support
-	FORCEINLINE void			Empty(){ clean(); }
-	FORCEINLINE KCTArray&		operator=( const KCTArray &mValues)
+	FORCEINLINE void			Empty() { clean(); }
+	FORCEINLINE KCTArray&		operator=(const KCTArray &mValues)
 	{
 		clean();
 		Reserve(mValues.m_iMemorySize);
@@ -132,7 +120,7 @@ public:
 		}
 		return *this;
 	}
-	
+
 	//returns the item at the index
 	FORCEINLINE T&				operator[](uint32 iIndex)
 	{
@@ -189,7 +177,7 @@ public:
 	//returns the last item in the list
 	FORCEINLINE T &				last()
 	{
-		
+
 		return m_Memory[m_iCountOfItems - 1];
 	}
 	//returns the last item in the list - ue4 helper
@@ -204,7 +192,7 @@ public:
 		return m_Memory[m_iCountOfItems - 1];
 	}
 	//returns the last item in the list - ue4 helper
-	FORCEINLINE const T &		Last() const {return last(); }
+	FORCEINLINE const T &		Last() const { return last(); }
 
 	//returns if the item is found in the array
 	FORCEINLINE bool			Find(T item, uint32 &iIndexOfItem)
@@ -244,7 +232,7 @@ public:
 		return m_iCountOfItems - 1;
 	}
 	//adds an object - UE4 helper 
-	FORCEINLINE uint32			Add(T item){ return add(item);}
+	FORCEINLINE uint32			Add(T item) { return add(item); }
 	//removes an item, replace the last item in the index with it and returns that index. returns INVALID if not found.
 	FORCEINLINE uint32			RemoveSwap(T item)
 	{
@@ -264,7 +252,7 @@ public:
 	{
 		if (iIndex < m_iCountOfItems)
 		{
-			m_iCountOfItems--;			
+			m_iCountOfItems--;
 			m_Memory[iIndex] = m_Memory[m_iCountOfItems];
 			return true;
 		}
@@ -276,7 +264,7 @@ public:
 		_expandMemoryTo(iSize);
 	}
 	//reserves the number of slots. UE4 helper function
-	void						Reserve(uint32 iSize){reserve(iSize);}
+	void						Reserve(uint32 iSize) { reserve(iSize); }
 
 private:
 	void						 _expandMemory()
@@ -299,7 +287,7 @@ private:
 		{
 			return;
 		}
-				
+
 		T *mMemoryTemp = KC_NEW T[iNewMemory];
 
 		for (uint32 t = 0; t < m_iMemorySize; t++)
@@ -307,17 +295,18 @@ private:
 			mMemoryTemp[t] = m_Memory[t];
 		}
 
-		DELETE_ARRAY_SAFELY( m_Memory );
+		DELETE_ARRAY_SAFELY(m_Memory);
 		m_Memory = mMemoryTemp;
 		m_iMemorySize = iNewMemory;
 	}
 
 
-	
+
 	T							*m_Memory = nullptr;
 	uint32						m_iMemorySize = 0;
 	ETARRAY_GROW_BY_TYPES		m_eGrowType = ETARRAY_GROW_BY_TYPES::DOUBLE;
 	uint32						m_iGrowBy = 0;
 	uint32						m_iCountOfItems = 0;
 };
-
+#define TArray KCTArray
+#endif

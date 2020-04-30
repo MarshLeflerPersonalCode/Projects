@@ -110,7 +110,8 @@ namespace Library.ClassCreator
             addVariablePrimitive("KCString", EVARIABLE_CSHARP_TYPES.STRING);
             addVariablePrimitive("KCDatabaseGuid", EVARIABLE_CSHARP_TYPES.INT);
             addVariableList("KCTArray");
-            
+            addVariableList("TArray");
+
         }
 
 		public LogFile logFile { get; set; }

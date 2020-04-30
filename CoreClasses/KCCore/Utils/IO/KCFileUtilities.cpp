@@ -1,17 +1,23 @@
 //copyright Marsh Lefler 2000-...
 #include "KCFileUtilities.h"
+#include "Utils/KCAsserts.h"
+#include "Utils/KCStringUtils.h"
+#if USING_UE4
+#include "Misc/Paths.h"
+#include "Misc/FileHelper.h"
+#include "HAL/FileManager.h"
+#else
 #include "windows.h"
 #include <direct.h>
+#endif
 
 
-bool KCFileUtilities::loadFile(const TCHAR *strFile, KCTArray<uint8> &mArray)
+bool KCFileUtilities::loadFile(const TCHAR *strFile, TArray<uint8> &mArray)
 {
 #if USING_UE4
-	FString strFullPath = FPaths::ProjectContentDir() + strFile;
-	TArray<uint8> mUE4Array;
-	if (FFileHelper::LoadFileToArray(mUE4Array, *strFullPath, 0))
-	{
-		mArray.copyMemoryUE4(mUE4Array);
+	FString strFullPath = strFile;	
+	if (FFileHelper::LoadFileToArray(mArray, *strFullPath, 0))
+	{		
 		return true;
 	}
 	
@@ -33,15 +39,13 @@ bool KCFileUtilities::loadFile(const TCHAR *strFile, KCTArray<uint8> &mArray)
 
 }
 
-bool KCFileUtilities::saveToFile(const TCHAR* strFile, const KCTArray<uint8> mArray)
+bool KCFileUtilities::saveToFile(const TCHAR* strFile, const TArray<uint8> mArray)
 {
 #if USING_UE4
-	FString strFullPath = FPaths::ProjectContentDir() + strFile;
-	TArray<uint8> mUE4Array;
-	mUE4Array.mer
+	FString strFullPath = strFile;
+	TArray<uint8> mUE4Array(mArray.GetData(), (int32)mArray.Num());	
 	if (FFileHelper::SaveArrayToFile(mUE4Array, *strFullPath, 0))
-	{
-		mArray.copyMemoryUE4(mUE4Array);
+	{		
 		return true;
 	}
 
@@ -49,7 +53,7 @@ bool KCFileUtilities::saveToFile(const TCHAR* strFile, const KCTArray<uint8> mAr
 	FILE *pFileReader = null;
 	if (_wfopen_s(&pFileReader, strFile, L"w") == 0)
 	{
-		fwrite(mArray.getMemory(),  sizeof(uint8), (size_t)mArray.getCount(), pFileReader);
+		fwrite(mArray.GetData(),  sizeof(uint8), (size_t)mArray.Num(), pFileReader);
 		fclose(pFileReader);
 		return true;
 	}
@@ -62,14 +66,13 @@ bool KCFileUtilities::saveToFile(const TCHAR* strFile, const KCTArray<uint8> mAr
 bool KCFileUtilities::saveToFile(const TCHAR* strFile, const char *pArray, size_t iCount)
 {
 #if USING_UE4
-	FString strFullPath = FPaths::ProjectContentDir() + strFile;
-	TArray<uint8> mUE4Array;
-	mUE4Array.mer
-		if (FFileHelper::SaveArrayToFile(mUE4Array, *strFullPath, 0))
-		{
-			mArray.copyMemoryUE4(mUE4Array);
-			return true;
-		}
+	FString strFullPath = strFile;
+	TArray<uint8> mUE4Array((const uint8 *)pArray, (int32)iCount);
+	if (FFileHelper::SaveArrayToFile(mUE4Array, *strFullPath, 0))
+	{
+
+		return true;
+	}
 
 #else	 
 	FILE *pFileReader = null;
@@ -85,9 +88,25 @@ bool KCFileUtilities::saveToFile(const TCHAR* strFile, const char *pArray, size_
 	return false;
 }
 
-int32 KCFileUtilities::getFilesInDirectory(const TCHAR* strPath, const TCHAR* strSearchPattern, KCTArray<std::wstring> &mListOfFiles, bool bRecusive /*= true*/)
+int32 KCFileUtilities::getFilesInDirectory(const TCHAR* strPath, const TCHAR* strSearchPattern, TArray<KCWString> &mListOfFiles, bool bRecusive /*= true*/)
 {
 	int32 iCount(mListOfFiles.Num());
+#if USING_UE4
+	TArray<FString> mFiles;
+	if (bRecusive)
+	{
+		IFileManager::Get().FindFilesRecursive(mFiles, strPath, strSearchPattern, true, false);
+	}
+	else
+	{
+		IFileManager::Get().FindFiles(mFiles, strPath, strSearchPattern);
+	}
+	for (int32 iIndex = 0; iIndex < mFiles.Num(); iIndex++)
+	{
+		mListOfFiles.Add(*mFiles[iIndex]);
+	}
+#else
+	
 	bool bDone = false;
 	bool bAddedApplicationDirectory = false;
 	std::wstring strRootPath = strPath;
@@ -159,7 +178,9 @@ int32 KCFileUtilities::getFilesInDirectory(const TCHAR* strPath, const TCHAR* st
 	}
 
 	FindClose(mFileHandle);
+#endif
 	return mListOfFiles.Num() - iCount;
+
 }
 
 const KCString & KCFileUtilities::getApplicationDirectory()
@@ -169,7 +190,10 @@ const KCString & KCFileUtilities::getApplicationDirectory()
 	{
 		return g_strApplicationPath;
 	}
+#if USING_UE4
+	g_strApplicationPath = KCStringUtils::convertWideToUtf8( *FPaths::ProjectContentDir() );
 
+#else
 //in the future we can redefine this for unix or whatever
 #define GetCurrentDir _getcwd
 
@@ -182,7 +206,9 @@ const KCString & KCFileUtilities::getApplicationDirectory()
 	cCurrentPath[sizeof(cCurrentPath) - 1] = '\0'; /* not really required */
 	g_strApplicationPath = cCurrentPath;
 	g_strApplicationPath = g_strApplicationPath + "\\";
+#endif
 	return g_strApplicationPath;
+
 }
 
 const std::wstring & KCFileUtilities::getApplicationDirectoryWide()

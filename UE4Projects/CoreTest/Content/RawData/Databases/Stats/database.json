@@ -1,0 +1,24 @@
+{
+  "databaseName": "Stats",
+  "databaseEntryClass": "FKCStatDefinition",
+  "uniqueMask": 134217728,
+  "guidMask": 65535,
+  "multiSelect": true,
+  "propertyFilters": [
+    {
+      "VariableName": "m_strName",
+      "ColumnWidth": 120,
+      "OverrideName": ""
+    },
+    {
+      "VariableName": "m_DatabaseGuid",
+      "ColumnWidth": 80,
+      "OverrideName": "Guid"
+    },
+    {
+      "VariableName": "m_eStatType",
+      "ColumnWidth": 60,
+      "OverrideName": ""
+    }
+  ]
+}

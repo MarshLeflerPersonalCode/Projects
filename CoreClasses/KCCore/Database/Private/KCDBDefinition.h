@@ -20,18 +20,18 @@ namespace DATABASE
 #define DB_GUID_MASK_INVALID				0x80000000
 #define DB_GUID_MASK_INVALID_SHIFT			31
 
-	static FORCEINLINE bool isDatabaseGuidValid(KCDatabaseGuid iDatabaseGuid)
+	static bool isDatabaseGuidValid(KCDatabaseGuid iDatabaseGuid)
 	{
 		return ((iDatabaseGuid & DB_GUID_MASK_INVALID) == 0 && (iDatabaseGuid & DB_GUID_MASK_TABLES) != 0 && (iDatabaseGuid & DB_GUID_MASK_ID) != 0) ? true : false;
 	}
 	//gets the table mask an then shifts it to fit in a uint8
-	static FORCEINLINE uint8 getDatabaseGuidTableMaskAsUInt8(KCDatabaseGuid iDatabaseGuid)
+	static uint8 getDatabaseGuidTableMaskAsUInt8(KCDatabaseGuid iDatabaseGuid)
 	{
 		return (uint8)((iDatabaseGuid & DB_GUID_MASK_TABLES) >> 27);
 	}
 
 	//sets the database guid table by ID - return false if the datatable isn't valid
-	static FORCEINLINE bool setDatabaseGuidTable(KCDatabaseGuid &iDatabaseGuid, uint8 iTableID)
+	static bool setDatabaseGuidTable(KCDatabaseGuid &iDatabaseGuid, uint8 iTableID)
 	{
 		iDatabaseGuid = MASK_REMOVE_SECOND_MASK(iDatabaseGuid, DB_GUID_MASK_TABLES);
 		MASK_ADD_SECOND_MASK(iDatabaseGuid, ((KCDatabaseGuid)iTableID << DB_GUID_MASK_TABLES_SHIFT));

@@ -1,5 +1,5 @@
 #pragma once
-#include "KCPrimitiveTypesDefinition.h"
+#include "Utils/TypeDefinitions/KCPrimitiveTypesDefinition.h"
 
 //copyright Marsh Lefler 2000-...
 //Simple definition for defining seeds and macros for helping them be valid

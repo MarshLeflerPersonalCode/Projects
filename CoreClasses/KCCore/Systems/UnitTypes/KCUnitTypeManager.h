@@ -29,7 +29,7 @@ public:
 	//returns the category Index by name
 	uint32							getCategoryIndexByName(const KCString &strCategoryName) const
 	{
-		for (uint32 iCategoryIndex = 0; iCategoryIndex < m_Categories.getCount(); iCategoryIndex++)
+		for (int32 iCategoryIndex = 0; iCategoryIndex < m_Categories.Num(); iCategoryIndex++)
 		{
 			if (m_Categories[iCategoryIndex]->getCategoryName() == strCategoryName)
 			{
@@ -42,7 +42,7 @@ public:
 	//returns the category Index by name
 	const KCUnitTypeCategory *		getCategoryByName(const KCString &strCategoryName) const
 	{
-		for (uint32 iCategoryIndex = 0; iCategoryIndex < m_Categories.getCount(); iCategoryIndex++)
+		for (int32 iCategoryIndex = 0; iCategoryIndex < m_Categories.Num(); iCategoryIndex++)
 		{
 			if (m_Categories[iCategoryIndex]->getCategoryName() == strCategoryName)
 			{
@@ -55,7 +55,7 @@ public:
 	//returns the category Index by name
 	const KCUnitTypeCategory *		getCategoryByIndex(uint32 iIndex) const
 	{
-		if (iIndex >= m_Categories.getCount())
+		if (iIndex >= (uint32)m_Categories.Num())
 		{
 			return nullptr;
 		}
@@ -144,7 +144,7 @@ public:
 private:
 	void							_clean();
 	//NOTE - maybe in the future better to make this a map
-	KCTArray<KCUnitTypeCategory *>	m_Categories;
+	TArray<KCUnitTypeCategory *>	m_Categories;
 };
 
 

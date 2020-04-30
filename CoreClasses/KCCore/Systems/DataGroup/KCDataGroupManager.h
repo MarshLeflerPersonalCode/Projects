@@ -20,7 +20,7 @@ public:
 	bool						createMasterFile(const WCHAR *pPathToLooseFiles, const WCHAR *pPathToMasterFile);
 
 	//returns all the data groups in the directory passed in
-	int32						getDataGroupsInDirectory(const KCString &strPath, KCTArray<const KCDataGroup *> &mDataGroups) const;
+	int32						getDataGroupsInDirectory(const KCString &strPath, TArray<const KCDataGroup *> &mDataGroups) const;
 
 private:
 

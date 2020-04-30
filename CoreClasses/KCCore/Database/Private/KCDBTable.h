@@ -16,9 +16,10 @@ public:
 	KCDBTable(const KCDataGroupManager *pDatagroupManager, DATABASE::EDATABASE_TABLES eTable, const KCString &strDatabaseFolder)
 	{
 		m_eDatatable = eTable;
-		KCTArray<const KCDataGroup*> mDataGroups(200);
+		TArray<const KCDataGroup*> mDataGroups;
+		mDataGroups.Reserve(200);
 		pDatagroupManager->getDataGroupsInDirectory(strDatabaseFolder, mDataGroups);
-		for (uint32 iIndex = 0; iIndex < mDataGroups.Num(); iIndex++)
+		for (int32 iIndex = 0; iIndex < mDataGroups.Num(); iIndex++)
 		{
 			T *pEntryObject = KC_NEW T();
 			FKCDBEntry *pEntry = (FKCDBEntry *)pEntryObject;
@@ -32,7 +33,7 @@ public:
 	}
 
 	//returns all the DB entries
-	const KCTArray< T * > &			getEntries() const { return m_Entries; }
+	const TArray< T * > &			getEntries() const { return m_Entries; }
 
 	//returns the table type
 	DATABASE::EDATABASE_TABLES		getTableType() const { return m_EntriesByGuid;}
@@ -63,7 +64,7 @@ public:
 	//returns the entry by index
 	FORCEINLINE const T	*			getEntryByIndex(uint32 iIndex) const
 	{
-		KCEnsureAlwaysReturnVal(iIndex >= 0 && iIndex < m_Entries.Num(), nullptr);
+		KCEnsureAlwaysReturnVal(iIndex >= 0 && iIndex < (uint32)m_Entries.Num(), nullptr);
 		return m_Entries[iIndex];
 	}
 
@@ -81,12 +82,16 @@ protected:
 	//deletes all the entries and cleans up the table
 	void							_clean()
 	{
-		m_Entries.deleteContents();
+		for (int32 iIndex = 0; iIndex < m_Entries.Num(); iIndex++)
+		{
+			DELETE_SAFELY(m_Entries[iIndex]);
+		}
+		m_Entries.Empty();
 		m_EntriesByGuid.clear();
 		m_EntriesByName.clear();
 	}
 	DATABASE::EDATABASE_TABLES		m_eDatatable = DATABASE::EDATABASE_TABLES::UNDEFINED;
-	KCTArray< T * >					m_Entries;
+	TArray< T * >					m_Entries;
 	std::unordered_map<KCDatabaseGuid, uint32>			m_EntriesByGuid;
 	std::unordered_map<KCName, uint32, KCNameHasher>	m_EntriesByName;
 };
