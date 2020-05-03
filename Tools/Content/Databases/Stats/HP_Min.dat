@@ -1,13 +1,5 @@
 [FKCStatDefinition]
-     <STRING>m_eStatType:INT32
-     <STRING>m_strDefaultValue:0
-     <STRING>m_strMinValue:0
-     <STRING>m_strMaxValue:0
-     <BOOL>m_bApplicableToCharacters:True
      <BOOL>m_bApplicableToItems:False
-     <STRING>m_strGraph:
-     <STRING>m_strGraphStat:Rank
-     <BOOL>m_bDirtyAllStats:False
      <INT32>m_DatabaseGuid:134240874
      <STRING>m_strName:HP Min
      <STRING>m_strFileName:HP_Min.dat
@@ -15,10 +7,7 @@
           <UINT16>COUNT:1
           [0]
                <STRING>m_strStat:RANK
-               <FLOAT>m_fDenominator:100
+               <STRING>CSHARP:Dynamic.KCStatMathFunctionAdd, classcompile, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
           [/0]
      [/m_MathFunctions]
-     [m_StatsReferencing]
-          <UINT16>COUNT:0
-     [/m_StatsReferencing]
 [/FKCStatDefinition]

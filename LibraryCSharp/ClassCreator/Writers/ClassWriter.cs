@@ -15,14 +15,31 @@ namespace Library.ClassCreator.Writers
             {
                 return "";
             }
-
+            List<string> mVariableInitializer = new List<string>();
             string strClass = Environment.NewLine;
             string strClassExtending = _getCLassInheritingFrom(mClass, mProjectWrapper);
             strClass = strClass + "    public class " + mClass.name + ": " + strClassExtending + Environment.NewLine;
 
 
-            strClass = strClass + "    {" + Environment.NewLine;            
-            strClass = strClass + _writeVariables(mManager, mClass, mProjectWrapper);           
+            strClass = strClass + "    {" + Environment.NewLine;
+            strClass = strClass + "        public override object _getAs(Type mType)" + Environment.NewLine;
+            strClass = strClass + "        {" + Environment.NewLine;
+            strClass = strClass + "                System.Windows.Forms.MessageBox.Show(\"calling _getAs. Type looking for is: \" + mType.Name + \" my type is " + mClass.name + "\" );" + Environment.NewLine;
+            strClass = strClass + "                if (mType.Name == \"" + mClass.name + "\")" + Environment.NewLine;
+            strClass = strClass + "                {" + Environment.NewLine;
+            strClass = strClass + "                System.Windows.Forms.MessageBox.Show(\"casting!!!!\" );" + Environment.NewLine;
+            strClass = strClass + "                        return (" + mClass.name + ")this;" + Environment.NewLine;
+            strClass = strClass + "                }" + Environment.NewLine;
+            strClass = strClass + "                return base._getAs(mType);" + Environment.NewLine;
+            strClass = strClass + "        }" + Environment.NewLine;
+            strClass = strClass + _writeVariables(mManager, mClass, mProjectWrapper, mVariableInitializer);
+            strClass = strClass + "public " + mClass.name + "()" + Environment.NewLine;
+            strClass = strClass + "        {" + Environment.NewLine;
+            foreach( string strVarInitializer in mVariableInitializer)
+            {
+                strClass = strClass + strVarInitializer + Environment.NewLine;
+            }
+            strClass = strClass + "        }" + Environment.NewLine;
             strClass = strClass + Environment.NewLine + "    } //end of " + mClass.name + Environment.NewLine;
 
             return strClass;
@@ -41,31 +58,15 @@ namespace Library.ClassCreator.Writers
             return "ClassInstance";
         }
 
-        private static string _writeHierarchy(ClassCreatorManager mManager, ClassStructure mClass, ProjectWrapper mProjectWrapper)
+        private static string _writeVariables(ClassCreatorManager mManager, ClassStructure mClass, ProjectWrapper mProjectWrapper, List<string> mVariableInitializer)
         {
-            string strHierarchyVariables = "";
-            foreach(string strClass in mClass.classStructuresInheritingFrom)
-            {
-                ClassStructure mClassParent = mProjectWrapper.getClassStructByName(strClass);
-                if(mClassParent == null )
-                {
-                    mManager.log("WARNING - class " + mClass.name + " is inheriting from " + strClass + ". But the class doesn't seem to be serialized. This might be okay depending on if those properties need to be serialized or not.");
-                    continue;
-                }
-                strHierarchyVariables = strHierarchyVariables + _writeVariables(mManager, mClassParent, mProjectWrapper);
-            }
-            return strHierarchyVariables;
-        }
-        private static string _writeVariables(ClassCreatorManager mManager, ClassStructure mClass, ProjectWrapper mProjectWrapper)
-        {
-            string strClass = "";
-            //strClass = strClass + _writeHierarchy(mManager, mClass, mProjectWrapper);
+            string strClass = "";            
             foreach (ClassVariable mVariable in mClass.variables)
             {
                 if (mVariable.isPrivateVariable == false &&
                     mVariable.isSerialized == true)
                 {
-                    string strReplace = _writeVariable(mManager, mProjectWrapper, mClass, mVariable);
+                    string strReplace = _writeVariable(mManager, mProjectWrapper, mClass, mVariable, mVariableInitializer);
                     strReplace = "        " + strReplace.Replace(Environment.NewLine, Environment.NewLine + "        ");
                     strClass = strClass + strReplace;
                 }
@@ -73,7 +74,7 @@ namespace Library.ClassCreator.Writers
             return strClass;
         }
 
-        private static string _writeVariable(ClassCreatorManager mManager, ProjectWrapper mProjectWrapper, ClassStructure mClass, ClassVariable mVariable)
+        private static string _writeVariable(ClassCreatorManager mManager, ProjectWrapper mProjectWrapper, ClassStructure mClass, ClassVariable mVariable, List<string> mVariableInitializer)
         {
             VariableDefinitionHandler mVariableTypes = mManager.variableDefinitionHandler;
 
@@ -99,14 +100,14 @@ namespace Library.ClassCreator.Writers
                 }
                 if (mVariableDef.isPrimitiveType)
                 {
-                    return _writeVariableInfo(mClass, mVariable) + _writePrimitiveVariable(mProjectWrapper, mVariableDef, mVariable);
+                    return _writeVariableInfo(mClass, mVariable) + _writePrimitiveVariable(mProjectWrapper, mVariableDef, mVariable, mClass);
                 }
                 else if (mVariableDef.eCSharpVariable == EVARIABLE_CSHARP_TYPES.CLASS)
                 {
                     if (mProjectWrapper.classStructures.ContainsKey(mVariableDef.variableClassName.ToUpper()))
                     {
                         //it's a class structure.
-                        return _writeVariableInfo(mClass, mVariable) + _writeClassVariable(mManager, mProjectWrapper, mClass, mVariable, mVariableDef.variableClassName);
+                        return _writeVariableInfo(mClass, mVariable) + _writeClassVariable(mManager, mProjectWrapper, mClass, mVariable, mVariableDef.variableClassName, mVariableInitializer);
                     }
                 }
                 else if (mVariableDef.eCSharpVariable == EVARIABLE_CSHARP_TYPES.ENUM)
@@ -132,7 +133,7 @@ namespace Library.ClassCreator.Writers
             if (mProjectWrapper.classStructures.ContainsKey(mVariable.variableType.ToUpper()))
             {
                 //it's a class structure.
-                return _writeVariableInfo(mClass, mVariable) + _writeClassVariable(mManager, mProjectWrapper, mClass, mVariable, "");
+                return _writeVariableInfo(mClass, mVariable) + _writeClassVariable(mManager, mProjectWrapper, mClass, mVariable, "", mVariableInitializer);
             }
 
 
@@ -165,9 +166,10 @@ namespace Library.ClassCreator.Writers
             return strClass;
         }
 
-        private static string _writePrimitiveVariable(ProjectWrapper mProjectWrapper, VariableDefinition mVariableDefinition, ClassVariable mClassVariable)
+        private static string _writePrimitiveVariable(ProjectWrapper mProjectWrapper, VariableDefinition mVariableDefinition, ClassVariable mClassVariable, ClassStructure mClass)
         {
             string strClass = "";
+            string strDefaultValue = "0";
             switch (mVariableDefinition.eCSharpVariable)
             {
                 default:
@@ -176,10 +178,10 @@ namespace Library.ClassCreator.Writers
                     string strValue = mClassVariable.variableValue.Trim().Replace("\"", "");
                     if (strValue.Length > 0)
                     {
-                        bool bFound = false;
+                        //bool bFound = false;
                         while (mProjectWrapper.defines.ContainsKey(strValue))
                         {
-                            bFound = true;
+                            //bFound = true;
                             strValue = mProjectWrapper.defines[strValue];
                         }
                         /*if (bFound == false)
@@ -191,8 +193,8 @@ namespace Library.ClassCreator.Writers
                             
                         }*/
                     }
-
-                    strClass = strClass + "private " + EVARIABLE_CSHARP_TYPES_NAMES.g_Names[(int)mVariableDefinition.eCSharpVariable] + " _" + mClassVariable.variableName + " = " + ((strValue.Length != 0) ? strValue : "0") + ";" + Environment.NewLine;
+                    strDefaultValue = ((strValue.Length != 0) ? strValue : "0");
+                    strClass = strClass + "private " + EVARIABLE_CSHARP_TYPES_NAMES.g_Names[(int)mVariableDefinition.eCSharpVariable] + " _" + mClassVariable.variableName + " = " + strDefaultValue + ";" + Environment.NewLine;
                 }
                 break;
                 case EVARIABLE_CSHARP_TYPES.STRING:
@@ -210,14 +212,24 @@ namespace Library.ClassCreator.Writers
                     {
                         strValue = strValue.Substring(0, strValue.Length - 1);
                     }
-                    strClass = strClass + "private string _" + mClassVariable.variableName + " = \"" + ((strValue.Length != 0) ? strValue : "") + "\";" + Environment.NewLine;
+                    strDefaultValue = "\"" + ((strValue.Length != 0) ? strValue : "") + "\"";
+                    strClass = strClass + "private string _" + mClassVariable.variableName + " = " + strDefaultValue + ";" + Environment.NewLine;
                 }
                 break;
             }
+            string strFuncVariableName = "_" + mClassVariable.variableName;
             strClass = strClass + _writeVaraibleComponentModelDetails(mClassVariable);
             strClass = strClass + "public " + EVARIABLE_CSHARP_TYPES_NAMES.g_Names[(int)mVariableDefinition.eCSharpVariable] + " " + mClassVariable.variableName + Environment.NewLine;
             strClass = strClass + "{" + Environment.NewLine;
-            strClass = strClass + "    get{ return _" + mClassVariable.variableName + "; }" + Environment.NewLine;
+            strClass = strClass + "    get" + Environment.NewLine;
+            strClass = strClass + "    {" + Environment.NewLine;
+            strClass = strClass + "        if(m_OwningClass != null && " + strFuncVariableName + " == " + strDefaultValue + ")" + Environment.NewLine;
+            strClass = strClass + "        {" + Environment.NewLine;
+            strClass = strClass + "            " + mClass.name + " mParent = m_OwningClass as " + mClass.name + ";" + Environment.NewLine;
+            strClass = strClass + "            if(mParent != null){ return mParent." + mClassVariable.variableName + "; }" + Environment.NewLine;
+            strClass = strClass + "        }" + Environment.NewLine;
+            strClass = strClass + "        return " + strFuncVariableName + ";" + Environment.NewLine;
+            strClass = strClass + "    }" + Environment.NewLine;
             if (mClassVariable.variableProperties.ContainsKey("ClampMin") ||
                mClassVariable.variableProperties.ContainsKey("ClampMax"))
             {
@@ -231,16 +243,18 @@ namespace Library.ClassCreator.Writers
                 {
                     strClass = strClass + "        if(value > " + mClassVariable.variableProperties["ClampMax"] + "){value = " + mClassVariable.variableProperties["ClampMax"] + ";}" + Environment.NewLine;
                 }
-                strClass = strClass + "        _" + mClassVariable.variableName + " = value;" + Environment.NewLine;
+                strClass = strClass + "        " + strFuncVariableName + " = value;" + Environment.NewLine;
                 strClass = strClass + "        _notifyOfPropertyChanged(\"" + mClassVariable.variableName + "\");" + Environment.NewLine;
                 strClass = strClass + "    }" + Environment.NewLine;
             }
             else
             {
-                strClass = strClass + "    set{ _" + mClassVariable.variableName + " = value; _notifyOfPropertyChanged(\"" + mClassVariable.variableName + "\");}" + Environment.NewLine;
+                strClass = strClass + "    set{ " + strFuncVariableName + " = value; _notifyOfPropertyChanged(\"" + mClassVariable.variableName + "\");}" + Environment.NewLine;
             }
             strClass = strClass + "}" + Environment.NewLine;
-            return strClass;
+
+            string strDefaultValueFunc = "public static " + EVARIABLE_CSHARP_TYPES_NAMES.g_Names[(int)mVariableDefinition.eCSharpVariable] + " " + mClassVariable.variableName + "_Default{ get { return " + strDefaultValue + "; } }" + Environment.NewLine;
+            return strDefaultValueFunc + strClass;
         }
 
         private static string _writeVaraibleComponentModelDetails(ClassVariable mClassVariable)
@@ -319,30 +333,44 @@ namespace Library.ClassCreator.Writers
         {
             string strEnumLine = "";
             string strValue = mVariable.variableValue;
+            string strGetCheck = mVariable.variableValue;
+            string strType = (strTypeOverride == "") ? mVariable.variableType : strTypeOverride;
             if (strValue != "")
             {
                 strValue = " = " + strValue.Replace("::", ".") + ";";
+                strGetCheck = strGetCheck.Replace("::", ".");
             }
             else
             {
+                strGetCheck = "(" + strType + ")0";
                 strValue = ";";
             }
-            string strType = (strTypeOverride == "") ? mVariable.variableType : strTypeOverride;
+            
             strEnumLine = strEnumLine + "private " + strType + " _" + mVariable.variableName + strValue + Environment.NewLine;
             strEnumLine = strEnumLine + _writeVaraibleComponentModelDetails(mVariable);
             strEnumLine = strEnumLine + "public " + strType + " " + mVariable.variableName + Environment.NewLine;
-            strEnumLine = strEnumLine + "{" + Environment.NewLine;
-            strEnumLine = strEnumLine + "    get{ return _" + mVariable.variableName + "; }" + Environment.NewLine;
+            strEnumLine = strEnumLine + "{" + Environment.NewLine;                        
+            strEnumLine = strEnumLine + "    get" + Environment.NewLine;
+            strEnumLine = strEnumLine + "    {" + Environment.NewLine;
+            strEnumLine = strEnumLine + "        if(m_OwningClass != null && _" + mVariable.variableName + " == " + strGetCheck + ")" + Environment.NewLine;
+            strEnumLine = strEnumLine + "        {" + Environment.NewLine;
+            strEnumLine = strEnumLine + "            " + mClass.name + " mParent = m_OwningClass as " + mClass.name + ";" + Environment.NewLine;
+            strEnumLine = strEnumLine + "            if(mParent != null){ return mParent." + mVariable.variableName + "; }" + Environment.NewLine;
+            strEnumLine = strEnumLine + "        }" + Environment.NewLine;
+            strEnumLine = strEnumLine + "        return _" + mVariable.variableName + ";" + Environment.NewLine;
+            strEnumLine = strEnumLine + "    }" + Environment.NewLine;
             strEnumLine = strEnumLine + "    set{ _" + mVariable.variableName + " = value; _notifyOfPropertyChanged(\"" + mVariable.variableName + "\");}" + Environment.NewLine;
             strEnumLine = strEnumLine + "}" + Environment.NewLine;
-            return strEnumLine;
+            string strDefaultValueFunc = "public static " + strType + " " + mVariable.variableName + "_Default{ get { return " + strGetCheck + "; } }" + Environment.NewLine;
+            return strDefaultValueFunc + strEnumLine;
         }
-        public static string _writeClassVariable(ClassCreatorManager mManager, ProjectWrapper mProjectWrapper, ClassStructure mClass, ClassVariable mVariable, string strTypeOverride)
+        public static string _writeClassVariable(ClassCreatorManager mManager, ProjectWrapper mProjectWrapper, ClassStructure mClass, ClassVariable mVariable, string strTypeOverride, List<string> mVariableInitializer)
         {
             string strClassLine = "";
             string strType = (strTypeOverride == "") ? mVariable.variableType : strTypeOverride;
 
-            strClassLine = strClassLine + "private " + strType + " _" + mVariable.variableName + " = new " + strType + "();" + Environment.NewLine;
+            //mVariableInitializer.Add("                _" + mVariable.variableName + ".m_OwningClass = this;");
+            strClassLine = strClassLine + "private " + strType + " _" + mVariable.variableName + " = new " + strType + "();" + Environment.NewLine;            
             strClassLine = strClassLine + _writeVaraibleComponentModelDetails(mVariable);
             strClassLine = strClassLine + "public " + strType + " " + mVariable.variableName + Environment.NewLine;
             strClassLine = strClassLine + "{" + Environment.NewLine;

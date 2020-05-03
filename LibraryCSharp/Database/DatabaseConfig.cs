@@ -44,6 +44,7 @@ namespace Library.Database
             propertyFilters = new List<PropertyFilterData>();
             propertyFilters.Add(new PropertyFilterData("m_strName", 120));
             propertyFilters.Add(new PropertyFilterData("m_DatabaseGuid", 80));
+            parentVariableName = "";
             multiSelect = false;
         }
 
@@ -68,7 +69,8 @@ namespace Library.Database
         [Category("Properties To Filter By"), DisplayName("Variables"), Description("This should be a variable you want to display. This will be the code value. Such as m_strName")]
         public List<PropertyFilterData> propertyFilters { get; set; }
 
-
+        [DisplayName("Parent Variable Name"), Description("Entries can have inheritance. If you do, specify the variable name here. It must be a string in code, For instance 'FString m_strParent;'.")]
+        public string parentVariableName { get; set; }
 
 
         //load the database - returning any errors.

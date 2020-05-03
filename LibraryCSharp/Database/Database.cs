@@ -41,7 +41,7 @@ namespace Library.Database
 		Dictionary<int, ClassInstance> m_InstancesByGuid = new Dictionary<int, ClassInstance>();
 		Dictionary<string, ClassInstance> m_InstancesByName = new Dictionary<string, ClassInstance>();
 		Dictionary<string, ClassInstance> m_InstancesByFileName = new Dictionary<string, ClassInstance>();
-        
+        List<string> m_ListOfNames = new List<string>();
 		public Database(DatabaseManager mDatabaseManager)
 		{
             m_DatabaseManager = mDatabaseManager;
@@ -49,11 +49,19 @@ namespace Library.Database
             databaseCallbacks = new List<IDatabaseCallbacks>();
 
         }
-
+       
         public List<IDatabaseCallbacks> databaseCallbacks { get; set; }
 
         public DatabaseManager getDatabaseManager() { return m_DatabaseManager; }
-        public ICollection getListOfNames() { return m_InstancesByName.Keys; }
+        public ICollection getListOfNames()
+        {
+            if( m_ListOfNames.Count == 0 )
+            {
+                m_ListOfNames = new List<string>(m_InstancesByName.Keys);
+                m_ListOfNames.Insert(0, "");
+            }
+            return m_ListOfNames;
+        }
         public bool isLoaded { get; set; }
 
         public DatabaseConfig getConfig() { return m_DatabaseConfig; }
@@ -104,7 +112,8 @@ namespace Library.Database
                     foreach (KeyValuePair<string, ClassInstance> mData in m_InstancesByName)
                     {
                         if (mData.Value == mInstance)
-                        {                            
+                        {
+                            m_ListOfNames.Clear();
                             m_InstancesByName.Remove(mData.Key);
                             m_InstancesByName[getEntryName(mInstance).ToUpper()] = mInstance;
                             break;
@@ -126,6 +135,15 @@ namespace Library.Database
                 }
                 break;
             }
+
+            if(strProperty == m_DatabaseConfig.parentVariableName)
+            {
+                ClassInstance mParentInstance = getEntryByName(mInstance.getPropertyValueString(strProperty, ""));
+                if (mParentInstance != mInstance)
+                {
+                    mInstance.setOwningClass(mParentInstance);
+                }
+            }
             
         }
 
@@ -139,7 +157,8 @@ namespace Library.Database
             m_Instances.Remove(mEntry);
             m_InstancesByFileName.Remove(getEntryFileName(mEntry).ToUpper());
             m_InstancesByName.Remove(getEntryName(mEntry).ToUpper());
-            m_InstancesByGuid.Remove(getEntryGuid(mEntry));
+            m_ListOfNames.Clear();
+            m_InstancesByGuid.Remove(getEntryGuid(mEntry));            
             mEntry.m_CallBacks.Remove(this);
         }
 
@@ -261,6 +280,7 @@ namespace Library.Database
             m_Instances.Clear();
             m_InstancesByGuid.Clear();
             m_InstancesByName.Clear();
+            m_ListOfNames.Clear();            
             m_InstancesByFileName.Clear();            
         }
 
@@ -374,10 +394,11 @@ namespace Library.Database
                 return EERROR_ADDING.GUID_ALREADY_TAKEN;
             }            
             mNewEntry.m_LogFile = m_DatabaseManager.logFile;
-            mNewEntry.m_CallBacks.Add(this);
+            mNewEntry.m_CallBacks.Add(this);            
             m_Instances.Add(mNewEntry);            
             m_InstancesByGuid[getEntryGuid(mNewEntry)] = mNewEntry;
             m_InstancesByName[getEntryName(mNewEntry).ToUpper()] = mNewEntry;
+            m_ListOfNames.Clear();
             m_InstancesByFileName[getEntryFileName(mNewEntry).ToUpper()] = mNewEntry;
             foreach(IDatabaseCallbacks mCallback in databaseCallbacks)
             {
@@ -400,6 +421,7 @@ namespace Library.Database
                 m_Instances.Remove(mNewEntry);
                 m_InstancesByGuid.Remove(getEntryGuid(mNewEntry));
                 m_InstancesByName.Remove(strEntryname);
+                m_ListOfNames.Clear();
                 m_InstancesByFileName.Remove(strEntryFileName);                
                 string strPathToDatabaseFolder = Path.Combine(m_DatabaseManager.getDatabaseDirectory(), databaseName.Replace(" ", "_") + "\\");
                 File.Delete(Path.Combine(strPathToDatabaseFolder, strEntryFileName));
@@ -514,7 +536,8 @@ namespace Library.Database
             {
                 try
                 {
-                    ClassInstance mEntry = DataGroupConvert.deserializeObjectFromFile(strFile, mType, m_DatabaseManager.logFile) as ClassInstance;
+                    
+                    ClassInstance mEntry = DataGroupConvert.deserializeObjectFromFile(strFile, mType, m_DatabaseManager.logFile, m_DatabaseManager) as ClassInstance;
                     if (mEntry == null)
                     {
                         log("ERROR - Unable to deserialize file: " + strFile);
@@ -530,9 +553,38 @@ namespace Library.Database
                     return false;
 
                 }
+
+            }
+            bool bNoErrors = true;
+            if (m_DatabaseConfig.parentVariableName != null &&
+                m_DatabaseConfig.parentVariableName != "")
+            {
+                foreach (ClassInstance mInstance in m_Instances)
+                {
+                    string strParent = mInstance.getPropertyValueString(m_DatabaseConfig.parentVariableName, "");
+                    try
+                    {
+
+                        
+                        if(strParent == "" )
+                        {
+                            continue;
+                        }
+                        ClassInstance mParent = getEntryByName(strParent);
+                        if( mParent != null)
+                        {
+                            mInstance.setOwningClass(mParent);
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        log("ERROR - Loaded objects but failed to set parent: " + strParent + " for object named " + getEntryName(mInstance) + Environment.NewLine + "Error message was: " + e.Message);
+                        bNoErrors = false;
+                    }
+                }
             }
             isLoaded = true;
-            return true;
+            return bNoErrors;
         }
 
     } //end class

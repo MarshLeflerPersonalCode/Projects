@@ -1,21 +1,8 @@
 [KCIncludeTest]
+     <FLOAT>m_fZ:10
+     <STRING>m_eEnumTest:ONE
+     <STRING>m_strParent:TESTING
      <INT32>m_DatabaseGuid:134229417
      <STRING>m_strName:Testing2
      <STRING>m_strFileName:Testing2.dat
-     <FLOAT>m_fX:0
-     <FLOAT>m_fY:0
-     <FLOAT>m_fZ:0
-     <STRING>m_eEnumTest:COUNT
-     <STRING>m_strUnitType:
-     <STRING>m_strFolderTest:
-     <STRING>m_strFileTest:
-     [m_SerializeChild]
-          <STRING>m_strTest:
-     [/m_SerializeChild]
-     [m_pSerializeChildTest]
-          <STRING>m_strTest:
-     [/m_pSerializeChildTest]
-     [m_Array]
-          <UINT16>COUNT:0
-     [/m_Array]
 [/KCIncludeTest]

@@ -45,6 +45,7 @@ namespace Library
     }
 
 
+
     public class DataProperty
 	{
 		private static Dictionary<string, EDATAGROUP_VARIABLE_TYPES> g_NamesToTypes = new Dictionary<string, EDATAGROUP_VARIABLE_TYPES>();

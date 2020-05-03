@@ -1,14 +1,6 @@
 [FKCStatDefinition]
-     <STRING>CSHARP:Dynamic.FKCStatDefinition, classcompile, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-     <STRING>m_strName:HP Max
-     <INT32>m_DatabaseGuid:134225495
-     <STRING>m_eStatType:INT32
-     <STRING>m_strFileName:HP_Max.dat
-     <STRING>m_strGraph:
-     <STRING>m_strDefaultValue:0
-     <STRING>m_strMinValue:0
-     <STRING>m_strMaxValue:0
-     <BOOL>m_bApplicableToCharacters:True
      <BOOL>m_bApplicableToItems:False
-     <STRING>m_strGraphStat:Rank
+     <INT32>m_DatabaseGuid:134225495
+     <STRING>m_strName:HP Max
+     <STRING>m_strFileName:HP_Max.dat
 [/FKCStatDefinition]

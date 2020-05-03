@@ -1,20 +1,12 @@
 [KCIncludeTest]
-     <INT32>m_DatabaseGuid:134262125
-     <STRING>m_strName:Testing
-     <STRING>m_strFileName:Testing.dat
-     <FLOAT>m_fX:0
-     <FLOAT>m_fY:0
-     <FLOAT>m_fZ:1
-     <STRING>m_eEnumTest:COUNT
+     <FLOAT>m_fZ:2
+     <STRING>m_eEnumTest:ONE
      <STRING>m_strUnitType:NEW7
      <STRING>m_strFolderTest:..\..\StatEditor\obj
      <STRING>m_strFileTest:..\Databases\Stats\Rank.dat
-     [m_SerializeChild]
-          <STRING>m_strTest:
-     [/m_SerializeChild]
-     [m_pSerializeChildTest]
-          <STRING>m_strTest:
-     [/m_pSerializeChildTest]
+     <INT32>m_DatabaseGuid:134262125
+     <STRING>m_strName:Testing
+     <STRING>m_strFileName:Testing.dat
      [m_Array]
           <UINT16>COUNT:1
           [0]

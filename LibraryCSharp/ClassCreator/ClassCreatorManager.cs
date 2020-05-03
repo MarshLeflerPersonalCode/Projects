@@ -12,6 +12,7 @@ using Library.ClassCreator.Writers;
 using System.ComponentModel;
 using System.Threading;
 using System.Windows.Forms;
+
 namespace Library.ClassCreator
 {
 
@@ -24,8 +25,8 @@ namespace Library.ClassCreator
 	//getting and setting properties/objects
 	//
 	//
-	public class ClassCreatorManager
-	{
+	public class ClassCreatorManager : IDataGroupConvertTypeRecast
+    {
 		private ClassParserManager m_ClassParser = null;
 		private StringWriter m_StringWriter = null;
 		private Thread m_Thread = null;
@@ -50,7 +51,15 @@ namespace Library.ClassCreator
 			variableDefinitionHandler = new VariableDefinitionHandler("VariableDefinitions.json");
 
 		}
-
+        public Type _dataGroupTypeRecast(Type mTypeRequest)
+        {
+            Type mType = getClassType(mTypeRequest.Name);
+            if (mType != null)
+            {
+                return mType;
+            }
+            return mTypeRequest;
+        }
         public ClassParserManager getClassParser() { return m_ClassParser; }
         public void setDirectories(string strDatabaseFolder, string strListFolder, List<ClassCreatorContentFolders> mContentFolders)
         {

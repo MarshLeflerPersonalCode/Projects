@@ -14,7 +14,8 @@ namespace Library
     {
         void _notifyOfPropertySetOnClassInstance(ClassInstance mInstance, string strProperty);
     }
-	public class ClassInstance
+
+    public class ClassInstance
 	{
 		[Browsable(false)]
 		[NonSerialized] public ClassStructure m_ClassStructure = null;
@@ -26,8 +27,157 @@ namespace Library
 		[NonSerialized] public bool m_bIsDirty = false;
         [Browsable(false)]
         [NonSerialized] public List<IClassInstanceCallbacks> m_CallBacks = new List<IClassInstanceCallbacks>();
+        [Browsable(false)]
+        [NonSerialized] protected ClassInstance m_OwningClass = null;
 
+        public virtual object _getAs(Type mType)
+        {
+            if (mType == this.GetType())
+            {
+                return (ClassInstance)this;
+            }
+            return null;
+        }
 
+        public void setOwningClass(ClassInstance mOwner)
+        {
+            if( mOwner == m_OwningClass )
+            {
+                return;
+            }
+            if( mOwner == this )
+            {
+                mOwner = null;
+            }
+            m_OwningClass = mOwner;
+            try
+            {
+                Type mType = GetType();                //mDataGroup.setProperty("CSHARP", mType.AssemblyQualifiedName);
+                MemberInfo[] mMembers = mType.GetMembers();
+
+                Type mStringType = Type.GetType("System.String");
+                foreach (MemberInfo mMember in mMembers)
+                {
+                    MemberTypes mMemberTypeInfo = mMember.MemberType;
+                    if (mMemberTypeInfo == MemberTypes.Property)
+                    {
+                        PropertyInfo mPropertyInfo = mMember as PropertyInfo;
+                        if(mPropertyInfo == null ||
+                            mPropertyInfo.CanWrite == false ||
+                            mPropertyInfo.PropertyType.IsPrimitive )
+                        {
+                            continue;
+                        }
+                        try
+                        {
+                            object mObject = mPropertyInfo.GetValue(this);
+                            ClassInstance mObjectClassInstance = mObject as ClassInstance;
+                            if (mObjectClassInstance != null)
+                            {
+                                ClassInstance mNewParent = null;
+                                if (m_OwningClass != null) //if m_OwningClass == null then we no longer have an owning class
+                                {
+                                    mNewParent = mPropertyInfo.GetValue(m_OwningClass) as ClassInstance;
+                                }
+                                mObjectClassInstance.setOwningClass(mNewParent);
+                            }
+                            else 
+                            {
+                                IList iList = mObject as IList;
+                                IList iParentList = null;
+                                if( m_OwningClass != null )
+                                {
+                                    iParentList = mPropertyInfo.GetValue(m_OwningClass) as IList;
+                                }
+                                if( iList != null)
+                                {
+                                    if( iParentList != null)
+                                    {
+                                        for (int iParentIndex = 0; iParentIndex < iParentList.Count; iParentIndex++)
+                                        {
+                                            ClassInstance mParentInstanceInList = iParentList[iParentIndex] as ClassInstance;
+                                            if( mParentInstanceInList != null )
+                                            {
+                                                if(iParentIndex >= iList.Count )
+                                                {
+
+                                                    iList.Add(Activator.CreateInstance(mParentInstanceInList.GetType()));
+                                                }
+                                                else if(iList[iParentIndex] == null )
+                                                {
+                                                    iList[iParentIndex] = Activator.CreateInstance(mParentInstanceInList.GetType());
+                                                }
+                                                ClassInstance mCurrentInstanceInList = iList[iParentIndex] as ClassInstance;
+                                                mCurrentInstanceInList.setOwningClass(mParentInstanceInList);
+                                            }
+                                        }
+                                    }
+                                    Type mTypeForList = null;
+                                    if (iList.Count > 0)
+                                    {
+                                        Type[] mTypes = iList.GetType().GetGenericArguments();
+                                        if (mTypes != null &&
+                                            mTypes.Length > 0)
+                                        {
+                                            mTypeForList = mTypes.Single();
+                                        }
+                                    }
+                                    //this usually happens when the parent was set to null
+                                    for(int iIndex = 0; iIndex < iList.Count; iIndex++)
+                                    {
+                                        if( iList[iIndex] == null &&
+                                            mTypeForList != null )
+                                        {
+                                            try
+                                            {
+                                                iList[iIndex] = Activator.CreateInstance(mTypeForList);
+                                            }
+                                            catch
+                                            {
+                                                log("Error in attempting to create instance for array object. Type was: " + mTypeForList.Name);
+                                                iList[iIndex] = null;
+                                            }
+                                        }
+                                        ClassInstance mInstanceInList = iList[iIndex] as ClassInstance;
+                                        if( mInstanceInList != null )
+                                        {
+                                            ClassInstance mNewParent = null;
+                                            if (iParentList != null &&
+                                                iIndex < iParentList.Count)
+                                            {
+                                                mNewParent = iParentList[iIndex] as ClassInstance;
+                                                if( mNewParent == null ||
+                                                    mNewParent.GetType() != mInstanceInList.GetType())
+                                                {
+                                                    mNewParent = null;
+                                                }
+                                            }
+                                            mInstanceInList.setOwningClass(mNewParent);
+                                        }                                        
+                                    }
+                                    
+                                }
+                            }
+
+                        }
+                        catch (Exception e)
+                        {
+                            log("ERROR - attempting to get property. from object type " + mPropertyInfo.Name + ". Error was: " + e.Message);
+                            
+                        }
+                        continue;
+                    }
+                    
+                }
+
+            }
+            catch (Exception e)
+            {
+                log("ERROR - Unable to serialize object into Data Group. Exception was: " + e.Message);
+            }
+        }
+
+        public ClassInstance getOwneringClass() { return m_OwningClass; }
         protected void _notifyOfPropertyChanged( string strProperty)
         {
             m_bIsDirty = true;

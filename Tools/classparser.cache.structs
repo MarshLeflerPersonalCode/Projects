@@ -108,6 +108,722 @@
       "enums": [],
       "defines": {}
     },
+    "KCCORE_API": {
+      "classStructuresInheritingFrom": [
+        "KCStatManager",
+        "KCCoreObject"
+      ],
+      "comment": "",
+      "name": "KCCORE_API",
+      "valid": false,
+      "isSerialized": false,
+      "file": "..\\CoreClasses\\KCCore\\Systems\\Stats\\KCStatManager.h",
+      "variables": [
+        {
+          "isPointer": false,
+          "isUE4Variable": false,
+          "variableName": "m_StatsByName",
+          "variableType": "std::unordered_map<KCName, KCStatID, KCNameHasher>",
+          "variableValue": "",
+          "displayName": "m_StatsByName",
+          "category": "",
+          "variableProperties": {},
+          "variableComment": "",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": true,
+          "isSerialized": false,
+          "lineNumber": 50,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": false,
+          "variableName": "m_StatsByID",
+          "variableType": "TArray<KCName>",
+          "variableValue": "",
+          "displayName": "m_StatsByID",
+          "category": "",
+          "variableProperties": {},
+          "variableComment": "",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": true,
+          "isSerialized": false,
+          "lineNumber": 51,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": false,
+          "variableName": "m_CharacterStatsByID",
+          "variableType": "KCBitArray",
+          "variableValue": "",
+          "displayName": "m_CharacterStatsByID",
+          "category": "",
+          "variableProperties": {},
+          "variableComment": "",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": true,
+          "isSerialized": false,
+          "lineNumber": 52,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": false,
+          "variableName": "m_ItemsStatsByID",
+          "variableType": "KCBitArray",
+          "variableValue": "",
+          "displayName": "m_ItemsStatsByID",
+          "category": "",
+          "variableProperties": {},
+          "variableComment": "",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": true,
+          "isSerialized": false,
+          "lineNumber": 53,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": false,
+          "variableName": "m_DefaultValues",
+          "variableType": "TArray< coreUnionData32Bit>",
+          "variableValue": "",
+          "displayName": "m_DefaultValues",
+          "category": "",
+          "variableProperties": {},
+          "variableComment": "",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": true,
+          "isSerialized": false,
+          "lineNumber": 54,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": false,
+          "variableName": "m_StatDefinitions",
+          "variableType": "TArray< FKCStatDefinition * >",
+          "variableValue": "",
+          "displayName": "m_StatDefinitions",
+          "category": "",
+          "variableProperties": {},
+          "variableComment": "",
+          "isStatic": false,
+          "isConst": true,
+          "isPrivateVariable": true,
+          "isSerialized": false,
+          "lineNumber": 55,
+          "typeConverter": ""
+        }
+      ],
+      "isClass": true,
+      "unknownMacros": [
+        "KCStatManager();"
+      ],
+      "labels": [],
+      "enums": [],
+      "defines": {}
+    },
+    "FKCSTATDEFINITION": {
+      "classStructuresInheritingFrom": [
+        "FKCDBEntry"
+      ],
+      "comment": "",
+      "name": "FKCStatDefinition",
+      "valid": false,
+      "isSerialized": true,
+      "file": "..\\CoreClasses\\KCCore\\Systems\\Stats\\Private\\KCStatDefinition.h",
+      "variables": [
+        {
+          "isPointer": false,
+          "isUE4Variable": true,
+          "variableName": "m_eStatType",
+          "variableType": "ESTAT_PRIMITIVE_TYPES",
+          "variableValue": "ESTAT_PRIMITIVE_TYPES::INT32",
+          "displayName": "Variable Type",
+          "category": "GENERAL",
+          "variableProperties": {
+            "CATEGORY": "GENERAL",
+            "DISPLAYNAME": "Variable Type"
+          },
+          "variableComment": "//The stat type dictates how it will be used in game.",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": true,
+          "lineNumber": 16,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": true,
+          "variableName": "m_eStateAggregateType",
+          "variableType": "ESTAT_AGGREGATE_TYPES",
+          "variableValue": "ESTAT_AGGREGATE_TYPES::ADD",
+          "displayName": "Stat Aggregate Type",
+          "category": "",
+          "variableProperties": {
+            "CATGORY": "MISC",
+            "DISPLAYNAME": "Stat Aggregate Type"
+          },
+          "variableComment": "//When stat systems get added together they aggregate those values. These are the types allowed",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": true,
+          "lineNumber": 19,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": true,
+          "variableName": "m_strDefaultValue",
+          "variableType": "KCString",
+          "variableValue": "\"0\"",
+          "displayName": "Default Value",
+          "category": "GENERAL",
+          "variableProperties": {
+            "CATEGORY": "GENERAL",
+            "DISPLAYNAME": "Default Value"
+          },
+          "variableComment": "//The default value of the stat.",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": true,
+          "lineNumber": 22,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": true,
+          "variableName": "m_strMinValue",
+          "variableType": "KCString",
+          "variableValue": "\"0\"",
+          "displayName": "Min Value",
+          "category": "GENERAL",
+          "variableProperties": {
+            "CATEGORY": "GENERAL",
+            "DISPLAYNAME": "Min Value"
+          },
+          "variableComment": "//The min value of the stat.",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": true,
+          "lineNumber": 25,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": true,
+          "variableName": "m_strMaxValue",
+          "variableType": "KCString",
+          "variableValue": "\"0\"",
+          "displayName": "Max Value",
+          "category": "GENERAL",
+          "variableProperties": {
+            "CATEGORY": "GENERAL",
+            "DISPLAYNAME": "Max Value"
+          },
+          "variableComment": "//The max value of the stat.",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": true,
+          "lineNumber": 28,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": true,
+          "variableName": "m_bApplicableToCharacters",
+          "variableType": "bool",
+          "variableValue": "true",
+          "displayName": "Characters",
+          "category": "APPLICABLE",
+          "variableProperties": {
+            "CATEGORY": "APPLICABLE",
+            "DISPLAYNAME": "Characters"
+          },
+          "variableComment": "//Will this stat exist on characters?",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": true,
+          "lineNumber": 31,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": true,
+          "variableName": "m_bApplicableToItems",
+          "variableType": "bool",
+          "variableValue": "true",
+          "displayName": "Items",
+          "category": "APPLICABLE",
+          "variableProperties": {
+            "CATEGORY": "APPLICABLE",
+            "DISPLAYNAME": "Items"
+          },
+          "variableComment": "//Will this stat exist on items?",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": true,
+          "lineNumber": 34,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": true,
+          "variableName": "m_strGraph",
+          "variableType": "KCString",
+          "variableValue": "\"\"",
+          "displayName": "Graph Name",
+          "category": "GRAPH",
+          "variableProperties": {
+            "CATEGORY": "GRAPH",
+            "DISPLAYNAME": "Graph Name",
+            "LIST": "Graphs"
+          },
+          "variableComment": "//the graph that will be used to generate the final value. The graph stat should be a float",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": true,
+          "lineNumber": 37,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": true,
+          "variableName": "m_strGraphStat",
+          "variableType": "KCString",
+          "variableValue": "\"Rank\"",
+          "displayName": "Graph Stat",
+          "category": "GRAPH",
+          "variableProperties": {
+            "CATEGORY": "GRAPH",
+            "DISPLAYNAME": "Graph Stat",
+            "LIST": "Stats"
+          },
+          "variableComment": "//The stat which will be used in the graph. Most times it's the rank.",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": true,
+          "lineNumber": 40,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": true,
+          "variableName": "m_eGraphResultStatType",
+          "variableType": "ESTAT_PRIMITIVE_TYPES",
+          "variableValue": "ESTAT_PRIMITIVE_TYPES::INT32",
+          "displayName": "Graph Result Variable Type",
+          "category": "GRAPH",
+          "variableProperties": {
+            "CATEGORY": "GRAPH",
+            "DISPLAYNAME": "Graph Result Variable Type"
+          },
+          "variableComment": "//The stat type that gets returned after the calculations. Sometimes/most times you want the stat type to be float while the graph result type is an int",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": true,
+          "lineNumber": 43,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": true,
+          "variableName": "m_MathFunctions",
+          "variableType": "TArray<IKCStatMathFunction>",
+          "variableValue": "",
+          "displayName": "Math Functions",
+          "category": "MISC",
+          "variableProperties": {
+            "CATEGORY": "MISC",
+            "DISPLAYNAME": "Math Functions"
+          },
+          "variableComment": "//functions that will do math on the stat. The functions get ran in order 0-to end.",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": true,
+          "lineNumber": 46,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": true,
+          "variableName": "m_StatsReferencing",
+          "variableType": "TArray<KCName>",
+          "variableValue": "",
+          "displayName": "Stat Refs",
+          "category": "MISC",
+          "variableProperties": {
+            "CATEGORY": "MISC",
+            "DISPLAYNAME": "Stat Refs",
+            "HIDDEN": ""
+          },
+          "variableComment": "//Stats need to know what other stats are referencing them. This is the array of stat ids",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": true,
+          "lineNumber": 49,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": true,
+          "variableName": "m_bDirtyAllStats",
+          "variableType": "bool",
+          "variableValue": "false",
+          "displayName": "Dirty All Stats",
+          "category": "MISC",
+          "variableProperties": {
+            "CATEGORY": "MISC",
+            "DISPLAYNAME": "Dirty All Stats"
+          },
+          "variableComment": "//When this stat changes all the stats will need to be recalculate",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": true,
+          "lineNumber": 52,
+          "typeConverter": ""
+        }
+      ],
+      "isClass": false,
+      "unknownMacros": [
+        "KCSERIALIZE_CODE();"
+      ],
+      "labels": [],
+      "enums": [],
+      "defines": {}
+    },
+    "KCTARRAY": {
+      "classStructuresInheritingFrom": [],
+      "comment": "",
+      "name": "KCTArray",
+      "valid": false,
+      "isSerialized": false,
+      "file": "..\\CoreClasses\\KCCore\\Utils\\Containers\\KCTArray.h",
+      "variables": [
+        {
+          "isPointer": true,
+          "isUE4Variable": false,
+          "variableName": "m_Memory",
+          "variableType": "T",
+          "variableValue": "nullptr",
+          "displayName": "m_Memory",
+          "category": "",
+          "variableProperties": {},
+          "variableComment": "",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": true,
+          "isSerialized": false,
+          "lineNumber": 299,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": false,
+          "variableName": "m_iMemorySize",
+          "variableType": "uint32",
+          "variableValue": "0",
+          "displayName": "m_iMemorySize",
+          "category": "",
+          "variableProperties": {},
+          "variableComment": "",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": true,
+          "isSerialized": false,
+          "lineNumber": 300,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": false,
+          "variableName": "m_eGrowType",
+          "variableType": "ETARRAY_GROW_BY_TYPES",
+          "variableValue": "ETARRAY_GROW_BY_TYPES::DOUBLE",
+          "displayName": "m_eGrowType",
+          "category": "",
+          "variableProperties": {},
+          "variableComment": "",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": true,
+          "isSerialized": false,
+          "lineNumber": 301,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": false,
+          "variableName": "m_iGrowBy",
+          "variableType": "uint32",
+          "variableValue": "0",
+          "displayName": "m_iGrowBy",
+          "category": "",
+          "variableProperties": {},
+          "variableComment": "",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": true,
+          "isSerialized": false,
+          "lineNumber": 302,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": false,
+          "variableName": "m_iCountOfItems",
+          "variableType": "uint32",
+          "variableValue": "0",
+          "displayName": "m_iCountOfItems",
+          "category": "",
+          "variableProperties": {},
+          "variableComment": "",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": true,
+          "isSerialized": false,
+          "lineNumber": 303,
+          "typeConverter": ""
+        }
+      ],
+      "isClass": true,
+      "unknownMacros": [],
+      "labels": [
+        "default",
+        "case ETARRAY_GROW_BY_TYPES::DOUBLE",
+        "case ETARRAY_GROW_BY_TYPES::PREDEFINED"
+      ],
+      "enums": [],
+      "defines": {}
+    },
+    "KCMEMORYWRITER": {
+      "classStructuresInheritingFrom": [],
+      "comment": "",
+      "name": "KCMemoryWriter",
+      "valid": false,
+      "isSerialized": false,
+      "file": "..\\CoreClasses\\KCCore\\Utils\\IO\\KCMemoryWriter.h",
+      "variables": [
+        {
+          "isPointer": false,
+          "isUE4Variable": false,
+          "variableName": "m_MemoryArray",
+          "variableType": "TArray<MemoryType>",
+          "variableValue": "",
+          "displayName": "m_MemoryArray",
+          "category": "",
+          "variableProperties": {},
+          "variableComment": "",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": true,
+          "isSerialized": false,
+          "lineNumber": 219,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": false,
+          "variableName": "m_iCurrentByteIndex",
+          "variableType": "uint32",
+          "variableValue": "0",
+          "displayName": "m_iCurrentByteIndex",
+          "category": "",
+          "variableProperties": {},
+          "variableComment": "",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": true,
+          "isSerialized": false,
+          "lineNumber": 220,
+          "typeConverter": ""
+        }
+      ],
+      "isClass": true,
+      "unknownMacros": [],
+      "labels": [],
+      "enums": [],
+      "defines": {}
+    },
+    "KCCHARWRITER": {
+      "classStructuresInheritingFrom": [
+        "KCMemoryWriter<char>"
+      ],
+      "comment": "",
+      "name": "KCCharWriter",
+      "valid": false,
+      "isSerialized": false,
+      "file": "..\\CoreClasses\\KCCore\\Utils\\IO\\KCMemoryWriter.h",
+      "variables": [],
+      "isClass": true,
+      "unknownMacros": [],
+      "labels": [],
+      "enums": [],
+      "defines": {}
+    },
+    "KCBYTEWRITER": {
+      "classStructuresInheritingFrom": [
+        "KCMemoryWriter<uint8>"
+      ],
+      "comment": "",
+      "name": "KCByteWriter",
+      "valid": false,
+      "isSerialized": false,
+      "file": "..\\CoreClasses\\KCCore\\Utils\\IO\\KCMemoryWriter.h",
+      "variables": [],
+      "isClass": true,
+      "unknownMacros": [],
+      "labels": [],
+      "enums": [],
+      "defines": {}
+    },
+    "KCDATABASEMANAGER": {
+      "classStructuresInheritingFrom": [
+        "KCCoreObject"
+      ],
+      "comment": "",
+      "name": "KCDatabaseManager",
+      "valid": false,
+      "isSerialized": false,
+      "file": "..\\CoreClasses\\KCCore\\Database\\KCDatabaseManager.h",
+      "variables": [],
+      "isClass": true,
+      "unknownMacros": [],
+      "labels": [],
+      "enums": [],
+      "defines": {}
+    },
+    "KCDBTABLE": {
+      "classStructuresInheritingFrom": [],
+      "comment": "/////////////////////////////////////////////////////////////////////////////The database manager holds all the tables for storing the games data.\r\n//\r\n///////////////////////////////////////////////////////////////////////////\r\n",
+      "name": "KCDBTable",
+      "valid": false,
+      "isSerialized": false,
+      "file": "..\\CoreClasses\\KCCore\\Database\\Private\\KCDBTable.h",
+      "variables": [
+        {
+          "isPointer": false,
+          "isUE4Variable": false,
+          "variableName": "m_eDatatable",
+          "variableType": "DATABASE::EDATABASE_TABLES",
+          "variableValue": "DATABASE::EDATABASE_TABLES::UNDEFINED",
+          "displayName": "m_eDatatable",
+          "category": "",
+          "variableProperties": {},
+          "variableComment": "//deletes all the entries and cleans up the table",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": false,
+          "lineNumber": 91,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": false,
+          "variableName": "m_Entries",
+          "variableType": "TArray< T * >",
+          "variableValue": "",
+          "displayName": "m_Entries",
+          "category": "",
+          "variableProperties": {},
+          "variableComment": "",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": false,
+          "lineNumber": 92,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": false,
+          "variableName": "m_EntriesByGuid",
+          "variableType": "std::unordered_map<KCDatabaseGuid, uint32>",
+          "variableValue": "",
+          "displayName": "m_EntriesByGuid",
+          "category": "",
+          "variableProperties": {},
+          "variableComment": "",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": false,
+          "lineNumber": 93,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": false,
+          "variableName": "m_EntriesByName",
+          "variableType": "std::unordered_map<KCName, uint32, KCNameHasher>",
+          "variableValue": "",
+          "displayName": "m_EntriesByName",
+          "category": "",
+          "variableProperties": {},
+          "variableComment": "",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": false,
+          "lineNumber": 94,
+          "typeConverter": ""
+        }
+      ],
+      "isClass": true,
+      "unknownMacros": [],
+      "labels": [],
+      "enums": [],
+      "defines": {}
+    },
+    "KCDATAGROUPBINARYWRITER": {
+      "classStructuresInheritingFrom": [],
+      "comment": "",
+      "name": "KCDataGroupBinaryWriter",
+      "valid": false,
+      "isSerialized": false,
+      "file": "..\\CoreClasses\\KCCore\\Systems\\DataGroup\\FileTypes\\KCDataGroupBinaryWriter.h",
+      "variables": [],
+      "isClass": true,
+      "unknownMacros": [],
+      "labels": [],
+      "enums": [],
+      "defines": {}
+    },
+    "KCDATAGROUPSTRINGPARSER": {
+      "classStructuresInheritingFrom": [],
+      "comment": "",
+      "name": "KCDataGroupStringParser",
+      "valid": false,
+      "isSerialized": false,
+      "file": "..\\CoreClasses\\KCCore\\Systems\\DataGroup\\FileTypes\\KCDataGroupStringParser.h",
+      "variables": [],
+      "isClass": true,
+      "unknownMacros": [],
+      "labels": [],
+      "enums": [],
+      "defines": {}
+    },
     "IKCSTATMATHFUNCTION": {
       "classStructuresInheritingFrom": [],
       "comment": "",
@@ -141,12 +857,12 @@
           "displayName": "m_pStatManager",
           "category": "",
           "variableProperties": {},
-          "variableComment": "//the original stat modifier//the stat manager\r\n",
+          "variableComment": "//if you copy and change anything you'll get the same has hash code, but shouldn't. So we need a way to reset it.//the original stat modifier\r\n//the stat manager\r\n",
           "isStatic": false,
           "isConst": true,
           "isPrivateVariable": false,
           "isSerialized": false,
-          "lineNumber": 21,
+          "lineNumber": 23,
           "typeConverter": ""
         },
         {
@@ -163,7 +879,7 @@
           "isConst": true,
           "isPrivateVariable": false,
           "isSerialized": false,
-          "lineNumber": 23,
+          "lineNumber": 25,
           "typeConverter": ""
         },
         {
@@ -180,7 +896,7 @@
           "isConst": false,
           "isPrivateVariable": false,
           "isSerialized": false,
-          "lineNumber": 25,
+          "lineNumber": 27,
           "typeConverter": ""
         },
         {
@@ -197,7 +913,7 @@
           "isConst": false,
           "isPrivateVariable": false,
           "isSerialized": false,
-          "lineNumber": 27,
+          "lineNumber": 29,
           "typeConverter": ""
         },
         {
@@ -205,7 +921,7 @@
           "isUE4Variable": false,
           "variableName": "m_eInheritType",
           "variableType": "ESTAT_INHERIT_TYPES",
-          "variableValue": "ESTAT_INHERIT_TYPES::CHILDREN",
+          "variableValue": "ESTAT_INHERIT_TYPES::SELF_AND_CHILDREN",
           "displayName": "m_eInheritType",
           "category": "",
           "variableProperties": {},
@@ -214,7 +930,7 @@
           "isConst": false,
           "isPrivateVariable": false,
           "isSerialized": false,
-          "lineNumber": 29,
+          "lineNumber": 31,
           "typeConverter": ""
         },
         {
@@ -231,49 +947,12 @@
           "isConst": false,
           "isPrivateVariable": true,
           "isSerialized": false,
-          "lineNumber": 53,
+          "lineNumber": 55,
           "typeConverter": ""
         }
       ],
       "isClass": false,
       "unknownMacros": [],
-      "labels": [],
-      "enums": [],
-      "defines": {}
-    },
-    "KCCORE_API": {
-      "classStructuresInheritingFrom": [
-        "KCUnitTypeManager",
-        "KCCoreObject"
-      ],
-      "comment": "",
-      "name": "KCCORE_API",
-      "valid": false,
-      "isSerialized": false,
-      "file": "..\\CoreClasses\\KCCore\\Systems\\UnitTypes\\KCUnitTypeManager.h",
-      "variables": [
-        {
-          "isPointer": false,
-          "isUE4Variable": false,
-          "variableName": "m_Categories",
-          "variableType": "KCTArray<KCUnitTypeCategory *>",
-          "variableValue": "",
-          "displayName": "m_Categories",
-          "category": "",
-          "variableProperties": {},
-          "variableComment": "//NOTE - maybe in the future better to make this a map",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": true,
-          "isSerialized": false,
-          "lineNumber": 145,
-          "typeConverter": ""
-        }
-      ],
-      "isClass": true,
-      "unknownMacros": [
-        "KCUnitTypeManager();"
-      ],
       "labels": [],
       "enums": [],
       "defines": {}
@@ -351,7 +1030,7 @@
           "isConst": false,
           "isPrivateVariable": true,
           "isSerialized": false,
-          "lineNumber": 175,
+          "lineNumber": 179,
           "typeConverter": ""
         },
         {
@@ -368,7 +1047,7 @@
           "isConst": false,
           "isPrivateVariable": true,
           "isSerialized": false,
-          "lineNumber": 176,
+          "lineNumber": 180,
           "typeConverter": ""
         },
         {
@@ -385,7 +1064,7 @@
           "isConst": false,
           "isPrivateVariable": true,
           "isSerialized": false,
-          "lineNumber": 177,
+          "lineNumber": 181,
           "typeConverter": ""
         }
       ],
@@ -624,6 +1303,27 @@
           "isSerialized": true,
           "lineNumber": 89,
           "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": true,
+          "variableName": "m_strParent",
+          "variableType": "KCString",
+          "variableValue": "\"\"",
+          "displayName": "Parent",
+          "category": "TESTING",
+          "variableProperties": {
+            "CATEGORY": "TESTING",
+            "DISPLAYNAME": "Parent",
+            "LIST": "Testing"
+          },
+          "variableComment": "",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": true,
+          "lineNumber": 91,
+          "typeConverter": ""
         }
       ],
       "isClass": true,
@@ -634,96 +1334,143 @@
       "enums": [],
       "defines": {}
     },
-    "KCDATABASEMANAGER": {
-      "classStructuresInheritingFrom": [
-        "KCCoreObject"
-      ],
+    "FKCDBENTRY": {
+      "classStructuresInheritingFrom": [],
       "comment": "",
-      "name": "KCDatabaseManager",
+      "name": "FKCDBEntry",
       "valid": false,
-      "isSerialized": false,
-      "file": "..\\CoreClasses\\KCCore\\Database\\KCDatabaseManager.h",
-      "variables": [],
-      "isClass": true,
-      "unknownMacros": [],
+      "isSerialized": true,
+      "file": "..\\CoreClasses\\KCCore\\Database\\KCDBEntry.h",
+      "variables": [
+        {
+          "isPointer": false,
+          "isUE4Variable": true,
+          "variableName": "m_DatabaseGuid",
+          "variableType": "KCDatabaseGuid",
+          "variableValue": "UNINITIALIZED_DATABASE_GUID",
+          "displayName": "Database Guid",
+          "category": "DATABASE",
+          "variableProperties": {
+            "CATEGORY": "DATABASE",
+            "DISPLAYNAME": "Database Guid",
+            "READONLY": ""
+          },
+          "variableComment": "//the database guid. Must be unique",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": true,
+          "lineNumber": 39,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": true,
+          "variableName": "m_strName",
+          "variableType": "KCName",
+          "variableValue": "",
+          "displayName": "Name",
+          "category": "DATABASE",
+          "variableProperties": {
+            "CATEGORY": "DATABASE",
+            "DISPLAYNAME": "Name",
+            "READONLY": ""
+          },
+          "variableComment": "//the name of the entry. Must be unique",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": true,
+          "lineNumber": 44,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": true,
+          "variableName": "m_strFileName",
+          "variableType": "KCString",
+          "variableValue": "",
+          "displayName": "File Name",
+          "category": "DATABASE",
+          "variableProperties": {
+            "CATEGORY": "DATABASE",
+            "DISPLAYNAME": "File Name",
+            "READONLY": ""
+          },
+          "variableComment": "//The filename of this entry",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": true,
+          "lineNumber": 47,
+          "typeConverter": ""
+        }
+      ],
+      "isClass": false,
+      "unknownMacros": [
+        "KCSERIALIZE_CODE();"
+      ],
       "labels": [],
       "enums": [],
       "defines": {}
     },
-    "KCDBTABLE": {
+    "KCDATAGROUP": {
       "classStructuresInheritingFrom": [],
-      "comment": "/////////////////////////////////////////////////////////////////////////////The database manager holds all the tables for storing the games data.\r\n//\r\n///////////////////////////////////////////////////////////////////////////\r\n",
-      "name": "KCDBTable",
+      "comment": "",
+      "name": "KCDataGroup",
       "valid": false,
       "isSerialized": false,
-      "file": "..\\CoreClasses\\KCCore\\Database\\Private\\KCDBTable.h",
+      "file": "..\\CoreClasses\\KCCore\\Systems\\DataGroup\\KCDataGroup.h",
       "variables": [
         {
           "isPointer": false,
           "isUE4Variable": false,
-          "variableName": "m_eDatatable",
-          "variableType": "DATABASE::EDATABASE_TABLES",
-          "variableValue": "DATABASE::EDATABASE_TABLES::UNDEFINED",
-          "displayName": "m_eDatatable",
-          "category": "",
-          "variableProperties": {},
-          "variableComment": "//deletes all the entries and cleans up the table",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": false,
-          "isSerialized": false,
-          "lineNumber": 86,
-          "typeConverter": ""
-        },
-        {
-          "isPointer": false,
-          "isUE4Variable": false,
-          "variableName": "m_Entries",
-          "variableType": "KCTArray< T * >",
+          "variableName": "m_strGroupName",
+          "variableType": "KCName",
           "variableValue": "",
-          "displayName": "m_Entries",
+          "displayName": "m_strGroupName",
           "category": "",
           "variableProperties": {},
           "variableComment": "",
           "isStatic": false,
           "isConst": false,
-          "isPrivateVariable": false,
+          "isPrivateVariable": true,
           "isSerialized": false,
-          "lineNumber": 87,
+          "lineNumber": 143,
           "typeConverter": ""
         },
         {
           "isPointer": false,
           "isUE4Variable": false,
-          "variableName": "m_EntriesByGuid",
-          "variableType": "std::unordered_map<KCDatabaseGuid, uint32>",
+          "variableName": "m_Properties",
+          "variableType": "std::unordered_map<KCName, KCDataProperty, KCNameHasher>",
           "variableValue": "",
-          "displayName": "m_EntriesByGuid",
+          "displayName": "m_Properties",
           "category": "",
           "variableProperties": {},
           "variableComment": "",
           "isStatic": false,
           "isConst": false,
-          "isPrivateVariable": false,
+          "isPrivateVariable": true,
           "isSerialized": false,
-          "lineNumber": 88,
+          "lineNumber": 144,
           "typeConverter": ""
         },
         {
           "isPointer": false,
           "isUE4Variable": false,
-          "variableName": "m_EntriesByName",
-          "variableType": "std::unordered_map<KCName, uint32, KCNameHasher>",
+          "variableName": "m_ChildGroups",
+          "variableType": "std::unordered_map<KCName, KCDataGroup, KCNameHasher>",
           "variableValue": "",
-          "displayName": "m_EntriesByName",
+          "displayName": "m_ChildGroups",
           "category": "",
           "variableProperties": {},
           "variableComment": "",
           "isStatic": false,
           "isConst": false,
-          "isPrivateVariable": false,
+          "isPrivateVariable": true,
           "isSerialized": false,
-          "lineNumber": 89,
+          "lineNumber": 145,
           "typeConverter": ""
         }
       ],
@@ -733,27 +1480,13 @@
       "enums": [],
       "defines": {}
     },
-    "KCDATAGROUPBINARYWRITER": {
+    "KCDATAGROUPSTRINGWRITER": {
       "classStructuresInheritingFrom": [],
       "comment": "",
-      "name": "KCDataGroupBinaryWriter",
+      "name": "KCDataGroupStringWriter",
       "valid": false,
       "isSerialized": false,
-      "file": "..\\CoreClasses\\KCCore\\Systems\\DataGroup\\FileTypes\\KCDataGroupBinaryWriter.h",
-      "variables": [],
-      "isClass": true,
-      "unknownMacros": [],
-      "labels": [],
-      "enums": [],
-      "defines": {}
-    },
-    "KCDATAGROUPSTRINGPARSER": {
-      "classStructuresInheritingFrom": [],
-      "comment": "",
-      "name": "KCDataGroupStringParser",
-      "valid": false,
-      "isSerialized": false,
-      "file": "..\\CoreClasses\\KCCore\\Systems\\DataGroup\\FileTypes\\KCDataGroupStringParser.h",
+      "file": "..\\CoreClasses\\KCCore\\Systems\\DataGroup\\FileTypes\\KCDataGroupStringWriter.h",
       "variables": [],
       "isClass": true,
       "unknownMacros": [],
@@ -985,8 +1718,88 @@
       "classStructuresInheritingFrom": [
         "IKCStatMathFunction"
       ],
-      "comment": "//this math function divides the stat by the denominator, multiplies it by the current stat and adds that back onto the stat//Current = Current + ( Current * ( Stat/Denominator ))\r\n",
+      "comment": "//this math function is meant to be used as a percent value. Where stat could be from -100 to 100. So it could look like this: Current * ( 1 + ( Stat/100)). If Stat was 0 then there would be no bonus to current stat. Great for bonus values//Current = Current * (Value +( Stat/Denominator ))\r\n",
       "name": "KCStatMathFunctionDivideAddAndMultiply",
+      "valid": false,
+      "isSerialized": true,
+      "file": "..\\CoreClasses\\KCCore\\Systems\\Stats\\MathFunctions\\KCStatMathFunctions.h",
+      "variables": [
+        {
+          "isPointer": false,
+          "isUE4Variable": true,
+          "variableName": "m_strStat",
+          "variableType": "KCName",
+          "variableValue": "",
+          "displayName": "Stat",
+          "category": "GENERAL",
+          "variableProperties": {
+            "CATEGORY": "GENERAL",
+            "DISPLAYNAME": "Stat",
+            "LIST": "Stats"
+          },
+          "variableComment": "//the stat that will be added onto the current stat",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": true,
+          "lineNumber": 124,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": true,
+          "variableName": "m_fDenominator",
+          "variableType": "float",
+          "variableValue": "100.0f",
+          "displayName": "Denominator",
+          "category": "GENERAL",
+          "variableProperties": {
+            "CATEGORY": "GENERAL",
+            "DISPLAYNAME": "Denominator"
+          },
+          "variableComment": "//the denominator",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": true,
+          "lineNumber": 127,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": true,
+          "variableName": "m_fValue",
+          "variableType": "float",
+          "variableValue": "1.0f",
+          "displayName": "Value",
+          "category": "GENERAL",
+          "variableProperties": {
+            "CATEGORY": "GENERAL",
+            "DISPLAYNAME": "Value"
+          },
+          "variableComment": "//the value",
+          "isStatic": false,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": true,
+          "lineNumber": 130,
+          "typeConverter": ""
+        }
+      ],
+      "isClass": true,
+      "unknownMacros": [
+        "KCSERIALIZE_CODE();"
+      ],
+      "labels": [],
+      "enums": [],
+      "defines": {}
+    },
+    "KCSTATMATHFUNCTIONDIVIDEMULTIPLYBYSTATADDANDSTAT": {
+      "classStructuresInheritingFrom": [
+        "IKCStatMathFunction"
+      ],
+      "comment": "//this math function divides the stat by the denominator, multiplies it by the current stat and adds that back onto the stat//Current = Current + ( Current * ( Stat/Denominator ))\r\n",
+      "name": "KCStatMathFunctionDivideMultiplyByStatAddAndStat",
       "valid": false,
       "isSerialized": true,
       "file": "..\\CoreClasses\\KCCore\\Systems\\Stats\\MathFunctions\\KCStatMathFunctions.h",
@@ -1186,159 +1999,13 @@
       "enums": [],
       "defines": {}
     },
-    "FKCDBENTRY": {
+    "KCDATAGROUPSIMPLEXMLREADER": {
       "classStructuresInheritingFrom": [],
       "comment": "",
-      "name": "FKCDBEntry",
-      "valid": false,
-      "isSerialized": true,
-      "file": "..\\CoreClasses\\KCCore\\Database\\KCDBEntry.h",
-      "variables": [
-        {
-          "isPointer": false,
-          "isUE4Variable": true,
-          "variableName": "m_DatabaseGuid",
-          "variableType": "KCDatabaseGuid",
-          "variableValue": "UNINITIALIZED_DATABASE_GUID",
-          "displayName": "Database Guid",
-          "category": "DATABASE",
-          "variableProperties": {
-            "CATEGORY": "DATABASE",
-            "DISPLAYNAME": "Database Guid",
-            "READONLY": ""
-          },
-          "variableComment": "//the database guid. Must be unique",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": false,
-          "isSerialized": true,
-          "lineNumber": 39,
-          "typeConverter": ""
-        },
-        {
-          "isPointer": false,
-          "isUE4Variable": true,
-          "variableName": "m_strName",
-          "variableType": "KCName",
-          "variableValue": "",
-          "displayName": "Name",
-          "category": "DATABASE",
-          "variableProperties": {
-            "CATEGORY": "DATABASE",
-            "DISPLAYNAME": "Name",
-            "READONLY": ""
-          },
-          "variableComment": "//the name of the entry. Must be unique",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": false,
-          "isSerialized": true,
-          "lineNumber": 44,
-          "typeConverter": ""
-        },
-        {
-          "isPointer": false,
-          "isUE4Variable": true,
-          "variableName": "m_strFileName",
-          "variableType": "KCString",
-          "variableValue": "",
-          "displayName": "Name",
-          "category": "DATABASE",
-          "variableProperties": {
-            "CATEGORY": "DATABASE",
-            "DISPLAYNAME": "Name",
-            "READONLY": ""
-          },
-          "variableComment": "//The filename of this entry",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": false,
-          "isSerialized": true,
-          "lineNumber": 47,
-          "typeConverter": ""
-        }
-      ],
-      "isClass": false,
-      "unknownMacros": [
-        "KCSERIALIZE_CODE();"
-      ],
-      "labels": [],
-      "enums": [],
-      "defines": {}
-    },
-    "KCDATAGROUP": {
-      "classStructuresInheritingFrom": [],
-      "comment": "",
-      "name": "KCDataGroup",
+      "name": "KCDataGroupSimpleXMLReader",
       "valid": false,
       "isSerialized": false,
-      "file": "..\\CoreClasses\\KCCore\\Systems\\DataGroup\\KCDataGroup.h",
-      "variables": [
-        {
-          "isPointer": false,
-          "isUE4Variable": false,
-          "variableName": "m_strGroupName",
-          "variableType": "KCName",
-          "variableValue": "",
-          "displayName": "m_strGroupName",
-          "category": "",
-          "variableProperties": {},
-          "variableComment": "",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": true,
-          "isSerialized": false,
-          "lineNumber": 143,
-          "typeConverter": ""
-        },
-        {
-          "isPointer": false,
-          "isUE4Variable": false,
-          "variableName": "m_Properties",
-          "variableType": "std::unordered_map<KCName, KCDataProperty, KCNameHasher>",
-          "variableValue": "",
-          "displayName": "m_Properties",
-          "category": "",
-          "variableProperties": {},
-          "variableComment": "",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": true,
-          "isSerialized": false,
-          "lineNumber": 144,
-          "typeConverter": ""
-        },
-        {
-          "isPointer": false,
-          "isUE4Variable": false,
-          "variableName": "m_ChildGroups",
-          "variableType": "std::unordered_map<KCName, KCDataGroup, KCNameHasher>",
-          "variableValue": "",
-          "displayName": "m_ChildGroups",
-          "category": "",
-          "variableProperties": {},
-          "variableComment": "",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": true,
-          "isSerialized": false,
-          "lineNumber": 145,
-          "typeConverter": ""
-        }
-      ],
-      "isClass": true,
-      "unknownMacros": [],
-      "labels": [],
-      "enums": [],
-      "defines": {}
-    },
-    "KCDATAGROUPSTRINGWRITER": {
-      "classStructuresInheritingFrom": [],
-      "comment": "",
-      "name": "KCDataGroupStringWriter",
-      "valid": false,
-      "isSerialized": false,
-      "file": "..\\CoreClasses\\KCCore\\Systems\\DataGroup\\FileTypes\\KCDataGroupStringWriter.h",
+      "file": "..\\CoreClasses\\KCCore\\Systems\\DataGroup\\FileTypes\\KCDataGroupSimpleXMLReader.h",
       "variables": [],
       "isClass": true,
       "unknownMacros": [],
@@ -1358,7 +2025,7 @@
           "isPointer": false,
           "isUE4Variable": false,
           "variableName": "m_ChildStatModifiers",
-          "variableType": "KCTArray< IKCStatModifier * >",
+          "variableType": "TArray< IKCStatModifier * >",
           "variableValue": "",
           "displayName": "m_ChildStatModifiers",
           "category": "",
@@ -1369,6 +2036,106 @@
           "isPrivateVariable": true,
           "isSerialized": false,
           "lineNumber": 72,
+          "typeConverter": ""
+        }
+      ],
+      "isClass": true,
+      "unknownMacros": [],
+      "labels": [],
+      "enums": [],
+      "defines": {}
+    },
+    "UNITTYPES": {
+      "classStructuresInheritingFrom": [],
+      "comment": "",
+      "name": "UNITTYPES",
+      "valid": false,
+      "isSerialized": false,
+      "file": "..\\CoreClasses\\KCCore\\Systems\\UnitTypes\\KCDefinedUnitTypes.h",
+      "variables": [
+        {
+          "isPointer": false,
+          "isUE4Variable": false,
+          "variableName": "ANY",
+          "variableType": "KCUnitType",
+          "variableValue": "",
+          "displayName": "ANY",
+          "category": "",
+          "variableProperties": {},
+          "variableComment": "",
+          "isStatic": true,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": false,
+          "lineNumber": 21,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": false,
+          "variableName": "CHARACTER",
+          "variableType": "KCUnitType",
+          "variableValue": "",
+          "displayName": "CHARACTER",
+          "category": "",
+          "variableProperties": {},
+          "variableComment": "",
+          "isStatic": true,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": false,
+          "lineNumber": 22,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": false,
+          "variableName": "ITEM",
+          "variableType": "KCUnitType",
+          "variableValue": "",
+          "displayName": "ITEM",
+          "category": "",
+          "variableProperties": {},
+          "variableComment": "",
+          "isStatic": true,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": false,
+          "lineNumber": 23,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": false,
+          "variableName": "WEAPON",
+          "variableType": "KCUnitType",
+          "variableValue": "",
+          "displayName": "WEAPON",
+          "category": "",
+          "variableProperties": {},
+          "variableComment": "",
+          "isStatic": true,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": false,
+          "lineNumber": 24,
+          "typeConverter": ""
+        },
+        {
+          "isPointer": false,
+          "isUE4Variable": false,
+          "variableName": "ARMOR",
+          "variableType": "KCUnitType",
+          "variableValue": "",
+          "displayName": "ARMOR",
+          "category": "",
+          "variableProperties": {},
+          "variableComment": "",
+          "isStatic": true,
+          "isConst": false,
+          "isPrivateVariable": false,
+          "isSerialized": false,
+          "lineNumber": 25,
           "typeConverter": ""
         }
       ],
@@ -1400,7 +2167,7 @@
           "isConst": false,
           "isPrivateVariable": true,
           "isSerialized": false,
-          "lineNumber": 50,
+          "lineNumber": 51,
           "typeConverter": ""
         },
         {
@@ -1417,7 +2184,7 @@
           "isConst": false,
           "isPrivateVariable": true,
           "isSerialized": false,
-          "lineNumber": 51,
+          "lineNumber": 52,
           "typeConverter": ""
         },
         {
@@ -1434,7 +2201,7 @@
           "isConst": false,
           "isPrivateVariable": true,
           "isSerialized": false,
-          "lineNumber": 52,
+          "lineNumber": 53,
           "typeConverter": ""
         },
         {
@@ -1451,7 +2218,7 @@
           "isConst": false,
           "isPrivateVariable": true,
           "isSerialized": false,
-          "lineNumber": 53,
+          "lineNumber": 54,
           "typeConverter": ""
         }
       ],
@@ -1483,7 +2250,7 @@
           "isConst": true,
           "isPrivateVariable": false,
           "isSerialized": false,
-          "lineNumber": 251,
+          "lineNumber": 252,
           "typeConverter": ""
         },
         {
@@ -1500,7 +2267,7 @@
           "isConst": false,
           "isPrivateVariable": false,
           "isSerialized": false,
-          "lineNumber": 252,
+          "lineNumber": 253,
           "typeConverter": ""
         },
         {
@@ -1517,7 +2284,7 @@
           "isConst": false,
           "isPrivateVariable": false,
           "isSerialized": false,
-          "lineNumber": 253,
+          "lineNumber": 254,
           "typeConverter": ""
         }
       ],
@@ -1558,489 +2325,6 @@
       "labels": [],
       "enums": [],
       "defines": {}
-    },
-    "KCDATAGROUPSIMPLEXMLREADER": {
-      "classStructuresInheritingFrom": [],
-      "comment": "",
-      "name": "KCDataGroupSimpleXMLReader",
-      "valid": false,
-      "isSerialized": false,
-      "file": "..\\CoreClasses\\KCCore\\Systems\\DataGroup\\FileTypes\\KCDataGroupSimpleXMLReader.h",
-      "variables": [],
-      "isClass": true,
-      "unknownMacros": [],
-      "labels": [],
-      "enums": [],
-      "defines": {}
-    },
-    "FKCSTATDEFINITION": {
-      "classStructuresInheritingFrom": [
-        "FKCDBEntry"
-      ],
-      "comment": "",
-      "name": "FKCStatDefinition",
-      "valid": false,
-      "isSerialized": true,
-      "file": "..\\CoreClasses\\KCCore\\Systems\\Stats\\Private\\KCStatDefinition.h",
-      "variables": [
-        {
-          "isPointer": false,
-          "isUE4Variable": true,
-          "variableName": "m_eStatType",
-          "variableType": "ESTAT_PRIMITIVE_TYPES",
-          "variableValue": "ESTAT_PRIMITIVE_TYPES::INT32",
-          "displayName": "Variable Type",
-          "category": "GENERAL",
-          "variableProperties": {
-            "CATEGORY": "GENERAL",
-            "DISPLAYNAME": "Variable Type"
-          },
-          "variableComment": "//The stat type dictates how it will be used in game.",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": false,
-          "isSerialized": true,
-          "lineNumber": 16,
-          "typeConverter": ""
-        },
-        {
-          "isPointer": false,
-          "isUE4Variable": true,
-          "variableName": "m_eStateAggregateType",
-          "variableType": "ESTAT_AGGREGATE_TYPES",
-          "variableValue": "ESTAT_AGGREGATE_TYPES::ADD",
-          "displayName": "Stat Aggregate Type",
-          "category": "",
-          "variableProperties": {
-            "CATGORY": "MISC",
-            "DISPLAYNAME": "Stat Aggregate Type"
-          },
-          "variableComment": "//When stat systems get added together they aggregate those values. These are the types allowed",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": false,
-          "isSerialized": true,
-          "lineNumber": 19,
-          "typeConverter": ""
-        },
-        {
-          "isPointer": false,
-          "isUE4Variable": true,
-          "variableName": "m_strDefaultValue",
-          "variableType": "KCString",
-          "variableValue": "\"0\"",
-          "displayName": "Default Value",
-          "category": "GENERAL",
-          "variableProperties": {
-            "CATEGORY": "GENERAL",
-            "DISPLAYNAME": "Default Value"
-          },
-          "variableComment": "//The default value of the stat.",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": false,
-          "isSerialized": true,
-          "lineNumber": 22,
-          "typeConverter": ""
-        },
-        {
-          "isPointer": false,
-          "isUE4Variable": true,
-          "variableName": "m_strMinValue",
-          "variableType": "KCString",
-          "variableValue": "\"0\"",
-          "displayName": "Min Value",
-          "category": "GENERAL",
-          "variableProperties": {
-            "CATEGORY": "GENERAL",
-            "DISPLAYNAME": "Min Value"
-          },
-          "variableComment": "//The min value of the stat.",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": false,
-          "isSerialized": true,
-          "lineNumber": 25,
-          "typeConverter": ""
-        },
-        {
-          "isPointer": false,
-          "isUE4Variable": true,
-          "variableName": "m_strMaxValue",
-          "variableType": "KCString",
-          "variableValue": "\"0\"",
-          "displayName": "Max Value",
-          "category": "GENERAL",
-          "variableProperties": {
-            "CATEGORY": "GENERAL",
-            "DISPLAYNAME": "Max Value"
-          },
-          "variableComment": "//The max value of the stat.",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": false,
-          "isSerialized": true,
-          "lineNumber": 28,
-          "typeConverter": ""
-        },
-        {
-          "isPointer": false,
-          "isUE4Variable": true,
-          "variableName": "m_bApplicableToCharacters",
-          "variableType": "bool",
-          "variableValue": "true",
-          "displayName": "Characters",
-          "category": "APPLICABLE",
-          "variableProperties": {
-            "CATEGORY": "APPLICABLE",
-            "DISPLAYNAME": "Characters"
-          },
-          "variableComment": "//Will this stat exist on characters?",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": false,
-          "isSerialized": true,
-          "lineNumber": 31,
-          "typeConverter": ""
-        },
-        {
-          "isPointer": false,
-          "isUE4Variable": true,
-          "variableName": "m_bApplicableToItems",
-          "variableType": "bool",
-          "variableValue": "true",
-          "displayName": "Items",
-          "category": "APPLICABLE",
-          "variableProperties": {
-            "CATEGORY": "APPLICABLE",
-            "DISPLAYNAME": "Items"
-          },
-          "variableComment": "//Will this stat exist on items?",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": false,
-          "isSerialized": true,
-          "lineNumber": 34,
-          "typeConverter": ""
-        },
-        {
-          "isPointer": false,
-          "isUE4Variable": true,
-          "variableName": "m_strGraph",
-          "variableType": "KCString",
-          "variableValue": "\"\"",
-          "displayName": "Graph Name",
-          "category": "GRAPH",
-          "variableProperties": {
-            "CATEGORY": "GRAPH",
-            "DISPLAYNAME": "Graph Name",
-            "LIST": "Graphs"
-          },
-          "variableComment": "//the graph that will be used to generate the final value. The graph stat should be a float",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": false,
-          "isSerialized": true,
-          "lineNumber": 37,
-          "typeConverter": ""
-        },
-        {
-          "isPointer": false,
-          "isUE4Variable": true,
-          "variableName": "m_strGraphStat",
-          "variableType": "KCString",
-          "variableValue": "\"Rank\"",
-          "displayName": "Graph Stat",
-          "category": "GRAPH",
-          "variableProperties": {
-            "CATEGORY": "GRAPH",
-            "DISPLAYNAME": "Graph Stat",
-            "LIST": "Stats"
-          },
-          "variableComment": "//The stat which will be used in the graph. Most times it's the rank.",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": false,
-          "isSerialized": true,
-          "lineNumber": 40,
-          "typeConverter": ""
-        },
-        {
-          "isPointer": false,
-          "isUE4Variable": true,
-          "variableName": "m_eGraphResultStatType",
-          "variableType": "ESTAT_PRIMITIVE_TYPES",
-          "variableValue": "ESTAT_PRIMITIVE_TYPES::INT32",
-          "displayName": "Graph Result Variable Type",
-          "category": "GRAPH",
-          "variableProperties": {
-            "CATEGORY": "GRAPH",
-            "DISPLAYNAME": "Graph Result Variable Type"
-          },
-          "variableComment": "//The stat type that gets returned after the calculations. Sometimes/most times you want the stat type to be float while the graph result type is an int",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": false,
-          "isSerialized": true,
-          "lineNumber": 43,
-          "typeConverter": ""
-        },
-        {
-          "isPointer": false,
-          "isUE4Variable": true,
-          "variableName": "m_MathFunctions",
-          "variableType": "KCTArray<IKCStatMathFunction>",
-          "variableValue": "",
-          "displayName": "Math Functions",
-          "category": "MISC",
-          "variableProperties": {
-            "CATEGORY": "MISC",
-            "DISPLAYNAME": "Math Functions"
-          },
-          "variableComment": "//functions that will do math on the stat. The functions get ran in order 0-to end.",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": false,
-          "isSerialized": true,
-          "lineNumber": 46,
-          "typeConverter": ""
-        },
-        {
-          "isPointer": false,
-          "isUE4Variable": true,
-          "variableName": "m_StatsReferencing",
-          "variableType": "KCTArray<KCName>",
-          "variableValue": "",
-          "displayName": "Stat Refs",
-          "category": "MISC",
-          "variableProperties": {
-            "CATEGORY": "MISC",
-            "DISPLAYNAME": "Stat Refs",
-            "HIDDEN": ""
-          },
-          "variableComment": "//Stats need to know what other stats are referencing them. This is the array of stat ids",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": false,
-          "isSerialized": true,
-          "lineNumber": 49,
-          "typeConverter": ""
-        },
-        {
-          "isPointer": false,
-          "isUE4Variable": true,
-          "variableName": "m_bDirtyAllStats",
-          "variableType": "bool",
-          "variableValue": "false",
-          "displayName": "Dirty All Stats",
-          "category": "MISC",
-          "variableProperties": {
-            "CATEGORY": "MISC",
-            "DISPLAYNAME": "Dirty All Stats"
-          },
-          "variableComment": "//When this stat changes all the stats will need to be recalculate",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": false,
-          "isSerialized": true,
-          "lineNumber": 52,
-          "typeConverter": ""
-        }
-      ],
-      "isClass": false,
-      "unknownMacros": [
-        "KCSERIALIZE_CODE();"
-      ],
-      "labels": [],
-      "enums": [],
-      "defines": {}
-    },
-    "KCTARRAY": {
-      "classStructuresInheritingFrom": [],
-      "comment": "",
-      "name": "KCTArray",
-      "valid": false,
-      "isSerialized": false,
-      "file": "..\\CoreClasses\\KCCore\\Utils\\Containers\\KCTArray.h",
-      "variables": [
-        {
-          "isPointer": true,
-          "isUE4Variable": false,
-          "variableName": "m_Memory",
-          "variableType": "T",
-          "variableValue": "nullptr",
-          "displayName": "m_Memory",
-          "category": "",
-          "variableProperties": {},
-          "variableComment": "",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": true,
-          "isSerialized": false,
-          "lineNumber": 293,
-          "typeConverter": ""
-        },
-        {
-          "isPointer": false,
-          "isUE4Variable": false,
-          "variableName": "m_iMemorySize",
-          "variableType": "uint32",
-          "variableValue": "0",
-          "displayName": "m_iMemorySize",
-          "category": "",
-          "variableProperties": {},
-          "variableComment": "",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": true,
-          "isSerialized": false,
-          "lineNumber": 294,
-          "typeConverter": ""
-        },
-        {
-          "isPointer": false,
-          "isUE4Variable": false,
-          "variableName": "m_eGrowType",
-          "variableType": "ETARRAY_GROW_BY_TYPES",
-          "variableValue": "ETARRAY_GROW_BY_TYPES::DOUBLE",
-          "displayName": "m_eGrowType",
-          "category": "",
-          "variableProperties": {},
-          "variableComment": "",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": true,
-          "isSerialized": false,
-          "lineNumber": 295,
-          "typeConverter": ""
-        },
-        {
-          "isPointer": false,
-          "isUE4Variable": false,
-          "variableName": "m_iGrowBy",
-          "variableType": "uint32",
-          "variableValue": "0",
-          "displayName": "m_iGrowBy",
-          "category": "",
-          "variableProperties": {},
-          "variableComment": "",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": true,
-          "isSerialized": false,
-          "lineNumber": 296,
-          "typeConverter": ""
-        },
-        {
-          "isPointer": false,
-          "isUE4Variable": false,
-          "variableName": "m_iCountOfItems",
-          "variableType": "uint32",
-          "variableValue": "0",
-          "displayName": "m_iCountOfItems",
-          "category": "",
-          "variableProperties": {},
-          "variableComment": "",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": true,
-          "isSerialized": false,
-          "lineNumber": 297,
-          "typeConverter": ""
-        }
-      ],
-      "isClass": true,
-      "unknownMacros": [
-        "#endif"
-      ],
-      "labels": [
-        "default",
-        "case ETARRAY_GROW_BY_TYPES::DOUBLE",
-        "case ETARRAY_GROW_BY_TYPES::PREDEFINED"
-      ],
-      "enums": [],
-      "defines": {}
-    },
-    "KCMEMORYWRITER": {
-      "classStructuresInheritingFrom": [],
-      "comment": "",
-      "name": "KCMemoryWriter",
-      "valid": false,
-      "isSerialized": false,
-      "file": "..\\CoreClasses\\KCCore\\Utils\\IO\\KCMemoryWriter.h",
-      "variables": [
-        {
-          "isPointer": false,
-          "isUE4Variable": false,
-          "variableName": "m_MemoryArray",
-          "variableType": "KCTArray<MemoryType>",
-          "variableValue": "",
-          "displayName": "m_MemoryArray",
-          "category": "",
-          "variableProperties": {},
-          "variableComment": "",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": true,
-          "isSerialized": false,
-          "lineNumber": 219,
-          "typeConverter": ""
-        },
-        {
-          "isPointer": false,
-          "isUE4Variable": false,
-          "variableName": "m_iCurrentByteIndex",
-          "variableType": "uint32",
-          "variableValue": "0",
-          "displayName": "m_iCurrentByteIndex",
-          "category": "",
-          "variableProperties": {},
-          "variableComment": "",
-          "isStatic": false,
-          "isConst": false,
-          "isPrivateVariable": true,
-          "isSerialized": false,
-          "lineNumber": 220,
-          "typeConverter": ""
-        }
-      ],
-      "isClass": true,
-      "unknownMacros": [],
-      "labels": [],
-      "enums": [],
-      "defines": {}
-    },
-    "KCCHARWRITER": {
-      "classStructuresInheritingFrom": [
-        "KCMemoryWriter<char>"
-      ],
-      "comment": "",
-      "name": "KCCharWriter",
-      "valid": false,
-      "isSerialized": false,
-      "file": "..\\CoreClasses\\KCCore\\Utils\\IO\\KCMemoryWriter.h",
-      "variables": [],
-      "isClass": true,
-      "unknownMacros": [],
-      "labels": [],
-      "enums": [],
-      "defines": {}
-    },
-    "KCBYTEWRITER": {
-      "classStructuresInheritingFrom": [
-        "KCMemoryWriter<uint8>"
-      ],
-      "comment": "",
-      "name": "KCByteWriter",
-      "valid": false,
-      "isSerialized": false,
-      "file": "..\\CoreClasses\\KCCore\\Utils\\IO\\KCMemoryWriter.h",
-      "variables": [],
-      "isClass": true,
-      "unknownMacros": [],
-      "labels": [],
-      "enums": [],
-      "defines": {}
     }
   },
   "enums": {
@@ -2058,10 +2342,10 @@
           "comment": "//A value of 0 is unknown/undefined datatable"
         },
         {
-          "name": "STATS",
+          "name": "STATS_DATABASE",
           "value": 1,
           "properties": {},
-          "comment": ""
+          "comment": "//NOTE STATS is a UE4 reserverd word!"
         },
         {
           "name": "COUNT",
@@ -2071,8 +2355,29 @@
         }
       ]
     },
-    "ESTAT_PRIMITIVE_TYPES": {
+    "ETARRAY_GROW_BY_TYPES": {
       "uniqueID": 1,
+      "enumName": "ETARRAY_GROW_BY_TYPES",
+      "type": "",
+      "comment": "",
+      "file": "..\\CoreClasses\\KCCore\\Utils\\Containers\\KCTArray.h",
+      "enumItems": [
+        {
+          "name": "DOUBLE",
+          "value": 0,
+          "properties": {},
+          "comment": "//doubles everytime it reaches max"
+        },
+        {
+          "name": "PREDEFINED",
+          "value": 1,
+          "properties": {},
+          "comment": "//predefined grow by value"
+        }
+      ]
+    },
+    "ESTAT_PRIMITIVE_TYPES": {
+      "uniqueID": 2,
       "enumName": "ESTAT_PRIMITIVE_TYPES",
       "type": "",
       "comment": "",
@@ -2093,7 +2398,7 @@
       ]
     },
     "ESTAT_HANDLER_TYPE": {
-      "uniqueID": 2,
+      "uniqueID": 3,
       "enumName": "ESTAT_HANDLER_TYPE",
       "type": "",
       "comment": "",
@@ -2114,7 +2419,7 @@
       ]
     },
     "ESTAT_AGGREGATE_TYPES": {
-      "uniqueID": 3,
+      "uniqueID": 4,
       "enumName": "ESTAT_AGGREGATE_TYPES",
       "type": "",
       "comment": "",
@@ -2141,7 +2446,7 @@
       ]
     },
     "ESTAT_INHERIT_TYPES": {
-      "uniqueID": 4,
+      "uniqueID": 5,
       "enumName": "ESTAT_INHERIT_TYPES",
       "type": "",
       "comment": "",
@@ -2157,7 +2462,7 @@
           "comment": ""
         },
         {
-          "name": "CHILDREN",
+          "name": "SELF_AND_CHILDREN",
           "value": 1,
           "properties": {
             "DISPLAYNAME": "Self And Children",
@@ -2177,7 +2482,7 @@
       ]
     },
     "ETEST": {
-      "uniqueID": 5,
+      "uniqueID": 6,
       "enumName": "ETEST",
       "type": "",
       "comment": "",
@@ -2226,7 +2531,7 @@
       ]
     },
     "EDATATYPES": {
-      "uniqueID": 6,
+      "uniqueID": 7,
       "enumName": "EDATATYPES",
       "type": "",
       "comment": "",
@@ -2313,7 +2618,7 @@
       ]
     },
     "EDATAGROUP_BINARY_VERSION": {
-      "uniqueID": 7,
+      "uniqueID": 8,
       "enumName": "EDATAGROUP_BINARY_VERSION",
       "type": "",
       "comment": "",
@@ -2332,37 +2637,14 @@
           "comment": "//always last"
         }
       ]
-    },
-    "ETARRAY_GROW_BY_TYPES": {
-      "uniqueID": 8,
-      "enumName": "ETARRAY_GROW_BY_TYPES",
-      "type": "",
-      "comment": "",
-      "file": "..\\CoreClasses\\KCCore\\Utils\\Containers\\KCTArray.h",
-      "enumItems": [
-        {
-          "name": "DOUBLE",
-          "value": 0,
-          "properties": {},
-          "comment": "//doubles everytime it reaches max"
-        },
-        {
-          "name": "PREDEFINED",
-          "value": 1,
-          "properties": {},
-          "comment": "//predefined grow by value"
-        }
-      ]
     }
   },
   "defines": {
+    "TARRAY": "KCTArray",
     "INVALID_SEED": "-1",
     "SAME_GROUP_TAG_NAME_SPLIT": "\"_A_\"",
     "GROUP_TYPE_NAME": "\"GROUP\"",
     "ATTRIBUTE_TYPE": "\"TYPE\"",
-    "*CATEGORY_OBJECT": "nullptr",
-    "_WCHAR_DEFINED": "",
-    "EMPTY_KCSTRING": "\"\"",
     "NULLPTR": "0",
     "FORCEINLINE": "__inline",
     "KCCORE_API": "",
@@ -2378,6 +2660,8 @@
     "DB_GUID_MASK_INVALID": "0x80000000",
     "DB_GUID_MASK_INVALID_SHIFT": "31",
     "UNINITIALIZED_DATABASE_GUID": "0",
-    "KDATAGROUP_BINARY_VERSION_ERROR": "0xFF"
+    "KDATAGROUP_BINARY_VERSION_ERROR": "0xFF",
+    "_WCHAR_DEFINED": "",
+    "EMPTY_KCSTRING": "\"\""
   }
 }

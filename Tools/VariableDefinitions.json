@@ -136,6 +136,14 @@
     "typeConverter": null
   },
   {
+    "variableName": "TArray",
+    "variableClassName": null,
+    "variableEnumName": null,
+    "eCSharpVariable": 15,
+    "isPrimitiveType": false,
+    "typeConverter": null
+  },  
+  {
     "variableName": "bool",
     "variableClassName": null,
     "variableEnumName": null,

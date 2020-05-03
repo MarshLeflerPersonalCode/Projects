@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace Library.Database
 {
-    public class DatabaseManager
+    public class DatabaseManager : IDataGroupConvertTypeRecast
     {
         private static DatabaseManager g_GlobalDatabaseManager = null;
         private string m_strDirectory = ".\\Databases\\";
@@ -29,7 +29,18 @@ namespace Library.Database
         public string getDatabaseDirectory() { return m_strDirectory; }
         //when creating classes if we create dynamic classes we to use the class creator manager
         public List<ClassCreatorManager> classCreators { get; set; }
-
+        public Type _dataGroupTypeRecast(Type mTypeRequest)
+        {
+            foreach( ClassCreatorManager mManager in classCreators)
+            {
+                Type mNewType = mManager._dataGroupTypeRecast(mTypeRequest);
+                if( mNewType != mTypeRequest )
+                {
+                    return mNewType;
+                }
+            }
+            return mTypeRequest;
+        }
         public bool createDatabase(string strDatabaseName)
         {
             strDatabaseName = strDatabaseName.Trim();

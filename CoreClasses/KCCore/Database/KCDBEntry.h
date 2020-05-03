@@ -45,6 +45,6 @@ struct FKCDBEntry
 	KCPROPERTY(Category = "DATABASE", DisplayName = "Name", ReadOnly)
 	KCName							m_strName;
 	//The filename of this entry
-	KCPROPERTY(Category = "DATABASE", DisplayName = "Name", ReadOnly)
+	KCPROPERTY(Category = "DATABASE", DisplayName = "File Name", ReadOnly)
 	KCString						m_strFileName;
 };

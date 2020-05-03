@@ -26,8 +26,23 @@ namespace Library
 		{
 			dataGroupName = strName;
 		}
-		//get/set the name of the datagroup
-		public string dataGroupName { get; set; }
+
+        public bool isEmpty()
+        {
+            return m_Properties.Count == 0 && m_ChildGroups.Count == 0;
+        }
+        public List<DataGroup> getChildDataGroups() { return m_ChildGroups.Values.ToList(); }
+        public bool deleteChildDataGroup(DataGroup mChild)
+        {
+            if( m_ChildGroups.ContainsKey(mChild.dataGroupName.ToUpper()) )
+            {
+                m_ChildGroups.Remove(mChild.dataGroupName.ToUpper());
+                return true;
+            }
+            return false;
+        }
+        //get/set the name of the datagroup
+        public string dataGroupName { get; set; }
 		public DataGroup getOrCreateDataGroup(string strDataGroupName)
 		{
 			if (m_ChildGroups.ContainsKey(strDataGroupName.ToUpper()) == false)

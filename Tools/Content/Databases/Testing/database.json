@@ -15,5 +15,6 @@
       "ColumnWidth": 80,
       "OverrideName": ""
     }
-  ]
+  ],
+  "parentVariableName": "m_strParent"
 }

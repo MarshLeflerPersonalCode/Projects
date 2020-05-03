@@ -96,4 +96,6 @@ protected:
 	KCString							m_strFolderTest = "";
 	UPROPERTY(Category = "TESTING", DisplayName = "File", Meta = (FilePath = "Content", FileFilter = "*.dat"))
 	KCString							m_strFileTest = "";
+	UPROPERTY(Category = "TESTING", DisplayName = "Parent", Meta=(List="Testing"))
+	KCString							m_strParent = "";
 };
