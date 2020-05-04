@@ -197,7 +197,8 @@ namespace CommandLineSerializer
 				}
 			}
 
-			if (m_StringWriter != null)
+			if (m_StringWriter != null &&
+                bSerializedHeader)
 			{
 				File.WriteAllText(exportedHeaderFile, m_StringWriter.ToString());
 				if (File.Exists(exportedHeaderFile))
@@ -242,7 +243,8 @@ namespace CommandLineSerializer
 			addLine("", false);
 
 			_writeMacroDefineCode(iLineNumber);
-			_writeByteWriterCode(mClass);
+            _writeSerializationFunctions(mClass);
+            _writeByteWriterCode(mClass);
 			_writeByteReaderCode(mClass);
 			_writeDataGroupWriteCode(mClass);
 			_writeDataGroupReadCode(mClass);
@@ -261,8 +263,12 @@ namespace CommandLineSerializer
 			addLine("#endif", false);
 			addLine("#define " + strMacroName + " ");
 		}
+        private void _writeSerializationFunctions(ClassStructure mClass)
+        {
+            addLine("virtual KCString getClassName(){ return \"" + mClass.name + "\";}");            
+        }
 
-		private void _writeByteWriterCode(ClassStructure mClass)
+        private void _writeByteWriterCode(ClassStructure mClass)
 		{
 			addLine("bool serialize(KCByteWriter &mByteWriter)");
 			addLine("{");

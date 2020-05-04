@@ -4,6 +4,7 @@
 #include "utils/Containers/KCName.h"
 #include "Systems/DataGroup/KCDataGroupManager.h"
 #include "Systems/Stats/Private/KCStatDefinition.h"
+#include "ClassCreationSerializer.h"
 
 ///////////////////////////////////////////////////////////////////////////
 //The database manager holds all the tables for storing the games data.

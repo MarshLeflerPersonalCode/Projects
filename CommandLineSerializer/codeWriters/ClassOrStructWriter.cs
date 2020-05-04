@@ -26,17 +26,20 @@ namespace CommandLineSerializer.codeWriters
 
 			if( mVariable.isPointer)
 			{
-				string strBoolName = "_b" + mVariable.variableName;
-				mHeaderFile.addLine("bool " + strBoolName + "(" + mVariable.variableName + " != nullptr);");
-				mHeaderFile.addLine("mByteWriter << " + strBoolName + ";");
-				mHeaderFile.addLine("if(" + strBoolName + ")");
+				mHeaderFile.addLine("if(" + mVariable.variableName + " != nullptr)");
 				mHeaderFile.addLine("{");
-				mHeaderFile.addLine(mVariable.variableName + "->serialize(mByteWriter);");
+                mHeaderFile.addLine("mByteWriter << " + mVariable.variableName + "->getClassName();");
+                mHeaderFile.addLine(mVariable.variableName + "->serialize(mByteWriter);");
 				mHeaderFile.addLine("}");
-			}
+                mHeaderFile.addLine("else");
+                mHeaderFile.addLine("{");
+                mHeaderFile.addLine("mByteWriter << EMPTY_STRING");
+                mHeaderFile.addLine("}");
+            }
 			else
 			{
-				mHeaderFile.addLine(mVariable.variableName + ".serialize(mByteWriter);");
+                mHeaderFile.addLine("mByteWriter << " + mVariable.variableName + ".getClassName();");
+                mHeaderFile.addLine(mVariable.variableName + ".serialize(mByteWriter);");
 			}
 
 			return true; 
@@ -53,21 +56,30 @@ namespace CommandLineSerializer.codeWriters
 				return false;
 			}
 
-			if (mVariable.isPointer)
-			{
-				string strBoolName = "_b" + mVariable.variableName;
-				mHeaderFile.addLine("DELETE_SAFELY(" + mVariable.variableName + ");");
-				mHeaderFile.addLine("bool " + strBoolName + "(false);");
-				mHeaderFile.addLine("mByteReader << " + strBoolName + ";");
-				mHeaderFile.addLine("if(" + strBoolName + ")");
-				mHeaderFile.addLine("{");
-				mHeaderFile.addLine(mVariable.variableName + " = new " + mVariable.variableType + "();");
-				mHeaderFile.addLine(mVariable.variableName + "->deserialize(mByteReader);");
+            string strClassName = "_strClassName" + mVariable.variableName;            
+            mHeaderFile.addLine("KCString " + strClassName + ";");
+            mHeaderFile.addLine("mByteReader << " + strClassName + ";");
+
+            if (mVariable.isPointer)
+            {
+                mHeaderFile.addLine("DELETE_SAFELY(" + mVariable.variableName + ");");
+                mHeaderFile.addLine("if(" + strClassName + " != EMPTY_STRING)");
+                mHeaderFile.addLine("{");
+                mHeaderFile.addLine(mVariable.variableName + " = new _SERIALIZE_CLASS_CREATION_::createObject(" + strClassName + ");");
+                mHeaderFile.addLine("if(" + mVariable.variableName + " != nullptr){" + mVariable.variableName + "->deserialize(mByteReader); } ");
 				mHeaderFile.addLine("}");
 			}
 			else
 			{
-				mHeaderFile.addLine(mVariable.variableName + ".deserialize(mByteReader);");
+                mHeaderFile.addLine("if(" + mVariable.variableName + ".getClassName() != " + strClassName + ")");
+                mHeaderFile.addLine("{");
+                mHeaderFile.addLine(mVariable.variableName + " = _SERIALIZE_CLASS_CREATION_::createObject<" + mVariable.variableType + ">(" + strClassName + ");");
+                mHeaderFile.addLine("}");
+                mHeaderFile.addLine("else");
+                mHeaderFile.addLine("{");
+                mHeaderFile.addLine(mVariable.variableName + " = " + mVariable.variableType + "();");
+                mHeaderFile.addLine("}");
+                mHeaderFile.addLine(mVariable.variableName + ".deserialize(mByteReader);");
 			}
 
 			return true;

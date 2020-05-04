@@ -82,7 +82,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
     <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
-    <IncludePath>$(VC_IncludePath)KCCore;$(VC_IncludePath)Intermediate;$(IncludePath)</IncludePath>
+    <IncludePath>$(VC_IncludePath)KCCore;$(VC_IncludePath)Intermediate;.\;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)..\Tools\</OutDir>
     <TargetName>$(ProjectName)_Debug</TargetName>
   </PropertyGroup>
@@ -91,7 +91,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(VC_IncludePath)KCCore;$(VC_IncludePath)Intermediate;$(IncludePath)</IncludePath>
+    <IncludePath>$(VC_IncludePath)KCCore;$(VC_IncludePath)Intermediate;.\;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)..\Tools\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -200,6 +200,7 @@
     <ClCompile Include="KCCore\Utils\TypeDefinitions\KCDataTypes.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Intermediate\ClassCreationSerializer.h" />
     <ClInclude Include="Intermediate\EnumsByName.h" />
     <ClInclude Include="KCCore\KCCoreData.h" />
     <ClInclude Include="KCCore\KCCoreObject.h" />

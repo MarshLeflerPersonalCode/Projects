@@ -258,6 +258,9 @@
     <ClInclude Include="KCCore\Systems\Effects\KCEffectsManager.h">
       <Filter>KCCore\Systems\Effects</Filter>
     </ClInclude>
+    <ClInclude Include="Intermediate\ClassCreationSerializer.h">
+      <Filter>Intermediate</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="TestCases\SerializeTest\KCIncludeTest.inc" />
