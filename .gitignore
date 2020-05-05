@@ -12,7 +12,6 @@ Release/
 *.zip
 *.ipch
 *.exe
-*.resx
 *.pdb
 *.ilk
 *.bla
