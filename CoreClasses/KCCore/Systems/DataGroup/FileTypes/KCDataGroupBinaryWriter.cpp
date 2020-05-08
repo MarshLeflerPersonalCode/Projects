@@ -141,7 +141,7 @@ void _writeStringTable(KCByteWriter &mWriter, std::map<KCString, uint16> &mStrin
 
 bool KCDataGroupBinaryWriter::writeDataGroupToFile(const WCHAR *strPathAndFile, KCDataGroup &mDataGroup)
 {
-	
+
 	mDataGroup.setProperty("_FILE_", strPathAndFile);
 	std::map<KCString, uint16> mStringLookupTable;
 	KCByteWriter mWriter;	

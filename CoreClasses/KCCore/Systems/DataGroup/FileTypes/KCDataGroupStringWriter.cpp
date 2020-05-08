@@ -42,7 +42,10 @@ bool KCDataGroupStringWriter::writeDataGroupToFile(const WCHAR *strPathAndFile, 
 
 KCString KCDataGroupStringWriter::writeDataGroupToString(KCDataGroup &mDataGroup)
 {
+	std::unordered_map<KCDataGroup *, const KCDataGroup *> mCacheLookup;
+	mDataGroup._cacheParents(mCacheLookup);
 	std::ostringstream  mStringStream;	
 	_writeDataGroup(mDataGroup, mStringStream, "");
+	mDataGroup._reinitializeFromCache(mCacheLookup);
 	return mStringStream.str();
 }

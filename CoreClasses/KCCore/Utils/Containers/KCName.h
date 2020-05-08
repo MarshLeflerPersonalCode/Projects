@@ -9,7 +9,7 @@ class KCName
 public:
 	KCName() { _setString(EMPTY_KCSTRING); }
 	KCName(const char *strString) { _setString((strString == null)?EMPTY_KCSTRING:KCString(strString)); }
-	KCName(const KCString strString) { _setString(strString); }
+	KCName(const KCString &strString) { _setString(strString); }
 	~KCName() {}
 	//returns if its empty
 	FORCEINLINE bool		isEmpty() const { return (m_iUniqueID == INVALID || m_iUniqueID == 0 )?true:false; }

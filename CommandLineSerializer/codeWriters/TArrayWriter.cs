@@ -162,7 +162,7 @@ namespace CommandLineSerializer.codeWriters
             mHeaderFile.addLine("{"); //start the array scope
 			string strTmpVar = "_tmp_" + mVariable.variableName;
             mHeaderFile.addLine(mVariable.variableName + ".Reset();");
-            mHeaderFile.addLine("const KCDataGroup *pArrayGroup = " + strDataGroupName + ".getChildGroup(\"" + mVariable.variableName + "\");");
+            mHeaderFile.addLine("const KCDataGroup *pArrayGroup = " + strDataGroupName + ".getChildGroupWithInhertance(\"" + mVariable.variableName + "\");");
             mHeaderFile.addLine("if(pArrayGroup != nullptr)");
             mHeaderFile.addLine("{");   //pArrayGroup check
             mHeaderFile.addLine("int32 iCount = pArrayGroup->getProperty(\"COUNT\", 0);");
@@ -208,9 +208,6 @@ namespace CommandLineSerializer.codeWriters
                     //not this gets filled out in mWriter.attemptDataGroupReadCode
                 }
 
-                //mHeaderFile.addLine("const KCDataGroup *pChildAsPointer = pArrayGroup->getChildGroup(DATATYPES_UTILS::getAsString(iIndex));");
-                //mHeaderFile.addLine("if(pChildAsPointer != nullptr)");
-                //mHeaderFile.addLine("{");
                 mHeaderFile.addLine("const KCDataGroup &mArrayGroupRef = *pArrayGroup;");
                 foreach (CodeWriter mWriter in mHeaderFile.getCodeWriters())
                 {
@@ -224,15 +221,6 @@ namespace CommandLineSerializer.codeWriters
                     //we need to add it back in.
                     mHeaderFile.addLine(mVariable.variableName + ".Add(" + strTmpVar + ");");
                 }
-                //mHeaderFile.addLine("}");//end check for pointer group
-//                 if (mNewVariable.isPointer) //if it's a pointer it could be null so we need to add it back in.
-//                 {
-//                     mHeaderFile.addLine("else");
-//                     mHeaderFile.addLine("{");
-//                     //we need to add it back in but it's null
-//                     mHeaderFile.addLine(mVariable.variableName + ".Add(nullptr);");
-//                     mHeaderFile.addLine("}");
-//                 }
                 mHeaderFile.addLine("}"); //end for loop
 			}
             mHeaderFile.addLine("}");   //end count check

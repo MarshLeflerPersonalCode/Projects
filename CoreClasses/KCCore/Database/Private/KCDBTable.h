@@ -20,6 +20,7 @@ public:
 		TArray<const KCDataGroup*> mDataGroups;
 		mDataGroups.Reserve(200);
 		pDatagroupManager->getDataGroupsInDirectory(strDatabaseFolder, mDataGroups);
+		pDatagroupManager->addInhertianceByPropertyName(mDataGroups, "m_strName", "m_strParent");
 		for (int32 iIndex = 0; iIndex < mDataGroups.Num(); iIndex++)
 		{
 			T *pEntryObject = KC_NEW T();

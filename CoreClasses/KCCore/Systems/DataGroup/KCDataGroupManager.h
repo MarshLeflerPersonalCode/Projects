@@ -22,8 +22,14 @@ public:
 	//returns all the data groups in the directory passed in
 	int32						getDataGroupsInDirectory(const KCString &strPath, TArray<const KCDataGroup *> &mDataGroups) const;
 
-private:
 
+	//returns a datagroup by file path and file name
+	const KCDataGroup *			getDataGroupByFileName(const KCString &strPath) const;
+
+	//when data groups load, some objects want to specify parents by a tag inside the datagroup. For instance DB Entries all have a name property and the inheritance tag named m_strParent looks for that tag to know what to inherit from
+	void						addInhertianceByPropertyName(const TArray<const KCDataGroup *> &mDataGroups, const KCName &strPropertyName, const KCName &strInheritanceProperty) const;
+private:
+	void						_configureFileInheritance();
 	void						_clean();
 	
 	std::unordered_map<KCString, KCDataGroup *>		m_DataGroups;	

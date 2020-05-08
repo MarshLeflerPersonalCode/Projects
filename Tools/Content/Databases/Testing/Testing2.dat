@@ -1,6 +1,6 @@
 [KCIncludeTest]
      <FLOAT>m_fZ:10
-     <STRING>m_eEnumTest:ONE
+     <STRING>m_eEnumTest:ONE     
      <STRING>m_strParent:TESTING
      <INT32>m_DatabaseGuid:134229417
      <STRING>m_strName:Testing2

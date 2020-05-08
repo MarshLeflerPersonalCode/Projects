@@ -141,7 +141,7 @@ namespace CommandLineSerializer.codeWriters
             {
                 mHeaderFile.addLine("DELETE_SAFELY(" + mVariable.variableName + ");");                
             }
-            mHeaderFile.addLine("const KCDataGroup *pObjectDataGroup = " + strDataGroupName + ".getChildGroup(" + strDataGroupOverride + ");");
+            mHeaderFile.addLine("const KCDataGroup *pObjectDataGroup = " + strDataGroupName + ".getChildGroupWithInhertance(" + strDataGroupOverride + ");");
             mHeaderFile.addLine("if(pObjectDataGroup != nullptr)");
             mHeaderFile.addLine("{");
            // mHeaderFile.addLine("std::cout << \"Data group was FOUND! \" << std::endl;");

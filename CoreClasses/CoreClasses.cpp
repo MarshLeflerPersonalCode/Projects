@@ -29,6 +29,46 @@ void _serializeTest()
 	mTest3.deserialize(mDataGroup);
 }
 
+void _testDataGroupInheritance()
+{
+	KCDataGroup mDataGroupParent;
+	KCDataGroup mDataGroupChild;
+	KCDataGroup mDataGroupChildOfChild;
+	mDataGroupParent.setProperty("PARENT_VALUE", 13);
+	mDataGroupParent.setProperty("OVERWRITE_VALUE", 13);
+	mDataGroupParent.getOrCreateChildGroup("PARENT_GROUP1").setProperty("PROP1", 13);
+	mDataGroupChild.setProperty("CHILD_VALUE", 17);	
+	mDataGroupChild.setParentDataGroup(&mDataGroupParent);
+	mDataGroupChild.setProperty("OVERWRITE_VALUE", 17);
+	mDataGroupChildOfChild.setParentDataGroup(&mDataGroupChild);
+	KCEnsureAlwaysMsg(mDataGroupChild.getProperty("OVERWRITE_VALUE", -1) == 17, "Value should be 17");
+	KCEnsureAlwaysMsg(mDataGroupChild.getChildGroupWithInhertance("PARENT_GROUP1") != nullptr, "Wasn't able to get child group from parent");
+	KCEnsureAlwaysMsg(mDataGroupChild.getProperty("CHILD_VALUE", -1) == 17, "setting property after parent is set breaks");
+	KCEnsureAlwaysMsg(mDataGroupChildOfChild.getChildGroupWithInhertance("PARENT_GROUP1") != nullptr, "Wasn't able to get child group from parent who also has a parent");
+	KCEnsureAlwaysMsg(mDataGroupChildOfChild.getProperty("CHILD_VALUE", -1) == 17, "setting property after parent is set breaks");
+}
+
+void _testPrimitiveTypeRepresentation()
+{
+	KCEnsureAlways(KCStringUtils::isNumber("-2323.0242f") == true);
+	KCEnsureAlways(KCStringUtils::isNumber("-f") == false);
+	KCEnsureAlways(KCStringUtils::isNumber("") == false);
+	KCEnsureAlways(KCStringUtils::isNumber("0") == true);
+	KCEnsureAlways(KCStringUtils::isNumber("3432") == true);
+	KCEnsureAlways(KCStringUtils::isNumber("Hello - 000.003 2223") == false);
+	KCEnsureAlways(DATATYPES_UTILS::getDataTypeRepresentingValue("testing") == EDATATYPES::STRING);
+	KCEnsureAlways(DATATYPES_UTILS::getDataTypeRepresentingValue("-23232") == EDATATYPES::INT32);
+	KCEnsureAlways(DATATYPES_UTILS::getDataTypeRepresentingValue("23232") == EDATATYPES::INT32);
+	KCEnsureAlways(DATATYPES_UTILS::getDataTypeRepresentingValue("4294967295") == EDATATYPES::UINT32);
+	KCEnsureAlways(DATATYPES_UTILS::getDataTypeRepresentingValue("23232.0f") == EDATATYPES::FLOAT);
+	KCEnsureAlways(DATATYPES_UTILS::getDataTypeRepresentingValue("-23232.0f") == EDATATYPES::FLOAT);
+	KCEnsureAlways(DATATYPES_UTILS::getDataTypeRepresentingValue("9223372036854775807") == EDATATYPES::INT64);
+	KCEnsureAlways(DATATYPES_UTILS::getDataTypeRepresentingValue("-9223372036854775808") == EDATATYPES::INT64);
+	KCEnsureAlways(DATATYPES_UTILS::getDataTypeRepresentingValue("18446744073709551615") == EDATATYPES::UINT64);
+	KCEnsureAlways(DATATYPES_UTILS::getDataTypeRepresentingValue("18446744073709551616") == EDATATYPES::COUNT);
+	KCEnsureAlways(DATATYPES_UTILS::getDataTypeRepresentingValue("-9223372036854775809") == EDATATYPES::COUNT);
+}
+
 int main()
 {
 
@@ -88,6 +128,7 @@ int main()
 	KCEnsureAlways(mStatHandler2.getStatValueForWeapon(KCSTATS::RANK, 1) == 4);
 	KCEnsureAlways(mStatHandler3.getStatValueForWeapon(KCSTATS::RANK, 1) == 14);
 
+	_testDataGroupInheritance();
 
 	/*KCDataGroup mSecondGroup;
 	KCDataGroupSimpleXMLReader::parseDataGroupFromFile(L"..\\CoreClasses\\Intermediate\\CommandLineSerializer.cfg", mSecondGroup);
@@ -99,24 +140,9 @@ int main()
 	std::cout << "time to parse: " << time_span.count() << "second(s). File: D:\\Personal\\Projects\\CoreClasses\\x64\\Intermediate\\CommandLineSerializer.cfg" << std::endl;
 	KCDataGroupBinaryWriter::writeDataGroupToFile(L"..\\CoreClasses\\x64\\Intermediate\\CommandLineSerializer.cfg.bin", mSecondGroup);
 	*/
+	_testPrimitiveTypeRepresentation();
+	
 
-	bool bIsNumber1 = KCStringUtils::isNumber("-2323.0242f");
-	bool bIsNumber2 = KCStringUtils::isNumber("-f");
-	bool bIsNumber3 = KCStringUtils::isNumber("");
-	bool bIsNumber4 = KCStringUtils::isNumber("0");
-	bool bIsNumber5 = KCStringUtils::isNumber("3432");
-	bool bIsNumber6 = KCStringUtils::isNumber("Hello - 000.003 2223");
-	EDATATYPES eDataTypeString = DATATYPES_UTILS::getDataTypeRepresentingValue("testing");
-	EDATATYPES eDataTypeInt32 = DATATYPES_UTILS::getDataTypeRepresentingValue("-23232");
-	EDATATYPES eDataTypeInt32_2 = DATATYPES_UTILS::getDataTypeRepresentingValue("23232");
-	EDATATYPES eDataTypeUInt32 = DATATYPES_UTILS::getDataTypeRepresentingValue("4294967295");
-	EDATATYPES eDataTypeFloat = DATATYPES_UTILS::getDataTypeRepresentingValue("23232.0f");
-	EDATATYPES eDataTypeFloat2 = DATATYPES_UTILS::getDataTypeRepresentingValue("-23232.0f");
-	EDATATYPES eDataTypeInt64 = DATATYPES_UTILS::getDataTypeRepresentingValue("9223372036854775807");
-	EDATATYPES eDataTypeInt642 = DATATYPES_UTILS::getDataTypeRepresentingValue("-9223372036854775808");
-	EDATATYPES eDataTypeUInt64 = DATATYPES_UTILS::getDataTypeRepresentingValue("18446744073709551615");
-	EDATATYPES eDataTypeUnknow = DATATYPES_UTILS::getDataTypeRepresentingValue("18446744073709551616");
-	EDATATYPES eDataTypeUnknow2 = DATATYPES_UTILS::getDataTypeRepresentingValue("-9223372036854775809");
 
 
 	KCDatabaseGuid mGuid(UNINITIALIZED_DATABASE_GUID);

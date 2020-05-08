@@ -2,7 +2,7 @@
      <BOOL>m_bApplicableToItems:False
      <INT32>m_DatabaseGuid:134240874
      <STRING>m_strName:HP Min
-     <STRING>m_strFileName:HP_Min.dat
+     <STRING>m_strFileName:HP_Min.dat     
      [m_MathFunctions]
           <UINT16>COUNT:1
           [0]

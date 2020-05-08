@@ -29,7 +29,7 @@ static void				testDataGroupStringWriter(const WCHAR *strPath)
 
 	
 	int32 iValue = mDataGroup.getProperty("TEST_INT", -1);
-	KCDataGroup *pChild1 = mDataGroup.getChildGroup("CHILD1");
+	const KCDataGroup *pChild1 = mDataGroup.getChildGroupWithInhertance("CHILD1");
 
 	KCEnsureAlways( KCDataGroupStringWriter::writeDataGroupToFile(strPath, mDataGroup) );
 	std::wstring strAddBinaryHack(strPath);
@@ -45,7 +45,7 @@ static void				testDataGroupStringParser(const WCHAR *strPath)
 	KCString strOutput = mDataGroup.getStringRepresentingDataGroup();
 	//std::cout << strOutput << std::endl;
 	int32 iValue = mDataGroup.getProperty("TEST_INT", -1);
-	KCDataGroup *pChild1 = mDataGroup.getChildGroup("CHILD1");
+	const KCDataGroup *pChild1 = mDataGroup.getChildGroupWithInhertance("CHILD1");
 	float fChildValue = (pChild1)?pChild1->getProperty("CHILD1_TEST_FLOAT", -1.0f):-1.0f;
 	bool bWOrked = ( iValue == 13 && pChild1 && fChildValue == 13.0f)?true:false;
 	KCEnsureAlways(bWOrked);
