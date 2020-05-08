@@ -13,12 +13,6 @@ using Library.IO;
 
 namespace CommandLineSerializer
 {
-    public enum ETEST
-    {
-        TESTING,
-        TESTING2,
-        TESTRING3
-    }
     [Serializable]
 	public class SerializerConfigFile
 	{
@@ -26,44 +20,27 @@ namespace CommandLineSerializer
 
 
 		//[System.Xml.Serialization.XmlIgnore]
-		[NonSerialized] public int m_iShouldNotShowUp = 13;
-        public bool m_bool = false;
-        public sbyte m_sbyte = -43;
-        public byte m_byte = 43;
-        public short m_short = -3443;
-        public ushort m_ushort = 3443;
-        public int m_int = -34343;
-        public uint m_uint = 34343;
-        public long m_long = -34343;
-        public ulong m_ulong = 34343;
-        public float m_float = 34343.0f;
-        public double m_double = 34343.0;
-        public ETEST m_eTest = ETEST.TESTRING3;
-        public string m_string = "should show up";
+		
         public SerializerConfigFile() 
 		{
-            TestingArray = new string[] { "test1", "test2" };
+        
 		}
 
-		public string[] TestingArray { get; set; }
+		
 		public void initialize(SerializerController mSerializerController, string strConfigFile)
 		{
-			headerFiles = new List<HeaderFile>();
-            emptyList = new List<HeaderFile>();
+			headerFiles = new List<HeaderFile>();            
             configFile = strConfigFile;
 			serializerController = mSerializerController;
-            dictionaryTest = new Dictionary<string, HeaderFile>();
-            dictionaryTest["test0"] = new HeaderFile();
-            dictionaryTest["test1"] = new HeaderFile();
+        
 
         }
 		private SerializerController serializerController { get; set; }
 
 		private string configFile { get; set; }
 		public List<HeaderFile> headerFiles { get; set; }
-
-        public List<HeaderFile> emptyList { get; set; }
-        public Dictionary<string, HeaderFile> dictionaryTest { get; set; }
+        
+        
         public void addHeaderFile(HeaderFile mFile)
 		{
 			if (headerFiles.Contains(mFile) == false)

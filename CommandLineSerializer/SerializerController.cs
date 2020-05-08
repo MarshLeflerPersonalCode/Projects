@@ -564,9 +564,8 @@ namespace CommandLineSerializer
             {
                 return; //nothing changed.
             }
-            string strPathToIntermediateDir = commandLineArguments.getCommandValueAsString("-IntermediateDir");
-            string strClassCreationHeaderFile = Path.Combine(strPathToIntermediateDir, "ClassCreationSerializer.h");
-            WriteClassCreationHeader.writeClassCreationHeader(commandLineArguments.getCommandValueAsString("-SourceDir"), strClassCreationHeaderFile, this);
+            WriteClassCreationHeader.writeClassCreationHeader(commandLineArguments.getCommandValueAsString("-IntermediateDir"), this);
+            //WriteClassCreationHeader.writeClassCreationHeaders(commandLineArguments.getCommandValueAsString("-IntermediateDir"), this);
 
         }
 

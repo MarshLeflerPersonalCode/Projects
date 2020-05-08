@@ -56,7 +56,7 @@ void _buildStringLookupTable(KCDataGroup &mDataGroup, std::map<KCString, uint16>
 
 void _writeDataGroup(KCDataGroup &mDataGroup, KCByteWriter &mWriter, std::map<KCString, uint16> &mStringLookupTable)
 {
-	mWriter << _getStringID(mDataGroup.getGroupName(), mStringLookupTable);
+	mWriter << _getStringID(mDataGroup.getGroupName(), mStringLookupTable);	
 	uint8 iCountOfProperties((uint8)mDataGroup.getProperties().size());
 	mWriter << iCountOfProperties;
 	for (auto mPropertyIter : mDataGroup.getProperties())

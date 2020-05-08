@@ -208,6 +208,127 @@ namespace Dynamic
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////EDATAGROUP_BINARY_VERSION/////////////////////////
+    public enum EDATAGROUP_BINARY_VERSION
+    {
+         ONE,
+         COUNT,
+    };
+
+    public class _TypeConverter_EDATAGROUP_BINARY_VERSION : StringConverter
+    {
+       StandardValuesCollection m_ReturnStandardCollection = null;
+       public override bool GetStandardValuesSupported(ITypeDescriptorContext context){ return true; }
+       public override bool GetStandardValuesExclusive(ITypeDescriptorContext context){ return true; }
+       public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+       {
+           if(m_ReturnStandardCollection == null )
+           {
+                List<String> mEnumList = new List<String>();
+                mEnumList.Add("ONE");
+                mEnumList.Add("COUNT");
+                m_ReturnStandardCollection = new StandardValuesCollection(mEnumList);
+           }
+           return m_ReturnStandardCollection;
+       }
+    }
+
+//////////////////////////////////////////////////EDATAGROUP_BINARY_VERSION/////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////ESERIALIZED_ENUMS/////////////////////////////////
+    public enum ESERIALIZED_ENUMS
+    {
+         EDATABASE_TABLES,
+         EDATAGROUP_BINARY_VERSION,
+         ESTAT_PRIMITIVE_TYPES,
+         ESTAT_HANDLER_TYPE,
+         ESTAT_AGGREGATE_TYPES,
+         ESTAT_INHERIT_TYPES,
+         ETARRAY_GROW_BY_TYPES,
+         EDATATYPES,
+         ETEST,
+         ESERIALIZED_CLASSES,
+    };
+
+    public class _TypeConverter_ESERIALIZED_ENUMS : StringConverter
+    {
+       StandardValuesCollection m_ReturnStandardCollection = null;
+       public override bool GetStandardValuesSupported(ITypeDescriptorContext context){ return true; }
+       public override bool GetStandardValuesExclusive(ITypeDescriptorContext context){ return true; }
+       public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+       {
+           if(m_ReturnStandardCollection == null )
+           {
+                List<String> mEnumList = new List<String>();
+                mEnumList.Add("EDATABASE_TABLES");
+                mEnumList.Add("EDATAGROUP_BINARY_VERSION");
+                mEnumList.Add("ESTAT_PRIMITIVE_TYPES");
+                mEnumList.Add("ESTAT_HANDLER_TYPE");
+                mEnumList.Add("ESTAT_AGGREGATE_TYPES");
+                mEnumList.Add("ESTAT_INHERIT_TYPES");
+                mEnumList.Add("ETARRAY_GROW_BY_TYPES");
+                mEnumList.Add("EDATATYPES");
+                mEnumList.Add("ETEST");
+                mEnumList.Add("ESERIALIZED_CLASSES");
+                m_ReturnStandardCollection = new StandardValuesCollection(mEnumList);
+           }
+           return m_ReturnStandardCollection;
+       }
+    }
+
+//////////////////////////////////////////////////ESERIALIZED_ENUMS/////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////ESERIALIZED_CLASSES///////////////////////////////
+    public enum ESERIALIZED_CLASSES
+    {
+         FKCDBEntry,
+         IKCStatMathFunction,
+         KCStatMathFunctionSubtract,
+         KCStatMathFunctionDivide,
+         KCStatMathFunctionMultiply,
+         KCStatMathFunctionDivideAndMultiply,
+         KCStatMathFunctionDivideAddAndMultiply,
+         KCStatMathFunctionDivideMultiplyByStatAddAndStat,
+         FKCStatDefinition,
+         KCSerializeChild,
+         KCIncludeTest,
+    };
+
+    public class _TypeConverter_ESERIALIZED_CLASSES : StringConverter
+    {
+       StandardValuesCollection m_ReturnStandardCollection = null;
+       public override bool GetStandardValuesSupported(ITypeDescriptorContext context){ return true; }
+       public override bool GetStandardValuesExclusive(ITypeDescriptorContext context){ return true; }
+       public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+       {
+           if(m_ReturnStandardCollection == null )
+           {
+                List<String> mEnumList = new List<String>();
+                mEnumList.Add("FKCDBEntry");
+                mEnumList.Add("IKCStatMathFunction");
+                mEnumList.Add("KCStatMathFunctionSubtract");
+                mEnumList.Add("KCStatMathFunctionDivide");
+                mEnumList.Add("KCStatMathFunctionMultiply");
+                mEnumList.Add("KCStatMathFunctionDivideAndMultiply");
+                mEnumList.Add("KCStatMathFunctionDivideAddAndMultiply");
+                mEnumList.Add("KCStatMathFunctionDivideMultiplyByStatAddAndStat");
+                mEnumList.Add("FKCStatDefinition");
+                mEnumList.Add("KCSerializeChild");
+                mEnumList.Add("KCIncludeTest");
+                m_ReturnStandardCollection = new StandardValuesCollection(mEnumList);
+           }
+           return m_ReturnStandardCollection;
+       }
+    }
+
+//////////////////////////////////////////////////ESERIALIZED_CLASSES///////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////EDATABASE_TABLES//////////////////////////////////
     public enum EDATABASE_TABLES
     {
@@ -474,35 +595,6 @@ namespace Dynamic
     }
 
 //////////////////////////////////////////////////EDATATYPES////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////EDATAGROUP_BINARY_VERSION/////////////////////////
-    public enum EDATAGROUP_BINARY_VERSION
-    {
-         ONE,
-         COUNT,
-    };
-
-    public class _TypeConverter_EDATAGROUP_BINARY_VERSION : StringConverter
-    {
-       StandardValuesCollection m_ReturnStandardCollection = null;
-       public override bool GetStandardValuesSupported(ITypeDescriptorContext context){ return true; }
-       public override bool GetStandardValuesExclusive(ITypeDescriptorContext context){ return true; }
-       public override System.ComponentModel.TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
-       {
-           if(m_ReturnStandardCollection == null )
-           {
-                List<String> mEnumList = new List<String>();
-                mEnumList.Add("ONE");
-                mEnumList.Add("COUNT");
-                m_ReturnStandardCollection = new StandardValuesCollection(mEnumList);
-           }
-           return m_ReturnStandardCollection;
-       }
-    }
-
-//////////////////////////////////////////////////EDATAGROUP_BINARY_VERSION/////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -777,7 +869,7 @@ namespace Dynamic
         //Class File:..\CoreClasses\KCCore\Systems\Stats\Private\KCStatDefinition.h
         //Class Name:FKCStatDefinition
         //Variable Name:m_MathFunctions
-        //Variable Type:TArray<IKCStatMathFunction>
+        //Variable Type:TArray<IKCStatMathFunction *>
         //Variable Value:
         //Variable Line Number:46
         //Variable Properties: CATEGORY = MISC, DISPLAYNAME = Math Functions
@@ -931,9 +1023,10 @@ public IKCStatMathFunction()
         //Variable Name:m_fX
         //Variable Type:float
         //Variable Value:0
-        //Variable Line Number:70
+        //Variable Line Number:53
         public static float m_fX_Default{ get { return 0; } }
         private float _m_fX = 0;
+        [Description(" m_fX = x; m_fY = y; m_fZ = z;")]
         public float m_fX
         {
             get
@@ -954,7 +1047,7 @@ public IKCStatMathFunction()
         //Variable Name:m_fY
         //Variable Type:float
         //Variable Value:0
-        //Variable Line Number:72
+        //Variable Line Number:55
         public static float m_fY_Default{ get { return 0; } }
         private float _m_fY = 0;
         public float m_fY
@@ -977,7 +1070,7 @@ public IKCStatMathFunction()
         //Variable Name:m_fZ
         //Variable Type:float
         //Variable Value:0
-        //Variable Line Number:74
+        //Variable Line Number:57
         public static float m_fZ_Default{ get { return 0; } }
         private float _m_fZ = 0;
         public float m_fZ
@@ -1000,7 +1093,7 @@ public IKCStatMathFunction()
         //Variable Name:m_SerializeChild
         //Variable Type:KCSerializeChild
         //Variable Value:
-        //Variable Line Number:76
+        //Variable Line Number:60
         private KCSerializeChild _m_SerializeChild = new KCSerializeChild();
         public KCSerializeChild m_SerializeChild
         {
@@ -1014,7 +1107,7 @@ public IKCStatMathFunction()
         //Variable Name:m_pSerializeChildTest
         //Variable Type:KCSerializeChild
         //Variable Value:nullptr
-        //Variable Line Number:78
+        //Variable Line Number:63
         private KCSerializeChild _m_pSerializeChildTest = new KCSerializeChild();
         public KCSerializeChild m_pSerializeChildTest
         {
@@ -1028,7 +1121,7 @@ public IKCStatMathFunction()
         //Variable Name:m_eEnumTest
         //Variable Type:ETEST
         //Variable Value:ETEST::COUNT
-        //Variable Line Number:80
+        //Variable Line Number:66
         public static ETEST m_eEnumTest_Default{ get { return ETEST.COUNT; } }
         private ETEST _m_eEnumTest = ETEST.COUNT;
         public ETEST m_eEnumTest
@@ -1051,7 +1144,7 @@ public IKCStatMathFunction()
         //Variable Name:m_Array
         //Variable Type:KCTArray<KCSerializeChild *>
         //Variable Value:
-        //Variable Line Number:82
+        //Variable Line Number:69
         //Variable Properties: DISPLAYNAME = Child Serialized Objects
         private List<KCSerializeChild> _m_Array = new List<KCSerializeChild>();
         [DisplayName("Child Serialized Objects")]
@@ -1064,14 +1157,30 @@ public IKCStatMathFunction()
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         //Class File:..\CoreClasses\TestCases\SerializeTest\KCIncludeTest.h
         //Class Name:KCIncludeTest
+        //Variable Name:m_ArrayOfValues
+        //Variable Type:KCTArray<float>
+        //Variable Value:
+        //Variable Line Number:71
+        //Variable Properties: DISPLAYNAME = Array of Values
+        private List<float> _m_ArrayOfValues = new List<float>();
+        [DisplayName("Array of Values")]
+        public List<float> m_ArrayOfValues
+        {
+            get{ return _m_ArrayOfValues; }
+            set{ _m_ArrayOfValues = value; _notifyOfPropertyChanged("m_ArrayOfValues"); }
+        }
+                
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        //Class File:..\CoreClasses\TestCases\SerializeTest\KCIncludeTest.h
+        //Class Name:KCIncludeTest
         //Variable Name:m_strUnitType
         //Variable Type:KCString
         //Variable Value:""
-        //Variable Line Number:85
+        //Variable Line Number:76
         //Variable Properties: CATEGORY = TESTING, DISPLAYNAME = Unit Type Test, UNITTYPECATEGORY = Items, UNITTYPEFILTER = New4, LIST = ITEMS_NEW4
         public static string m_strUnitType_Default{ get { return ""; } }
         private string _m_strUnitType = "";
-        [DisplayName("Unit Type Test"), Category("TESTING"), Description("The stat which will be used in the graph. Most times it's the rank.")]
+        [DisplayName("Unit Type Test"), Category("TESTING"), Description("UPROPERTY(DisplayName = 'Child REf Objects')KCTArray<KCSerializeChild > m_ArrayRef;The stat which will be used in the graph. Most times it's the rank.")]
         [TypeConverter(typeof(UnitTypeConverter_ITEMS_NEW4))]
         public string m_strUnitType
         {
@@ -1093,7 +1202,7 @@ public IKCStatMathFunction()
         //Variable Name:m_strFolderTest
         //Variable Type:KCString
         //Variable Value:""
-        //Variable Line Number:87
+        //Variable Line Number:78
         //Variable Properties: CATEGORY = TESTING, DISPLAYNAME = Folder Path, FOLDERPATH = Content, LIST = PathSelectConverter___CONTENT_
         public static string m_strFolderTest_Default{ get { return ""; } }
         private string _m_strFolderTest = "";
@@ -1119,7 +1228,7 @@ public IKCStatMathFunction()
         //Variable Name:m_strFileTest
         //Variable Type:KCString
         //Variable Value:""
-        //Variable Line Number:89
+        //Variable Line Number:80
         //Variable Properties: CATEGORY = TESTING, DISPLAYNAME = File, FILEPATH = Content, FILEFILTER = *.dat, LIST = FileSelectConverter___CONTENT_
         public static string m_strFileTest_Default{ get { return ""; } }
         private string _m_strFileTest = "";
@@ -1145,7 +1254,7 @@ public IKCStatMathFunction()
         //Variable Name:m_strParent
         //Variable Type:KCString
         //Variable Value:""
-        //Variable Line Number:91
+        //Variable Line Number:82
         //Variable Properties: CATEGORY = TESTING, DISPLAYNAME = Parent, LIST = Testing
         public static string m_strParent_Default{ get { return ""; } }
         private string _m_strParent = "";
@@ -1273,56 +1382,6 @@ public IKCStatMathFunction()
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////KCStatMathFunctionAdd/////////////////////////////
-
-    public class KCStatMathFunctionAdd: IKCStatMathFunction
-    {
-        public override object _getAs(Type mType)
-        {
-                System.Windows.Forms.MessageBox.Show("calling _getAs. Type looking for is: " + mType.Name + " my type is KCStatMathFunctionAdd" );
-                if (mType.Name == "KCStatMathFunctionAdd")
-                {
-                System.Windows.Forms.MessageBox.Show("casting!!!!" );
-                        return (KCStatMathFunctionAdd)this;
-                }
-                return base._getAs(mType);
-        }
-        
-        ////////////////////////////////////////////////////////////////////////////////////////////////////
-        //Class File:..\CoreClasses\KCCore\Systems\Stats\MathFunctions\KCStatMathFunctions.h
-        //Class Name:KCStatMathFunctionAdd
-        //Variable Name:m_strStat
-        //Variable Type:KCName
-        //Variable Value:
-        //Variable Line Number:29
-        //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Stat, LIST = Stats
-        public static string m_strStat_Default{ get { return ""; } }
-        private string _m_strStat = "";
-        [DisplayName("Stat"), Category("GENERAL"), Description("the stat that will be added onto the current stat")]
-        [TypeConverter(typeof(ListTypeConverter_STATS))]
-        public string m_strStat
-        {
-            get
-            {
-                if(m_OwningClass != null && _m_strStat == "")
-                {
-                    KCStatMathFunctionAdd mParent = m_OwningClass as KCStatMathFunctionAdd;
-                    if(mParent != null){ return mParent.m_strStat; }
-                }
-                return _m_strStat;
-            }
-            set{ _m_strStat = value; _notifyOfPropertyChanged("m_strStat");}
-        }
-        public KCStatMathFunctionAdd()
-        {
-        }
-
-    } //end of KCStatMathFunctionAdd
-
-//////////////////////////////////////////////////KCStatMathFunctionAdd/////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////////
-
-////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////KCStatMathFunctionSubtract////////////////////////
 
     public class KCStatMathFunctionSubtract: IKCStatMathFunction
@@ -1344,7 +1403,7 @@ public IKCStatMathFunction()
         //Variable Name:m_strStat
         //Variable Type:KCName
         //Variable Value:
-        //Variable Line Number:47
+        //Variable Line Number:48
         //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Stat, LIST = Stats
         public static string m_strStat_Default{ get { return ""; } }
         private string _m_strStat = "";
@@ -1394,7 +1453,7 @@ public IKCStatMathFunction()
         //Variable Name:m_strStat
         //Variable Type:KCName
         //Variable Value:
-        //Variable Line Number:65
+        //Variable Line Number:66
         //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Stat, LIST = Stats
         public static string m_strStat_Default{ get { return ""; } }
         private string _m_strStat = "";
@@ -1444,7 +1503,7 @@ public IKCStatMathFunction()
         //Variable Name:m_strStat
         //Variable Type:KCName
         //Variable Value:
-        //Variable Line Number:83
+        //Variable Line Number:84
         //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Stat, LIST = Stats
         public static string m_strStat_Default{ get { return ""; } }
         private string _m_strStat = "";
@@ -1494,7 +1553,7 @@ public IKCStatMathFunction()
         //Variable Name:m_strStat
         //Variable Type:KCName
         //Variable Value:
-        //Variable Line Number:102
+        //Variable Line Number:103
         //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Stat, LIST = Stats
         public static string m_strStat_Default{ get { return ""; } }
         private string _m_strStat = "";
@@ -1520,7 +1579,7 @@ public IKCStatMathFunction()
         //Variable Name:m_fDenominator
         //Variable Type:float
         //Variable Value:100.0f
-        //Variable Line Number:105
+        //Variable Line Number:106
         //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Denominator
         public static float m_fDenominator_Default{ get { return 100.0f; } }
         private float _m_fDenominator = 100.0f;
@@ -1569,7 +1628,7 @@ public IKCStatMathFunction()
         //Variable Name:m_strStat
         //Variable Type:KCName
         //Variable Value:
-        //Variable Line Number:124
+        //Variable Line Number:125
         //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Stat, LIST = Stats
         public static string m_strStat_Default{ get { return ""; } }
         private string _m_strStat = "";
@@ -1595,7 +1654,7 @@ public IKCStatMathFunction()
         //Variable Name:m_fDenominator
         //Variable Type:float
         //Variable Value:100.0f
-        //Variable Line Number:127
+        //Variable Line Number:128
         //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Denominator
         public static float m_fDenominator_Default{ get { return 100.0f; } }
         private float _m_fDenominator = 100.0f;
@@ -1620,7 +1679,7 @@ public IKCStatMathFunction()
         //Variable Name:m_fValue
         //Variable Type:float
         //Variable Value:1.0f
-        //Variable Line Number:130
+        //Variable Line Number:131
         //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Value
         public static float m_fValue_Default{ get { return 1.0f; } }
         private float _m_fValue = 1.0f;
@@ -1669,7 +1728,7 @@ public IKCStatMathFunction()
         //Variable Name:m_strStat
         //Variable Type:KCName
         //Variable Value:
-        //Variable Line Number:149
+        //Variable Line Number:150
         //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Stat, LIST = Stats
         public static string m_strStat_Default{ get { return ""; } }
         private string _m_strStat = "";
@@ -1695,7 +1754,7 @@ public IKCStatMathFunction()
         //Variable Name:m_fDenominator
         //Variable Type:float
         //Variable Value:100.0f
-        //Variable Line Number:152
+        //Variable Line Number:153
         //Variable Properties: CATEGORY = GENERAL, DISPLAYNAME = Denominator
         public static float m_fDenominator_Default{ get { return 100.0f; } }
         private float _m_fDenominator = 100.0f;

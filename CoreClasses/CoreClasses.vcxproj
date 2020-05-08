@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Target Name="OnCleanOnly" AfterTargets="Clean">
     <Exec Command="..\tools\CommandLineSerializer.exe -Clean -debug -SourceDir 'D:\Personal\Projects\CoreClasses\' -IntermediateDir 'D:\Personal\Projects\CoreClasses\Intermediate\'" />
@@ -82,7 +82,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
     <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
-    <IncludePath>$(VC_IncludePath)KCCore;$(VC_IncludePath)Intermediate;.\;$(IncludePath)</IncludePath>
+    <IncludePath>$(VC_IncludePath)KCCore;$(VC_IncludePath)Intermediate;$(IncludePath)</IncludePath>
     <OutDir>$(SolutionDir)..\Tools\</OutDir>
     <TargetName>$(ProjectName)_Debug</TargetName>
   </PropertyGroup>
@@ -126,7 +126,7 @@
       <GenerateDebugInformation>DebugFull</GenerateDebugInformation>
     </Link>
     <PreBuildEvent>
-      <Command>D:\Personal\Projects\Tools\CommandLineSerializer.exe -debug -SourceDir 'D:\Personal\Projects\CoreClasses\' -IntermediateDir 'D:\Personal\Projects\CoreClasses\Intermediate\' -TypeDefs 'KCDatabaseGuid=int32,StatID=int16'</Command>
+      <Command>..\Tools\CommandLineSerializer.exe -debug -SourceDir '..\CoreClasses\' -IntermediateDir '..\CoreClasses\Intermediate\' -TypeDefs 'KCDatabaseGuid=int32,StatID=int16'</Command>
     </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -173,6 +173,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="CoreClasses.cpp" />
+    <ClCompile Include="Intermediate\ClassCreation.cpp" />
     <ClCompile Include="KCCore\KCCoreData.cpp" />
     <ClCompile Include="KCCore\KCCoreObject.cpp" />
     <ClCompile Include="KCCore\KCDefines.cpp" />
@@ -200,7 +201,8 @@
     <ClCompile Include="KCCore\Utils\TypeDefinitions\KCDataTypes.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Intermediate\ClassCreationSerializer.h" />
+    <ClInclude Include="Intermediate\ClassCreation.h" />
+    <ClInclude Include="Intermediate\ClassCreation_IKCStatMathFunction.h" />
     <ClInclude Include="Intermediate\EnumsByName.h" />
     <ClInclude Include="KCCore\KCCoreData.h" />
     <ClInclude Include="KCCore\KCCoreObject.h" />

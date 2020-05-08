@@ -510,9 +510,9 @@ namespace Library.Database
             return bChanged;
         }
 
-        public bool save()
+        public bool save(bool bForce)
         {
-            if (m_ActiveDatabase.saveDatabase(false))
+            if (m_ActiveDatabase.saveDatabase(bForce))
             {
                 if (m_ActiveDatabase.getEntrysDirtyCount() > 0)
                 {                    

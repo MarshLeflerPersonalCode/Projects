@@ -18,6 +18,7 @@ namespace Library.ClassParser
 			category = "";
 			variableComment = "";
             typeConverter = "";
+            dataataGroupOverride = "";
         }
 		public bool isPointer { get; set; }
 		public bool isUE4Variable { get; set; }
@@ -34,6 +35,7 @@ namespace Library.ClassParser
 		public bool isSerialized { get; set; }
 		public int lineNumber { get; set; }
         public string typeConverter { get; set; }
+        public string dataataGroupOverride { get; set; }
 	}
 	
 	public class ClassStructure

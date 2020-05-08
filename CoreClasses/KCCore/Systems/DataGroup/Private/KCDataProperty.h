@@ -10,6 +10,7 @@ struct KCDataProperty
 	EDATATYPES						m_eType = EDATATYPES::COUNT;
 	coreUnionData32Bit				m_Data;
 	KCName							m_strLookupName;
+	KCString						m_strValueAsString;
 
 
 	const KCString &				getNameAsString() const { return m_strLookupName.toString(); }
@@ -61,7 +62,7 @@ struct KCDataProperty
 	}
 	void operator<<(const KCName &strValue)
 	{
-		m_Data.m_uiValue32 = strValue.getValue();
+		m_strValueAsString = strValue.toString();
 		m_eType = EDATATYPES::STRING;
 	}
 	void operator<<(const KCString &strValue);

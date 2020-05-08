@@ -39,30 +39,13 @@ public:
 	KCIncludeTest(float x, float y, float z)
 	{
 		m_SerializeChild.m_strTest = "WORKS!";
-		//std::cout << __LINE__ << std::endl;
 		m_fX = x; m_fY = y; m_fZ = z;
-		//m_pSerializeChildTest = new KCSerializeChild();
-		//m_pSerializeChildTest->m_strTest ="Working!";
 		m_eEnumTest = ETEST::FOUR;
-		for (int32 i = 0; i < 10; i++)
-		{
-			/*switch (i % 2)
-			{
-			default:
-				m_Array.add(ETEST::FOUR);
-				break;
-			case 0:
-				m_Array.Add(ETEST::ONE);
-				break;
-			case 1:
-				m_Array.Add(ETEST::TWO);
-				break;
-			}*/
-			//m_Array.add( rand());
-			//m_Array.add(std::to_string(rand()));
-			m_Array.Add(KC_NEW KCSerializeChild());
-			m_Array.Last()->m_strTest = std::to_string(rand());
-		}
+			
+			
+		m_Array.Add(KC_NEW KCSerializeChild());
+		m_Array.Last()->m_strTest = std::to_string(rand());
+		
 	}
 	~KCIncludeTest()
 	{
@@ -73,7 +56,7 @@ public:
 
 
 
-	void set(float x, float y, float z ){ m_fX = x; m_fY = y; m_fZ = z;}
+	void set(float x, float y, float z) {}// m_fX = x; m_fY = y; m_fZ = z;
 protected:
 	UPROPERTY()
 	float				m_fX = 0;
@@ -81,14 +64,22 @@ protected:
 	float				m_fY = 0;
 	UPROPERTY()
 	float				m_fZ = 0;
+	
 	UPROPERTY()
 	KCSerializeChild	m_SerializeChild;
+	
 	UPROPERTY()
 	KCSerializeChild	*m_pSerializeChildTest = nullptr;
+	
 	UPROPERTY()
 	ETEST				m_eEnumTest = ETEST::COUNT;
+	
 	UPROPERTY(DisplayName="Child Serialized Objects")
 	KCTArray<KCSerializeChild *>	m_Array;
+	UPROPERTY(DisplayName = "Array of Values")
+	KCTArray<float>					m_ArrayOfValues;
+	//UPROPERTY(DisplayName = "Child REf Objects")
+	//KCTArray<KCSerializeChild >	m_ArrayRef;
 	//The stat which will be used in the graph. Most times it's the rank.
 	UPROPERTY(Category = "TESTING", DisplayName = "Unit Type Test", Meta = (UnitTypeCategory = "Items", UnitTypeFilter = "New4"))
 	KCString							m_strUnitType = "";

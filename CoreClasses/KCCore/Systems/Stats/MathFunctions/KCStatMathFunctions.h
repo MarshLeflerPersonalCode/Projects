@@ -1,7 +1,7 @@
 //copyright Marsh Lefler 2000-...
 #pragma once
 #include "IKCStatMathFunction.h"
-#include "Systems/Stats/private/KCStats.h"
+#include "Systems/Stats/Private/KCStats.h"
 #include "KCStatMathFunctions.serialize.inc"
 
 ///////////////////////////////////////////////////////////
@@ -18,11 +18,11 @@ class KCStatMathFunctionAdd : public IKCStatMathFunction
 {
 public:
 	KCSERIALIZE_CODE();
-	virtual int32 calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, int32 iValue) const
+	virtual int32 calculateStat(KCStats *pStats, const struct FKCStatDefinition *pStatDef, int32 iValue) const
 	{			
 		return iValue + pStats->getValue(pStats->getStatIDByName(m_strStat), 0);
 	}
-	virtual float calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, float fValue) const
+	virtual float calculateStat(KCStats *pStats, const struct FKCStatDefinition *pStatDef, float fValue) const
 	{
 		return fValue + pStats->getValue(pStats->getStatIDByName(m_strStat), 0.0f);
 	}
@@ -36,11 +36,11 @@ class KCStatMathFunctionSubtract : public IKCStatMathFunction
 {
 public:
 	KCSERIALIZE_CODE();
-	virtual int32 calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, int32 iValue) const
+	virtual int32 calculateStat(KCStats *pStats, const struct FKCStatDefinition *pStatDef, int32 iValue) const
 	{
 		return iValue - pStats->getValue(pStats->getStatIDByName(m_strStat), 0);
 	}
-	virtual float calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, float fValue) const
+	virtual float calculateStat(KCStats *pStats, const struct FKCStatDefinition *pStatDef, float fValue) const
 	{
 		return fValue - pStats->getValue(pStats->getStatIDByName(m_strStat), 0.0f);
 	}
@@ -54,11 +54,11 @@ class KCStatMathFunctionDivide : public IKCStatMathFunction
 {
 public:
 	KCSERIALIZE_CODE();
-	virtual int32 calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, int32 iValue) const
+	virtual int32 calculateStat(KCStats *pStats, const struct FKCStatDefinition *pStatDef, int32 iValue) const
 	{
 		return iValue / pStats->getValue(pStats->getStatIDByName(m_strStat), 1);
 	}
-	virtual float calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, float fValue) const
+	virtual float calculateStat(KCStats *pStats, const struct FKCStatDefinition *pStatDef, float fValue) const
 	{
 		return fValue / pStats->getValue(pStats->getStatIDByName(m_strStat), 1.0f);
 	}
@@ -72,11 +72,11 @@ class KCStatMathFunctionMultiply : public IKCStatMathFunction
 {
 public:
 	KCSERIALIZE_CODE();
-	virtual int32 calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, int32 iValue) const
+	virtual int32 calculateStat(KCStats *pStats, const struct FKCStatDefinition *pStatDef, int32 iValue) const
 	{
 		return iValue * pStats->getValue(pStats->getStatIDByName(m_strStat), 1);
 	}
-	virtual float calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, float fValue) const
+	virtual float calculateStat(KCStats *pStats, const struct FKCStatDefinition *pStatDef, float fValue) const
 	{
 		return fValue * pStats->getValue(pStats->getStatIDByName(m_strStat), 1.0f);
 	}
@@ -91,11 +91,11 @@ class KCStatMathFunctionDivideAndMultiply : public IKCStatMathFunction
 {
 public:
 	KCSERIALIZE_CODE();
-	virtual int32 calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, int32 iValue) const
+	virtual int32 calculateStat(KCStats *pStats, const struct FKCStatDefinition *pStatDef, int32 iValue) const
 	{
 		return (int32)((double)iValue * ((double)pStats->getValue(pStats->getStatIDByName(m_strStat), 0)/ (double)m_fDenominator));
 	}
-	virtual float calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, float fValue) const
+	virtual float calculateStat(KCStats *pStats, const struct FKCStatDefinition *pStatDef, float fValue) const
 	{
 		return fValue * (pStats->getValue(pStats->getStatIDByName(m_strStat), 0.0f) / m_fDenominator);
 	}
@@ -113,11 +113,11 @@ class KCStatMathFunctionDivideAddAndMultiply : public IKCStatMathFunction
 {
 public:
 	KCSERIALIZE_CODE();
-	virtual int32 calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, int32 iValue) const
+	virtual int32 calculateStat(KCStats *pStats, const struct FKCStatDefinition *pStatDef, int32 iValue) const
 	{
 		return (int32)((double)iValue * ((double)m_fValue + ((double)pStats->getValue(pStats->getStatIDByName(m_strStat), 0) / (double)m_fDenominator)));
 	}
-	virtual float calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, float fValue) const
+	virtual float calculateStat(KCStats *pStats, const struct FKCStatDefinition *pStatDef, float fValue) const
 	{
 		return fValue * (m_fValue + (pStats->getValue(pStats->getStatIDByName(m_strStat), 0.0f) / m_fDenominator));
 	}
@@ -138,11 +138,11 @@ class KCStatMathFunctionDivideMultiplyByStatAddAndStat : public IKCStatMathFunct
 {
 public:
 	KCSERIALIZE_CODE();
-	virtual int32 calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, int32 iValue) const
+	virtual int32 calculateStat(KCStats *pStats, const struct FKCStatDefinition *pStatDef, int32 iValue) const
 	{
 		return iValue + (int32)((double)iValue * ((double)pStats->getValue(pStats->getStatIDByName(m_strStat), 0) / (double)m_fDenominator));
 	}
-	virtual float calculateStat(class KCStats *pStats, const struct FKCStatDefinition *pStatDef, float fValue) const
+	virtual float calculateStat(KCStats *pStats, const struct FKCStatDefinition *pStatDef, float fValue) const
 	{
 		return fValue + (fValue * (pStats->getValue(pStats->getStatIDByName(m_strStat), 0.0f) / m_fDenominator));
 	}

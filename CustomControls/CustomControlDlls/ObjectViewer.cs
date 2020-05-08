@@ -573,7 +573,15 @@ namespace CustomControls
 				}
 				else if( typeOfObject.IsPrimitive)
 				{
-					mList.Add(0);
+                    try
+                    {
+                        mList.Add(0);
+                    }
+                    catch
+                    {
+                        mList.Add(0.0f);
+                    }
+                    
 				}
 				else if( typeOfObject.IsEnum)
 				{

@@ -8,6 +8,7 @@
           [0]
                <STRING>m_strStat:RANK
                <STRING>CSHARP:Dynamic.KCStatMathFunctionAdd, classcompile, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+               <STRING>_SERIALIZE_AS_:KCStatMathFunctionAdd
           [/0]
      [/m_MathFunctions]
 [/FKCStatDefinition]

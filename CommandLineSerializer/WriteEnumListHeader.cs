@@ -63,12 +63,12 @@ namespace CommandLineSerializer
             mHeaderWriter.WriteLine("     if(m_EnumLookUpByIDAndName.size() > 0 )");
             mHeaderWriter.WriteLine("     {");
             mHeaderWriter.WriteLine("          auto mValue = m_EnumLookUpByIDAndName.find(iEnumID);");
-            mHeaderWriter.WriteLine("          if (mValue != m_EnumLookUpByIDAndName.end())");
+            mHeaderWriter.WriteLine("          if (mValue == m_EnumLookUpByIDAndName.end())");
             mHeaderWriter.WriteLine("          {");
             mHeaderWriter.WriteLine("               return -1;");
             mHeaderWriter.WriteLine("          }");
             mHeaderWriter.WriteLine("          auto mValue2 = mValue->second.find(strEnumItemName);");
-            mHeaderWriter.WriteLine("          if (mValue2 != mValue->second.end())");
+            mHeaderWriter.WriteLine("          if (mValue2 == mValue->second.end())");
             mHeaderWriter.WriteLine("          {");
             mHeaderWriter.WriteLine("              return -1;");
             mHeaderWriter.WriteLine("          }");
@@ -126,12 +126,12 @@ namespace CommandLineSerializer
             mHeaderWriter.WriteLine("     {");
             mHeaderWriter.WriteLine("          static KCString g_Empty;");
             mHeaderWriter.WriteLine("          auto mValue = m_EnumLookUpByIDAndValue.find(iEnumID);");
-            mHeaderWriter.WriteLine("          if (mValue != m_EnumLookUpByIDAndValue.end())");
+            mHeaderWriter.WriteLine("          if (mValue == m_EnumLookUpByIDAndValue.end())");
             mHeaderWriter.WriteLine("          {");
             mHeaderWriter.WriteLine("               return g_Empty;");
             mHeaderWriter.WriteLine("          }");
             mHeaderWriter.WriteLine("          auto mValue2 = mValue->second.find(iValue);");
-            mHeaderWriter.WriteLine("          if (mValue2 != mValue->second.end())");
+            mHeaderWriter.WriteLine("          if (mValue2 == mValue->second.end())");
             mHeaderWriter.WriteLine("          {");
             mHeaderWriter.WriteLine("              return g_Empty;");
             mHeaderWriter.WriteLine("          }");
@@ -186,7 +186,7 @@ namespace CommandLineSerializer
             mHeaderWriter.WriteLine("    {");
             mHeaderWriter.WriteLine("          static TArray<KCString> g_ReturnEmpty;");
             mHeaderWriter.WriteLine("          auto mValue = m_EnumLookUpByName.find(strEnumName);");
-            mHeaderWriter.WriteLine("          if (mValue != m_EnumLookUpByName.end())");
+            mHeaderWriter.WriteLine("          if (mValue == m_EnumLookUpByName.end())");
             mHeaderWriter.WriteLine("          {");
             mHeaderWriter.WriteLine("               return g_ReturnEmpty;");
             mHeaderWriter.WriteLine("          }");

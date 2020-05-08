@@ -74,7 +74,7 @@ float KCStats::getValue(KCStatID iStat, float fDefaultValue)
 	float fCurrentValue = m_Stats[iStat].m_fValue;	
 	for (int32 iIndexOfMathFunc = 0; iIndexOfMathFunc < pStatDefinition->m_MathFunctions.Num(); iIndexOfMathFunc++)
 	{
-		fCurrentValue = pStatDefinition->m_MathFunctions[iIndexOfMathFunc].calculateStat(this, pStatDefinition, fCurrentValue);
+		fCurrentValue = pStatDefinition->m_MathFunctions[iIndexOfMathFunc]->calculateStat(this, pStatDefinition, fCurrentValue);
 	}
 	return fCurrentValue;
 }
@@ -91,7 +91,7 @@ int32 KCStats::getValue(KCStatID iStat, int32 iDefaultValue)
 	
 	for (int32 iIndexOfMathFunc = 0; iIndexOfMathFunc < pStatDefinition->m_MathFunctions.Num(); iIndexOfMathFunc++)
 	{
-		iCurrentValue = pStatDefinition->m_MathFunctions[iIndexOfMathFunc].calculateStat(this, pStatDefinition, iCurrentValue);
+		iCurrentValue = pStatDefinition->m_MathFunctions[iIndexOfMathFunc]->calculateStat(this, pStatDefinition, iCurrentValue);
 	}
 	return iCurrentValue;
 }

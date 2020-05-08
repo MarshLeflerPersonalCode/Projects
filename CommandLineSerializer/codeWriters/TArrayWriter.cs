@@ -108,123 +108,137 @@ namespace CommandLineSerializer.codeWriters
 			string strType = "";
 			if (_parseType(mVariable, ref strType) == false) { return false; }
 			EnumList mEnum = mHeaderFile.getEnumList(strType);
+            
+			string strTmpVar = "_tmp_" + mVariable.variableName;
+            mHeaderFile.addLine("{"); //start the array scope
+            mHeaderFile.addLine("KCDataGroup &mArrayDataGroup = " + strDataGroupName + ".getOrCreateChildGroup(\"" + mVariable.variableName + "\");");
+            mHeaderFile.addLine("uint16 iElementCount = (uint16)" + mVariable.variableName + ".Num();");
+			mHeaderFile.addLine("mArrayDataGroup.setProperty(\"COUNT\", iElementCount);");
 
-			string strCountVar = "iCount_" + mVariable.variableName;
-			string strLoopVar = "iLoop_" + mVariable.variableName;
-			string strTmpVar = "_tmp" + mVariable.variableName;
-			mHeaderFile.addLine("uint16 " + strCountVar + " = (uint16)" + mVariable.variableName + ".Num();");
-			mHeaderFile.addLine(strDataGroupName + ".setProperty(\"" + strCountVar + "\", " + strCountVar + ");");
-			if (_isPrimitive(mHeaderFile, strType))
+            if (_isPrimitive(mHeaderFile, strType))
 			{
-				mHeaderFile.addLine("for(uint16 " + strLoopVar + " = 0; " + strLoopVar + " < " + strCountVar + "; " + strLoopVar + "++)");
-				mHeaderFile.addLine("{");				
-				mHeaderFile.addLine(strDataGroupName + ".setProperty( \"" + mVariable.variableName + "\" + std::to_string(" + strLoopVar + "), " + mVariable.variableName + "[" + strLoopVar + "]);");
+                mHeaderFile.addLine("for(uint16 iIndex = 0; iIndex < iElementCount; iIndex++)");
+                mHeaderFile.addLine("{");                
+                mHeaderFile.addLine("mArrayDataGroup.setProperty( DATATYPES_UTILS::getAsString(iIndex), " + mVariable.variableName + "[iIndex]);");
 				mHeaderFile.addLine("}");
 			}
 			else if (mEnum != null)
 			{
-				mHeaderFile.addLine("for(uint16 " + strLoopVar + " = 0; " + strLoopVar + " < " + strCountVar + "; " + strLoopVar + "++)");
-				mHeaderFile.addLine("{");				
-				mHeaderFile.addLine(strDataGroupName + ".setProperty( \"" + mVariable.variableName + "\" + std::to_string(" + strLoopVar + "), (int32)" + mVariable.variableName + "[" + strLoopVar + "]);");				
-				mHeaderFile.addLine("}");
+                mHeaderFile.addLine("for(uint16 iIndex = 0; iIndex < iElementCount; iIndex++)");
+                mHeaderFile.addLine("{");
+                mHeaderFile.addLine("mArrayDataGroup.setProperty( DATATYPES_UTILS::getAsString(iIndex), (int32)" + mVariable.variableName + "[iIndex]);");
+                mHeaderFile.addLine("}");
 			}
 			else
 			{
-				
-				ClassVariable mNewVariable = _createNewVariable(mHeaderFile, strTmpVar, strType);
-				mHeaderFile.addLine("for(uint16 " + strLoopVar + " = 0; " + strLoopVar + " < " + strCountVar + "; " + strLoopVar + "++)");
-				mHeaderFile.addLine("{");				
-				mHeaderFile.addLine(strType + ((mNewVariable.isPointer) ? "" : " &") + strTmpVar + " = " + mVariable.variableName + "[" + strLoopVar + "];");
-				string strNewDataGroupName = "_mDataGroup" + mVariable.variableName;
-				mHeaderFile.addLine("KCDataGroup &" + strNewDataGroupName + " = " + strDataGroupName + ".getOrCreateChildGroup(\"" + mVariable.variableName + "\" + std::to_string(" + strLoopVar + "));");
+                ClassVariable mNewVariable = _createNewVariable(mHeaderFile, strTmpVar, strType);
+                mNewVariable.dataataGroupOverride = "DATATYPES_UTILS::getAsString(iIndex)";
+                mHeaderFile.addLine("for(uint16 iIndex = 0; iIndex < iElementCount; iIndex++)");
+                mHeaderFile.addLine("{");
+                mHeaderFile.addLine(strType + ((mNewVariable.isPointer) ? "" : " &") + strTmpVar + " = " + mVariable.variableName + "[iElementCount];");
+                //mHeaderFile.addLine("KCDataGroup &mChildObject = mArrayDataGroup.getOrCreateChildGroup(DATATYPES_UTILS::getAsString(iIndex));");
+                
+                foreach (CodeWriter mWriter in mHeaderFile.getCodeWriters())
+                {
 
-				foreach (CodeWriter mWriter in mHeaderFile.getCodeWriters())
-				{
-
-					if (mWriter.attemptDataGroupWriteCode(mHeaderFile, mNewVariable, strNewDataGroupName))
-					{
-						break;
-					}
-				}
-				mHeaderFile.addLine("if(" + strNewDataGroupName + ".isEmpty()){ " + strDataGroupName + ".removeChildGroup(" + strNewDataGroupName + ");}");
-				mHeaderFile.addLine("}");
+                    if (mWriter.attemptDataGroupWriteCode(mHeaderFile, mNewVariable, "mArrayDataGroup"))
+                    {
+                        break;
+                    }
+                }
+                
+                mHeaderFile.addLine("}");
+               
 			}
-			//mHeaderFile.addLine("mDataGroup.setProperty(\"" + mVariable.variableName + "\", " + mVariable.variableName + ");");
-			return true;
+          
+            mHeaderFile.addLine("}");   //end the array scope
+            return true;
 		}
 		public override bool attemptDataGroupReadCode(HeaderFile mHeaderFile, ClassVariable mVariable, string strDataGroupName)
 		{
 			string strType = "";
-			if (_parseType(mVariable, ref strType) == false) { return false; }
-			
+			if (_parseType(mVariable, ref strType) == false) { return false; }			
 			EnumList mEnum = mHeaderFile.getEnumList(strType);
-
-			string strCountVar = "iCount_" + mVariable.variableName;
-			string strLoopVar = "iLoop_" + mVariable.variableName;
-			string strTmpVar = "_tmp" + mVariable.variableName;
-			mHeaderFile.addLine("uint16 " + strCountVar + "(0);");
-			mHeaderFile.addLine(strCountVar + " = " + strDataGroupName + ".getProperty(\"" + strCountVar + "\", " + strCountVar + ");");
-			mHeaderFile.addLine(mVariable.variableName + ".Reset();");
-			mHeaderFile.addLine(mVariable.variableName + ".Reserve(" + strCountVar + ");");
+            mHeaderFile.addLine("{"); //start the array scope
+			string strTmpVar = "_tmp_" + mVariable.variableName;
+            mHeaderFile.addLine(mVariable.variableName + ".Reset();");
+            mHeaderFile.addLine("const KCDataGroup *pArrayGroup = " + strDataGroupName + ".getChildGroup(\"" + mVariable.variableName + "\");");
+            mHeaderFile.addLine("if(pArrayGroup != nullptr)");
+            mHeaderFile.addLine("{");   //pArrayGroup check
+            mHeaderFile.addLine("int32 iCount = pArrayGroup->getProperty(\"COUNT\", 0);");
+            mHeaderFile.addLine("if(iCount > 0)");
+            mHeaderFile.addLine("{");   //start count check
+			mHeaderFile.addLine(mVariable.variableName + ".Reserve((uint32)iCount);");
 			if (_isPrimitive(mHeaderFile, strType))
 			{
 
 				mHeaderFile.addLine(_writePrimitiveTypeInitializer(mHeaderFile, strType, strTmpVar));
-				mHeaderFile.addLine("for(uint16 " + strLoopVar + " = 0; " + strLoopVar + " < " + strCountVar + "; " + strLoopVar + "++)");
-				mHeaderFile.addLine("{");				
-				mHeaderFile.addLine(strType + " " + strTmpVar + "_tmp = " + strDataGroupName + ".getProperty(\"" + mVariable.variableName + "\" + std::to_string(" + strLoopVar + "), " + strTmpVar + ");");
-				mHeaderFile.addLine(mVariable.variableName + ".Add(" + strTmpVar + "_tmp);");
+				mHeaderFile.addLine("for(uint16 iIndex = 0; iIndex < iCount; iIndex++)");
+				mHeaderFile.addLine("{");                
+                mHeaderFile.addLine(strType + " valueOfSomeType = pArrayGroup->getProperty(DATATYPES_UTILS::getAsString(iIndex), " + strTmpVar + ");");
+				mHeaderFile.addLine(mVariable.variableName + ".Add(valueOfSomeType);");
 				mHeaderFile.addLine("}");
 			}	
 			else if(mEnum != null )
 			{
 				string strEnumTempVar = "_enum" + mVariable.variableName;
 				mHeaderFile.addLine(_writePrimitiveTypeInitializer(mHeaderFile, "int32", strEnumTempVar));
-				mHeaderFile.addLine("for(uint16 " + strLoopVar + " = 0; " + strLoopVar + " < " + strCountVar + "; " + strLoopVar + "++)");
-				mHeaderFile.addLine("{");				
-				mHeaderFile.addLine(strType + " " + strTmpVar + "_tmp = (" + strType + ")" + strDataGroupName + ".getProperty(\"" + mVariable.variableName + "\" + std::to_string(" + strLoopVar + "), " + strEnumTempVar + ");");
-				mHeaderFile.addLine(mVariable.variableName + ".Add(" + strTmpVar + "_tmp);");
+                mHeaderFile.addLine("for(uint16 iIndex = 0; iIndex < iCount; iIndex++)");
+                mHeaderFile.addLine("{");
+                mHeaderFile.addLine(strType + " mEnumValue = (" + strType + ")pArrayGroup->getProperty(DATATYPES_UTILS::getAsString(iIndex), " + strEnumTempVar + ");");                
+				mHeaderFile.addLine(mVariable.variableName + ".Add(mEnumValue);");
 				mHeaderFile.addLine("}");
 			}
 			else
 			{
 				ClassVariable mNewVariable = _createNewVariable(mHeaderFile, strTmpVar, strType);
-				mHeaderFile.addLine("for(uint16 " + strLoopVar + " = 0; " + strLoopVar + " < " + strCountVar + "; " + strLoopVar + "++)");
-				mHeaderFile.addLine("{");
-				if (mNewVariable.isPointer == false)
-				{
-					mHeaderFile.addLine(mVariable.variableName + ".Add(" + mNewVariable.variableType + "() );");
-					mHeaderFile.addLine(strType + " &" + strTmpVar + " = " + mVariable.variableName + ".Last();");
-				}
-				else
-				{
-					//just just need to define it.
-					mHeaderFile.addLine(strType + " " + strTmpVar + " = nullptr;");
-				}
-				string strNewDataGroupName = "_mDataGroup" + mVariable.variableName;
-				mHeaderFile.addLine("const KCDataGroup *p" + strNewDataGroupName + " = " + strDataGroupName + ".getChildGroup(\"" + mVariable.variableName + "\" + std::to_string(" + strLoopVar + "));");
-                mHeaderFile.addLine("if(p" + strNewDataGroupName + " != nullptr)");
+                mNewVariable.dataataGroupOverride = "DATATYPES_UTILS::getAsString(iIndex)";
+                mHeaderFile.addLine("std::cout << \"Found array with count \" << iCount << std::endl;");
+                mHeaderFile.addLine("for(uint16 iIndex = 0; iIndex < iCount; iIndex++)");
                 mHeaderFile.addLine("{");
-                mHeaderFile.addLine("const KCDataGroup &" + strNewDataGroupName + " = *p" + strNewDataGroupName + ";");
-                foreach (CodeWriter mWriter in mHeaderFile.getCodeWriters())
-				{
-					if (mWriter.attemptDataGroupReadCode(mHeaderFile, mNewVariable, strNewDataGroupName))
-					{
-						break;
-					}
-				}
+                if (mNewVariable.isPointer == false)
+                {
+                    mHeaderFile.addLine(mVariable.variableName + ".Add(" + mNewVariable.variableType + "() );");
+                    mHeaderFile.addLine(strType + " &" + strTmpVar + " = " + mVariable.variableName + ".Last();");
+                }
+                else
+                {
+                    //just just need to define it. ALSO WEIRD but was easier to code with the type having the *. So type here is actually "SomeClass*"
+                    mHeaderFile.addLine(strType + " " + strTmpVar + " = nullptr;");
+                    //not this gets filled out in mWriter.attemptDataGroupReadCode
+                }
 
-				if (mNewVariable.isPointer )
-				{
-					//we need to add it back in.
-					mHeaderFile.addLine(mVariable.variableName + ".Add(" + strTmpVar + ");");
-				}
-				//mHeaderFile.addLine("if(" + strNewDataGroupName + ".isEmpty()){ " + strDataGroupName + ".removeChildGroup(" + strNewDataGroupName + ");}");
-                mHeaderFile.addLine("}");   //end check for pointer
-                mHeaderFile.addLine("}");
+                //mHeaderFile.addLine("const KCDataGroup *pChildAsPointer = pArrayGroup->getChildGroup(DATATYPES_UTILS::getAsString(iIndex));");
+                //mHeaderFile.addLine("if(pChildAsPointer != nullptr)");
+                //mHeaderFile.addLine("{");
+                mHeaderFile.addLine("const KCDataGroup &mArrayGroupRef = *pArrayGroup;");
+                foreach (CodeWriter mWriter in mHeaderFile.getCodeWriters())
+                {
+                    if (mWriter.attemptDataGroupReadCode(mHeaderFile, mNewVariable, "mArrayGroupRef"))
+                    {
+                        break;
+                    }
+                }
+                if (mNewVariable.isPointer) //pointer gets filled out in mWriter.attemptDataGroupReadCode
+                {
+                    //we need to add it back in.
+                    mHeaderFile.addLine(mVariable.variableName + ".Add(" + strTmpVar + ");");
+                }
+                //mHeaderFile.addLine("}");//end check for pointer group
+//                 if (mNewVariable.isPointer) //if it's a pointer it could be null so we need to add it back in.
+//                 {
+//                     mHeaderFile.addLine("else");
+//                     mHeaderFile.addLine("{");
+//                     //we need to add it back in but it's null
+//                     mHeaderFile.addLine(mVariable.variableName + ".Add(nullptr);");
+//                     mHeaderFile.addLine("}");
+//                 }
+                mHeaderFile.addLine("}"); //end for loop
 			}
-			//mHeaderFile.addLine(mVariable.variableName + " = mDataGroup.getProperty(\"" + mVariable.variableName + "\", " + mVariable.variableName + ");");
-			return true;
+            mHeaderFile.addLine("}");   //end count check
+            mHeaderFile.addLine("}");   //end pArrayGroup check
+            mHeaderFile.addLine("}");   //end the array scope*/
+            return true;
 		}
 
 		private bool _parseType(ClassVariable mVariable, ref string strType )

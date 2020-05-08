@@ -8,17 +8,31 @@
 #include <direct.h>
 #include "TestCases/SerializeTest/KCIncludeTest.h"
 #include <chrono>
-
+#include "KCCore/Systems/Stats/MathFunctions/KCStatMathFunctions.h"
 #include "Systems/Stats/KCStatHandler.h"
 
 #define GetCurrentDir _getcwd
 
-
-
+void _serializeTest()
+{
+	KCDataGroup mDataGroup;
+	const KCName &strGroupname = mDataGroup.getGroupName();
+	bool bIsEmpty = strGroupname == EMPTY_KCSTRING;
+	KCIncludeTest mTest1(12.5f, 13.5, 14.5f);
+	KCByteWriter mWriter;
+	mTest1.serialize(mWriter);
+	mTest1.serialize(mDataGroup);
+	KCIncludeTest mTest2;
+	KCIncludeTest mTest3;
+	KCByteReader mReader(mWriter.getMemory(), mWriter.getArrayCount());
+	mTest2.deserialize(mReader);
+	mTest3.deserialize(mDataGroup);
+}
 
 int main()
 {
 
+	
 	char cCurrentPath[FILENAME_MAX];
 	if (!GetCurrentDir(cCurrentPath, sizeof(cCurrentPath)))
 	{
@@ -28,7 +42,7 @@ int main()
 
 	printf("The current working directory is %s\n", cCurrentPath);
 	KCCoreData mCoreData;
-	mCoreData._initialize(L"\\Content\\");
+	mCoreData._initialize(KCFileUtilities::getApplicationDirectoryWide() + L"\\Content\\");
 	
 	if (mCoreData.getUnitTypeManager())//.configureUnitTypeByConfigFile(L"..\\UE4Projects\\CoreTest\\Content\\RawData\\unittypes.bin"))
 	{
@@ -52,20 +66,11 @@ int main()
 	bool bIsSet3 = mBitArray[5];
 	mBitArray[5] = false;
 	bool bIsSet4 = mBitArray[5];
-	testDataGroupSavingAndLoad(L".\\content\\DataGroupTestCast.dat");
+
+	testDataGroupSavingAndLoad( L".\\content\\DataGroupTestCast.dat");
 	
-	KCDataGroup mDataGroup;
-	const KCName &strGroupname = mDataGroup.getGroupName();
-	bool bIsEmpty = strGroupname == EMPTY_KCSTRING;
-	KCIncludeTest mTest1( 12.5f, 13.5, 14.5f);
-	KCByteWriter mWriter;
-	mTest1.serialize(mWriter);
-	mTest1.serialize(mDataGroup);
-	KCIncludeTest mTest2;
-	KCIncludeTest mTest3;
-	KCByteReader mReader(mWriter.getMemory(), mWriter.getArrayCount());
-	mTest2.deserialize(mReader);
-	mTest3.deserialize(mDataGroup);
+	_serializeTest();
+	
 	
 	//KCString strData = KCDataGroupSimpleXMLWriter::writeDataGroupToString(mDataGroup);
 	
@@ -84,16 +89,17 @@ int main()
 	KCEnsureAlways(mStatHandler3.getStatValueForWeapon(KCSTATS::RANK, 1) == 14);
 
 
-	KCDataGroup mSecondGroup;
-	KCDataGroupSimpleXMLReader::parseDataGroupFromFile(L"D:\\Personal\\Projects\\CoreClasses\\x64\\Intermediate\\CommandLineSerializer.cfg", mSecondGroup);
+	/*KCDataGroup mSecondGroup;
+	KCDataGroupSimpleXMLReader::parseDataGroupFromFile(L"..\\CoreClasses\\Intermediate\\CommandLineSerializer.cfg", mSecondGroup);
 	std::chrono::high_resolution_clock::time_point t1 = std::chrono::high_resolution_clock::now();
 	KCString strData = KCDataGroupSimpleXMLWriter::writeDataGroupToString(mSecondGroup);
 	std::chrono::high_resolution_clock::time_point t2 = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double> time_span = std::chrono::duration_cast<std::chrono::duration<double>>(t2 - t1);
 	//std::cout << strData << std::endl;
 	std::cout << "time to parse: " << time_span.count() << "second(s). File: D:\\Personal\\Projects\\CoreClasses\\x64\\Intermediate\\CommandLineSerializer.cfg" << std::endl;
-	KCDataGroupBinaryWriter::writeDataGroupToFile(L"D:\\Personal\\Projects\\CoreClasses\\x64\\Intermediate\\CommandLineSerializer.cfg.bin", mSecondGroup);
-	
+	KCDataGroupBinaryWriter::writeDataGroupToFile(L"..\\CoreClasses\\x64\\Intermediate\\CommandLineSerializer.cfg.bin", mSecondGroup);
+	*/
+
 	bool bIsNumber1 = KCStringUtils::isNumber("-2323.0242f");
 	bool bIsNumber2 = KCStringUtils::isNumber("-f");
 	bool bIsNumber3 = KCStringUtils::isNumber("");

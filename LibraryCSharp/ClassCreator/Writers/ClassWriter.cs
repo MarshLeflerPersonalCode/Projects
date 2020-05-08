@@ -306,13 +306,10 @@ namespace Library.ClassCreator.Writers
 
             if (strDescription.Length != 0)
             {
-                while (strDescription.StartsWith("//")) { strDescription = strDescription.Substring(2, strDescription.Length - 2); }
-                if (strDescription.StartsWith("/*")) { strDescription = strDescription.Substring(2, strDescription.Length - 2); }
-                if (strDescription.StartsWith("\n//")) { strDescription = strDescription.Replace("\n//", "\n"); }
-                if (strDescription.StartsWith(Environment.NewLine + "//")) { strDescription = strDescription.Replace(Environment.NewLine + "//", Environment.NewLine); }
-                if (strDescription.StartsWith("\n/*")) { strDescription = strDescription.Replace("\n/*", "\n"); }
-                if (strDescription.StartsWith(Environment.NewLine + "/*")) { strDescription = strDescription.Replace(Environment.NewLine + "/*", Environment.NewLine); }
-
+                strDescription = strDescription.Replace("\r", "");
+                strDescription = strDescription.Replace("\n", "");
+                strDescription = strDescription.Replace("\"", "'");
+                strDescription = strDescription.Replace("//", "");                
                 strDetails = strDetails + "Description(\"" + strDescription + "\"), ";
             }
             if (strDetails.Length == 0)

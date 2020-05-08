@@ -6,7 +6,7 @@
 #include <sstream>
 
 
-void KCStringUtils::replace(std::string &strString, char cLookFor, char cReplaceWith)
+std::string & KCStringUtils::replace(std::string &strString, char cLookFor, char cReplaceWith)
 {
 	for (size_t iIndex = 0; iIndex < strString.size(); iIndex++)
 	{
@@ -15,7 +15,53 @@ void KCStringUtils::replace(std::string &strString, char cLookFor, char cReplace
 			strString.replace(iIndex, 1, 1, cReplaceWith);
 		}
 	}
-	
+	return strString;
+}
+
+std::string & KCStringUtils::replace(std::string &strString, const std::string &strLookFor, const std::string &strReplaceWith)
+{
+	size_t iIndex = 0;
+	while (true)
+	{
+		iIndex = strString.find(strLookFor, iIndex);
+		if (iIndex == std::string::npos)
+		{
+			break;
+		}
+		strString.erase(iIndex, strLookFor.length());
+		strString.insert(iIndex, strReplaceWith);
+		iIndex += strReplaceWith.length();
+	}
+	return strString;
+}
+
+std::wstring & KCStringUtils::replace(std::wstring &strString, const std::wstring &strLookFor, const std::wstring &strReplaceWith)
+{
+	size_t iIndex = 0;
+	while (true)
+	{		
+		iIndex = strString.find(strLookFor, iIndex);
+		if (iIndex == std::string::npos)
+		{
+			break;
+		}
+		strString.erase(iIndex, strLookFor.length());
+		strString.insert(iIndex, strReplaceWith);		
+		iIndex += strReplaceWith.length();
+	}
+	return strString;
+}
+
+std::wstring & KCStringUtils::replace(std::wstring &strString, WCHAR cLookFor, WCHAR cReplaceWith)
+{
+	for (size_t iIndex = 0; iIndex < strString.size(); iIndex++)
+	{
+		if (strString.c_str()[iIndex] == cLookFor)
+		{
+			strString.replace(iIndex, 1, 1, cReplaceWith);
+		}
+	}
+	return strString;
 }
 
 std::wstring KCStringUtils::toWide(const std::string &strString)

@@ -44,6 +44,7 @@ namespace StatEditor
             this.tabs = new System.Windows.Forms.TabControl();
             this.timerProcessClasses = new System.Windows.Forms.Timer(this.components);
             this.updateTimer = new System.Windows.Forms.Timer(this.components);
+            this.forceSaveAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -62,7 +63,8 @@ namespace StatEditor
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.saveToolStripMenuItem});
+            this.saveToolStripMenuItem,
+            this.forceSaveAllToolStripMenuItem});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
@@ -70,7 +72,7 @@ namespace StatEditor
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(98, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.saveToolStripMenuItem.Text = "&Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -109,28 +111,28 @@ namespace StatEditor
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.toolsToolStripMenuItem.Text = "&Editor";
             this.toolsToolStripMenuItem.Click += new System.EventHandler(this.toolsToolStripMenuItem_Click);
             // 
             // databasesToolStripMenuItem
             // 
             this.databasesToolStripMenuItem.Name = "databasesToolStripMenuItem";
-            this.databasesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.databasesToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.databasesToolStripMenuItem.Text = "&Databases";
             this.databasesToolStripMenuItem.Click += new System.EventHandler(this.databasesToolStripMenuItem_Click);
             // 
             // variableTypesToolStripMenuItem
             // 
             this.variableTypesToolStripMenuItem.Name = "variableTypesToolStripMenuItem";
-            this.variableTypesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.variableTypesToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.variableTypesToolStripMenuItem.Text = "&Variable Types";
             this.variableTypesToolStripMenuItem.Click += new System.EventHandler(this.variableTypesToolStripMenuItem_Click);
             // 
             // unitTypeConfigToolStripMenuItem
             // 
             this.unitTypeConfigToolStripMenuItem.Name = "unitTypeConfigToolStripMenuItem";
-            this.unitTypeConfigToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.unitTypeConfigToolStripMenuItem.Size = new System.Drawing.Size(162, 22);
             this.unitTypeConfigToolStripMenuItem.Text = "&Unit Type Config";
             this.unitTypeConfigToolStripMenuItem.Click += new System.EventHandler(this.unitTypeConfigToolStripMenuItem_Click);
             // 
@@ -159,6 +161,13 @@ namespace StatEditor
             // updateTimer
             // 
             this.updateTimer.Tick += new System.EventHandler(this.updateTimer_Tick);
+            // 
+            // forceSaveAllToolStripMenuItem
+            // 
+            this.forceSaveAllToolStripMenuItem.Name = "forceSaveAllToolStripMenuItem";
+            this.forceSaveAllToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.forceSaveAllToolStripMenuItem.Text = "&Force Save All";
+            this.forceSaveAllToolStripMenuItem.Click += new System.EventHandler(this.forceSaveAllToolStripMenuItem_Click);
             // 
             // StatEditorForm
             // 
@@ -198,6 +207,7 @@ namespace StatEditor
         private System.Windows.Forms.ToolStripMenuItem copyGuidctrlgToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem unitTypeConfigToolStripMenuItem;
         private System.Windows.Forms.Timer updateTimer;
+        private System.Windows.Forms.ToolStripMenuItem forceSaveAllToolStripMenuItem;
     }
 }
 

@@ -22,7 +22,7 @@ bool KCFileUtilities::loadFile(const TCHAR *strFile, TArray<uint8> &mArray)
 	}
 	
 #else	 
-	FILE *pFileReader = null;
+	FILE *pFileReader = null;	
 	if (_wfopen_s(&pFileReader, strFile, L"r") == 0)
 	{
 		fseek(pFileReader, 0, SEEK_END);
@@ -34,7 +34,7 @@ bool KCFileUtilities::loadFile(const TCHAR *strFile, TArray<uint8> &mArray)
 	}
 	
 #endif
-	KCEnsureAlways(false);
+	KCEnsureAlwaysMsg(false, "Error in loading file: " + KCStringUtils::toNarrowUtf8(strFile));	
 	return false;
 
 }
@@ -117,6 +117,7 @@ int32 KCFileUtilities::getFilesInDirectory(const TCHAR* strPath, const TCHAR* st
 	{
 		strPathAndSearchPattern = getApplicationDirectoryWide() + strPathAndSearchPattern;
 		strRootPath = getApplicationDirectoryWide() + strRootPath;
+		strRootPath = KCStringUtils::replace(strRootPath, L"\\\\", L"\\");
 		bAddedApplicationDirectory = true;
 		mFileHandle = FindFirstFileW(strPathAndSearchPattern.c_str(), &mFileData);
 	}
@@ -145,15 +146,15 @@ int32 KCFileUtilities::getFilesInDirectory(const TCHAR* strPath, const TCHAR* st
 	if (bRecusive )
 	{
 		bAddedApplicationDirectory = false;
-		bDone = false;
-		strPathAndSearchPattern = std::wstring(strPath) + std::wstring(strSearchPattern);
+		bDone = false;		
 		strRootPath = strPath;
 		mFileHandle = FindFirstFileW((strRootPath + L"*.").c_str(), &mFileData);
 		if (mFileHandle == INVALID_HANDLE_VALUE)
 		{
-			bAddedApplicationDirectory = true;
-			strPathAndSearchPattern = getApplicationDirectoryWide() + strPathAndSearchPattern;
+			bAddedApplicationDirectory = true;			
 			strRootPath = getApplicationDirectoryWide() + strRootPath;
+			strRootPath = KCStringUtils::replace(strRootPath, L"\\\\", L"\\");
+			mFileHandle = FindFirstFileW((strRootPath + L"*.").c_str(), &mFileData);
 		}
 
 		while (!bDone && mFileHandle != INVALID_HANDLE_VALUE)

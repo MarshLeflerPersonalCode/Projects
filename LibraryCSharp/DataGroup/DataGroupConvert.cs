@@ -18,7 +18,8 @@ namespace Library
     }
     public class DataGroupConvert
     {
-
+        private static string g_strCSharpTag = "CSHARP";
+        private static string g_strCodeTag = "_SERIALIZE_AS_";
         public class DataGroupConvertParams
         {
             public DataGroupConvertParams m_Parent = null;
@@ -199,7 +200,13 @@ namespace Library
         #endregion
         #region HELPER_FUNCTIONS
         public IDataGroupConvertTypeRecast typeCastInterface { get; set; }
-        public Type _recastType(Type mType )
+        private void _addTypeTags(DataGroup mDataGroup, Type mType)
+        {
+            mDataGroup.setProperty(g_strCSharpTag, mType.AssemblyQualifiedName);
+            mDataGroup.setProperty(g_strCodeTag, mType.Name);
+            
+        }
+        private Type _recastType(Type mType )
         {
             if(typeCastInterface != null)
             {
@@ -211,7 +218,7 @@ namespace Library
         {
 
 
-            string strValue = mDataGroup.getProperty("CSHARP", "");
+            string strValue = mDataGroup.getProperty(g_strCSharpTag, "");
             if (strValue != "")
             {
                 return Type.GetType(strValue);
@@ -372,7 +379,9 @@ namespace Library
                 }
                 if (mObjectInArray.GetType() != mElementType)
                 {
-                    mChild.setProperty("CSHARP", mObjectInArray.GetType().AssemblyQualifiedName);
+                    _addTypeTags(mChild, mObjectInArray.GetType());
+                    //mChild.setProperty("CSHARP", mObjectInArray.GetType().AssemblyQualifiedName);
+                    //mChild.setProperty("_SERIALIZE_AS_", mObjectInArray.GetType().Name);
                 }
                 iCount++;
             }
@@ -406,6 +415,11 @@ namespace Library
                     continue;
                 }
                 _serializeObjectAsDataProperty(mParams, mArrayGroup, mObjectInArray, iCount.ToString());
+                if(mArrayGroup.getDataProperty(iCount.ToString()) != null )
+                {
+                    iCount++;
+                    continue;
+                }
                 DataGroup mChild = mArrayGroup.getChildDataGroup(iCount.ToString());
                 if (mChild == null)
                 {
@@ -413,7 +427,7 @@ namespace Library
                 }
                 if (mObjectInArray.GetType() != mElementType)
                 {
-                    mChild.setProperty("CSHARP", mObjectInArray.GetType().AssemblyQualifiedName);
+                    _addTypeTags(mChild, mObjectInArray.GetType());                    
                 }
                 iCount++;
             }
@@ -468,7 +482,8 @@ namespace Library
                         DataGroup mChild = mKeyValueGroup.getChildDataGroup("key");
                         if (mChild != null)
                         {
-                            mChild.setProperty("CSHARP", mKeyArray[iCount].GetType().AssemblyQualifiedName);
+                            _addTypeTags(mChild, mKeyArray[iCount].GetType());
+                            //mChild.setProperty("CSHARP", mKeyArray[iCount].GetType().AssemblyQualifiedName);
                         }
                     }
                     _serializeObjectAsDataProperty(mParams, mKeyValueGroup, mValueArray[iCount], "VALUE");
@@ -478,7 +493,8 @@ namespace Library
                         DataGroup mChild = mKeyValueGroup.getChildDataGroup("value");
                         if (mChild != null)
                         {
-                            mChild.setProperty("CSHARP", mValueArray[iCount].GetType().AssemblyQualifiedName);
+                            _addTypeTags(mChild, mValueArray[iCount].GetType());
+                            //mChild.setProperty("CSHARP", mValueArray[iCount].GetType().AssemblyQualifiedName);
                         }
                     }
                 }

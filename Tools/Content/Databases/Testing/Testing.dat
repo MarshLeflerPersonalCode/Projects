@@ -13,4 +13,9 @@
                <STRING>m_strTest:Testing
           [/0]
      [/m_Array]
+     [m_ArrayOfValues]
+          <UINT16>COUNT:2
+          <FLOAT>0:0
+          <FLOAT>1:0
+     [/m_ArrayOfValues]
 [/KCIncludeTest]

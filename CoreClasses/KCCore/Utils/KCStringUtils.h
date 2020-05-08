@@ -8,8 +8,13 @@
 namespace KCStringUtils
 {
 	//replaces all the char cLookFor with cReplaceWith. 
-	void				replace(std::string &strString, char cLookFor, char cReplaceWith);
-
+	std::string &		replace(std::string &strString, char cLookFor, char cReplaceWith);
+	std::string &		replace(std::string &strString, const std::string &strLookFor, const std::string &strReplaceWith);
+	std::wstring &		replace(std::wstring &strString, WCHAR cLookFor, WCHAR cReplaceWith);
+	std::wstring &		replace(std::wstring &strString, const std::wstring &strLookFor, const std::wstring &strReplaceWith);
+	//std::wstring &		replace(std::wstring &strString, const WCHAR *strLookFor, const WCHAR *strReplaceWith) { return replace(strString, std::wstring(strLookFor), std::wstring(strReplaceWith)); }
+	//std::wstring 		replace(const WCHAR *strString, const WCHAR *strLookFor, const WCHAR *strReplaceWith) { std::wstring strStringWide = strString; return replace(strStringWide, std::wstring(strLookFor), std::wstring(strReplaceWith)); }
+	
 	//converts a string to upper
 	FORCEINLINE std::string & toUpper( std::string &strToUpper){ transform(strToUpper.begin(), strToUpper.end(), strToUpper.begin(), ::toupper);  return strToUpper;}
 	//converts a string to upper making a new string

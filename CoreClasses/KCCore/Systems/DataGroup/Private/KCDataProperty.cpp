@@ -32,7 +32,7 @@ void KCDataProperty::operator<<(int64 iValue)
 
 void KCDataProperty::operator<<(const KCString &strValue)
 {
-	m_Data.m_uiValue32 = KCName::getStringTable().getStringID(strValue);
+	m_strValueAsString = strValue;	
 	m_eType = EDATATYPES::STRING;
 }
 
@@ -64,7 +64,7 @@ void KCDataProperty::operator<<(const KCString &strValue)
 	case EDATATYPES::FLOAT:		
 		return std::to_string(m_Data.m_fValue);
 	case EDATATYPES::STRING:
-		return KCName::getStringTable().getStringByID(m_Data.m_uiValue32);
+		return m_strValueAsString;
 	}	
 }
 
@@ -102,7 +102,7 @@ int64 KCDataProperty::getAsInt64() const
 	case EDATATYPES::FLOAT:
 		return (int64)m_Data.m_fValue;
 	case EDATATYPES::STRING:
-		return (getAsString() != "")?1:0;
+		return (m_strValueAsString != "")?1:0;
 	}
 }
 
@@ -309,7 +309,7 @@ bool KCDataProperty::setValueByString(const KCString &strString, EDATATYPES eTyp
 
 	if (m_eType == EDATATYPES::STRING)
 	{
-		m_Data.m_uiValue32 = KCName::getStringTable().getStringID(strString);
+		m_strValueAsString = strString;
 		m_eType = EDATATYPES::STRING;
 		return true;
 	}

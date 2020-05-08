@@ -183,7 +183,7 @@ namespace StatEditor
                 }
                 if( mResult == DialogResult.Yes)
                 {
-                    if( _save() == false )
+                    if( _save(false) == false )
                     {
                         MessageBox.Show("Error in saving. Check log. Not quiting.", "Error?", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         e.Cancel = true;
@@ -195,10 +195,10 @@ namespace StatEditor
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            _save();
+            _save(false);
         }
 
-        private bool _save()
+        private bool _save(bool bForceSave)
         {
             bool bEverythingSavedOkay = true;
             if(m_Core.unitTypeManager.needsToSave)
@@ -211,9 +211,10 @@ namespace StatEditor
             }
             foreach (DatabaseEditorControl mControl in m_EditorControls)
             {
-                if (mControl.isDirty)
+                if (mControl.isDirty ||
+                    bForceSave)
                 {
-                    if(mControl.save() == false )
+                    if(mControl.save(bForceSave) == false )
                     {
                         bEverythingSavedOkay = false;
                         log("Error in saving database : " + mControl.database.databaseName);
@@ -314,6 +315,9 @@ namespace StatEditor
             }
         }
 
-
+        private void forceSaveAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            _save(true);
+        }
     }//end class
 } //end namespace

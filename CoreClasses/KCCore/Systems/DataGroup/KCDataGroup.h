@@ -138,8 +138,16 @@ public:
 	DEBUG_FORCEINLINE int64				getProperty(const KCName &strName, int64 iValue) const { const KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> iValue; } return iValue; }
 	DEBUG_FORCEINLINE uint64			getProperty(const KCName &strName, uint64 iValue)  const { const KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> iValue; } return iValue; }
 	DEBUG_FORCEINLINE float				getProperty(const KCName &strName, float fValue) const { const KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> fValue; } return fValue; }
-	DEBUG_FORCEINLINE KCName 			getProperty(const KCName &strName, KCName strValue) const { const KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> strValue; } return strValue; }
-	DEBUG_FORCEINLINE KCString			getProperty(const KCName &strName, KCString strValue) const { const KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> strValue; } return strValue; }
+	DEBUG_FORCEINLINE KCName 			getPropertyAsName(const KCName &strName, KCName &strValue) const { const KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> strValue; } return strValue; }
+	DEBUG_FORCEINLINE KCName 			getProperty(const KCName &strName, const KCName &strValue) const { KCName mReturnValue = strValue; const KCDataProperty *pProperty = getProperty(strName); if (pProperty) {  (*pProperty) >> mReturnValue; } return mReturnValue; }
+	DEBUG_FORCEINLINE KCString			getPropertyAsString(const KCName &strName, KCString &strValue) const { const KCDataProperty *pProperty = getProperty(strName); if (pProperty) { (*pProperty) >> strValue; } return strValue; }
+	DEBUG_FORCEINLINE KCString			getProperty(const KCName &strName, const KCString &strValue) const { KCString mReturnValue = strValue; const KCDataProperty *pProperty = getProperty(strName);  if (pProperty) {  (*pProperty) >> mReturnValue; } return mReturnValue; }
+	
+	DEBUG_FORCEINLINE KCString			getProperty(const KCName &strName, const char *pArray) const 
+	{ 
+		KCString strValue = pArray;
+		return getPropertyAsString(strName, strValue);
+	}
 
 private:
 	KCName														m_strGroupName;

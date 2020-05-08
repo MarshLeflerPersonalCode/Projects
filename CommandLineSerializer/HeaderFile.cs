@@ -16,6 +16,7 @@ namespace CommandLineSerializer
 		private SerializerController m_Controller = null;
 		private StringWriter m_StringWriter = null;
 		private List<CodeWriter> m_CodeWriters = new List<CodeWriter>();
+        private List<ClassStructure> m_AdditionalHeadersNeeded = new List<ClassStructure>();
 		public void initialize(SerializerController mController, string strHeaderFile, string strExportedFile)
 		{
 			m_Controller = mController;
@@ -39,6 +40,13 @@ namespace CommandLineSerializer
 		{
 			m_Controller.log(strMessage);
 		}
+        public void addClassRef(ClassStructure mClassStructure)
+        {
+            if (m_AdditionalHeadersNeeded.Contains(mClassStructure) == false)
+            {
+                m_AdditionalHeadersNeeded.Add(mClassStructure);
+            }
+        }
 		public List<CodeWriter> getCodeWriters() { return m_CodeWriters; }
 		public Dictionary<string, ESERIALIZE_DATA_TYPE> getTypeDefs() { return m_Controller.getTypeDefs(); }
 		public ProjectWrapper getProjectWrapper() { return m_Controller.getProjectWrapper(); }
@@ -163,8 +171,9 @@ namespace CommandLineSerializer
 			bool bSerializedHeader = false;
 			string strClassOrStructName = "";
 			//need to find a way to make this settable from external
-			addLine("#include \"Systems/DataGroup/KCDataGroup.h\"", false);
-            addLine("#include \"EnumsByName.h\"", false);
+
+            List<string> mHeaderFilesFound = new List<string>();
+            mHeaderFilesFound.Add(Path.GetFileName(headerFile));
             for (int iLineIndex = 0; iLineIndex < mLines.Length; iLineIndex++)
 			{
 				string strLine = mLines[iLineIndex];
@@ -174,12 +183,26 @@ namespace CommandLineSerializer
 					{
 						return;
 					}
-					if (strLine.Trim().StartsWith("#include") &&
-					   strLine.Contains(".serialize.inc"))
-					{
-						bSerializedHeader = true;
-					}
-					continue;
+                    string strHeaderFile = strLine.Trim();
+
+                    if (strHeaderFile.StartsWith("#include") &&
+                        strHeaderFile.Contains("\""))
+                    {
+                        strHeaderFile = strHeaderFile.Remove(0, 8); //#include
+                        strHeaderFile = strHeaderFile.Replace("\"", "");
+                        strHeaderFile = strHeaderFile.Trim();
+
+                        try
+                        {
+                            mHeaderFilesFound.Add(Path.GetFileName(strHeaderFile));
+                            if (strHeaderFile.Contains(".serialize.inc"))
+                            {
+                                bSerializedHeader = true;
+                            }
+                        }
+                        catch { }
+                    }
+                    continue;
 				}
 				string strClassName = getClassName(strLine);
 				if (strClassName != "")
@@ -192,7 +215,14 @@ namespace CommandLineSerializer
 				{
 					if (strLine.Contains("KCSERIALIZE_CODE_MANUAL") == false)
 					{
-						_createSerializeFile(strClassOrStructName, iLineIndex);
+                        if (mHeaderFilesFound.Contains("KCDataGroup") == false)
+                        {
+                            addLine("#include \"Systems/DataGroup/KCDataGroup.h\"", false);
+                        }
+                        addLine("#include \"EnumsByName.h\"", false);
+                        addLine("#include \"ClassCreation.h\"", false);
+                        //addLine("<additional_headers>", false);
+                        _createSerializeFile(strClassOrStructName, iLineIndex);
 					}
 				}
 			}
@@ -200,7 +230,28 @@ namespace CommandLineSerializer
 			if (m_StringWriter != null &&
                 bSerializedHeader)
 			{
-				File.WriteAllText(exportedHeaderFile, m_StringWriter.ToString());
+                string strFileToWrite = m_StringWriter.ToString();
+                /*ProjectWrapper mProjectWrapper = m_Controller.getProjectWrapper();
+                List<string> mHeadersAdded = new List<string>();
+                string strAdditionalHeaders = "";
+                foreach (ClassStructure mClass in m_AdditionalHeadersNeeded)
+                {
+                    string strFileForClass = Path.GetFileName( mClass.file );
+                    if( mHeaderFilesFound.Contains(strFileForClass) == false )
+                    {
+                        mHeaderFilesFound.Add(strFileForClass);
+                        strAdditionalHeaders = strAdditionalHeaders + "#include \"" + mClass.file + "\"" + Environment.NewLine;
+                    }
+                    string strSerializationCreationFile = "ClassCreation_" + mClass.name + ".h";
+                    if (mHeaderFilesFound.Contains(strSerializationCreationFile) == false)
+                    {
+                        mHeaderFilesFound.Add(strSerializationCreationFile);
+                        strAdditionalHeaders = strAdditionalHeaders + "#include \"" + strSerializationCreationFile + "\"" + Environment.NewLine;
+                    }
+
+                }
+                strFileToWrite = strFileToWrite.Replace("<additional_headers>", strAdditionalHeaders);*/
+                File.WriteAllText(exportedHeaderFile, strFileToWrite);
 				if (File.Exists(exportedHeaderFile))
 				{
 					exportedHeaderFileWriteTime = File.GetLastWriteTime(exportedHeaderFile);
@@ -270,7 +321,7 @@ namespace CommandLineSerializer
 
         private void _writeByteWriterCode(ClassStructure mClass)
 		{
-			addLine("bool serialize(KCByteWriter &mByteWriter)");
+			addLine("virtual bool serialize(KCByteWriter &mByteWriter)");
 			addLine("{");
 			_addInheritance(mClass, "serialize(mByteWriter);");
 			foreach (ClassVariable mVariable in mClass.variables)
@@ -288,7 +339,7 @@ namespace CommandLineSerializer
 		}
 		private void _writeByteReaderCode(ClassStructure mClass)
 		{
-			addLine("bool deserialize(KCByteReader &mByteReader)");
+			addLine("virtual bool deserialize(KCByteReader &mByteReader)");
 			addLine("{");
 			_addInheritance(mClass, "deserialize(mByteReader);");
 			foreach (ClassVariable mVariable in mClass.variables)
@@ -306,7 +357,7 @@ namespace CommandLineSerializer
 		}
 		private void _writeDataGroupWriteCode(ClassStructure mClass)
 		{
-			addLine("bool serialize(KCDataGroup &mDataGroup, const KCString &strGroupName)");
+			addLine("virtual bool serialize(KCDataGroup &mDataGroup, const KCString &strGroupName)");
 			addLine("{");
 			addLine("if (mDataGroup.getGroupName().isEmpty()) { mDataGroup.setGroupName(strGroupName); }");
 			_addInheritance(mClass, "serialize(mDataGroup, strGroupName);");
@@ -322,7 +373,7 @@ namespace CommandLineSerializer
 			}
 			addLine("return true;");
 			addLine("}");
-			addLine("bool serialize(KCDataGroup &mDataGroup)");
+			addLine("virtual bool serialize(KCDataGroup &mDataGroup)");
 			addLine("{");
 			addLine("return serialize(mDataGroup, \"" + mClass.name + "\");");
 			addLine("}");
@@ -330,7 +381,7 @@ namespace CommandLineSerializer
 		private void _writeDataGroupReadCode(ClassStructure mClass)
 		{
 
-			addLine("bool deserialize(const KCDataGroup &mDataGroup)");
+			addLine("virtual bool deserialize(const KCDataGroup &mDataGroup)");
 			addLine("{");
 			_addInheritance(mClass, "deserialize(mDataGroup);");
 			foreach (ClassVariable mVariable in mClass.variables)

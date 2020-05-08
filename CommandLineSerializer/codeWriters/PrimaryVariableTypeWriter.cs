@@ -27,7 +27,7 @@ namespace CommandLineSerializer.codeWriters
 		}
 		public override bool attemptDataGroupReadCode(HeaderFile mHeaderFile, ClassVariable mVariable, string strDataGroupName)
 		{
-			mHeaderFile.addLine(mVariable.variableName + " = " + strDataGroupName + ".getProperty(\"" + mVariable.variableName + "\", " + mVariable.variableName + ");");
+            mHeaderFile.addLine(mVariable.variableName + " = " + strDataGroupName + ".getProperty(\"" + mVariable.variableName + "\", " + mVariable.variableName + ");");
 			return true;
 		}
 	}
